@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="GEN-Z — Kurucuyla İletişim."/>
+<title>GEN-Z · İletişim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --accent: #7B5CF0;
+  --accent2: #F0C55C;
+  --accent3: #5CF0B4;
+  --bg: #0a0a0f;
+  --bg2: #13131a;
+  --bg3: #1c1c28;
+  --surface: #22222f;
+  --border: #2e2e3f;
+  --text: #f0eeff;
+  --text2: #9b97b8;
+  --text3: #5a5770;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 8px 32px rgba(123,92,240,0.15);
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+[data-theme="light"] {
+  --bg: #f5f4ff; --bg2: #eeedf8; --bg3: #e4e3f2;
+  --surface: #ffffff; --border: #d0cee8; --text: #1a1830;
+  --text2: #5a5580; --text3: #9894b8;
+  --shadow: 0 8px 32px rgba(123,92,240,0.10);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg); color: var(--text);
+  min-height: 100vh; overflow-x: hidden;
+}
+body.theme-transitioning { transition: background-color 0.3s ease, color 0.3s ease; }
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0; opacity: 0.4;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 64px;
+  background: rgba(10,10,15,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 24px; gap: 12px;
+}
+[data-theme="light"] nav { background: rgba(245,244,255,0.85); }
+.nav-logo {
+  font-family: var(--font-display); font-size: 22px; font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px; text-decoration: none; flex-shrink: 0;
+}
+.nav-back {
+  background: none; border: none; color: var(--text2);
+  font-family: var(--font-body); font-size: 14px; font-weight: 500;
+  cursor: pointer; padding: 6px 12px; border-radius: var(--radius-sm);
+  transition: color 0.2s, background 0.2s; text-decoration: none;
+}
+.nav-back:hover { color: var(--text); background: var(--surface); }
+.nav-right { margin-left: auto; }
+.btn-icon {
+  width: 36px; height: 36px;
+  border: 1px solid var(--border); background: var(--surface);
+  border-radius: var(--radius-sm); cursor: pointer; color: var(--text2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; transition: color 0.2s, border-color 0.2s;
+}
+.btn-icon:hover { color: var(--text); border-color: var(--accent); }
+
+/* PAGE */
+.page {
+  position: relative; z-index: 1;
+  padding-top: 64px; min-height: 100vh;
+}
+
+/* LANDING */
+#landing {
+  min-height: calc(100vh - 64px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 60px 24px;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+#landing.hidden { opacity: 0; transform: translateY(-16px); pointer-events: none; }
+
+.landing-inner { max-width: 580px; width: 100%; text-align: center; }
+
+.founder-avatar {
+  width: 100px; height: 100px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 38px; font-weight: 800; color: #fff;
+  margin: 0 auto 24px;
+  border: 3px solid var(--border);
+  box-shadow: 0 0 0 6px var(--bg), 0 0 0 7px var(--border), 0 0 40px rgba(123,92,240,0.25);
+  opacity: 0; animation: fadeUp 0.5s ease forwards 0s, avatarPulse 3s ease-in-out 0.6s infinite;
+}
+@keyframes avatarPulse {
+  0%, 100% { box-shadow: 0 0 0 6px var(--bg), 0 0 0 7px var(--border), 0 0 40px rgba(123,92,240,0.2); }
+  50%       { box-shadow: 0 0 0 6px var(--bg), 0 0 0 7px var(--border), 0 0 64px rgba(123,92,240,0.45); }
+}
+
+.online-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 14px; border-radius: 999px;
+  background: color-mix(in srgb, var(--accent3) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent3) 25%, transparent);
+  font-size: 12px; color: var(--accent3); font-weight: 600;
+  margin-bottom: 24px;
+  opacity: 0; animation: fadeUp 0.5s ease forwards 0.15s;
+}
+.online-pill::before {
+  content: '';
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent3);
+  animation: blink 1.8s ease-in-out infinite;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+.landing-title {
+  font-family: var(--font-display); font-size: clamp(30px, 6vw, 52px);
+  font-weight: 800; letter-spacing: -1.5px; line-height: 1.1;
+  margin-bottom: 20px;
+  opacity: 0; animation: fadeUp 0.5s ease forwards 0.25s;
+}
+.landing-title .grad {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+.landing-sub {
+  font-size: 16px; color: var(--text2); line-height: 1.8;
+  max-width: 440px; margin: 0 auto 32px;
+  opacity: 0; animation: fadeUp 0.5s ease forwards 0.35s;
+}
+.landing-sub strong { color: var(--text); }
+
+.landing-quote {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-left: 3px solid var(--accent2);
+  border-radius: var(--radius); padding: 20px 24px;
+  margin-bottom: 36px; text-align: left;
+  font-size: 14px; color: var(--text2); line-height: 1.75; font-style: italic;
+  opacity: 0; animation: fadeUp 0.5s ease forwards 0.45s;
+}
+.quote-sig {
+  margin-top: 10px; font-size: 12px;
+  color: var(--accent2); font-style: normal; font-weight: 700;
+}
+
+.btn-start {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 36px; background: var(--accent); color: #fff; border: none;
+  border-radius: var(--radius); font-family: var(--font-display);
+  font-size: 16px; font-weight: 700; cursor: pointer;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 24px rgba(123,92,240,0.4);
+  letter-spacing: -0.3px;
+  opacity: 0; animation: fadeUp 0.5s ease forwards 0.55s;
+}
+.btn-start:hover {
+  background: #6a4de0; transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(123,92,240,0.55);
+}
+.arrow { transition: transform 0.2s; display: inline-block; }
+.btn-start:hover .arrow { transform: translateX(5px); }
+
+/* FORM SCREEN */
+#formScreen {
+  display: none;
+  min-height: calc(100vh - 64px);
+  align-items: center; justify-content: center;
+  padding: 60px 24px;
+}
+#formScreen.visible { display: flex; }
+
+.form-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 20px; padding: 40px;
+  width: 100%; max-width: 560px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+  position: relative; overflow: hidden;
+  animation: fadeUp 0.5s ease forwards;
+}
+.form-card::before {
+  content: ''; position: absolute; top: -60px; right: -60px;
+  width: 220px; height: 220px;
+  background: radial-gradient(circle, rgba(123,92,240,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.form-header { margin-bottom: 28px; }
+.form-header-top {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 12px;
+}
+.form-avatar-sm {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 18px; font-weight: 800; color: #fff;
+  flex-shrink: 0;
+}
+.form-to { font-size: 13px; color: var(--text3); }
+.form-to strong { color: var(--accent); font-weight: 700; }
+.form-title {
+  font-family: var(--font-display); font-size: 24px; font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-grid .full { grid-column: 1 / -1; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-label {
+  font-size: 11px; font-weight: 700; color: var(--text3);
+  letter-spacing: 0.8px; text-transform: uppercase;
+}
+.form-input, .form-textarea {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+  font-family: var(--font-body); font-size: 14px; color: var(--text);
+  outline: none; transition: border-color 0.2s, box-shadow 0.2s; width: 100%;
+}
+.form-input:focus, .form-textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(123,92,240,0.12);
+}
+.form-input::placeholder, .form-textarea::placeholder { color: var(--text3); }
+.form-textarea { resize: vertical; min-height: 130px; line-height: 1.6; }
+
+.form-footer {
+  display: flex; align-items: center; gap: 16px;
+  margin-top: 24px; flex-wrap: wrap;
+}
+.form-note { font-size: 12px; color: var(--text3); line-height: 1.6; flex: 1; }
+.form-note span { color: var(--accent2); }
+.btn-send {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 28px; background: var(--accent); color: #fff; border: none;
+  border-radius: var(--radius); font-family: var(--font-display);
+  font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px rgba(123,92,240,0.35);
+}
+.btn-send:hover { background: #6a4de0; transform: translateY(-1px); }
+.btn-send:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* SUCCESS */
+.success-overlay {
+  position: absolute; inset: 0; border-radius: 20px;
+  background: var(--bg2);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 40px;
+  opacity: 0; pointer-events: none; transition: opacity 0.4s;
+}
+.success-overlay.show { opacity: 1; pointer-events: all; }
+.success-icon { font-size: 56px; margin-bottom: 20px; }
+.success-icon.pop { animation: popIn 0.5s ease; }
+@keyframes popIn { 0% { transform: scale(0); } 70% { transform: scale(1.15); } 100% { transform: scale(1); } }
+.success-title {
+  font-family: var(--font-display); font-size: 26px; font-weight: 800;
+  letter-spacing: -0.5px; margin-bottom: 12px;
+}
+.success-sub { font-size: 14px; color: var(--text2); line-height: 1.75; margin-bottom: 28px; }
+.btn-back-form {
+  padding: 11px 24px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: 14px; color: var(--text2);
+  cursor: pointer; transition: border-color 0.2s, color 0.2s;
+}
+.btn-back-form:hover { border-color: var(--accent); color: var(--accent); }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 28px; right: 24px; z-index: 999;
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 3px solid var(--accent); border-radius: var(--radius-sm);
+  padding: 12px 18px; font-size: 13px; color: var(--text);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  transform: translateY(80px); opacity: 0; transition: transform 0.3s, opacity 0.3s;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 520px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .form-card { padding: 26px 20px; }
+  .form-footer { flex-direction: column; align-items: stretch; }
+  .btn-send { justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">GEN-Z</a>
+  <a class="nav-back" href="index.html">← Geri</a>
+  <div class="nav-right">
+    <button class="btn-icon" onclick="toggleTheme()" id="themeBtn">🌙</button>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- LANDING -->
+  <div id="landing">
+    <div class="landing-inner">
+
+      <div class="founder-avatar">Y</div>
+      <div class="online-pill">Şu an müsait</div>
+
+      <h1 class="landing-title">
+        Hey, benimle istediğin kadar<br>
+        <span class="grad">konuşabilirsin.</span>
+      </h1>
+
+      <p class="landing-sub">
+        Ne istersen yazabilirsin — sakın unutma.<br>
+        <strong>İfade etmek, özgürlüğünün yalnızca %20'sidir.</strong><br>
+        Geri kalan %80'i de burada seni bekliyor.
+      </p>
+
+      <div class="landing-quote">
+        "Bir şey söylemek istiyorsan söyle. Sessizlik bazen haklı olanı değil,
+        çekingeni korur. Ben dinlemek için buradayım."
+        <div class="quote-sig">— Yasin İnce · Kurucu & CEO</div>
+      </div>
+
+      <button class="btn-start" onclick="startForm()">
+        Şimdi İletişime Geç <span class="arrow">→</span>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div id="formScreen">
+    <div class="form-card">
+
+      <div class="form-header">
+        <div class="form-header-top">
+          <div class="form-avatar-sm">Y</div>
+          <div class="form-to">Alıcı: <strong>Yasin İnce · Kurucu & CEO</strong></div>
+        </div>
+        <div class="form-title">Mesajını bırak.</div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Kullanıcı Adı</label>
+          <input class="form-input" id="fName" type="text" placeholder="@kullanici" readonly style="opacity:0.7;cursor:default;"/>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Konu</label>
+          <input class="form-input" id="fSubject" type="text" placeholder="Ne hakkında?"/>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Mesajın</label>
+          <textarea class="form-textarea" id="fMessage" placeholder="Aklındaki her şeyi yaz. Hiçbir şeyi sakınma."></textarea>
+        </div>
+      </div>
+
+      <div class="form-footer">
+        <div class="form-note">
+          <span>✦</span> Mesajın doğrudan Yasin'e ulaşır.<br>
+          Her mesaj okunur, her ses duyulur.
+        </div>
+        <button class="btn-send" id="sendBtn" onclick="sendForm()">Gönder ✦</button>
+      </div>
+
+      <div class="success-overlay" id="successOverlay">
+        <div class="success-icon" id="successIcon">✉️</div>
+        <div class="success-title">Mesajın ulaştı!</div>
+        <div class="success-sub">
+          Yasin en kısa sürede seninle iletişime geçecek.<br>
+          Sesini duyurduğun için teşekkürler.
+        </div>
+        <button class="btn-back-form" onclick="resetForm()">Yeni Mesaj Gönder</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* THEME */
+let currentTheme = (() => { try { return localStorage.getItem('genz-theme') || 'dark'; } catch(e) { return 'dark'; } })();
+document.documentElement.setAttribute('data-theme', currentTheme);
+document.getElementById('themeBtn').textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+function toggleTheme() {
+  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  try { localStorage.setItem('genz-theme', currentTheme); } catch(e) {}
+  document.body.classList.add('theme-transitioning');
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  document.getElementById('themeBtn').textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+  setTimeout(() => document.body.classList.remove('theme-transitioning'), 350);
+}
+
+/* KULLANICI ADINI OTO DOLDUR */
+function loadUser() {
+  try {
+    const user = JSON.parse(localStorage.getItem('genz-user'));
+    document.getElementById('fName').value = (user && user.username) ? user.username : '@misafir';
+  } catch(e) {
+    document.getElementById('fName').value = '@misafir';
+  }
+}
+
+/* LANDING → FORM */
+function startForm() {
+  const landing = document.getElementById('landing');
+  const form    = document.getElementById('formScreen');
+  landing.classList.add('hidden');
+  setTimeout(() => {
+    landing.style.display = 'none';
+    form.classList.add('visible');
+    loadUser();
+  }, 420);
+}
+
+/* SEND */
+function sendForm() {
+  const name    = document.getElementById('fName').value.trim();
+  const message = document.getElementById('fMessage').value.trim();
+  if (!name)    { showToast('Kullanıcı adı bulunamadı ✦'); return; }
+  if (!message) { showToast('Mesaj boş bırakılamaz ✦'); return; }
+
+  const btn = document.getElementById('sendBtn');
+  btn.disabled = true; btn.textContent = 'Gönderiliyor...';
+
+  setTimeout(() => {
+    const icon = document.getElementById('successIcon');
+    icon.classList.add('pop');
+    document.getElementById('successOverlay').classList.add('show');
+  }, 800);
+}
+
+function resetForm() {
+  document.getElementById('successOverlay').classList.remove('show');
+  document.getElementById('successIcon').classList.remove('pop');
+  document.getElementById('sendBtn').disabled = false;
+  document.getElementById('sendBtn').textContent = 'Gönder ✦';
+  ['fSubject','fMessage'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  loadUser();
+}
+
+/* TOAST */
+let _t;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(_t); _t = setTimeout(() => t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<div class="profile-section-title">🛒 Sepetim</div>
+<div id="cartList">
+  <div class="cart-item" id="cartItem1">
+    <div class="cart-item-icon">🧴</div>
+    <div class="cart-item-info">
+      <div class="cart-item-name">Doğal Argan Yağı Şampuanı</div>
+      <div class="cart-item-seller">EkoSaç Market</div>
+    </div>
+    <div class="cart-item-qty">
+      <button class="qty-btn" onclick="changeQty('cartItem1', -1)">−</button>
+      <span class="qty-val" id="qty-cartItem1">1</span>
+      <button class="qty-btn" onclick="changeQty('cartItem1', 1)">+</button>
+    </div>
+    <span class="cart-item-price" id="price-cartItem1">₺189</span>
+    <button class="cart-item-del" onclick="removeCartItem('cartItem1')" title="Kaldır">✕</button>
+  </div>
+  <div class="cart-item" id="cartItem2">
+    <div class="cart-item-icon">🕯️</div>
+    <div class="cart-item-info">
+      <div class="cart-item-name">El Yapımı Soya Mum Seti</div>
+      <div class="cart-item-seller">Ateş & Işık</div>
+    </div>
+    <div class="cart-item-qty">
+      <button class="qty-btn" onclick="changeQty('cartItem2', -1)">−</button>
+      <span class="qty-val" id="qty-cartItem2">1</span>
+      <button class="qty-btn" onclick="changeQty('cartItem2', 1)">+</button>
+    </div>
+    <span class="cart-item-price" id="price-cartItem2">₺320</span>
+    <button class="cart-item-del" onclick="removeCartItem('cartItem2')" title="Kaldır">✕</button>
+  </div>
+</div>
+<div class="cart-summary" id="cartSummary">
+  <div class="cart-summary-row"><span>Ara toplam</span><span id="cartSubtotal">₺509</span></div>
+  <div class="cart-summary-row"><span>Kargo</span><span style="color:var(--accent3)">Ücretsiz</span></div>
+  <div class="cart-summary-row total"><span>Toplam</span><span id="cartTotal">₺509</span></div>
+  <button class="btn-checkout" onclick="showToast('Ödeme sistemi yakında aktif olacak 🔜')">Ödemeye Geç →</button>
+</div>

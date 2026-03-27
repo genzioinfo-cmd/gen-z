@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="description" content="GEN-Z Ustam Profili — Ustanın profilini incele, abonelik planını seç."/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GEN-Z · Usta Profili</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--accent:#7B5CF0;--accent2:#F0C55C;--accent3:#5CF0B4;--bg:#0a0a0f;--bg2:#13131a;--bg3:#1c1c28;--surface:#22222f;--border:#2e2e3f;--text:#f0eeff;--text2:#9b97b8;--text3:#5a5770;--radius:14px;--radius-sm:8px;--font-display:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;}
+[data-theme="light"]{--bg:#f5f4ff;--bg2:#eeedf8;--bg3:#e4e3f2;--surface:#ffffff;--border:#d0cee8;--text:#1a1830;--text2:#5a5580;--text3:#9894b8;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;}
+body.tt{transition:background-color .3s,color .3s;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:rgba(10,10,15,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;}
+[data-theme="light"] nav{background:rgba(245,244,255,.85);}
+.nav-logo{font-family:var(--font-display);font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;cursor:pointer;flex-shrink:0;text-decoration:none;}
+.nav-links{display:flex;align-items:center;gap:2px;margin-left:32px;flex:1;list-style:none;}
+.nav-links a{font-size:13px;font-weight:500;color:var(--text2);text-decoration:none;padding:6px 12px;border-radius:var(--radius-sm);transition:color .2s,background .2s;white-space:nowrap;}
+.nav-links a:hover{color:var(--text);background:var(--surface);}
+.nav-links a.active{color:var(--accent2);}
+.nav-right{display:flex;align-items:center;gap:10px;margin-left:auto;}
+.btn-icon{width:36px;height:36px;border:1px solid var(--border);background:var(--surface);border-radius:var(--radius-sm);cursor:pointer;color:var(--text2);display:flex;align-items:center;justify-content:center;font-size:16px;transition:color .2s,border-color .2s;}
+.btn-icon:hover{color:var(--text);border-color:var(--accent);}
+.btn-signin{padding:8px 18px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;}
+.hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:36px;height:36px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;}
+.hamburger span{display:block;width:16px;height:2px;background:var(--text2);border-radius:2px;transition:transform .3s,opacity .3s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;z-index:99;background:var(--bg2);border-bottom:1px solid var(--border);padding:16px 24px 20px;flex-direction:column;gap:4px;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-size:15px;font-weight:500;color:var(--text2);text-decoration:none;padding:10px 12px;border-radius:var(--radius-sm);}
+@media(max-width:640px){.nav-links{display:none;}.hamburger{display:flex;}}
+.toast{position:fixed;bottom:28px;right:24px;z-index:999;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent2);border-radius:var(--radius-sm);padding:12px 18px;font-size:13px;color:var(--text);box-shadow:0 8px 24px rgba(0,0,0,.3);transform:translateY(80px);opacity:0;transition:transform .3s,opacity .3s;}
+.toast.show{transform:translateY(0);opacity:1;}
+.page-wrap{padding-top:64px;min-height:100vh;position:relative;z-index:1;}
+.page-inner{max-width:1100px;margin:0 auto;padding:32px 24px 80px;}
+.bc{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text3);margin-bottom:28px;flex-wrap:wrap;}
+.bc a{color:var(--text2);text-decoration:none;transition:color .2s;}
+.bc a:hover{color:var(--accent);}
+.bc .sep{font-size:11px;}
+.bc .cur{color:var(--text);font-weight:500;}
+.grid{display:grid;grid-template-columns:300px 1fr;gap:28px;align-items:start;}
+@media(max-width:860px){.grid{grid-template-columns:1fr;}}
+.lp{display:flex;flex-direction:column;gap:16px;}
+.cover{width:100%;aspect-ratio:1/1;border-radius:var(--radius);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:100px;position:relative;overflow:hidden;}
+.cover-emoji{position:relative;z-index:1;filter:drop-shadow(0 0 40px rgba(240,120,40,.6));}
+.icard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;}
+.irow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.irow:last-child{border-bottom:none;}
+.ilbl{color:var(--text3);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+.ival{color:var(--text);font-weight:500;text-align:right;}
+.ival.a2{color:var(--accent2);font-weight:700;}
+.rp{display:flex;flex-direction:column;gap:20px;}
+.cat-pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--accent2);background:color-mix(in srgb,var(--accent2) 12%,transparent);border:1px solid color-mix(in srgb,var(--accent2) 25%,transparent);padding:4px 12px;border-radius:999px;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;}
+.uname{font-family:var(--font-display);font-size:clamp(28px,4vw,40px);font-weight:800;line-height:1.1;margin-bottom:6px;}
+.utitle{font-size:13px;color:var(--text3);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;}
+.plbtn{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--accent);font-weight:600;cursor:pointer;border:none;background:none;padding:0;margin-bottom:18px;transition:opacity .2s;font-family:var(--font-body);}
+.plbtn:hover{opacity:.7;}
+.plavatar{width:26px;height:26px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;}
+.rrow{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+.stars{color:var(--accent2);font-size:18px;letter-spacing:1px;}
+.rnum{font-family:var(--font-display);font-size:18px;font-weight:800;}
+.rcnt{font-size:13px;color:var(--text3);}
+.pbadge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;background:color-mix(in srgb,var(--accent2) 15%,transparent);color:var(--accent2);border:1px solid color-mix(in srgb,var(--accent2) 30%,transparent);}
+.pbox{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:22px;}
+.prow{display:flex;align-items:baseline;gap:8px;margin-bottom:6px;}
+.pmain{font-family:var(--font-display);font-size:36px;font-weight:800;color:var(--accent2);}
+.punit{font-size:13px;color:var(--text3);}
+.pavail{font-size:12px;color:var(--accent3);font-weight:600;margin-bottom:18px;}
+.slbl{font-size:11px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+.stags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+.stag{padding:7px 14px;border-radius:var(--radius-sm);background:var(--bg3);border:1px solid var(--border);font-size:12px;color:var(--text2);cursor:pointer;transition:border-color .2s,color .2s,background .2s;}
+.stag:hover,.stag.active{border-color:var(--accent2);color:var(--accent2);background:color-mix(in srgb,var(--accent2) 8%,transparent);}
+.btn-rv{width:100%;padding:16px;background:linear-gradient(135deg,var(--accent2),#d4a83e);color:#000;border:none;border-radius:var(--radius-sm);font-family:var(--font-display);font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s,transform .2s;letter-spacing:.5px;}
+.btn-rv:hover{opacity:.9;transform:translateY(-1px);}
+.trow{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;font-size:12px;color:var(--text3);}
+.tabs-bar{display:flex;border-bottom:1px solid var(--border);}
+.tbtn{padding:12px 20px;font-size:13px;font-weight:600;color:var(--text3);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:color .2s,border-color .2s;font-family:var(--font-body);letter-spacing:.5px;}
+.tbtn:hover{color:var(--text2);}
+.tbtn.active{color:var(--accent2);border-bottom-color:var(--accent2);}
+.tc{padding-top:24px;}
+.tpanel{display:none;}
+.tpanel.active{display:block;}
+.adesc{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:24px;}
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.sc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;display:flex;flex-direction:column;gap:6px;}
+.sci{font-size:22px;}
+.scv{font-family:var(--font-display);font-size:18px;font-weight:800;}
+.scl{font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+@media(max-width:500px){.sgrid{grid-template-columns:repeat(2,1fr);}}
+.ci{padding:18px 0;border-bottom:1px solid var(--border);}
+.ci:last-child{border-bottom:none;}
+.ch{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.cav{width:34px;height:34px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--text2);flex-shrink:0;}
+.cu{font-size:13px;font-weight:600;}
+.cs{color:var(--accent2);font-size:12px;}
+.cd{font-size:11px;color:var(--text3);margin-left:auto;}
+.ct{font-size:14px;color:var(--text2);line-height:1.7;padding-left:44px;}
+/* RANDEVU MODAL */
+.mo{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.75);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
+.mo.open{opacity:1;pointer-events:all;}
+.rbox{background:var(--bg2);border:1px solid var(--border);border-radius:20px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto;padding:28px;position:relative;transform:translateY(24px) scale(.97);transition:transform .3s;box-shadow:0 24px 80px rgba(0,0,0,.5);}
+.mo.open .rbox{transform:translateY(0) scale(1);}
+.rclose{position:absolute;top:14px;right:14px;width:30px;height:30px;background:var(--surface);border:1px solid var(--border);border-radius:8px;cursor:pointer;color:var(--text2);font-size:16px;display:flex;align-items:center;justify-content:center;}
+.rtitle{font-family:var(--font-display);font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;}
+.rname{font-family:var(--font-display);font-size:22px;font-weight:800;margin-bottom:16px;}
+.anotice{background:color-mix(in srgb,var(--accent2) 8%,transparent);border:1px solid color-mix(in srgb,var(--accent2) 20%,transparent);border-radius:var(--radius-sm);padding:12px 14px;font-size:12px;color:var(--text2);margin-bottom:20px;line-height:1.6;}
+.anotice strong{color:var(--accent2);}
+.fg{margin-bottom:14px;}
+.fl{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;display:block;}
+.fl .req{color:var(--accent2);}
+.fi{width:100%;padding:11px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;color:var(--text);outline:none;transition:border-color .2s;}
+.fi::placeholder{color:var(--text3);}
+.fi:focus{border-color:var(--accent2);}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.htags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
+.htm{padding:7px 14px;border-radius:var(--radius-sm);background:var(--bg3);border:1px solid var(--border);font-size:12px;color:var(--text2);cursor:pointer;transition:border-color .2s,color .2s,background .2s;}
+.htm.active{border-color:var(--accent2);color:var(--accent2);background:color-mix(in srgb,var(--accent2) 8%,transparent);}
+.egbtn{font-size:12px;color:var(--accent);background:none;border:1px dashed var(--border);border-radius:var(--radius-sm);padding:7px 14px;cursor:pointer;transition:border-color .2s;font-family:var(--font-body);}
+.egbtn:hover{border-color:var(--accent);}
+.calwrap{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;margin-bottom:14px;}
+.calh{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.calm{font-family:var(--font-display);font-size:15px;font-weight:700;}
+.caln{width:28px;height:28px;background:var(--surface);border:1px solid var(--border);border-radius:6px;cursor:pointer;color:var(--text2);display:flex;align-items:center;justify-content:center;font-size:14px;transition:color .2s,border-color .2s;}
+.caln:hover{color:var(--text);border-color:var(--accent2);}
+.calg{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cdn{font-size:10px;font-weight:700;color:var(--text3);text-align:center;padding:4px 0;text-transform:uppercase;}
+.cd2{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:12px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s;color:var(--text2);}
+.cd2.past{color:var(--text3);cursor:default;}
+.cd2.avail:hover{background:color-mix(in srgb,var(--accent2) 15%,transparent);color:var(--accent2);}
+.cd2.sel{background:var(--accent2);color:#000;font-weight:700;}
+.cd2.tod{border:1px solid var(--accent2);color:var(--accent2);}
+.cd2.busy{color:var(--text3);cursor:default;}
+.calleg{display:flex;gap:14px;margin-top:10px;font-size:11px;color:var(--text3);}
+.cldot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;}
+.ni{width:100%;min-height:80px;padding:11px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;color:var(--text);outline:none;resize:vertical;transition:border-color .2s;}
+.ni::placeholder{color:var(--text3);}
+.ni:focus{border-color:var(--accent2);}
+.btn-send{width:100%;padding:15px;background:linear-gradient(135deg,var(--accent2),#d4a83e);color:#000;border:none;border-radius:var(--radius-sm);font-family:var(--font-display);font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s,transform .2s;margin-top:6px;letter-spacing:.5px;}
+.btn-send:hover{opacity:.9;transform:translateY(-1px);}
+/* AUTH */
+.moa{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
+.moa.open{opacity:1;pointer-events:all;}
+.amb{background:var(--bg2);border:1px solid var(--border);border-radius:20px;width:100%;max-width:420px;padding:36px;position:relative;transform:translateY(20px) scale(.97);transition:transform .3s;box-shadow:0 24px 64px rgba(0,0,0,.4);}
+.moa.open .amb{transform:translateY(0) scale(1);}
+.amc{position:absolute;top:16px;right:16px;width:32px;height:32px;background:var(--surface);border:1px solid var(--border);border-radius:8px;cursor:pointer;color:var(--text2);font-size:18px;display:flex;align-items:center;justify-content:center;}
+.mlogo{font-family:var(--font-display);font-size:26px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;}
+.msub{font-size:13px;color:var(--text2);margin-bottom:24px;}
+.atabs{display:flex;gap:4px;background:var(--bg3);border-radius:var(--radius-sm);padding:4px;margin-bottom:24px;}
+.atab{flex:1;padding:8px;background:none;border:none;border-radius:6px;font-family:var(--font-body);font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:border-color .2s,color .2s,background .2s;}
+.atab.active{background:var(--surface);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.2);}
+.bgoog{width:100%;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;font-weight:500;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:border-color .2s;margin-bottom:20px;}
+.bgoog:hover{border-color:var(--accent);}
+.gi{width:18px;height:18px;}
+.div{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.div::before,.div::after{content:'';flex:1;height:1px;background:var(--border);}
+.div span{font-size:12px;color:var(--text3);}
+.afg{margin-bottom:14px;}
+.afl{font-size:12px;font-weight:500;color:var(--text2);margin-bottom:6px;display:block;}
+.afi{width:100%;padding:11px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;color:var(--text);outline:none;transition:border-color .2s;}
+.afi::placeholder{color:var(--text3);}
+.afi:focus{border-color:var(--accent);}
+.bsub{width:100%;padding:13px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;transition:background .2s;margin-top:6px;}
+.bsub:hover{background:#6a4de0;}
+.af{text-align:center;margin-top:16px;font-size:12px;color:var(--text3);}
+.af a{color:var(--accent);text-decoration:none;cursor:pointer;}
+.apanel{display:none;}
+.apanel.active{display:block;}
+.pf{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg3);border-radius:var(--radius-sm);margin-bottom:10px;}
+.pfl{font-size:12px;color:var(--text2);width:90px;}
+.pfv{font-size:14px;color:var(--text);flex:1;}
+
+/* ── 60FPS PERFORMANCE ── */
+nav,.mo,.rbox,.moa,.mbox,.toast{will-change:transform,opacity;transform:translateZ(0);}
+.btn-rv,.btn-send,.stag,.htm,.tbtn{will-change:transform;backface-visibility:hidden;}
+.phead-bg{contain:strict;}
+
+/* ── REDUCED MOTION ── */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}
+  nav{backdrop-filter:none;background:var(--bg2);}
+  .mo,.moa{backdrop-filter:none;}
+}
+@media(max-width:640px){
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  nav{backdrop-filter:blur(12px);}
+  .mo,.moa{backdrop-filter:blur(4px);}
+}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo" onclick="location.href='index.html'">GEN-Z</div>
+  <ul class="nav-links">
+    <li><a href="magaza.html" data-tr="Mağaza" data-en="Shop">Mağaza</a></li>
+    <li><a href="ustam.html" class="active" data-tr="Ustam" data-en="Ustam">Ustam</a></li>
+    <li><a href="gen-z.html" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a></li>
+    <li><a href="#" data-tr="Hakkımızda" data-en="About">Hakkımızda</a></li>
+    <li><a href="#" data-tr="Topluluk" data-en="Community">Topluluk</a></li>
+    <li><a href="#" data-tr="Kurucu" data-en="Founder">Kurucu</a></li>
+    <li><a href="birlikte-buyuyelim.html" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a></li>
+    <li><a href="#" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="hamburger" id="hbBtn" onclick="toggleMM()"><span></span><span></span><span></span></button>
+    <button class="btn-icon" onclick="toggleLang()">🌐</button>
+    <button class="btn-icon" onclick="toggleTheme()" id="themeBtn">🌙</button>
+    <button class="btn-signin" onclick="openAuth('signin')" id="authBtn">Giriş Yap</button>
+  </div>
+</nav>
+<nav class="mobile-menu" id="mmenu">
+  <a href="magaza.html" data-tr="Mağaza" data-en="Shop">Mağaza</a>
+  <a href="ustam.html" data-tr="Ustam" data-en="Ustam">Ustam</a>
+  <a href="gen-z.html" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a>
+  <a href="#" data-tr="Hakkımızda" data-en="About">Hakkımızda</a>
+  <a href="#" data-tr="Topluluk" data-en="Community">Topluluk</a>
+  <a href="#" data-tr="Kurucu" data-en="Founder">Kurucu</a>
+  <a href="birlikte-buyuyelim.html" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a>
+  <a href="#" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a>
+</nav>
+
+<div class="page-wrap"><div class="page-inner">
+  <div class="bc" id="bc"></div>
+  <div class="grid">
+    <div class="lp" id="lp"></div>
+    <div class="rp" id="rp"></div>
+  </div>
+</div></div>
+
+<!-- RANDEVU -->
+<div class="mo" id="rvModal" onclick="closeRVOO(event)">
+<div class="rbox">
+  <button class="rclose" onclick="closeRV()">✕</button>
+  <div class="rtitle">RANDEVU AL</div>
+  <div class="rname" id="rvName"></div>
+  <div class="anotice" id="rvNotice"></div>
+  <div class="fg"><label class="fl">Ad Soyad <span class="req">*</span></label><input class="fi" id="rn" type="text" placeholder="Adınız Soyadınız"/></div>
+  <div class="fr">
+    <div class="fg"><label class="fl">E-Posta <span class="req">*</span></label><input class="fi" id="re" type="email" placeholder="ornek@gmail.com"/></div>
+    <div class="fg"><label class="fl">Telefon <span class="req">*</span></label><input class="fi" id="rp2" type="tel" placeholder="05XX XXX XX XX"/></div>
+  </div>
+  <div class="fg">
+    <label class="fl">Hizmet Türü <span class="req">*</span></label>
+    <div class="htags" id="rvHizmet"></div>
+    <button class="egbtn" onclick="toggleEG()">+ VEYA YAPILACAK İŞİ ELLE GİR</button>
+    <input class="fi" id="rcustom" type="text" placeholder="İşi kısaca açıklayın..." style="margin-top:8px;display:none"/>
+  </div>
+  <div class="fg">
+    <label class="fl">Tarih Seçin <span class="req">*</span></label>
+    <div class="calwrap">
+      <div class="calh"><button class="caln" onclick="calPrev()">‹</button><div class="calm" id="calM"></div><button class="caln" onclick="calNext()">›</button></div>
+      <div class="calg" id="calG"></div>
+      <div class="calleg">
+        <span><span class="cldot" style="background:var(--accent2)"></span>Seçili</span>
+        <span><span class="cldot" style="background:var(--accent3)"></span>Müsait</span>
+        <span><span class="cldot" style="background:var(--border)"></span>Dolu</span>
+      </div>
+    </div>
+  </div>
+  <div class="fg"><label class="fl">Notunuz</label><textarea class="ni" id="rnotes" placeholder="Yaşadığınız sorunu veya özel isteklerinizi kısaca anlatın..."></textarea></div>
+  <button class="btn-send" onclick="sendRV()">RANDEVU TALEBİ GÖNDER +</button>
+</div></div>
+
+<!-- AUTH -->
+<div class="moa" id="authModal" onclick="closeAOO(event)">
+<div class="amb">
+  <button class="amc" onclick="closeAuth()">✕</button>
+  <div class="mlogo">GEN-Z</div>
+  <div id="authTabs" class="atabs">
+    <button class="atab active" id="tab-signin" onclick="switchTab('signin')">Giriş Yap</button>
+    <button class="atab" id="tab-signup" onclick="switchTab('signup')">Kayıt Ol</button>
+  </div>
+  <div class="apanel active" id="panel-signin">
+    <div class="msub">Hesabına giriş yap</div>
+    <button class="bgoog"><svg class="gi" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>Google ile Giriş</button>
+    <div class="div"><span>veya</span></div>
+    <div class="afg"><label class="afl">E-posta</label><input class="afi" id="se" type="email" placeholder="ornek@mail.com"/></div>
+    <div class="afg"><label class="afl">Şifre</label><input class="afi" id="sp" type="password" placeholder="••••••••"/></div>
+    <button class="bsub" onclick="doSI()">Giriş Yap</button>
+    <div class="af"><a onclick="switchTab('forgot')">Şifremi unuttum</a></div>
+  </div>
+  <div class="apanel" id="panel-signup">
+    <div class="msub">Yeni hesap oluştur</div>
+    <div class="afg"><label class="afl">Kullanıcı Adı</label><input class="afi" id="su" type="text" placeholder="kullaniciadin"/></div>
+    <div class="afg"><label class="afl">E-posta</label><input class="afi" id="sue" type="email" placeholder="ornek@mail.com"/></div>
+    <div class="afg"><label class="afl">Şifre</label><input class="afi" id="sup" type="password" placeholder="En az 8 karakter"/></div>
+    <button class="bsub" onclick="doSU()">Kayıt Ol</button>
+  </div>
+  <div class="apanel" id="panel-forgot">
+    <div class="msub">Şifre sıfırlama bağlantısı gönderilecek</div>
+    <div class="afg"><label class="afl">E-posta</label><input class="afi" id="fe" type="email" placeholder="ornek@mail.com"/></div>
+    <button class="bsub" onclick="doFG()">Bağlantı Gönder</button>
+    <div class="af"><a onclick="switchTab('signin')">← Giriş yap</a></div>
+  </div>
+  <div class="apanel" id="panel-profile">
+    <div class="msub">Hesap bilgilerin</div>
+    <div class="pf"><span class="pfl">Kullanıcı Adı</span><span class="pfv" id="pu">@kullanici</span></div>
+    <div class="pf"><span class="pfl">E-posta</span><span class="pfv" id="pe">ornek@mail.com</span></div>
+    <button class="bsub" style="background:var(--bg3);color:var(--text2);margin-top:8px" onclick="doSO()">Çıkış Yap</button>
+  </div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const USTALAR=[
+  {id:'ali-kara',name:'Ali Kara',initials:'AK',title:'ELEKTRİK USTASI',category:'elektrik',icon:'⚡',coverEmoji:'⚡',coverBg:'linear-gradient(135deg,#1a1200,#2a1a00,#1a0a00)',coverGlow:'rgba(240,120,40,0.6)',rating:4.8,reviewCount:87,jobCount:620,experience:15,city:'Ankara',district:'Keçiören',hourlyRate:280,availability:'hafta içi 08:00–18:00, cumartesi 09:00–14:00',desc:'Konut ve iş yeri elektrik tesisatı, aydınlatma sistemleri ve sigorta panosu yenileme konularında uzman.',tags:['Elektrik Tesisatı','Priz & Anahtar','Aydınlatma','Sigorta Panosu','Arıza Tespiti'],badge:'premium',cert:'TEDAŞ Belgeli',busyDays:[2,6,9,13,16,20,23,27],comments:[{user:'me**',stars:5,date:'Mart 2025',text:'Çok hızlı ve temiz iş çıkardı. Kesinlikle tavsiye ederim.'},{user:'ay**',stars:5,date:'Şubat 2025',text:'Sigorta panomuz tamamen yenilendi, harika iş.'}]},
+  {id:'ahmet-usta',name:'Ahmet Yılmaz',initials:'AY',title:'ELEKTRİK USTASI',category:'elektrik',icon:'⚡',coverEmoji:'⚡',coverBg:'linear-gradient(135deg,#1a1200,#1a1000)',coverGlow:'rgba(240,197,92,0.5)',rating:4.9,reviewCount:87,jobCount:234,experience:15,city:'Ankara',district:'Çankaya',hourlyRate:320,availability:'hafta içi 08:00–18:00',desc:'Ev, ofis ve fabrika elektrik tesisatı. Acil arıza servisi. 15 yıllık deneyim.',tags:['Elektrik Tesisatı','Sigorta & Pano','Aydınlatma','Topraklama','Acil Servis'],badge:'premium',cert:'TEDAŞ Belgeli',busyDays:[1,5,8,12,15,19,22,26],comments:[{user:'me**',stars:5,date:'Mart 2025',text:'Harika iş, çok teşekkürler.'}]},
+  {id:'mehmet-usta',name:'Mehmet Demir',initials:'MD',title:'DOĞALGAZ TESİSATÇISI',category:'dogalgaz',icon:'🔥',coverEmoji:'🔥',coverBg:'linear-gradient(135deg,#1a0800,#2a1000)',coverGlow:'rgba(240,92,30,0.5)',rating:4.8,reviewCount:63,jobCount:178,experience:12,city:'Ankara',district:'Keçiören',hourlyRate:300,availability:'hafta içi 08:00–18:00',desc:'Sertifikalı doğalgaz tesisatçısı. Kombi bakım, kaçak tespiti ve yeni tesisat döşeme.',tags:['Doğalgaz Tesisatı','Kombi Bakım','Kaçak Tespiti','Proje & Onay'],badge:'premium',cert:'IGDAŞ Sertifikalı',busyDays:[3,7,10,14,17,21,24],comments:[{user:'ze**',stars:5,date:'Mart 2025',text:'Kombi bakımı çok profesyonel yapıldı.'}]},
+  {id:'ali-usta',name:'Ali Kaya',initials:'AK',title:'SU TESİSATÇISI',category:'su',icon:'🚿',coverEmoji:'🚿',coverBg:'linear-gradient(135deg,#001a1a,#002020)',coverGlow:'rgba(92,200,240,0.4)',rating:4.7,reviewCount:45,jobCount:156,experience:8,city:'Ankara',district:'Mamak',hourlyRate:250,availability:'her gün 07:00–21:00',desc:'Banyo ve mutfak su tesisatı, tıkanıklık açma, pis su hattı yenileme.',tags:['Pis Su','Temiz Su','Tıkanıklık','Banyo Renovasyon'],badge:null,cert:null,busyDays:[4,11,18,25],comments:[{user:'fa**',stars:4,date:'Şubat 2025',text:'Tıkanıklık sorunumuzu hızla çözdü.'}]},
+  {id:'hasan-usta',name:'Hasan Çelik',initials:'HÇ',title:'BOYACI & BADANACI',category:'boya',icon:'🎨',coverEmoji:'🎨',coverBg:'linear-gradient(135deg,#0d001a,#1a0030)',coverGlow:'rgba(123,92,240,0.5)',rating:4.9,reviewCount:112,jobCount:420,experience:20,city:'Ankara',district:'Yenimahalle',hourlyRate:280,availability:'hafta içi 08:00–18:00',desc:'İç ve dış cephe boya, dekoratif duvar uygulamaları, alçı sıva. 20 yıllık tecrübe.',tags:['İç Cephe Boya','Dış Cephe','Dekoratif Boya','Alçı & Sıva'],badge:'premium',cert:null,busyDays:[2,8,15,22,28],comments:[{user:'bu**',stars:5,date:'Mart 2025',text:'Salon boyamamız mükemmel oldu.'},{user:'ni**',stars:5,date:'Ocak 2025',text:'Temiz çalışma, söylediği zamanda bitirdi.'}]},
+  {id:'murat-usta',name:'Murat Aydın',initials:'MA',title:'İNŞAAT USTASI',category:'insaat',icon:'🏗️',coverEmoji:'🏗️',coverBg:'linear-gradient(135deg,#1a0800,#1a1000)',coverGlow:'rgba(240,140,60,0.4)',rating:4.6,reviewCount:34,jobCount:89,experience:10,city:'Ankara',district:'Etimesgut',hourlyRate:240,availability:'hafta içi 07:00–18:00',desc:'Tadilat, renovasyon ve kaba inşaat işleri. Duvar örme, yıkım, çatı izolasyon.',tags:['Kaba İnşaat','İnce İnşaat','Tadilat','Çatı & İzolasyon'],badge:null,cert:null,busyDays:[6,13,20,27],comments:[{user:'ka**',stars:5,date:'Şubat 2025',text:'Mutfak tadilat projemizi başarıyla tamamladı.'}]},
+  {id:'kemal-usta',name:'Kemal Özkan',initials:'KÖ',title:'KLİMA TEKNİKERİ',category:'klima',icon:'❄️',coverEmoji:'❄️',coverBg:'linear-gradient(135deg,#001020,#001a2a)',coverGlow:'rgba(92,200,240,0.5)',rating:4.8,reviewCount:56,jobCount:145,experience:9,city:'Ankara',district:'Çankaya',hourlyRate:290,availability:'her gün 08:00–20:00',desc:'Klima montaj, bakım ve onarım. Tüm markalar. Yerden ısıtma sistemleri.',tags:['Klima Montaj','Klima Bakım','Yerden Isıtma','Kalorifer'],badge:'premium',cert:'F-Gaz Belgeli',busyDays:[5,12,19,26],comments:[{user:'em**',stars:5,date:'Mart 2025',text:'Klima montajı çok temiz yapıldı.'}]},
+];
+
+function getU(id){return USTALAR.find(u=>u.id===id);}
+let lang=_ls.get('genz-lang', 'tr');
+let theme=_ls.get('genz-theme', 'dark');
+let user=_ls.getJSON('genz-user', null);
+let curU=null,selDay=null,calD=new Date();
+const MN=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+const DN=['Pz','Pt','Sa','Çr','Pe','Cu','Ct'];
+
+function init(){
+  document.documentElement.setAttribute('data-theme',theme);
+  const tb=document.getElementById('themeBtn');if(tb)tb.textContent=theme==='dark'?'🌙':'☀️';
+  if(user){const ab=document.getElementById('authBtn');if(ab)ab.textContent=user.username;}
+}
+function toggleTheme(){theme=theme==='dark'?'light':'dark';_ls.set('genz-theme', theme);document.body.classList.add('tt');document.documentElement.setAttribute('data-theme',theme);document.getElementById('themeBtn').textContent=theme==='dark'?'🌙':'☀️';toast(theme==='dark'?'Koyu tema 🌙':'Açık tema ☀️');setTimeout(()=>document.body.classList.remove('tt'),350);}
+function toggleLang(){lang=lang==='tr'?'en':'tr';_ls.set('genz-lang', lang);toast(lang==='tr'?'Dil: Türkçe 🇹🇷':'Language: English 🇬🇧');}
+function toggleMM(){document.getElementById('mmenu')?.classList.toggle('open');document.getElementById('hbBtn')?.classList.toggle('open');}
+let _tt;function toast(m){const t=document.getElementById('toast');if(!t)return;t.textContent=m;t.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),2800);}
+function gp(k){return new URLSearchParams(location.search).get(k);}
+function nav(u2){document.body.style.transition='opacity .25s';document.body.style.opacity='0';setTimeout(()=>{location.href=u2;},250);}
+
+function openAuth(t){if(user)switchTab('profile');else switchTab(t||'signin');document.getElementById('authModal').classList.add('open');}
+function closeAuth(){document.getElementById('authModal').classList.remove('open');}
+function closeAOO(e){if(e.target===document.getElementById('authModal'))closeAuth();}
+function switchTab(t){
+  document.querySelectorAll('.apanel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.atab').forEach(b=>b.classList.remove('active'));
+  const p=document.getElementById('panel-'+t);if(p)p.classList.add('active');
+  const b=document.getElementById('tab-'+t);if(b)b.classList.add('active');
+  const at=document.getElementById('authTabs');if(at)at.style.display=(t==='forgot'||t==='profile')?'none':'flex';
+}
+function doSI(){const e=document.getElementById('se').value.trim(),p=document.getElementById('sp').value;if(!e||!p){toast('Tüm alanları doldurun ⚠️');return;}login(e,'Kullanıcı');}
+function doSU(){const u2=document.getElementById('su').value.trim(),e=document.getElementById('sue').value.trim(),p=document.getElementById('sup').value;if(!u2||!e||!p){toast('Tüm alanları doldurun ⚠️');return;}if(p.length<8){toast('Şifre en az 8 karakter ⚠️');return;}login(e,u2);}
+function doFG(){const e=document.getElementById('fe').value.trim();if(!e){toast('E-posta girin ⚠️');return;}toast('Bağlantı gönderildi ✉️');setTimeout(()=>switchTab('signin'),1500);}
+function login(email,username){const c='@'+username.replace('@','');user={email,username:c};_ls.set('genz-user', JSON.stringify(user));const ab=document.getElementById('authBtn');if(ab)ab.textContent=c;closeAuth();toast('Hoş geldin, '+c+' 👋');}
+function doSO(){user=null;_ls.remove('genz-user');const ab=document.getElementById('authBtn');if(ab)ab.textContent='Giriş Yap';closeAuth();toast('Çıkış yapıldı 👋');}
+
+function renderCal(busy){
+  const mo=calD.getMonth(),yr=calD.getFullYear(),td=new Date();
+  document.getElementById('calM').textContent=MN[mo]+' '+yr;
+  const fd=(new Date(yr,mo,1).getDay()+6)%7;
+  const dim=new Date(yr,mo+1,0).getDate();
+  let h=DN.map(d=>`<div class="cdn">${d}</div>`).join('');
+  for(let i=0;i<fd;i++)h+='<div></div>';
+  for(let d=1;d<=dim;d++){
+    const ip=new Date(yr,mo,d)<new Date(td.getFullYear(),td.getMonth(),td.getDate());
+    const ib=busy&&busy.includes(d);
+    const is=selDay===d;
+    const it=d===td.getDate()&&mo===td.getMonth()&&yr===td.getFullYear();
+    let cls='cd2';
+    if(ip)cls+=' past';else if(is)cls+=' sel';else if(ib)cls+=' busy';else cls+=' avail';
+    if(it&&!is)cls+=' tod';
+    const cl=(!ip&&!ib)?`onclick="selD(${d})"`:' ';
+    h+=`<div class="${cls}" ${cl}>${d}</div>`;
+  }
+  document.getElementById('calG').innerHTML=h;
+}
+window.selD=function(d){selDay=d;renderCal(curU?curU.busyDays:[]);};
+window.calPrev=function(){calD=new Date(calD.getFullYear(),calD.getMonth()-1,1);renderCal(curU?curU.busyDays:[]);};
+window.calNext=function(){calD=new Date(calD.getFullYear(),calD.getMonth()+1,1);renderCal(curU?curU.busyDays:[]);};
+
+window.openRV=function(){if(!user){openAuth('signin');toast('Randevu için giriş yapmalısın ⚠️');return;}document.getElementById('rvModal').classList.add('open');calD=new Date();selDay=null;renderCal(curU?curU.busyDays:[]);};
+window.closeRV=function(){document.getElementById('rvModal').classList.remove('open');};
+window.closeRVOO=function(e){if(e.target===document.getElementById('rvModal'))closeRV();};
+window.toggleEG=function(){const i=document.getElementById('rcustom');i.style.display=i.style.display==='none'?'block':'none';};
+window.sendRV=function(){
+  if(!document.getElementById('rn').value.trim()||!document.getElementById('re').value.trim()||!document.getElementById('rp2').value.trim()){toast('Ad, e-posta ve telefon zorunlu ⚠️');return;}
+  if(!selDay){toast('Lütfen bir tarih seçin 📅');return;}
+  closeRV();toast('Randevu talebiniz gönderildi ✅');
+};
+
+window.switchMT=function(id){
+  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tpanel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tb-'+id).classList.add('active');
+  document.getElementById('tp-'+id).classList.add('active');
+};
+window.selSvc=function(el){document.querySelectorAll('.stag').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.htm').forEach(t=>t.classList.toggle('active',t.textContent===el.textContent));};
+window.selHM=function(el){document.querySelectorAll('.htm').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.stag').forEach(t=>t.classList.toggle('active',t.textContent===el.textContent));};
+
+init();
+document.addEventListener('DOMContentLoaded',()=>{
+  document.body.style.opacity='0';document.body.style.transition='opacity .3s';
+  requestAnimationFrame(()=>{document.body.style.opacity='1';});
+
+  const uid=gp('usta');
+  const u=getU(uid)||USTALAR[0];
+  curU=u;
+  document.title='GEN-Z · '+u.name;
+
+  document.getElementById('bc').innerHTML=
+    `<a href="ustam.html">Ustam</a><span class="sep">›</span>
+     <a href="ustam-kategori.html?cat=${u.category}">${u.title}</a>
+     <span class="sep">›</span><span class="cur">${u.name}</span>`;
+
+  document.getElementById('lp').innerHTML=
+    `<div class="cover" style="background:${u.coverBg}">
+       <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 60%,${u.coverGlow},transparent 70%)"></div>
+       <div class="cover-emoji">${u.coverEmoji}</div>
+     </div>
+     <div class="icard">
+       <div class="irow"><span class="ilbl">Konum</span><span class="ival">${u.district}, ${u.city}</span></div>
+       <div class="irow"><span class="ilbl">Uzmanlık</span><span class="ival a2">${u.title}</span></div>
+       <div class="irow"><span class="ilbl">Ort. Puan</span><span class="ival">${u.rating} ⭐</span></div>
+       <div class="irow"><span class="ilbl">Toplam Yorum</span><span class="ival">${u.reviewCount}</span></div>
+       ${u.cert?`<div class="irow"><span class="ilbl">Sertifika</span><span class="ival a2">${u.cert}</span></div>`:''}
+       <div class="irow"><span class="ilbl">Müsaitlik</span><span class="ival" style="font-size:11px">Her Gün 07–19</span></div>
+     </div>`;
+
+  const stars='★'.repeat(Math.round(u.rating))+'☆'.repeat(5-Math.round(u.rating));
+  const stags=u.tags.map((t,i)=>`<span class="stag${i===0?' active':''}" onclick="selSvc(this)">${t}</span>`).join('');
+  const htags=u.tags.map((t,i)=>`<span class="htm${i===0?' active':''}" onclick="selHM(this)">${t}</span>`).join('');
+  const cmts=u.comments.length===0
+    ?'<div style="text-align:center;padding:40px 20px;color:var(--text3)"><div style="font-size:40px;margin-bottom:12px">💬</div><div style="font-size:14px">Henüz yorum yok.</div></div>'
+    :u.comments.map(c=>`<div class="ci"><div class="ch"><div class="cav">${c.user[0].toUpperCase()}</div><span class="cu">${c.user}</span><span class="cs">${'★'.repeat(c.stars)}</span><span class="cd">${c.date}</span></div><div class="ct">${c.text}</div></div>`).join('');
+
+  document.getElementById('rp').innerHTML=
+    `<div>
+       <div class="cat-pill">${u.icon} ${u.title}</div>
+       <div class="uname">${u.name}${u.badge==='premium'?' <span class="pbadge">✦ Premium</span>':''}</div>
+       <div class="utitle">${u.title}</div>
+       <button class="plbtn"><div class="plavatar">${u.initials[0]}</div>PROFİLİ GÖRÜNTÜLE</button>
+       <div class="rrow"><span class="stars">${stars}</span><span class="rnum">${u.rating}</span><span class="rcnt">${u.reviewCount} yorum</span></div>
+     </div>
+     <div class="pbox">
+       <div class="prow"><span class="pmain">₺${u.hourlyRate}</span><span class="punit">/ saat başlangıç</span></div>
+       <div class="pavail">✓ MÜSAİT — BU HAFTA RANDEVU ALINABİLİR</div>
+       <div class="slbl">HİZMET SEÇİN</div>
+       <div class="stags">${stags}</div>
+       <button class="btn-rv" onclick="openRV()">📅 RANDEVU AL</button>
+       <div class="trow">
+         <span>✓ Kimlik Doğrulandı</span>
+         <span>🛡 Güvenli Ödeme</span>
+         <span>★ Kalite Garantisi</span>
+         <span>📍 Yerinde Hizmet</span>
+       </div>
+     </div>
+     <div>
+       <div class="tabs-bar">
+         <button class="tbtn active" id="tb-hakkinda" onclick="switchMT('hakkinda')">HAKKINDA</button>
+         <button class="tbtn" id="tb-ilanlar" onclick="switchMT('ilanlar')">İLANLAR</button>
+         <button class="tbtn" id="tb-yorumlar" onclick="switchMT('yorumlar')">YORUMLAR</button>
+       </div>
+       <div class="tc">
+         <div class="tpanel active" id="tp-hakkinda">
+           <p class="adesc">${u.desc}</p>
+           <div class="sgrid">
+             <div class="sc"><div class="sci">📅</div><div class="scv">${u.experience} Yıl</div><div class="scl">Deneyim</div></div>
+             <div class="sc"><div class="sci">⚡</div><div class="scv">${u.jobCount}+</div><div class="scl">Tamamlanan İş</div></div>
+             <div class="sc"><div class="sci">★</div><div class="scv">${u.rating} / 5</div><div class="scl">Puan</div></div>
+             <div class="sc"><div class="sci">📍</div><div class="scv" style="font-size:13px">${u.district}, ${u.city}</div><div class="scl">Bölge</div></div>
+             <div class="sc"><div class="sci">🕐</div><div class="scv" style="font-size:12px">Her Gün 07–19</div><div class="scl">Müsaitlik</div></div>
+             ${u.cert?`<div class="sc"><div class="sci">🏅</div><div class="scv" style="font-size:12px">${u.cert}</div><div class="scl">Sertifika</div></div>`:''}
+           </div>
+         </div>
+         <div class="tpanel" id="tp-ilanlar">
+           <div style="text-align:center;padding:40px 20px;color:var(--text3)"><div style="font-size:40px;margin-bottom:12px">📋</div><div style="font-size:16px;font-weight:700;color:var(--text2);margin-bottom:6px">Henüz ilan yok</div><div style="font-size:13px">Bu usta yakında ilanlarını paylaşacak.</div></div>
+         </div>
+         <div class="tpanel" id="tp-yorumlar">${cmts}</div>
+       </div>
+     </div>`;
+
+  document.getElementById('rvName').textContent=u.name;
+  document.getElementById('rvNotice').innerHTML=`<strong>${u.name}</strong> ${u.availability} saatleri arasında müsaittir.`;
+  document.getElementById('rvHizmet').innerHTML=htags;
+});
+</script>
+</body>
+</html>

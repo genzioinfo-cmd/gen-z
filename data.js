@@ -186,7 +186,7 @@ const DEMO_PRODUCTS = [
   {
     id: 2, emoji: '🕯️', name: 'El Yapımı Soya Mum Seti',
     price: 320, oldPrice: null, rating: 4.9, reviews: 28,
-    badge: 'hot', tags: ['ev dekor', 'el yapımı', 'lavanta', '3'lü set'],
+    badge: 'hot', tags: ['ev dekor', 'el yapımı', 'lavanta', "3'lü set"],
     category: 'dekor', kategori: 'Mum & Oda Kokusu',
     desc: 'El yapımı soya mumu seti. Lavanta, vanilya ve okaliptüs aromalı 3 farklı mum. Tamamen doğal, evcil hayvan dostu formül.',
     gradA: 'rgba(240,197,92,0.15)', gradB: 'rgba(240,140,60,0.1)',
@@ -255,14 +255,14 @@ const DEMO_PRODUCTS = [
   {
     id: 6, emoji: '🍵', name: 'Oolong Çay Koleksiyonu',
     price: 160, oldPrice: 195, rating: 4.9, reviews: 71,
-    badge: null, tags: ['çay', 'oolong', '5'li set', 'premium'],
+    badge: null, tags: ['çay', 'oolong', "5'li set", 'premium'],
     category: 'yiyecek', kategori: 'Çay & Kahve & Bitki Çayı',
     desc: 'Tayvan ve Çin kökenli 5 farklı oolong çeşidinden oluşan tatma seti.',
     gradA: 'rgba(92,240,120,0.15)', gradB: 'rgba(240,197,92,0.08)',
     seller: {
       id: 'cayyolu', uid: 'demo_satici_01', name: 'Çay Yolu', initials: 'ÇY', sales: 15200,
       joined: '2022', rating: 4.9, ratingCount: 890,
-      desc: 'Premium çay çeşitleri. Dünya'nın dört bir yanından özenle seçilmiş yapraklar.',
+      desc: 'Premium çay çeşitleri. Dünya\'nın dört bir yanından özenle seçilmiş yapraklar.',
       puanlar: { alis: 12, satis: 76000, eldenEle: 0, yorum: 45, davet: 30, toplam: 76087 },
       comments: [
         { user: 'fa**', stars: 5, date: 'Mart 2025', text: 'Her çeşit çok lezzetli.' },
@@ -306,7 +306,7 @@ const DEMO_PRODUCTS = [
   {
     id: 9, emoji: '🌱', name: 'Ev Bahçesi Tohum Seti',
     price: 130, oldPrice: null, rating: 4.8, reviews: 44,
-    badge: 'new', tags: ['tohum', 'organik', '12'li set', 'balkon'],
+    badge: 'new', tags: ['tohum', 'organik', "12'li set", 'balkon'],
     category: 'bahce', kategori: 'Bahçe & Dış Mekan',
     desc: 'Balkon ve iç mekân için ideal 12 farklı otantik tohum çeşidi. Fesleğen, nane, kekik dahil.',
     gradA: 'rgba(92,240,180,0.18)', gradB: 'rgba(92,240,120,0.1)',

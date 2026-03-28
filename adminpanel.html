@@ -297,134 +297,64 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
 .f-input:focus { border-color:var(--gold); }
 
 
-/* ══════════════════════════════════════════════
-   SAYFA EDİTÖRÜ
-════════════════════════════════════════════════ */
-#sayfa-tema { padding: 0 !important; height: calc(100vh - 56px); overflow: hidden; }
-.editor-wrap {
-  display: grid;
-  grid-template-columns: 180px 1fr 300px;
-  height: 100%;
-  overflow: hidden;
-}
-/* Sol - Sayfa Listesi */
-.editor-sol {
-  background: var(--panel);
-  border-right: 1px solid var(--border);
-  display: flex; flex-direction: column;
-  overflow-y: auto;
-}
-.editor-sol-baslik {
-  padding: 12px 14px 8px;
-  font-size: 10px; font-weight: 700;
-  letter-spacing: 1px; text-transform: uppercase;
-  color: var(--text2); border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
-.sayfa-listesi { padding: 6px; display: flex; flex-direction: column; gap: 2px; }
-.sayfa-btn {
-  display: flex; align-items: center; gap: 8px;
-  padding: 8px 10px; border-radius: 8px;
-  background: none; border: none; color: var(--text2);
-  font-size: 12px; font-weight: 500; cursor: pointer;
-  text-align: left; width: 100%; transition: all .15s;
-}
-.sayfa-btn:hover { background: var(--bg2); color: var(--text); }
-.sayfa-btn.aktif { background: rgba(201,168,76,.12); color: var(--gold); border-left: 2px solid var(--gold); }
-.sayfa-btn-icon { font-size: 14px; flex-shrink: 0; }
-
-/* Orta - iframe */
-.editor-orta {
-  display: flex; flex-direction: column;
-  background: #000; overflow: hidden;
-}
-.editor-orta-bar {
-  display: flex; align-items: center; gap: 8px;
-  padding: 6px 12px; background: var(--panel);
-  border-bottom: 1px solid var(--border);
-  font-size: 12px; color: var(--text2);
-  flex-shrink: 0;
-}
-.iframe-kap {
-  flex: 1; overflow: hidden; position: relative;
-}
-#sayfaIframe {
-  width: 100%; height: 100%;
-  border: none; display: block;
-  transform-origin: top left;
-}
-
-/* Sağ - Ayar Paneli */
-.editor-sag {
-  background: var(--panel);
-  border-left: 1px solid var(--border);
-  display: flex; flex-direction: column;
-  overflow: hidden;
-}
-.editor-sag-baslik {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 12px; border-bottom: 1px solid var(--border);
-  font-size: 12px; font-weight: 700; flex-shrink: 0;
-}
-.editor-sekmeler {
-  display: flex; gap: 2px; padding: 6px 8px;
-  border-bottom: 1px solid var(--border); flex-shrink: 0;
-  flex-wrap: wrap;
-}
-.editor-sekme {
-  padding: 5px 10px; border-radius: 6px;
-  background: none; border: 1px solid transparent;
-  color: var(--text2); font-size: 14px; cursor: pointer;
-  transition: all .15s;
-}
-.editor-sekme:hover { background: var(--bg2); color: var(--text); }
-.editor-sekme.aktif { background: rgba(201,168,76,.12); border-color: rgba(201,168,76,.3); color: var(--gold); }
-.editor-panel {
-  flex: 1; overflow-y: auto; padding: 12px;
-}
-.ep-baslik {
-  font-size: 11px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .8px; color: var(--text2); margin-bottom: 12px;
-}
-.ep-alan { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
-.ep-alan label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--text2); }
-.ep-input {
-  background: var(--bg3); border: 1px solid var(--border);
-  color: var(--text); border-radius: 6px;
-  padding: 7px 10px; font-size: 12px; font-family: inherit;
-  width: 100%; transition: border-color .2s; outline: none;
-}
-.ep-input:focus { border-color: var(--gold); }
-.ep-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.renk-row { display: flex; gap: 6px; align-items: center; }
-.renk-row input[type="color"] {
-  width: 36px; height: 32px; border-radius: 6px;
-  border: 1px solid var(--border); cursor: pointer;
-  background: none; flex-shrink: 0; padding: 2px;
-}
-.ep-toggle {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 12px; color: var(--text2); cursor: pointer;
-}
-.ep-toggle input[type="checkbox"] { accent-color: var(--gold); width: 14px; height: 14px; }
-.ep-ayrac { border-top: 1px solid var(--border); margin: 12px 0; }
-.ep-reset { font-size: 11px; color: var(--text2); background: none; border: none; cursor: pointer; padding: 0; }
-.ep-reset:hover { color: var(--text); }
-.mini-tab {
-  padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
-  background: var(--bg3); border: 1px solid var(--border);
-  color: var(--text2); cursor: pointer; transition: all .15s;
-}
-.mini-tab.aktif { background: rgba(201,168,76,.12); border-color: rgba(201,168,76,.3); color: var(--gold); }
-.editor-rek-kart {
-  background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 8px; padding: 10px; margin-bottom: 8px;
-}
-@media (max-width: 900px) {
-  .editor-wrap { grid-template-columns: 1fr; }
   .editor-sol { display: none; }
   .editor-orta { height: 300px; }
 }
+
+
+/* ══════════════════════════════════════════════
+   SAYFA EDİTÖRÜ CSS
+════════════════════════════════════════════════ */
+#sayfa-tema { padding:0!important; height:calc(100vh - 56px); overflow:hidden; }
+.ed-wrap { display:grid; grid-template-columns:200px 1fr 320px; height:100%; overflow:hidden; }
+
+/* Sol: sayfa listesi */
+.ed-sol { background:var(--panel); border-right:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
+.ed-sol-baslik { padding:10px 12px 8px; font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text2); border-bottom:1px solid var(--border); flex-shrink:0; }
+.ed-sayfa-liste { flex:1; overflow-y:auto; padding:4px; display:flex; flex-direction:column; gap:1px; }
+.sayfa-btn { display:flex; align-items:center; gap:8px; padding:7px 10px; border-radius:6px; background:none; border:none; color:var(--text2); font-size:11px; font-weight:500; cursor:pointer; text-align:left; width:100%; transition:all .15s; white-space:nowrap; overflow:hidden; }
+.sayfa-btn:hover { background:var(--bg2); color:var(--text); }
+.sayfa-btn.aktif { background:rgba(201,168,76,.1); color:var(--gold); border-left:2px solid var(--gold); padding-left:8px; }
+.sayfa-btn-ikon { font-size:13px; flex-shrink:0; }
+
+/* Orta: iframe */
+.ed-orta { display:flex; flex-direction:column; background:#000; overflow:hidden; }
+.ed-orta-bar { display:flex; align-items:center; gap:8px; padding:5px 10px; background:var(--panel); border-bottom:1px solid var(--border); flex-shrink:0; }
+.ed-iframe-kap { flex:1; overflow:hidden; position:relative; }
+#edIframe { width:100%; height:100%; border:none; display:block; }
+
+/* Sağ: ayar paneli */
+.ed-sag { background:var(--panel); border-left:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
+.ed-sag-baslik { display:flex; align-items:center; justify-content:space-between; padding:8px 12px; border-bottom:1px solid var(--border); flex-shrink:0; font-size:12px; font-weight:700; }
+.ed-sekmeler { display:flex; flex-wrap:wrap; gap:2px; padding:6px 8px; border-bottom:1px solid var(--border); flex-shrink:0; }
+.ed-sekme { padding:4px 10px; border-radius:6px; background:none; border:1px solid transparent; color:var(--text2); font-size:11px; font-weight:600; cursor:pointer; transition:all .15s; white-space:nowrap; }
+.ed-sekme:hover { background:var(--bg2); color:var(--text); }
+.ed-sekme.aktif { background:rgba(201,168,76,.1); border-color:rgba(201,168,76,.25); color:var(--gold); }
+.ed-panel { flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:10px; }
+
+/* Panel içi elemanlar */
+.ep-alan { display:flex; flex-direction:column; gap:5px; }
+.ep-alan label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text2); }
+.ep-inp { background:var(--bg3); border:1px solid var(--border); color:var(--text); border-radius:6px; padding:7px 10px; font-size:12px; font-family:inherit; width:100%; outline:none; transition:border-color .2s; }
+.ep-inp:focus { border-color:var(--gold); }
+.ep-renk-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.ep-renk-row { display:flex; gap:6px; align-items:center; }
+.ep-renk-row input[type="color"] { width:34px; height:30px; border-radius:5px; border:1px solid var(--border); cursor:pointer; background:none; flex-shrink:0; padding:2px; }
+.ep-toggle-row { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text2); cursor:pointer; }
+.ep-toggle-row input[type="checkbox"] { accent-color:var(--gold); width:14px; height:14px; }
+.ep-tip-row { display:flex; gap:4px; flex-wrap:wrap; margin-top:4px; }
+.ep-tip { padding:4px 10px; border-radius:5px; font-size:11px; font-weight:600; background:var(--bg3); border:1px solid var(--border); color:var(--text2); cursor:pointer; transition:all .15s; }
+.ep-tip:hover { border-color:var(--gold); color:var(--text); }
+.ep-tip.aktif { background:rgba(201,168,76,.1); border-color:rgba(201,168,76,.3); color:var(--gold); }
+.ep-not { font-size:11px; color:var(--text2); background:rgba(255,255,255,.03); border:1px solid var(--border); border-radius:6px; padding:7px 10px; line-height:1.5; }
+.ep-not code { background:var(--bg3); padding:1px 5px; border-radius:3px; font-size:10px; }
+.ep-gorsel-prev { width:100%; height:70px; border-radius:6px; border:1px solid var(--border); background:var(--bg2) center/cover no-repeat; }
+.ep-reset-btn { background:none; border:none; color:var(--text2); font-size:11px; cursor:pointer; padding:0; text-align:left; }
+.ep-reset-btn:hover { color:var(--text); text-decoration:underline; }
+.ed-rek-kart { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:10px; display:flex; flex-direction:column; gap:8px; }
+
+@media (max-width:1100px) { .ed-wrap { grid-template-columns:160px 1fr 280px; } }
+@media (max-width:800px) { .ed-wrap { grid-template-columns:1fr; } .ed-sol,.ed-orta { display:none; } }
 
 </style>
 </head>
@@ -740,13 +670,6 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
     </div>
   </div>
 
-  <!-- SAYFA EDITÖRÜ -->
-  <div class="sayfa" id="sayfa-tema">
-    <div class="editor-wrap">
-
-      <!-- SOL: Sayfa Listesi -->
-      <div class="editor-sol">
-        <div class="editor-sol-baslik">📄 Sayfalar</div>
         <div class="sayfa-listesi" id="sayfaListesi">
           <button class="sayfa-btn aktif" onclick="sayfaSec('gen-z',this)" data-sayfa="gen-z">
             <span class="sayfa-btn-icon">⚡</span><span>Keşfet (Gen-Z)</span>
@@ -924,6 +847,182 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
 
       </div><!-- /editor-sag -->
     </div><!-- /editor-wrap -->
+  </div>
+
+  <!-- ═══ SAYFA EDİTÖRÜ ═══ -->
+  <div class="sayfa" id="sayfa-tema">
+    <div class="ed-wrap">
+
+      <!-- SOL: Sayfa Listesi -->
+      <div class="ed-sol">
+        <div class="ed-sol-baslik">📄 Tüm Sayfalar</div>
+        <div class="ed-sayfa-liste">
+          <button class="sayfa-btn aktif" onclick="sayfaSec('gen-z',this)" data-sayfa="gen-z"><span class="sayfa-btn-ikon">⚡</span><span>Keşfet (Gen-Z)</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('magaza',this)" data-sayfa="magaza"><span class="sayfa-btn-ikon">🏪</span><span>Mağaza</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('ustam',this)" data-sayfa="ustam"><span class="sayfa-btn-ikon">🔨</span><span>Ustam</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('topluluk',this)" data-sayfa="topluluk"><span class="sayfa-btn-ikon">👥</span><span>Topluluk</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('elden-ele',this)" data-sayfa="elden-ele"><span class="sayfa-btn-ikon">🫶</span><span>Elden-Ele</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('birlikte-buyuyelim',this)" data-sayfa="birlikte-buyuyelim"><span class="sayfa-btn-ikon">🤝</span><span>Birlikte Büyüyelim</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('gen-z.html',this)" data-sayfa="gen-z.html"><span class="sayfa-btn-ikon">🛍</span><span>Ürün Detay (GZ)</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('magaza-urun',this)" data-sayfa="magaza-urun"><span class="sayfa-btn-ikon">📦</span><span>Ürün Detay (Mağaza)</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('gen-z.katagori',this)" data-sayfa="gen-z.katagori"><span class="sayfa-btn-ikon">📂</span><span>Kategori (GZ)</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('magaza-kategori',this)" data-sayfa="magaza-kategori"><span class="sayfa-btn-ikon">📂</span><span>Kategori (Mağaza)</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('gen-z.satici',this)" data-sayfa="gen-z.satici"><span class="sayfa-btn-ikon">🧑‍💼</span><span>Satıcı Profili (GZ)</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('magaza-satici',this)" data-sayfa="magaza-satici"><span class="sayfa-btn-ikon">🧑‍💼</span><span>Satıcı Profili (Mağaza)</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('ustam-kategori',this)" data-sayfa="ustam-kategori"><span class="sayfa-btn-ikon">📂</span><span>Ustam Kategori</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('ustam-profil',this)" data-sayfa="ustam-profil"><span class="sayfa-btn-ikon">🔧</span><span>Usta Profili</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('siparis',this)" data-sayfa="siparis"><span class="sayfa-btn-ikon">🛒</span><span>Sipariş</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('profile',this)" data-sayfa="profile"><span class="sayfa-btn-ikon">👤</span><span>Profil</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('stil_odasi_v3',this)" data-sayfa="stil_odasi_v3"><span class="sayfa-btn-ikon">👗</span><span>Stil Odası</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('ev_stil_odasi',this)" data-sayfa="ev_stil_odasi"><span class="sayfa-btn-ikon">🏠</span><span>Ev Stil Odası</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('hakkimizda',this)" data-sayfa="hakkimizda"><span class="sayfa-btn-ikon">ℹ️</span><span>Hakkımızda</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('iletisim',this)" data-sayfa="iletisim"><span class="sayfa-btn-ikon">📩</span><span>İletişim</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('gizlilik',this)" data-sayfa="gizlilik"><span class="sayfa-btn-ikon">🔒</span><span>Gizlilik</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('kullanim-sartlari',this)" data-sayfa="kullanim-sartlari"><span class="sayfa-btn-ikon">📋</span><span>Kullanım Şartları</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('profile-orders',this)" data-sayfa="profile-orders"><span class="sayfa-btn-ikon">📦</span><span>Profil - Siparişler</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('profile-cart',this)" data-sayfa="profile-cart"><span class="sayfa-btn-ikon">🛒</span><span>Profil - Sepet</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('profile-favorites',this)" data-sayfa="profile-favorites"><span class="sayfa-btn-ikon">❤️</span><span>Profil - Favoriler</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('profile-addresses',this)" data-sayfa="profile-addresses"><span class="sayfa-btn-ikon">📍</span><span>Profil - Adresler</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('profile-info',this)" data-sayfa="profile-info"><span class="sayfa-btn-ikon">👤</span><span>Profil - Bilgiler</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('profile-notifications',this)" data-sayfa="profile-notifications"><span class="sayfa-btn-ikon">🔔</span><span>Profil - Bildirimler</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('profile-reviews',this)" data-sayfa="profile-reviews"><span class="sayfa-btn-ikon">⭐</span><span>Profil - Yorumlar</span></button>
+          <button class="sayfa-btn" onclick="sayfaSec('profile-randevular',this)" data-sayfa="profile-randevular"><span class="sayfa-btn-ikon">📅</span><span>Profil - Randevular</span></button>
+        </div>
+      </div>
+
+      <!-- ORTA: Canlı Önizleme -->
+      <div class="ed-orta">
+        <div class="ed-orta-bar">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span id="ed-sayfa-adi" style="font-weight:700;font-size:12px;color:var(--text);">gen-z.html</span>
+            <span id="ed-kayit-durum" style="font-size:11px;color:var(--text2);"></span>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="eylem-btn" onclick="edIframeYenile()" title="Yenile">↻</button>
+            <button class="eylem-btn detay" onclick="window.open(document.getElementById('edIframe').src.split('?')[0],'_blank')">↗ Aç</button>
+          </div>
+        </div>
+        <div class="ed-iframe-kap">
+          <iframe id="edIframe" src="gen-z.html" frameborder="0"></iframe>
+        </div>
+      </div>
+
+      <!-- SAĞ: Ayar Paneli -->
+      <div class="ed-sag">
+        <div class="ed-sag-baslik">
+          <span id="ed-panel-baslik">⚡ Gen-Z Ayarları</span>
+          <button class="eylem-btn onay" onclick="edKaydet()" style="padding:5px 14px;font-size:12px;">💾 Kaydet</button>
+        </div>
+
+        <!-- Sekme butonları -->
+        <div class="ed-sekmeler">
+          <button class="ed-sekme aktif" onclick="edSekme('renkler',this)" title="Renkler">🎨 Renkler</button>
+          <button class="ed-sekme" onclick="edSekme('arkaplan',this)" title="Arka Plan">🖼 Arka Plan</button>
+          <button class="ed-sekme" onclick="edSekme('navbar',this)" title="Navbar">🔝 Navbar</button>
+          <button class="ed-sekme" onclick="edSekme('hero',this)" title="Hero">✨ Hero</button>
+          <button class="ed-sekme" onclick="edSekme('duyuru',this)" title="Duyuru">📢 Duyuru</button>
+          <button class="ed-sekme" onclick="edSekme('reklamlar',this)" title="Reklamlar">📣 Reklamlar</button>
+          <button class="ed-sekme" onclick="edSekme('css',this)" title="CSS">💻 CSS</button>
+        </div>
+
+        <!-- ── RENKLER ── -->
+        <div class="ed-panel" id="ep-renkler">
+          <div class="ep-not">Bu sayfaya özel renkler. Boş bırakılırsa varsayılan tema kullanılır.</div>
+          <div class="ep-renk-grid">
+            <div class="ep-alan"><label>Ana Renk (--accent)</label><div class="ep-renk-row"><input type="color" id="er-accent" value="#7B5CF0"><input type="text" id="er-accent-h" class="ep-inp" placeholder="#7B5CF0"></div></div>
+            <div class="ep-alan"><label>Vurgu 2 (--accent2)</label><div class="ep-renk-row"><input type="color" id="er-accent2" value="#F0C55C"><input type="text" id="er-accent2-h" class="ep-inp" placeholder="#F0C55C"></div></div>
+            <div class="ep-alan"><label>Vurgu 3 (--accent3)</label><div class="ep-renk-row"><input type="color" id="er-accent3" value="#5CF0B4"><input type="text" id="er-accent3-h" class="ep-inp" placeholder="#5CF0B4"></div></div>
+            <div class="ep-alan"><label>Arka Plan (--bg)</label><div class="ep-renk-row"><input type="color" id="er-bg" value="#0a0a0f"><input type="text" id="er-bg-h" class="ep-inp" placeholder="#0a0a0f"></div></div>
+            <div class="ep-alan"><label>Yüzey (--bg2)</label><div class="ep-renk-row"><input type="color" id="er-bg2" value="#13131a"><input type="text" id="er-bg2-h" class="ep-inp" placeholder="#13131a"></div></div>
+            <div class="ep-alan"><label>Yüzey 2 (--bg3)</label><div class="ep-renk-row"><input type="color" id="er-bg3" value="#1c1c28"><input type="text" id="er-bg3-h" class="ep-inp" placeholder="#1c1c28"></div></div>
+            <div class="ep-alan"><label>Kenarlık (--border)</label><div class="ep-renk-row"><input type="color" id="er-border" value="#2e2e3f"><input type="text" id="er-border-h" class="ep-inp" placeholder="#2e2e3f"></div></div>
+            <div class="ep-alan"><label>Ana Metin (--text)</label><div class="ep-renk-row"><input type="color" id="er-text" value="#f0eeff"><input type="text" id="er-text-h" class="ep-inp" placeholder="#f0eeff"></div></div>
+            <div class="ep-alan"><label>İkincil Metin (--text2)</label><div class="ep-renk-row"><input type="color" id="er-text2" value="#9b97b8"><input type="text" id="er-text2-h" class="ep-inp" placeholder="#9b97b8"></div></div>
+            <div class="ep-alan"><label>Üçüncül Metin (--text3)</label><div class="ep-renk-row"><input type="color" id="er-text3" value="#5a5770"><input type="text" id="er-text3-h" class="ep-inp" placeholder="#5a5770"></div></div>
+          </div>
+          <button class="ep-reset-btn" onclick="edRenkVarsayilan()">↺ Bu sayfanın renklerini sıfırla</button>
+        </div>
+
+        <!-- ── ARKA PLAN ── -->
+        <div class="ed-panel" id="ep-arkaplan" style="display:none">
+          <label class="ep-toggle-row"><input type="checkbox" id="ab-aktif"><span>Özel arka plan aktif</span></label>
+          <div class="ep-alan" style="margin-top:12px"><label>Tip</label>
+            <div class="ep-tip-row">
+              <button class="ep-tip aktif" onclick="edAbTip('renk',this)">Düz Renk</button>
+              <button class="ep-tip" onclick="edAbTip('gradient',this)">Gradient</button>
+              <button class="ep-tip" onclick="edAbTip('gorsel',this)">Fotoğraf</button>
+            </div>
+          </div>
+          <div id="ab-s-renk" class="ep-alan"><label>Renk</label><div class="ep-renk-row"><input type="color" id="ab-renk" value="#0a0a0f"><input type="text" id="ab-renk-h" class="ep-inp"></div></div>
+          <div id="ab-s-gradient" style="display:none" class="ep-alan"><label>Gradient CSS</label><input type="text" id="ab-gradient" class="ep-inp" placeholder="linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 100%)"></div>
+          <div id="ab-s-gorsel" style="display:none">
+            <div class="ep-alan"><label>Fotoğraf URL</label><input type="text" id="ab-gorsel-url" class="ep-inp" placeholder="https://..." oninput="edGorselPrev('ab-gorsel-url','ab-gorsel-prev')"></div>
+            <div id="ab-gorsel-prev" class="ep-gorsel-prev"></div>
+            <div class="ep-alan"><label>Karartma: <span id="ab-op-val">0.50</span></label><input type="range" id="ab-opasite" min="0" max="1" step="0.05" value="0.5" style="width:100%" oninput="document.getElementById('ab-op-val').textContent=parseFloat(this.value).toFixed(2)"></div>
+          </div>
+        </div>
+
+        <!-- ── NAVBAR ── -->
+        <div class="ed-panel" id="ep-navbar" style="display:none">
+          <label class="ep-toggle-row"><input type="checkbox" id="nb-aktif"><span>Özel navbar aktif</span></label>
+          <div class="ep-alan" style="margin-top:12px"><label>Logo Metni</label><input type="text" id="nb-logo" class="ep-inp" placeholder="GEN-Z"></div>
+          <div class="ep-alan"><label>Arka Plan Rengi</label><div class="ep-renk-row"><input type="color" id="nb-bg" value="#0a0a0f"><input type="text" id="nb-bg-h" class="ep-inp" placeholder="rgba(10,10,15,0.85)"></div></div>
+          <div class="ep-alan"><label>Blur (px): <span id="nb-blur-v">20</span></label><input type="range" id="nb-blur" min="0" max="40" value="20" style="width:100%" oninput="document.getElementById('nb-blur-v').textContent=this.value"></div>
+        </div>
+
+        <!-- ── HERO ── -->
+        <div class="ed-panel" id="ep-hero" style="display:none">
+          <label class="ep-toggle-row"><input type="checkbox" id="hero-aktif"><span>Hero alanını özelleştir</span></label>
+          <div class="ep-alan" style="margin-top:12px"><label>Arka Plan Tipi</label>
+            <div class="ep-tip-row">
+              <button class="ep-tip aktif" onclick="edHeroTip('gorsel',this)">Fotoğraf</button>
+              <button class="ep-tip" onclick="edHeroTip('gradient',this)">Gradient</button>
+              <button class="ep-tip" onclick="edHeroTip('renk',this)">Renk</button>
+            </div>
+          </div>
+          <div id="hero-s-gorsel" class="ep-alan"><label>Fotoğraf URL</label><input type="text" id="hero-gorsel-url" class="ep-inp" placeholder="https://..." oninput="edGorselPrev('hero-gorsel-url','hero-gorsel-prev')"><div id="hero-gorsel-prev" class="ep-gorsel-prev" style="margin-top:6px"></div></div>
+          <div id="hero-s-gradient" style="display:none" class="ep-alan"><label>Gradient CSS</label><input type="text" id="hero-gradient" class="ep-inp" placeholder="radial-gradient(...)"></div>
+          <div id="hero-s-renk" style="display:none" class="ep-alan"><label>Renk</label><div class="ep-renk-row"><input type="color" id="hero-renk" value="#7B5CF0"><input type="text" id="hero-renk-h" class="ep-inp"></div></div>
+          <div class="ep-alan"><label>Min. Yükseklik</label><input type="text" id="hero-minh" class="ep-inp" placeholder="400px"></div>
+          <hr style="border-color:var(--border);margin:12px 0">
+          <div class="ep-not">Sayfa başlığı ve butonunu değiştir (sayfada .hero-title, .hero-sub, .btn-primary bulunmalı)</div>
+          <div class="ep-alan"><label>Başlık</label><input type="text" id="hero-baslik" class="ep-inp" placeholder="Sayfanın başlığı..."></div>
+          <div class="ep-alan"><label>Alt Yazı</label><input type="text" id="hero-altyazi" class="ep-inp" placeholder="Alt başlık metni..."></div>
+          <div class="ep-alan"><label>Buton Metni</label><input type="text" id="hero-btn-metin" class="ep-inp" placeholder="Keşfet →"></div>
+          <div class="ep-alan"><label>Buton Linki</label><input type="text" id="hero-btn-link" class="ep-inp" placeholder="magaza.html"></div>
+        </div>
+
+        <!-- ── DUYURU ── -->
+        <div class="ed-panel" id="ep-duyuru" style="display:none">
+          <label class="ep-toggle-row"><input type="checkbox" id="du-aktif"><span>Duyuru bandını aktifleştir</span></label>
+          <div class="ep-not" style="margin-top:8px">Sayfanın en üstünde tam genişlikte şerit olarak gösterilir.</div>
+          <div class="ep-alan" style="margin-top:12px"><label>Duyuru Metni</label><input type="text" id="du-metin" class="ep-inp" placeholder="🔥 Büyük kampanya başladı!"></div>
+          <div class="ep-alan"><label>Link (tıklanınca gidilecek)</label><input type="text" id="du-link" class="ep-inp" placeholder="https://..."></div>
+          <div class="ep-alan"><label>Arka Plan</label><div class="ep-renk-row"><input type="color" id="du-bg" value="#7B5CF0"><input type="text" id="du-bg-h" class="ep-inp" placeholder="#7B5CF0"></div></div>
+          <div class="ep-alan"><label>Metin Rengi</label><div class="ep-renk-row"><input type="color" id="du-text" value="#ffffff"><input type="text" id="du-text-h" class="ep-inp" placeholder="#ffffff"></div></div>
+          <label class="ep-toggle-row" style="margin-top:8px"><input type="checkbox" id="du-kapat"><span>Kapatılabilir (✕ butonu göster)</span></label>
+        </div>
+
+        <!-- ── REKLAM ALANLARI ── -->
+        <div class="ed-panel" id="ep-reklamlar" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <span class="ep-not" style="margin:0">Her sayfada hazır alanlar: <code>genz-rek-1</code> (alt), <code>genz-rek-2</code> (üst)</span>
+            <button class="eylem-btn onay" onclick="edRekEkle()" style="padding:3px 10px;font-size:11px;white-space:nowrap">+ Yeni</button>
+          </div>
+          <div id="ed-rek-liste"></div>
+        </div>
+
+        <!-- ── ÖZEL CSS ── -->
+        <div class="ed-panel" id="ep-css" style="display:none">
+          <div class="ep-not">Sadece bu sayfaya uygulanır. CSS değişkenlerini override edebilirsin.</div>
+          <textarea id="ep-css-kod" rows="16" style="width:100%;font-family:monospace;font-size:11px;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:10px;resize:vertical;margin-top:8px" placeholder="/* Örnek */
+.hero { min-height: 600px; }
+body { background-image: url(...); }"></textarea>
+          <button class="eylem-btn red" onclick="document.getElementById('ep-css-kod').value=''" style="margin-top:6px;width:100%">🗑 Temizle</button>
+        </div>
+
+      </div><!-- /ed-sag -->
+    </div><!-- /ed-wrap -->
   </div>
 </main>
 </div>
@@ -1771,7 +1870,7 @@ window.sayfaGit=function(id,el){
   document.querySelectorAll('.sb-item').forEach(s=>s.classList.remove('aktif'));
   document.getElementById('sayfa-'+id)?.classList.add('aktif');
   if(el)el.classList.add('aktif');
-  const basliklar={ozet:'📊 Özet',basvurular:'📋 Ortak Başvuruları',siparisler:'🛒 Tüm Siparişler',ustaSiparisler:'✂ Usta Siparişlerii',kullanicilar:'👥 Kullanıcılar',gencimBasvurular:'🎓 Gencim — Sanatçı Başvuruları',finans:'💰 Finans Özeti',urunler:'🎨 Paylaşılan Ürünler',cekim:'💸 Çekim Talepleri',cekmeTalepleri:'💸 Çekme Talepleri',tema:'🎨 Sayfa Editörü'};
+  const basliklar={ozet:'📊 Özet',tema:'🎨 Sayfa Editörü',basvurular:'📋 Ortak Başvuruları',siparisler:'🛒 Tüm Siparişler',ustaSiparisler:'✂ Usta Siparişlerii',kullanicilar:'👥 Kullanıcılar',gencimBasvurular:'🎓 Gencim — Sanatçı Başvuruları',finans:'💰 Finans Özeti',urunler:'🎨 Paylaşılan Ürünler',cekim:'💸 Çekim Talepleri',cekmeTalepleri:'💸 Çekme Talepleri'};
   document.getElementById('topbarBaslik').textContent=basliklar[id]||id;
   if(id==='finans')renderFinans();
   if(id==='urunler')renderUrunler();
@@ -1785,6 +1884,172 @@ window.filtreSiparis=function(tip,el){window._filtreSiparis=tip;document.querySe
 window.aramaYap=function(tip){if(tip==='basvuru')renderBasvurular();else if(tip==='siparis')renderSiparisler();else if(tip==='usta')renderTerziSiparisler();else if(tip==='kullanici')renderKullanicilar();};
 window.sayfaYenile=function(){tumVerileriYukle();bildir('Veriler yenilendi.');};
 window.toggleSidebar=function(){document.getElementById('sidebar').classList.toggle('acik');};
+
+/* ══════════════════════════════════════════════
+   SAYFA EDİTÖRÜ JS
+════════════════════════════════════════════════ */
+var _edSayfa='gen-z',_edData={},_edAbTip='renk',_edHeroTip='gorsel';
+
+window.renderTema=function(){
+  var b=document.querySelector('.sayfa-btn[data-sayfa="gen-z"]');
+  window.sayfaSec('gen-z',b);
+};
+
+window.sayfaSec=async function(sayfa,btn){
+  _edSayfa=sayfa;
+  document.querySelectorAll('.sayfa-btn').forEach(function(b){b.classList.remove('aktif');});
+  if(btn)btn.classList.add('aktif');
+  var adEl=document.getElementById('ed-sayfa-adi');if(adEl)adEl.textContent=sayfa+'.html';
+  var bEl=document.getElementById('ed-panel-baslik');
+  if(bEl){var ad=btn?(btn.querySelector('span:last-child')||btn).textContent:sayfa;bEl.textContent=ad+' Ayarları';}
+  var ifr=document.getElementById('edIframe');if(ifr)ifr.src=sayfa+'.html?'+Date.now();
+  try{
+    var snap=await getDoc(doc(db,'platform_ayarlari','sayfa_'+sayfa));
+    _edData=snap.exists()?snap.data():{};
+    edDoldur(_edData);
+    var ds=document.getElementById('ed-kayit-durum');
+    if(ds)ds.textContent=snap.exists()?'✓ Özel ayar kayıtlı':'○ Varsayılan tema';
+  }catch(e){bildir('Yüklenemedi: '+e.message,'hata');}
+};
+
+function edDoldur(d){
+  function sR(id,v){if(!v)return;var ci=document.getElementById(id),hi=document.getElementById(id+'-h');if(ci)ci.value=v;if(hi)hi.value=v;}
+  var r=d.renkler||{};
+  sR('er-accent',r.accent||'#7B5CF0');sR('er-accent2',r.accent2||'#F0C55C');sR('er-accent3',r.accent3||'#5CF0B4');
+  sR('er-bg',r.bg||'#0a0a0f');sR('er-bg2',r.bg2||'#13131a');sR('er-bg3',r.bg3||'#1c1c28');
+  sR('er-border',r.border||'#2e2e3f');sR('er-text',r.text||'#f0eeff');sR('er-text2',r.text2||'#9b97b8');sR('er-text3',r.text3||'#5a5770');
+  var a=d.arkaplan||{};
+  var abA=document.getElementById('ab-aktif');if(abA)abA.checked=!!a.aktif;
+  edAbTip(a.tip||'renk',null);
+  if(a.renk)sR('ab-renk',a.renk);
+  if(a.gradient){var e=document.getElementById('ab-gradient');if(e)e.value=a.gradient;}
+  if(a.gorselUrl){var e2=document.getElementById('ab-gorsel-url');if(e2){e2.value=a.gorselUrl;edGPrev('ab-gorsel-url','ab-gorsel-prev');}}
+  if(a.opasite!==undefined){var e3=document.getElementById('ab-opasite');if(e3){e3.value=a.opasite;var ov=document.getElementById('ab-op-val');if(ov)ov.textContent=parseFloat(a.opasite).toFixed(2);}}
+  var nb=d.navbar||{};
+  var nbA=document.getElementById('nb-aktif');if(nbA)nbA.checked=!!nb.aktif;
+  if(nb.logoMetin){var e4=document.getElementById('nb-logo');if(e4)e4.value=nb.logoMetin;}
+  sR('nb-bg',nb.bgRenk||'#0a0a0f');
+  if(nb.blur!==undefined){var e5=document.getElementById('nb-blur');if(e5){e5.value=nb.blur;var bv=document.getElementById('nb-blur-v');if(bv)bv.textContent=nb.blur;}}
+  var h=d.hero||{};
+  var hA=document.getElementById('hero-aktif');if(hA)hA.checked=!!h.aktif;
+  edHeroTip(h.bgTip||'gorsel',null);
+  if(h.gorselUrl){var e6=document.getElementById('hero-gorsel-url');if(e6){e6.value=h.gorselUrl;edGPrev('hero-gorsel-url','hero-gorsel-prev');}}
+  if(h.gradient){var e7=document.getElementById('hero-gradient');if(e7)e7.value=h.gradient;}
+  sR('hero-renk',h.renk||'#7B5CF0');
+  var fields={minh:'hero-minh',baslik:'hero-baslik',altyazi:'hero-altyazi',butonMetin:'hero-btn-metin',butonLink:'hero-btn-link'};
+  Object.keys(fields).forEach(function(k){if(h[k]){var e=document.getElementById(fields[k]);if(e)e.value=h[k];}});
+  var du=d.duyuru||{};
+  var duA=document.getElementById('du-aktif');if(duA)duA.checked=!!du.aktif;
+  if(du.metin){var e8=document.getElementById('du-metin');if(e8)e8.value=du.metin;}
+  if(du.link){var e9=document.getElementById('du-link');if(e9)e9.value=du.link;}
+  sR('du-bg',du.bgRenk||'#7B5CF0');sR('du-text',du.textRenk||'#ffffff');
+  var duK=document.getElementById('du-kapat');if(duK)duK.checked=!!du.kapatilabilir;
+  edRekRender(d.reklamlar||[]);
+  var css=document.getElementById('ep-css-kod');if(css)css.value=d.ozelCss||'';
+}
+
+window.edSekme=function(id,btn){
+  document.querySelectorAll('.ed-panel').forEach(function(p){p.style.display='none';});
+  var p=document.getElementById('ep-'+id);if(p)p.style.display='flex';
+  document.querySelectorAll('.ed-sekme').forEach(function(b){b.classList.remove('aktif');});
+  if(btn)btn.classList.add('aktif');
+};
+
+window.edAbTip=function(tip,btn){
+  _edAbTip=tip;
+  ['ab-s-renk','ab-s-gradient','ab-s-gorsel'].forEach(function(id){var e=document.getElementById(id);if(e)e.style.display='none';});
+  var m={renk:'ab-s-renk',gradient:'ab-s-gradient',gorsel:'ab-s-gorsel'};
+  var e=document.getElementById(m[tip]);if(e){e.style.display='flex';e.style.flexDirection='column';}
+  document.querySelectorAll('#ep-arkaplan .ep-tip').forEach(function(b){b.classList.remove('aktif');});
+  if(btn){btn.classList.add('aktif');}else{var a=document.querySelector('#ep-arkaplan .ep-tip[onclick*="'+tip+'"]');if(a)a.classList.add('aktif');}
+};
+
+window.edHeroTip=function(tip,btn){
+  _edHeroTip=tip;
+  ['hero-s-gorsel','hero-s-gradient','hero-s-renk'].forEach(function(id){var e=document.getElementById(id);if(e)e.style.display='none';});
+  var m={gorsel:'hero-s-gorsel',gradient:'hero-s-gradient',renk:'hero-s-renk'};
+  var e=document.getElementById(m[tip]);if(e){e.style.display='flex';e.style.flexDirection='column';}
+  document.querySelectorAll('#ep-hero .ep-tip').forEach(function(b){b.classList.remove('aktif');});
+  if(btn){btn.classList.add('aktif');}else{var a=document.querySelector('#ep-hero .ep-tip[onclick*="'+tip+'"]');if(a)a.classList.add('aktif');}
+};
+
+window.edGPrev=function(inp,prev){
+  var url=document.getElementById(inp)?.value;
+  var el=document.getElementById(prev);
+  if(el&&url&&url.startsWith('http'))el.style.backgroundImage="url('"+url+"')";
+};
+
+window.edIframeYenile=function(){var ifr=document.getElementById('edIframe');if(ifr)ifr.src=_edSayfa+'.html?'+Date.now();};
+
+window.edKaydet=async function(){
+  function gV(id){return(document.getElementById(id)||{}).value||'';}
+  function gH(id){return gV(id+'-h')||gV(id);}
+  function gC(id){return!!(document.getElementById(id)||{}).checked;}
+  try{
+    var payload={
+      renkler:{accent:gH('er-accent'),accent2:gH('er-accent2'),accent3:gH('er-accent3'),bg:gH('er-bg'),bg2:gH('er-bg2'),bg3:gH('er-bg3'),border:gH('er-border'),text:gH('er-text'),text2:gH('er-text2'),text3:gH('er-text3')},
+      arkaplan:(function(){var o={aktif:gC('ab-aktif'),tip:_edAbTip};if(_edAbTip==='renk')o.renk=gH('ab-renk');if(_edAbTip==='gradient')o.gradient=gV('ab-gradient');if(_edAbTip==='gorsel'){o.gorselUrl=gV('ab-gorsel-url');o.opasite=parseFloat(gV('ab-opasite')||'0.5');}return o;})(),
+      navbar:{aktif:gC('nb-aktif'),logoMetin:gV('nb-logo'),bgRenk:gH('nb-bg'),blur:parseInt(gV('nb-blur')||'20')},
+      hero:(function(){var o={aktif:gC('hero-aktif'),bgTip:_edHeroTip};if(_edHeroTip==='gorsel')o.gorselUrl=gV('hero-gorsel-url');if(_edHeroTip==='gradient')o.gradient=gV('hero-gradient');if(_edHeroTip==='renk')o.renk=gH('hero-renk');o.minH=gV('hero-minh');o.baslik=gV('hero-baslik');o.altYazi=gV('hero-altyazi');o.butonMetin=gV('hero-btn-metin');o.butonLink=gV('hero-btn-link');return o;})(),
+      duyuru:{aktif:gC('du-aktif'),metin:gV('du-metin'),link:gV('du-link'),bgRenk:gH('du-bg'),textRenk:gH('du-text'),kapatilabilir:gC('du-kapat')},
+      reklamlar:_edData.reklamlar||[],
+      ozelCss:gV('ep-css-kod'),
+      guncellendi:serverTimestamp()
+    };
+    await setDoc(doc(db,'platform_ayarlari','sayfa_'+_edSayfa),payload);
+    bildir('✅ '+_edSayfa+'.html kaydedildi!');
+    var ds=document.getElementById('ed-kayit-durum');if(ds)ds.textContent='✓ Özel ayar kayıtlı';
+    setTimeout(edIframeYenile,600);
+  }catch(e){bildir('Kayıt hatası: '+e.message,'hata');}
+};
+
+window.edRenkVarsayilan=async function(){
+  if(!confirm(_edSayfa+' sayfasının özel ayarlarını tamamen sil?'))return;
+  try{
+    var {deleteDoc:dD}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    await dD(doc(db,'platform_ayarlari','sayfa_'+_edSayfa)).catch(function(){});
+    _edData={};edDoldur({});
+    bildir('Ayarlar silindi, varsayılan tema aktif.');
+    var ds=document.getElementById('ed-kayit-durum');if(ds)ds.textContent='○ Varsayılan tema';
+    setTimeout(edIframeYenile,600);
+  }catch(e){bildir('Hata: '+e.message,'hata');}
+};
+
+document.addEventListener('input',function(e){
+  var t=e.target;
+  if(t.type==='color'){var h=document.getElementById(t.id+'-h');if(h)h.value=t.value;}
+  else if(t.classList.contains('ep-inp')&&t.id&&t.id.endsWith('-h')){var ci=document.getElementById(t.id.slice(0,-2));if(ci&&ci.type==='color'&&/^#[0-9a-fA-F]{6}$/.test(t.value))ci.value=t.value;}
+});
+
+function edRekRender(liste){
+  _edData.reklamlar=liste;
+  var el=document.getElementById('ed-rek-liste');if(!el)return;
+  if(!liste.length){el.innerHTML='<div style="font-size:11px;color:var(--text3)">Henüz reklam yok.</div>';return;}
+  el.innerHTML=liste.map(function(r,i){
+    return '<div class="ed-rek-kart">'
+      +'<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">'
+      +'<span style="font-size:11px;font-weight:700">Alan:</span>'
+      +'<input type="text" value="'+(r.alanId||'')+'" oninput="edRekG('+i+','alanId',this.value)" class="ep-inp" style="flex:1" placeholder="genz-rek-1">'
+      +'<label style="display:flex;align-items:center;gap:4px;font-size:11px;cursor:pointer;flex-shrink:0">'
+      +'<input type="checkbox"'+(r.aktif?' checked':'')+" onchange="edRekG("+i+",'aktif',this.checked)" style="accent-color:var(--gold)"> Aktif</label>"
+      +'<button onclick="edRekSil('+i+')" style="background:none;border:none;color:var(--text2);cursor:pointer">🗑</button>'
+      +'</div>'
+      +'<select class="ep-inp" onchange="edRekG('+i+",\'tip\',this.value);edRekRender(_edData.reklamlar)">"
+      +'<option value="gorsel"'+(r.tip==='gorsel'?' selected':'')+'>📸 Görsel</option>'
+      +'<option value="html"'+(r.tip==='html'?' selected':'')+'>💻 HTML</option>'
+      +'<option value="metin"'+(r.tip==='metin'?' selected':'')+'>📝 Metin</option>'
+      +'</select>'
+      +(r.tip==='gorsel'?'<input type="text" class="ep-inp" style="margin-top:6px" value="'+(r.gorselUrl||'')+'" oninput="edRekG('+i+",\'gorselUrl\',this.value)" placeholder="Görsel URL">"
+        +'<input type="text" class="ep-inp" style="margin-top:4px" value="'+(r.link||'')+'" oninput="edRekG('+i+",\'link\',this.value)" placeholder="Link URL">":"")
+      +(r.tip==='html'?'<textarea class="ep-inp" style="margin-top:6px;font-family:monospace;font-size:11px;resize:vertical" rows="3" oninput="edRekG('+i+",\'html\',this.value)">"+(r.html||'')+'</textarea>':'')"
+      +(r.tip==='metin'?'<input type="text" class="ep-inp" style="margin-top:6px" value="'+(r.metin||'')+'" oninput="edRekG('+i+",\'metin\',this.value)" placeholder="Metin">":"")"
+      +'</div>';
+  }).join('');
+}
+window.edRekG=function(i,k,v){if(_edData.reklamlar)_edData.reklamlar[i][k]=v;};
+window.edRekSil=function(i){if(!confirm('Sil?'))return;_edData.reklamlar&&_edData.reklamlar.splice(i,1);edRekRender(_edData.reklamlar||[]);};
+window.edRekEkle=function(){if(!_edData.reklamlar)_edData.reklamlar=[];_edData.reklamlar.push({alanId:'genz-rek-'+(_edData.reklamlar.length+1),tip:'gorsel',aktif:true,gorselUrl:'',link:''});edRekRender(_edData.reklamlar);};
+
 
 
 </script>

@@ -595,21 +595,27 @@ const USTAM_PLANS = [
 ];
 
 const USTAM_CATEGORIES = [
-  { id: 'all', name: 'Tümü', icon: '🌐' },
-  { id: 'elektrik', name: 'Elektrik', icon: '⚡', subs: ['Elektrik Tesisatı', 'Sigorta & Pano', 'Aydınlatma', 'Topraklama'] },
-  { id: 'dogalgaz', name: 'Doğalgaz', icon: '🔥', subs: ['Doğalgaz Tesisatı', 'Kombi Bakım', 'Kaçak Tespiti', 'Proje & Onay'] },
-  { id: 'su', name: 'Su Tesisatı', icon: '🚿', subs: ['Pis Su', 'Temiz Su', 'Tıkanıklık', 'Banyo Renovasyon'] },
-  { id: 'boya', name: 'Boya & Badana', icon: '🎨', subs: ['İç Cephe Boya', 'Dış Cephe', 'Dekoratif Boya', 'Alçı & Sıva'] },
-  { id: 'insaat', name: 'İnşaat', icon: '🏗️', subs: ['Kaba İnşaat', 'İnce İnşaat', 'Tadilat', 'Çatı & İzolasyon'] },
-  { id: 'cati', name: 'Çatı & İzolasyon', icon: '🏠', subs: ['Kiremit Döşeme', 'Çatı Tamiri', 'Su Yalıtımı', 'Isı Yalıtımı'] },
-  { id: 'seramik', name: 'Seramik & Zemin', icon: '🪟', subs: ['Seramik Döşeme', 'Parke', 'Mermer', 'Epoksi Zemin'] },
-  { id: 'alcipan', name: 'Alçıpan & Asma Tavan', icon: '🔲', subs: ['Asma Tavan', 'Bölme Duvar', 'Kartonpiyer', 'Ses Yalıtımı'] },
-  { id: 'beton', name: 'Beton & Zemin', icon: '🧱', subs: ['Şap Döşeme', 'Beton Enjeksiyon', 'Zemin Sertleştirme', 'Temel Güçlendirme'] },
-  { id: 'mobilya', name: 'Mobilya & Marangoz', icon: '🪑', subs: ['Mutfak Dolabı', 'Vestiyer', 'Özel Tasarım', 'Tamir'] },
-  { id: 'klima', name: 'Klima & Isıtma', icon: '❄️', subs: ['Klima Montaj', 'Klima Bakım', 'Yerden Isıtma', 'Kalorifer'] },
-  { id: 'demir', name: 'Demir & Kaynak', icon: '🔩', subs: ['Ferforje', 'Korkuluk', 'Çelik Kapı', 'Kaynak İşleri'] },
-  { id: 'vinc', name: 'Vinç & Nakliye', icon: '🏗️', subs: ['Malzeme Taşıma', 'Yıkım Atıkları', 'Hafriyat', 'İş Makinası'] },
-  { id: 'hafriyat', name: 'Hafriyat & Kazı', icon: '⛏️', subs: ['Temel Kazısı', 'Hafriyat Nakliye', 'Ekskavatör', 'Sondaj'] },
+  { id: 'all',       name: 'Tümü',                  icon: '🌐', subs: [] },
+  { id: 'elektrik',  name: 'Elektrik',               icon: '⚡', subs: ['Elektrik Tesisatı','Sigorta & Pano','Aydınlatma','Topraklama','Acil Arıza'] },
+  { id: 'dogalgaz',  name: 'Doğalgaz',               icon: '🔥', subs: ['Kombi Bakım','Kaçak Tespiti','Tesisat Döşeme','Isıtma Sistemi'] },
+  { id: 'su',        name: 'Su Tesisatı',            icon: '🚿', subs: ['Tıkanıklık Açma','Banyo Renovasyon','Temiz Su Hattı','Pis Su Hattı'] },
+  { id: 'boya',      name: 'Boya & Badana',          icon: '🎨', subs: ['İç Cephe Boya','Dış Cephe','Dekoratif Boya','Alçı & Sıva'] },
+  { id: 'insaat',    name: 'İnşaat & Tadilat',      icon: '🏗️', subs: ['Kaba İnşaat','İnce İnşaat','Duvar Örme','Çatı & İzolasyon','Yıkım'] },
+  { id: 'klima',     name: 'Klima & Isıtma',        icon: '❄️', subs: ['Klima Montaj','Klima Bakım','Yerden Isıtma','Kalorifer Tesisatı'] },
+  { id: 'seramik',   name: 'Seramik & Zemin',       icon: '🪨', subs: ['Seramik Döşeme','Parke','Laminat','Mermer & Granit','Fayans'] },
+  { id: 'marangoz',  name: 'Marangoz & Mobilya',    icon: '🪚', subs: ['Mutfak Dolabı','Gardrop','Kapı & Pencere','Ahşap Tamir'] },
+  { id: 'cam',       name: 'Cam & Alüminyum',       icon: '🪟', subs: ['PVC Pencere','Alüminyum Doğrama','Cam Balkon','Sürgülü Kapı'] },
+  { id: 'alcipan',   name: 'Alçıpan & Asma Tavan', icon: '🏠', subs: ['Asma Tavan','Bölme Duvar','Alçı Dekorasyon','Ses Yalıtımı'] },
+  { id: 'demir',     name: 'Demir & Kaynak',        icon: '⚙️', subs: ['Kaynak','Korkuluk & Demir','Çelik Kapı','Metal Konstrüksiyon'] },
+  { id: 'nakliye',   name: 'Nakliye & Taşımacılık', icon: '🚛', subs: ['Ev Taşıma','Ofis Taşıma','Eşya Depolama','Paketleme'] },
+  { id: 'temizlik',  name: 'Temizlik',               icon: '🧹', subs: ['Ev Temizliği','Ofis Temizliği','İnşaat Sonrası','Halı Yıkama'] },
+  { id: 'bahce',     name: 'Bahçe & Peyzaj',        icon: '🌿', subs: ['Çim Biçme','Peyzaj Tasarımı','Sulama Sistemi','Ağaç Budama'] },
+  { id: 'guvenlik',  name: 'Güvenlik Sistemi',      icon: '📷', subs: ['Kamera Kurulum','Alarm Sistemi','Parmak İzi','Otomatik Kapı'] },
+  { id: 'araba',     name: 'Araç & Oto',            icon: '🚗', subs: ['Mekanik Servis','Elektrik Arıza','Kaporta & Boya','Oto Lastik','Detailing'] },
+  { id: 'beyazes',   name: 'Beyaz Eşya',            icon: '🫧', subs: ['Çamaşır Makinesi','Bulaşık Makinesi','Buzdolabı','Fırın & Ocak'] },
+  { id: 'elektronik',name: 'Elektronik & BT',       icon: '💻', subs: ['Bilgisayar Tamiri','Telefon Tamiri','Yazıcı Bakım','Ağ & Kamera'] },
+  { id: 'kombi',     name: 'Kombi & Kazan',         icon: '♨️', subs: ['Kombi Bakım','Arıza Tamiri','Baca Temizliği','Isıtma Projesi'] },
+  { id: 'hafriyat',  name: 'Hafriyat & Kazı',       icon: '⛏️', subs: ['Temel Kazısı','Hafriyat Nakliye','Ekskavatör','Sondaj'] },
 ];
 
 const DEMO_USTALAR = [
@@ -762,6 +768,85 @@ const DEMO_USTALAR = [
     badge: 'premium',
     comments: [
       { user: 'em**', stars: 5, date: 'Mart 2025', text: 'Klima montajı çok temiz yapıldı, teşekkürler.' },
+    ]
+  },
+  {
+    id: 'onur-usta', name: 'Onur Arslan', initials: 'OA',
+    title: 'Oto Mekanik', category: 'araba',
+    rating: 4.9, reviewCount: 144, jobCount: 512, joined: '2021',
+    city: 'Ankara', district: 'Çankaya',
+    desc: 'Her marka araç mekanik bakım ve onarım. Motor, şanzıman, fren, süspansiyon ve periyodik bakım.',
+    tags: ['Mekanik Servis', 'Motor Arıza', 'Fren & Süspansiyon', 'Periyodik Bakım'],
+    gradA: 'rgba(60,60,80,0.20)', gradB: 'rgba(100,80,240,0.1)',
+    badge: 'premium',
+    comments: [
+      { user: 'ta**', stars: 5, date: 'Mart 2025', text: 'Arabamın motor sorununu anında teşhis etti, harika.' },
+      { user: 'bu**', stars: 5, date: 'Şubat 2025', text: 'Fiyat uygun, iş kaliteli. Tekrar geleceğim.' }
+    ]
+  },
+  {
+    id: 'caner-usta', name: 'Caner Yıldız', initials: 'CY',
+    title: 'Oto Elektrik Ustası', category: 'araba',
+    rating: 4.7, reviewCount: 62, jobCount: 178, joined: '2023',
+    city: 'Ankara', district: 'Keçiören',
+    desc: 'Araç elektrik arızaları, kamera ve ses sistemi montajı. Akü, alternatör ve marş tamiri.',
+    tags: ['Oto Elektrik', 'Kamera Montaj', 'Ses Sistemi', 'Akü & Alternatör'],
+    gradA: 'rgba(40,60,100,0.20)', gradB: 'rgba(92,140,240,0.1)',
+    badge: null,
+    comments: [
+      { user: 'mu**', stars: 5, date: 'Ocak 2025', text: 'Araç kamera sistemi kurulumu çok profesyonel yapıldı.' }
+    ]
+  },
+  {
+    id: 'serhat-usta', name: 'Serhat Güneş', initials: 'SG',
+    title: 'Kaporta & Oto Boyacı', category: 'araba',
+    rating: 4.8, reviewCount: 89, jobCount: 267, joined: '2022',
+    city: 'Ankara', district: 'Etimesgut',
+    desc: 'Araç kaporta tamiri ve boyama. Göçük düzeltme, çizik giderme. Cam film ve seramik kaplama.',
+    tags: ['Kaporta Tamiri', 'Araç Boya', 'Göçük Düzeltme', 'Cam Film'],
+    gradA: 'rgba(60,20,20,0.20)', gradB: 'rgba(180,60,60,0.1)',
+    badge: 'premium',
+    comments: [
+      { user: 'ah**', stars: 5, date: 'Şubat 2025', text: 'Arabamın göçüğü sanki hiç olmamış gibi oldu.' }
+    ]
+  },
+  {
+    id: 'erhan-usta', name: 'Erhan Toprak', initials: 'ET',
+    title: 'Beyaz Eşya Teknikeri', category: 'beyazes',
+    rating: 4.6, reviewCount: 48, jobCount: 130, joined: '2023',
+    city: 'Ankara', district: 'Mamak',
+    desc: 'Çamaşır makinesi, bulaşık makinesi, buzdolabı ve fırın tamiri. Tüm markalar.',
+    tags: ['Çamaşır Makinesi', 'Buzdolabı', 'Bulaşık Makinesi', 'Fırın & Ocak'],
+    gradA: 'rgba(20,60,80,0.18)', gradB: 'rgba(92,180,220,0.1)',
+    badge: null,
+    comments: [
+      { user: 'fi**', stars: 4, date: 'Ocak 2025', text: 'Çamaşır makinemi aynı gün tamir etti.' }
+    ]
+  },
+  {
+    id: 'tolga-usta', name: 'Tolga Demirci', initials: 'TD',
+    title: 'Güvenlik Sistemleri', category: 'guvenlik',
+    rating: 4.8, reviewCount: 55, jobCount: 160, joined: '2022',
+    city: 'Ankara', district: 'Çankaya',
+    desc: 'Kamera, alarm ve parmak izi sistemi kurulumu. Bina ve site güvenlik çözümleri.',
+    tags: ['Kamera Kurulum', 'Alarm Sistemi', 'Parmak İzi', 'Otomatik Kapı'],
+    gradA: 'rgba(20,40,20,0.20)', gradB: 'rgba(60,180,60,0.1)',
+    badge: 'premium',
+    comments: [
+      { user: 'or**', stars: 5, date: 'Mart 2025', text: 'Bütün binaya kamera sistemi kurdu, çok memnunuz.' }
+    ]
+  },
+  {
+    id: 'burak-usta', name: 'Burak Yılmaz', initials: 'BY',
+    title: 'Temizlik Uzmanı', category: 'temizlik',
+    rating: 4.7, reviewCount: 93, jobCount: 310, joined: '2021',
+    city: 'Ankara', district: 'Yenimahalle',
+    desc: 'Ev, ofis ve inşaat sonrası temizlik. Halı yıkama, derin temizlik ve dezenfeksiyon.',
+    tags: ['Ev Temizliği', 'Ofis Temizliği', 'İnşaat Sonrası', 'Halı Yıkama'],
+    gradA: 'rgba(40,60,80,0.18)', gradB: 'rgba(92,180,240,0.1)',
+    badge: null,
+    comments: [
+      { user: 'le**', stars: 5, date: 'Şubat 2025', text: 'İnşaat sonrası temizliği pırıl pırıl yaptılar.' }
     ]
   },
 ];

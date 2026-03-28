@@ -528,6 +528,19 @@ nav, .modal-overlay-auth, .modal-box, .toast {
         <div class="urun-price" id="urunPrice"></div>
         <div class="urun-desc" id="urunDesc"></div>
         <div class="urun-tags" id="urunTags"></div>
+
+        <!-- PUBLUU KİTAP EMBED -->
+        <div id="publuuEmbed" style="display:none;margin:1.2rem 0;">
+          <div style="font-size:.62rem;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem;">📖 Dijital Kitabı Önizle</div>
+          <div style="border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--bg2);">
+            <iframe id="publuuFrame" src="" width="100%" height="400" frameborder="0" allowfullscreen style="display:block;"></iframe>
+            <div style="padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-size:.6rem;color:var(--text3);">📚 Flip Book Okuyucu — Publuu ile çalışır</span>
+              <button onclick="tamEkranKitap()" style="padding:.3rem .7rem;background:rgba(123,92,240,.15);border:1px solid rgba(123,92,240,.3);border-radius:6px;font-size:.58rem;color:#a78bfa;cursor:pointer;">⛶ Tam Ekran</button>
+            </div>
+          </div>
+        </div>
+
         <div class="urun-actions">
           <button class="btn-buy-lg" id="buyBtn" onclick="sepeteEkleDetay()">🛒 Sepete Ekle</button>
           <button class="btn-share-lg" id="favBtn" onclick="favoriToggleDetay()" style="min-width:44px">🤍</button>
@@ -793,6 +806,13 @@ function navigateTo(url) {
 }
 
 /* ── ORTAK TOAST ── */
+function tamEkranKitap() {
+  const iframe = document.getElementById('publuuFrame');
+  if(!iframe) return;
+  if(iframe.requestFullscreen) iframe.requestFullscreen();
+  else if(iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
+}
+
 let _toastTimer;
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -986,7 +1006,20 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('urunRatingVal').textContent = p.rating;
   document.getElementById('urunRatingCount').textContent = '(' + p.reviews + ' değerlendirme)';
   document.getElementById('urunPrice').innerHTML = '₺' + p.price.toLocaleString('tr-TR') + (p.oldPrice ? '<span class="old">₺' + p.oldPrice + '</span>' : '');
-  document.getElementById('urunDesc').textContent = p.desc;
+  document.getElementById('urunDesc').textContent = p.desc || p.aciklama || '';
+
+  // Publuu kitap embed
+  const publuuUrl = p.publuu || p.publuuLink || '';
+  if(publuuUrl && publuuUrl.includes('publuu.com')) {
+    const embedDiv = document.getElementById('publuuEmbed');
+    const iframe   = document.getElementById('publuuFrame');
+    if(embedDiv && iframe) {
+      let eUrl = publuuUrl.trim().replace('publuu.com/flip-book/','publuu.com/embed/');
+      iframe.src = eUrl;
+      embedDiv.style.display = 'block';
+    }
+  }
+
   document.getElementById('urunTags').innerHTML = p.tags.map(t => '<span class="urun-tag">' + t + '</span>').join('');
 
   const badge = getBadgeLevel(p.seller.sales);

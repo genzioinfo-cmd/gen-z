@@ -482,6 +482,10 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
           <button class="sb-btn" onclick="git('gencz-ozet',this)"><span class="ikon">📊</span> Genel Bakış</button>
           <button class="sb-btn" onclick="git('gencz-icerik',this)"><span class="ikon">🎨</span> İçeriklerim</button>
           <button class="sb-btn" onclick="git('gencz-yeni',this)"><span class="ikon">✏️</span> Yeni İçerik</button>
+          <button class="sb-btn" onclick="git('gencz-magaza',this)"><span class="ikon">🛍</span> Dijital Mağazam</button>
+          <button class="sb-btn" onclick="git('gencz-kazanc',this)"><span class="ikon">💰</span> Kazancım</button>
+          <button class="sb-btn" onclick="git('gencz-portfolyo',this)"><span class="ikon">🖼</span> Portföyüm</button>
+          <button class="sb-btn" onclick="git('gencz-analitik',this)"><span class="ikon">📈</span> İçerik Analitik</button>
         </div>
 
         <!-- USTA BÖLÜMÜ -->
@@ -1115,6 +1119,79 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
           </div>
           <div id="ustaIlanListesi" style="margin-top:1rem;"></div>
         </div>
+      </div>
+
+
+      <!-- ████ ANALİTİK ████ -->
+      <div class="sayfa" id="sayfa-analitik">
+        <div class="sh"><span class="eyebrow">Mağaza Performansı</span><h1>Analitik <em>Paneli</em></h1></div>
+        <div id="analitik-icerik"></div>
+      </div>
+
+      <!-- ████ MÜŞTERİLER ████ -->
+      <div class="sayfa" id="sayfa-musteriler">
+        <div class="sh"><span class="eyebrow">CRM</span><h1>Müşteri <em>Yönetimi</em></h1></div>
+        <div id="musteriler-icerik"></div>
+      </div>
+
+      <!-- ████ KAMPANYALAR ████ -->
+      <div class="sayfa" id="sayfa-kampanyalar">
+        <div class="sh"><span class="eyebrow">Pazarlama</span><h1>Kampanya & <em>Kuponlar</em></h1></div>
+        <div id="kampanyalar-icerik"></div>
+      </div>
+
+      <!-- ████ MUHASEBE ████ -->
+      <div class="sayfa" id="sayfa-muhasebe">
+        <div class="sh"><span class="eyebrow">Finans</span><h1>Muhasebe <em>Paneli</em></h1></div>
+        <div id="muhasebe-icerik"></div>
+      </div>
+
+      <!-- ████ MAĞAZA AYARLARI ████ -->
+      <div class="sayfa" id="sayfa-magaza-ayarlar">
+        <div class="sh"><span class="eyebrow">Ayarlar</span><h1>Mağaza <em>Ayarları</em></h1></div>
+        <div id="magaza-ayarlar-icerik"></div>
+      </div>
+
+      <!-- ████ USTA PROFİL ████ -->
+      <div class="sayfa" id="sayfa-usta-profil-duzenle">
+        <div class="sh"><span class="eyebrow">Profil</span><h1>Profilim & <em>Bio</em></h1></div>
+        <div id="usta-profil-duzenle-icerik"></div>
+      </div>
+
+      <!-- ████ USTA MUHASEBE ████ -->
+      <div class="sayfa" id="sayfa-usta-muhasebe">
+        <div class="sh"><span class="eyebrow">Kazanç</span><h1>Kazanç & <em>Muhasebe</em></h1></div>
+        <div id="usta-muhasebe-icerik"></div>
+      </div>
+
+      <!-- ████ USTA YORUMLAR ████ -->
+      <div class="sayfa" id="sayfa-usta-yorumlar">
+        <div class="sh"><span class="eyebrow">Geri Bildirim</span><h1>Müşteri <em>Yorumları</em></h1></div>
+        <div id="usta-yorumlar-icerik"></div>
+      </div>
+
+      <!-- ████ GENÇ-Z DİJİTAL MAĞAZA ████ -->
+      <div class="sayfa" id="sayfa-gencz-magaza">
+        <div class="sh"><span class="eyebrow">Dijital Satış</span><h1>Dijital <em>Mağazam</em></h1></div>
+        <div id="gencz-magaza-icerik"></div>
+      </div>
+
+      <!-- ████ GENÇ-Z KAZANÇ ████ -->
+      <div class="sayfa" id="sayfa-gencz-kazanc">
+        <div class="sh"><span class="eyebrow">Gelir Takibi</span><h1>Kazancım</h1></div>
+        <div id="gencz-kazanc-icerik"></div>
+      </div>
+
+      <!-- ████ GENÇ-Z PORTFÖY ████ -->
+      <div class="sayfa" id="sayfa-gencz-portfolyo">
+        <div class="sh"><span class="eyebrow">Eser Galerisi</span><h1>Portföyüm</h1></div>
+        <div id="gencz-portfolyo-icerik"></div>
+      </div>
+
+      <!-- ████ GENÇ-Z ANALİTİK ████ -->
+      <div class="sayfa" id="sayfa-gencz-analitik">
+        <div class="sh"><span class="eyebrow">İçerik Performansı</span><h1>İçerik <em>Analitik</em></h1></div>
+        <div id="gencz-analitik-icerik"></div>
       </div>
 
       <!-- USTA ABONELİK -->
@@ -3591,6 +3668,7 @@ window.iadeAc = function(s) { _iadeModalAcFn(typeof s==='string'?JSON.parse(s):s
 <script type="module" src="firebase-sync.js"></script>
 <script type="module" src="modpanel-stok.js"></script>
 <script type="module" src="modpanel-ilan-gencz.js"></script>
+<script type="module" src="modpanel-pro.js"></script>
 <script src="cookie-consent.js"></script>
 
 <!-- CHAT MODAL -->

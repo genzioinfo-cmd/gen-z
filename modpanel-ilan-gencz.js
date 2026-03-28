@@ -228,8 +228,8 @@ window.ilanGonder = async function() {
 ══════════════════════════════════════════════════════════════ */
 
 const GENCZ_KATEGORILER = {
-  'Şiir & Edebiyat'    : { ikon:'📝', alanlar:['baslik','sure','tarz','aciklama','icerikMetin'] },
-  'Kitap & Hikaye'     : { ikon:'📚', alanlar:['baslik','sayfa','tur','aciklama','dosyaLink'] },
+  'Şiir & Edebiyat'    : { ikon:'📝', alanlar:['baslik','sure','tarz','aciklama','icerikMetin','publuu'] },
+  'Kitap & Hikaye'     : { ikon:'📚', alanlar:['baslik','sayfa','tur','aciklama','publuu','dosyaLink'] },
   'Grafik Tasarım'     : { ikon:'🎨', alanlar:['baslik','format','program','aciklama','portfolyoLink'] },
   'Fotoğrafçılık'      : { ikon:'📷', alanlar:['baslik','teknik','ekipman','aciklama','portfolyoLink'] },
   'Müzik'              : { ikon:'🎵', alanlar:['baslik','tur','enstruman','aciklama','linkUrl'] },
@@ -256,6 +256,7 @@ const GENCZ_ALAN_LABELS = {
   malzeme      : { label:'Malzeme',            type:'text',     placeholder:'Keçe, ahşap, seramik…' },
   boyut        : { label:'Boyut',              type:'text',     placeholder:'20x30 cm' },
   fiyat        : { label:'Fiyat (₺)',          type:'number',   placeholder:'0 — 0 ise ücretsiz' },
+  publuu       : { label:'📖 Publuu Kitap Linki', type:'url', placeholder:'https://publuu.com/flip-book/xxxxx' },
   portfolyoLink: { label:'Portföy / Galeri Linki', type:'url', placeholder:'https://…' },
   dosyaLink    : { label:'Dosya / Drive Linki',type:'url',      placeholder:'https://…' },
   linkUrl      : { label:'İçerik Linki',       type:'url',      placeholder:'https://…' },
@@ -309,6 +310,21 @@ window.gzKatSec = function(ad, el) {
   const errEl = document.getElementById('gzErr');
   const okEl  = document.getElementById('gzOk');
   if(errEl){errEl.style.display='none';} if(okEl){okEl.style.display='none';}
+};
+
+// Publuu önizleme
+window.publuuOnizle = function(url) {
+  const div    = document.getElementById('publuuOnizleDiv');
+  const iframe = document.getElementById('publuuIframe');
+  if(!div || !iframe) return;
+  if(!url || !url.includes('publuu.com')) { div.style.display='none'; return; }
+  // Publuu embed URL formatı
+  let embedUrl = url.trim();
+  if(embedUrl.includes('/flip-book/')) {
+    embedUrl = embedUrl.replace('publuu.com/flip-book/','publuu.com/embed/');
+  }
+  iframe.src = embedUrl;
+  div.style.display = 'block';
 };
 
 window.gzIcerikGonder = async function() {

@@ -1077,7 +1077,7 @@ window.proSatinAlSayfadan = async function() {
     if(mag) await updateDoc(doc(db,'magazalar',mag.id),{ proModul:true, proModulTs:serverTimestamp() });
     if(uid) await updateDoc(doc(db,'kullanicilar',uid),{ proModul:true, proModulTs:serverTimestamp() });
     _isPro = true;
-
+    if(window._genzKullanici) { window._genzKullanici.proModul=true; }
     if(typeof toast==='function') toast('🎉 Büyük İşletme Modülü aktif! Tüm özellikler açıldı.');
 
     // Sayfayı güncelle

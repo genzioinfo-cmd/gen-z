@@ -44,9 +44,43 @@ async function firestoredenYukle(uid) {
       }
     });
     window.dispatchEvent(new CustomEvent('genzSyncYuklendi'));
+
+    // Pro modül badge güncelle
+    const kulRef  = doc(db, 'kullanicilar', uid);
+    const kulSnap = await getDoc(kulRef).catch(()=>null);
+    if(kulSnap?.exists()) {
+      const ud = kulSnap.data();
+      window._genzKullanici = ud;
+      _rolBadgeGuncelle(ud);
+    }
   } catch(e) {
     console.warn('Firestore yükleme hatası:', e);
   }
+}
+
+function _rolBadgeGuncelle(ud) {
+  const badge = document.getElementById('profileRoleBadge');
+  if(!badge) return;
+  const rol    = ud.rol || '';
+  const roller = ud.roller || [];
+  const isPro  = ud.proModul === true;
+  const isAdmin= rol==='admin' || roller.includes('admin');
+
+  let rozetler = [];
+  if(isAdmin)              rozetler.push({txt:'👑 Admin',         bg:'rgba(201,168,76,.2)', renk:'#F0C55C', border:'rgba(201,168,76,.4)'});
+  if(isPro)                rozetler.push({txt:'⚡ Büyük Mağaza',  bg:'rgba(201,168,76,.12)',renk:'#d4a83e', border:'rgba(201,168,76,.35)'});
+  if(roller.includes('usta')||ud.ustaOnay)
+                           rozetler.push({txt:'🔨 Usta',          bg:'rgba(123,92,240,.15)',renk:'#a78bfa', border:'rgba(123,92,240,.3)'});
+  if(roller.includes('gencz')||ud.gencimDurum==='onaylandi')
+                           rozetler.push({txt:'⚡ Genç-Z',        bg:'rgba(92,240,180,.1)', renk:'#5CF0B4', border:'rgba(92,240,180,.25)'});
+  if(ud.magazaOnay||roller.includes('satici'))
+                           rozetler.push({txt:'🏪 Satıcı',        bg:'rgba(255,153,102,.1)',renk:'#ff9966', border:'rgba(255,153,102,.25)'});
+
+  if(!rozetler.length)     rozetler.push({txt:'👤 Üye',           bg:'rgba(255,255,255,.05)',renk:'var(--text3)', border:'rgba(255,255,255,.1)'});
+
+  badge.innerHTML = rozetler.map(r=>
+    `<span style="display:inline-flex;align-items:center;padding:.25rem .7rem;border-radius:20px;font-size:.65rem;font-weight:700;background:${r.bg};color:${r.renk};border:1px solid ${r.border};margin-right:.3rem;">${r.txt}</span>`
+  ).join('');
 }
 
 // ── localStorage'ı Firestore'a kaydet ──

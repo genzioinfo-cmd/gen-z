@@ -1,2285 +1,270 @@
 <!DOCTYPE html>
-<html lang="tr" data-theme="dark">
+<html lang="tr" data-theme="dark" data-lang="tr">
 <head>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="apple-touch-icon" sizes="192x192" href="favicon-192x192.png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GEN-Z · Ev Stil Odası</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="GEN-Z Elden Ele — İkinci el ürünlerin buluşma noktası."/>
+<title>GEN-Z · Elden Ele</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-:root{
-  --accent:#7B5CF0;--accent2:#F0C55C;--accent3:#5CF0B4;
-  --bg:#0a0a0f;--bg2:#13131a;--bg3:#1c1c28;
-  --surface:#22222f;--border:#2e2e3f;
-  --text:#f0eeff;--text2:#9b97b8;--text3:#5a5770;
-  --radius:14px;--radius-sm:8px;
-  --shadow:0 8px 32px rgba(123,92,240,0.15);
-  --font-display:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;
-  /* compat aliases */
-  --g1:#4a2d8f;--g2:#a78bfa;--g3:#7B5CF0;--g4:#9d7ef5;--g5:#b8a4f8;
-  --ink:var(--bg);--ink2:var(--bg2);--ink3:var(--bg3);--ink4:var(--surface);
-  --cream:var(--text);--cream2:var(--text2);--cream3:var(--text2);
-  --border2:rgba(123,92,240,.28);--border3:rgba(123,92,240,.5);
-  --sidebar:230px;
-  --red:#ff5f5f;--green:#5CF0B4;
-  --ease-out-expo:cubic-bezier(.16,1,.3,1);
-}
-[data-theme="light"] {
-  --bg:#f5f4ff;--bg2:#eeedf8;--bg3:#e4e3f2;
-  --surface:#ffffff;--border:#d0cee8;--text:#1a1830;
-  --text2:#5a5580;--text3:#9894b8;
-  --shadow:0 8px 32px rgba(123,92,240,.10);
-  --g1:#5a3eb0;--g2:#7B5CF0;--g3:#5CF0B4;--g4:#7B5CF0;--g5:#9d7ef5;
-  --ink:#f5f4ff;--ink2:#eeedf8;--ink3:#e4e3f2;--ink4:#fff;
-  --cream:#1a1830;--cream2:#5a5580;--cream3:#5a5580;
-  --border2:rgba(123,92,240,.22);--border3:rgba(123,92,240,.4);
-  --red:#e05555;--green:#27a873;
-}
+:root{--accent:#7B5CF0;--accent2:#F0C55C;--accent3:#5CF0B4;--bg:#0a0a0f;--bg2:#13131a;--bg3:#1c1c28;--surface:#22222f;--border:#2e2e3f;--text:#f0eeff;--text2:#9b97b8;--text3:#5a5770;--radius:14px;--radius-sm:8px;--shadow:0 8px 32px rgba(123,92,240,0.15);--font-display:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;}
+[data-theme="light"]{--bg:#f5f4ff;--bg2:#eeedf8;--bg3:#e4e3f2;--surface:#ffffff;--border:#d0cee8;--text:#1a1830;--text2:#5a5580;--text3:#9894b8;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
 body.theme-transitioning{transition:background-color 0.3s ease,color 0.3s ease;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.4;contain:strict;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:rgba(10,10,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:0;}
+[data-theme="light"] nav{background:rgba(245,244,255,0.85);}
+.nav-logo{font-family:var(--font-display);font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.5px;cursor:pointer;flex-shrink:0;}
+.nav-links{display:flex;align-items:center;gap:2px;margin-left:32px;flex:1;list-style:none;}
+.nav-links a{font-family:var(--font-body);font-size:13px;font-weight:500;color:var(--text2);text-decoration:none;padding:6px 12px;border-radius:var(--radius-sm);transition:color 0.2s,background 0.2s;white-space:nowrap;}
+.nav-links a:hover{color:var(--text);background:var(--surface);}
+.nav-links a.active{color:var(--accent2);}
+.nav-right{display:flex;align-items:center;gap:10px;margin-left:auto;}
+.btn-icon{width:36px;height:36px;border:1px solid var(--border);background:var(--surface);border-radius:var(--radius-sm);cursor:pointer;color:var(--text2);display:flex;align-items:center;justify-content:center;font-size:16px;transition:color 0.2s,border-color 0.2s;}
+.btn-icon:hover{color:var(--text);border-color:var(--accent);}
+.btn-signin{padding:8px 18px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;transition:background 0.2s,transform 0.2s;}
+.btn-signin:hover{background:#6a4de0;transform:translateY(-1px);}
+.hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:36px;height:36px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;}
+.hamburger span{display:block;width:16px;height:1.5px;background:var(--text2);border-radius:2px;transition:transform 0.2s,opacity 0.2s;}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;z-index:99;background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;flex-direction:column;gap:2px;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-family:var(--font-body);font-size:14px;color:var(--text2);text-decoration:none;padding:10px 12px;border-radius:var(--radius-sm);transition:color 0.2s,background 0.2s;}
+.mobile-menu a:hover{color:var(--text);background:var(--surface);}
+@media(max-width:640px){.nav-links{display:none;}.hamburger{display:flex;}}
 
-html,body{
-  background:var(--bg);
-  font-family:var(--font-body);
-  color:var(--text);
-  min-height:100vh;
-  overflow-x:hidden;
-}
+.page-header{position:relative;padding:100px 24px 52px;overflow:hidden;text-align:center;}
+.page-header-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--accent2) 12%,transparent) 0%,transparent 65%);contain:strict;}
+.page-header-inner{position:relative;z-index:1;}
+.page-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent2);background:color-mix(in srgb,var(--accent2) 10%,transparent);border:1px solid color-mix(in srgb,var(--accent2) 25%,transparent);padding:5px 14px;border-radius:999px;margin-bottom:16px;}
+.page-title{font-family:var(--font-display);font-size:clamp(32px,6vw,52px);font-weight:800;letter-spacing:-1.5px;margin-bottom:14px;line-height:1.1;}
+.page-title .grad{background:linear-gradient(135deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.page-sub{font-size:15px;color:var(--text2);max-width:520px;margin:0 auto 28px;line-height:1.7;}
+.coming-badge-big{display:inline-flex;align-items:center;gap:8px;background:color-mix(in srgb,var(--accent3) 10%,transparent);border:1px solid color-mix(in srgb,var(--accent3) 25%,transparent);border-radius:999px;padding:8px 20px;font-size:13px;font-weight:600;color:var(--accent3);margin-bottom:40px;}
 
-/* Grain overlay */
-body::before{
-  content:'';
-  position:fixed;inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events:none;z-index:9999;opacity:.4;
-}
+.content{max-width:960px;margin:0 auto;padding:0 24px 80px;position:relative;z-index:1;}
+.section-label{font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;}
+.section-title{font-family:var(--font-display);font-size:clamp(22px,4vw,30px);font-weight:800;letter-spacing:-0.5px;margin-bottom:32px;}
 
-/* ════════════════════════════
-   HEADER
-════════════════════════════ */
-.hdr{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 28px;
-  border-bottom:1px solid var(--border);
-  position:relative;z-index:10;flex-shrink:0;
-  background:linear-gradient(180deg,rgba(10,7,0,.95) 0%,rgba(5,3,0,.85) 100%);
-  backdrop-filter:blur(20px);
-}
-.hdr::after{
-  content:'';position:absolute;bottom:0;left:5%;right:5%;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(201,168,76,.3),rgba(245,215,142,.5),rgba(201,168,76,.3),transparent);
-}
-.hdr-left{display:flex;align-items:center;gap:20px;}
-.back-link{
-  font-size:.48rem;letter-spacing:.25em;text-transform:uppercase;
-  color:rgba(201,168,76,.35);text-decoration:none;
-  transition:all .3s;
-  display:flex;align-items:center;gap:5px;
-}
-.back-link::before{content:'←';transition:transform .3s;}
-.back-link:hover{color:var(--g3);}
-.back-link:hover::before{transform:translateX(-3px);}
-.hdr-brand{}
-.logo{
-  font-family:var(--font-display);font-size:19px;font-weight:400;
-  background:linear-gradient(120deg,var(--g1) 0%,var(--g3) 30%,var(--g2) 50%,var(--g4) 70%,var(--g3) 85%,var(--g1) 100%);
-  background-size:200% auto;
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  letter-spacing:.55em;text-transform:uppercase;
-  animation:logoShimmer 6s linear infinite;
-}
-@keyframes logoShimmer{0%{background-position:0% center;}100%{background-position:200% center;}}
-.tagline{font-size:6.5px;color:rgba(201,168,76,.22);letter-spacing:.5em;text-transform:uppercase;margin-top:2px;}
+.how-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:60px;}
+.how-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;text-align:center;transition:border-color 0.2s,transform 0.2s;}
+.how-card:hover{border-color:color-mix(in srgb,var(--accent2) 35%,transparent);transform:translateY(-2px);}
+.how-step{width:40px;height:40px;background:color-mix(in srgb,var(--accent2) 12%,transparent);border:1px solid color-mix(in srgb,var(--accent2) 25%,transparent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:16px;font-weight:800;color:var(--accent2);margin:0 auto 14px;}
+.how-title{font-family:var(--font-display);font-size:15px;font-weight:700;margin-bottom:6px;}
+.how-desc{font-size:12px;color:var(--text2);line-height:1.6;}
 
-/* Sepet butonu — header */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:60px;}
+.cat-pill{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px 12px;text-align:center;cursor:default;transition:border-color 0.2s;}
+.cat-pill:hover{border-color:color-mix(in srgb,var(--accent2) 30%,transparent);}
+.cat-pill-icon{font-size:22px;margin-bottom:6px;}
+.cat-pill-name{font-size:12px;font-weight:600;color:var(--text);}
+.cat-pill-badge{display:block;margin-top:6px;font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent2);}
 
-.sepet-topbar-count{
-  background:linear-gradient(135deg,#c9a84c,#e8c96a);
-  color:#040300;font-size:.48rem;font-weight:800;
-  width:16px;height:16px;border-radius:50%;
-  display:none;align-items:center;justify-content:center;
-  font-family:var(--font-body);
-  box-shadow:0 2px 8px rgba(201,168,76,.4);
-}
-.sepet-topbar-count.v{display:flex;}
+.cta-box{background:var(--bg2);border:1px solid color-mix(in srgb,var(--accent2) 25%,transparent);border-radius:var(--radius);padding:40px;text-align:center;background-image:radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--accent2) 8%,transparent),transparent 60%);}
+.cta-title{font-family:var(--font-display);font-size:22px;font-weight:800;margin-bottom:10px;}
+.cta-sub{font-size:14px;color:var(--text2);margin-bottom:24px;}
+.btn-cta{padding:13px 32px;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#0a0800;border:none;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;display:inline-block;text-decoration:none;}
+.btn-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px color-mix(in srgb,var(--accent2) 30%,transparent);}
 
-/* ════════════════════════════
-   LAYOUT
-════════════════════════════ */
-.layout{display:flex;height:calc(100vh - 64px);}
-
-/* ════════════════════════════
-   SIDEBAR
-════════════════════════════ */
-.sidebar{
-  width:var(--sidebar);flex-shrink:0;
-  background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%);
-  border-right:1px solid var(--border);
-  display:flex;flex-direction:column;
-  overflow-y:auto;
-}
-.sidebar::-webkit-scrollbar{width:1px;}
-.sidebar::-webkit-scrollbar-thumb{background:rgba(201,168,76,.15);}
-
-.sb-header{
-  padding:16px 18px 12px;
-  border-bottom:1px solid rgba(201,168,76,.07);
-}
-.sb-headline{
-  font-size:.42rem;letter-spacing:.35em;text-transform:uppercase;
-  color:rgba(201,168,76,.22);
-}
-.sb-headline-deco{
-  display:flex;align-items:center;gap:8px;margin-top:4px;
-}
-.sb-headline-deco::before,.sb-headline-deco::after{
-  content:'';flex:1;height:1px;
-  background:linear-gradient(90deg,rgba(201,168,76,.15),transparent);
-}
-
-/* Oda butonu — karakteristik tasarım */
-.sb-room{
-  display:flex;align-items:center;gap:0;
-  padding:0;
-  cursor:pointer;
-  transition:all .3s var(--ease-out-expo);
-  border-left:2px solid transparent;
-  position:relative;
-  overflow:hidden;
-  text-decoration:none;color:inherit;
-}
-/* Hover sweep efekti */
-.sb-room::after{
-  content:'';
-  position:absolute;inset:0;
-  background:linear-gradient(90deg,rgba(201,168,76,.08) 0%,transparent 100%);
-  transform:translateX(-100%);
-  transition:transform .4s var(--ease-out-expo);
-}
-.sb-room:hover::after{transform:translateX(0);}
-.sb-room:hover{border-left-color:rgba(201,168,76,.35);}
-.sb-room:hover .sb-room-name{color:var(--g3);}
-.sb-room:hover .sb-room-icon-wrap{background:rgba(201,168,76,.12);}
-
-/* AKTİF oda */
-.sb-room.active{border-left-color:var(--accent);}
-.sb-room.active::before{
-  content:'';
-  position:absolute;left:0;top:0;bottom:0;width:2px;
-  background:linear-gradient(180deg,transparent,var(--g3),var(--g4),var(--g3),transparent);
-  animation:sidebarGlow 2s ease-in-out infinite;
-}
-@keyframes sidebarGlow{
-  0%,100%{opacity:.6;box-shadow:0 0 8px var(--accent);}
-  50%{opacity:1;box-shadow:0 0 16px var(--accent2);}
-}
-.sb-room.active .sb-room-icon-wrap{background:rgba(123,92,240,.15);}
-.sb-room.active .sb-room-name{color:var(--accent2);}
-.sb-room.active .sb-room-sub{color:rgba(123,92,240,.5);}
-
-.sb-room-icon-wrap{
-  width:44px;height:52px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  transition:background .3s;
-  border-right:1px solid rgba(201,168,76,.06);
-}
-.sb-room-icon{font-size:1.25rem;transition:transform .3s;display:block;}
-.sb-room:hover .sb-room-icon{transform:scale(1.1);}
-.sb-room.active .sb-room-icon{animation:iconBounce .5s var(--ease-out-expo);}
-@keyframes iconBounce{0%{transform:scale(1);}40%{transform:scale(1.3);}70%{transform:scale(.95);}100%{transform:scale(1);}}
-
-.sb-room-info{flex:1;padding:8px 10px 8px 12px;}
-.sb-room-name{
-  font-size:.58rem;font-weight:600;letter-spacing:.1em;
-  text-transform:uppercase;color:rgba(240,235,224,.45);
-  transition:color .3s;line-height:1;
-}
-.sb-room-sub{
-  font-size:.44rem;color:rgba(201,168,76,.22);
-  letter-spacing:.04em;margin-top:3px;
-  transition:color .3s;
-}
-
-.sb-sel-count{
-  position:absolute;right:10px;top:50%;transform:translateY(-50%);
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  color:#fff;font-size:.42rem;font-weight:800;
-  min-width:17px;height:17px;border-radius:8px;
-  display:none;align-items:center;justify-content:center;
-  padding:0 4px;
-  box-shadow:0 2px 8px rgba(201,168,76,.4);
-  animation:countPop .3s var(--ease-out-expo);
-}
-@keyframes countPop{from{transform:translateY(-50%) scale(0);}to{transform:translateY(-50%) scale(1);}}
-.sb-sel-count.v{display:flex;}
-
-/* ════════════════════════════
-   MAIN ALAN
-════════════════════════════ */
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;}
-
-/* ════════════════════════════
-   ODA GÖRÜNÜMÜ
-════════════════════════════ */
-.room-wrap{
-  position:absolute;inset:0;
-  overflow:hidden;
-  background:radial-gradient(ellipse at 50% 35%,rgba(15,11,0,.8) 0%,rgba(5,3,0,1) 70%);
-}
-/* Ambient ışık efekti */
-.room-wrap::before{
-  content:'';position:absolute;
-  top:-20%;left:20%;width:60%;height:60%;
-  background:radial-gradient(ellipse,rgba(123,92,240,.06) 0%,transparent 70%);
-  pointer-events:none;z-index:1;
-  animation:ambientPulse 8s ease-in-out infinite;
-}
-@keyframes ambientPulse{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:1;transform:scale(1.1);}}
-
-.room-svg-wrap{position:absolute;inset:0;z-index:2;
-  transition:transform .78s cubic-bezier(.4,0,.2,1);
-  transform-origin:50% 50%;
-  will-change:transform;
-}
-.room-svg{position:absolute;inset:0;width:100%;height:100%;display:block;}
-
-/* ════════════════════════════
-   ZONE HIT AREAS — Çerçeve tasarımı
-════════════════════════════ */
-.zone-hit{
-  position:absolute;
-  cursor:pointer;
-  /* Artık sadece merkez noktasını tutar, görsel olarak küçük kutu */
-  background:transparent;
-  z-index:6;
-  /* Hit alanı büyük kalır, ama görsel kutu ayrıca çizilir */
-  display:flex;align-items:center;justify-content:center;
-}
-.zh-inner{display:none;}
-
-/* Zone etiketi — küçük kare kutu */
-.zh-label{
-  position:absolute;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  white-space:nowrap;
-  display:flex;align-items:center;gap:4px;
-  padding:5px 9px;
-  background:rgba(8,6,0,.82);
-  border:1px solid rgba(201,168,76,.28);
-  border-radius:3px;
-  font-size:7.5px;letter-spacing:.1em;
-  color:rgba(201,168,76,.55);
-  text-transform:uppercase;
-  pointer-events:none;
-  transition:all .28s;
-  backdrop-filter:blur(6px);
-  box-shadow:0 2px 12px rgba(0,0,0,.5);
-}
-.zone-hit:hover .zh-label{
-  background:rgba(15,15,25,.92);
-  border-color:rgba(123,92,240,.7);
-  color:rgba(201,168,76,1);
-  box-shadow:0 0 16px rgba(201,168,76,.2),0 2px 12px rgba(0,0,0,.6);
-  transform:translate(-50%,-50%) scale(1.06);
-}
-.zone-hit.selected .zh-label{
-  background:rgba(75,45,143,.35);
-  border-color:rgba(123,92,240,.8);
-  color:var(--accent2);
-  box-shadow:0 0 20px rgba(201,168,76,.25),0 2px 12px rgba(0,0,0,.5);
-}
-.zh-label-icon{font-size:9px;line-height:1;}
-.zh-label-sel{color:var(--g4);margin-right:1px;font-size:7px;}
-
-/* RING animasyonu */
-.ring{
-  position:absolute;z-index:5;pointer-events:none;
-  border:1.5px solid transparent;
-  border-radius:4px;
-  transition:all .5s var(--ease-out-expo);
-}
-.ring.show{
-  border-color:rgba(123,92,240,.7);
-  background:rgba(123,92,240,.06);
-  box-shadow:
-    0 0 0 1px rgba(123,92,240,.1),
-    0 0 20px rgba(167,139,250,.2),
-    inset 0 0 20px rgba(123,92,240,.06);
-  animation:ringPulse 2.4s ease-in-out infinite;
-}
-@keyframes ringPulse{
-  0%,100%{
-    box-shadow:0 0 0 1px rgba(201,168,76,.1),0 0 20px rgba(245,215,142,.2),inset 0 0 20px rgba(201,168,76,.06);
-  }
-  50%{
-    box-shadow:0 0 0 4px rgba(201,168,76,.06),0 0 40px rgba(245,215,142,.35),inset 0 0 30px rgba(201,168,76,.1);
-  }
-}
-
-/* ════════════════════════════
-   ODA BADGE
-════════════════════════════ */
-.room-badge{
-  position:absolute;top:14px;left:14px;z-index:7;
-  display:flex;align-items:center;gap:8px;
-  background:rgba(0,0,0,.55);
-  backdrop-filter:blur(12px);
-  border:1px solid var(--border);
-  border-radius:8px;
-  padding:6px 14px;
-  pointer-events:none;
-}
-.room-badge-icon{font-size:.9rem;}
-.room-badge-text{font-size:.48rem;color:var(--text3);letter-spacing:.25em;text-transform:uppercase;}
-/* Sol dikey çizgi */
-.room-badge::before{
-  content:'';position:absolute;left:0;top:15%;bottom:15%;width:2px;
-  background:linear-gradient(180deg,transparent,var(--accent),transparent);
-}
-
-/* ════════════════════════════
-   ZONE ALT ETİKET
-════════════════════════════ */
-.zone-label{display:none;}
-
-/* ════════════════════════════
-   SEÇİM PANELİ (alt overlay)
-════════════════════════════ */
-.secim-panel{
-  position:absolute;bottom:0;left:0;right:0;z-index:8;
-  background:linear-gradient(transparent,rgba(5,3,0,.97) 18%);
-  border-top:1px solid rgba(201,168,76,.08);
-  padding:2.2rem 1.6rem .8rem;
-  flex-shrink:0;
-  pointer-events:none;
-}
-.secim-panel > *{pointer-events:auto;}
-.sp-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.6rem;}
-.sp-title{
-  display:flex;align-items:center;gap:.5rem;
-  font-family:var(--font-display);
-  font-size:.95rem;font-weight:300;
-  color:rgba(240,235,224,.4);letter-spacing:.05em;
-}
-.sp-title-icon{color:var(--g3);font-size:.7rem;}
-.sp-count{
-  background:var(--accent);
-  color:#040300;font-size:.46rem;font-weight:800;
-  font-family:var(--font-body);
-  width:17px;height:17px;border-radius:50%;
-  display:none;align-items:center;justify-content:center;
-  box-shadow:0 2px 8px rgba(201,168,76,.35);
-}
-.sp-count.v{display:inline-flex;}
-.sp-meta{display:flex;gap:.35rem;flex-wrap:wrap;}
-.ipill{
-  font-size:6.5px;color:rgba(201,168,76,.2);
-  background:rgba(201,168,76,.04);
-  border:1px solid rgba(201,168,76,.08);
-  border-radius:2px;padding:2px 8px;
-  letter-spacing:.05em;
-}
-.ipill b{color:rgba(201,168,76,.55);}
-
-.sp-chips{display:flex;flex-wrap:wrap;gap:.4rem;min-height:8px;}
-/* Chip — seçili bölge etiketi */
-.schip{
-  display:flex;align-items:center;gap:.35rem;
-  background:rgba(201,168,76,.04);
-  border:1px solid rgba(201,168,76,.08);
-  border-radius:2px;padding:4px 10px;
-  font-size:7px;cursor:pointer;
-  transition:all .25s;letter-spacing:.1px;
-  position:relative;overflow:hidden;
-}
-.schip::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
-  background:transparent;transition:background .25s;
-}
-.schip:hover{border-color:rgba(201,168,76,.22);background:rgba(201,168,76,.06);}
-.schip:hover::before{background:rgba(201,168,76,.4);}
-.schip.filled{border-color:rgba(123,92,240,.22);background:rgba(123,92,240,.07);}
-.schip.filled::before{background:var(--accent);}
-.schip.filled .schip-val{color:var(--accent2);font-weight:600;}
-.schip-val{color:rgba(201,168,76,.22);}
-.schip-rm{background:none;border:none;color:rgba(224,85,85,.25);cursor:pointer;font-size:.65rem;padding:0;margin-left:.2rem;transition:color .18s;line-height:1;}
-.schip-rm:hover{color:var(--red);}
-.sp-empty{
-  font-family:var(--font-display);font-style:italic;
-  color:rgba(240,235,224,.14);font-size:.78rem;
-  padding:.3rem 0 .2rem;letter-spacing:.04em;
-}
-.sp-footer{
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:.8rem;
-  margin-top:.75rem;padding-top:.75rem;
-  border-top:1px solid rgba(201,168,76,.07);
-}
-.sp-total-wrap{display:flex;align-items:baseline;gap:.4rem;}
-.sp-total-lbl{font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(201,168,76,.28);}
-.sp-total-val{font-family:var(--font-display);font-size:1.4rem;color:var(--g3);font-weight:400;line-height:1;}
-.sp-btns{display:flex;gap:.6rem;flex-wrap:wrap;}
-
-/* Sepeti Gör butonu */
-.sp-sepet-btn{
-  display:flex;align-items:center;gap:.5rem;
-  padding:.45rem 1.1rem;
-  background:transparent;
-  border:1px solid rgba(123,92,240,.2);
-  border-radius:4px;
-  color:rgba(123,92,240,.8);
-  font-family:var(--font-body);font-size:.48rem;
-  font-weight:600;letter-spacing:.2em;text-transform:uppercase;
-  cursor:pointer;transition:all .3s var(--ease-out-expo);
-  position:relative;overflow:hidden;
-}
-.sp-sepet-btn::before{
-  content:'';position:absolute;inset:0;
-  background:rgba(201,168,76,.06);
-  transform:scaleX(0);transform-origin:left;
-  transition:transform .3s var(--ease-out-expo);
-}
-.sp-sepet-btn:hover{border-color:rgba(123,92,240,.4);color:var(--accent);}
-.sp-sepet-btn:hover::before{transform:scaleX(1);}
-.sp-sepet-btn span{position:relative;z-index:1;}
-
-/* Tümünü Satın Al butonu — flagship */
-.sp-satin-btn{
-  display:flex;align-items:center;gap:.6rem;
-  padding:.45rem 1.5rem;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  background-size:200% auto;
-  border:none;border-radius:4px;
-  color:#fff;
-  font-family:var(--font-body);font-size:.5rem;
-  font-weight:700;letter-spacing:.25em;text-transform:uppercase;
-  cursor:pointer;transition:all .4s var(--ease-out-expo);
-  box-shadow:0 4px 20px rgba(201,168,76,.25),inset 0 1px 0 rgba(255,255,255,.15);
-  position:relative;overflow:hidden;
-}
-.sp-satin-btn::after{
-  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
-  transition:left .6s;
-}
-.sp-satin-btn:hover{
-  background-position:right center;
-  box-shadow:0 6px 30px rgba(201,168,76,.4),inset 0 1px 0 rgba(255,255,255,.2);
-  transform:translateY(-2px);
-}
-.sp-satin-btn:hover::after{left:100%;}
-.sp-satin-btn:active{transform:translateY(0) scale(.98);}
-.sp-arrow{transition:transform .3s;}
-.sp-satin-btn:hover .sp-arrow{transform:translateX(4px);}
-
-/* ════════════════════════════
-   BACKDROP & POPUP
-════════════════════════════ */
-.backdrop{
-  position:fixed;top:0;left:0;bottom:0;right:min(500px,52vw);
-  background:rgba(0,0,0,.55);
-  backdrop-filter:blur(4px);
-  z-index:100;display:none;opacity:0;transition:opacity .35s;
-}
-.backdrop.show{display:block;opacity:1;}
-.popup{
-  position:fixed;top:0;right:0;bottom:0;
-  width:min(500px,52vw);
-  background:linear-gradient(170deg,var(--bg3) 0%,var(--bg2) 100%);
-  border-left:1px solid rgba(201,168,76,.15);
-  z-index:101;
-  transform:translateX(102%);
-  transition:transform .48s var(--ease-out-expo);
-  display:flex;flex-direction:column;
-  box-shadow:-24px 0 80px rgba(0,0,0,.7);
-}
-.popup.show{transform:translateX(0);}
-
-/* Popup header şeridi */
-.popup-header-strip{
-  padding:18px 22px 14px;
-  border-bottom:1px solid rgba(201,168,76,.08);
-  position:relative;flex-shrink:0;
-}
-.popup-header-strip::before{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(201,168,76,.2),rgba(245,215,142,.3),rgba(201,168,76,.2),transparent);
-}
-.pu-head{display:flex;justify-content:space-between;align-items:flex-start;}
-.pu-zone-icon{font-size:1.6rem;margin-bottom:4px;display:block;animation:iconEntry .5s var(--ease-out-expo);}
-@keyframes iconEntry{from{transform:scale(.5) rotate(-10deg);opacity:0;}to{transform:scale(1) rotate(0deg);opacity:1;}}
-.pu-title{font-family:var(--font-display);font-size:20px;font-weight:400;color:var(--g2);letter-spacing:.02em;}
-.pu-sub{font-size:6.5px;color:rgba(201,168,76,.3);letter-spacing:.6px;margin-top:4px;text-transform:uppercase;}
-/* Kapat butonu */
-.pu-close{
-  width:32px;height:32px;border-radius:2px;
-  background:rgba(255,255,255,.02);
-  border:1px solid rgba(201,168,76,.12);
-  color:rgba(201,168,76,.35);cursor:pointer;
-  font-size:13px;display:flex;align-items:center;justify-content:center;
-  transition:all .25s;flex-shrink:0;margin-top:2px;
-  position:relative;overflow:hidden;
-}
-.pu-close::before{
-  content:'';position:absolute;inset:0;
-  background:rgba(224,85,85,.08);
-  transform:scale(0);border-radius:50%;
-  transition:transform .3s var(--ease-out-expo);
-}
-.pu-close:hover{border-color:rgba(224,85,85,.3);color:var(--red);}
-.pu-close:hover::before{transform:scale(2);}
-.pu-close span{position:relative;z-index:1;}
-
-.popup-inner{overflow-y:auto;padding:0 22px 28px;flex:1;}
-.popup-inner::-webkit-scrollbar{width:2px;}
-.popup-inner::-webkit-scrollbar-thumb{background:linear-gradient(180deg,transparent,rgba(201,168,76,.15),transparent);}
-
-/* ════════════════════════════
-   ÜRÜN GRID & KARTLAR
-════════════════════════════ */
-.prod-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:20px;margin-top:16px;}
-
-/* Ürün kartı */
-.pcard{
-  background:var(--bg3);
-  border:1px solid var(--border);
-  border-radius:3px;
-  overflow:hidden;cursor:pointer;
-  transition:all .35s var(--ease-out-expo);
-  position:relative;
-  display:grid;grid-template-columns:88px 1fr;
-}
-/* Sol renkli çubuk */
-.pcard::before{
-  content:'';
-  position:absolute;left:0;top:0;bottom:0;width:2px;
-  background:transparent;
-  transition:background .35s,box-shadow .35s;
-}
-.pcard:hover{
-  border-color:rgba(201,168,76,.2);
-  transform:translateY(-2px);
-  box-shadow:0 8px 30px rgba(0,0,0,.5),0 0 0 1px rgba(201,168,76,.08);
-}
-.pcard:hover::before{
-  background:linear-gradient(180deg,transparent,var(--accent),var(--accent2),var(--accent),transparent);
-  box-shadow:0 0 12px rgba(123,92,240,.3);
-}
-.pcard.sel{
-  border-color:rgba(123,92,240,.3);
-  background:var(--surface);
-  box-shadow:0 4px 24px rgba(0,0,0,.4),inset 0 0 40px rgba(201,168,76,.04);
-}
-.pcard.sel::before{
-  background:linear-gradient(180deg,transparent,var(--accent),var(--accent2),var(--accent),transparent);
-  box-shadow:0 0 16px rgba(123,92,240,.4);
-}
-/* Seçili rozet */
-.pcard.sel::after{
-  content:'✦';
-  position:absolute;top:6px;right:8px;
-  font-size:8px;color:var(--accent);
-  background:rgba(0,0,0,.8);
-  border:1px solid rgba(201,168,76,.25);
-  border-radius:50%;width:17px;height:17px;
-  display:flex;align-items:center;justify-content:center;
-  line-height:17px;text-align:center;
-}
-
-.pc-img{
-  width:88px;height:100%;min-height:92px;
-  background:rgba(10,7,0,.8);
-  display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;flex-shrink:0;
-}
-.pc-img-bg{position:absolute;inset:0;transition:opacity .35s;}
-.pc-emoji-main{
-  font-size:32px;display:block;
-  filter:drop-shadow(0 2px 12px rgba(0,0,0,.5));
-  position:relative;z-index:1;
-  transition:transform .35s var(--ease-out-expo);
-}
-.pcard:hover .pc-emoji-main{transform:scale(1.12) translateY(-2px);}
-.pc-badge{
-  position:absolute;bottom:4px;left:4px;z-index:2;
-  background:rgba(0,0,0,.75);
-  border:1px solid rgba(201,168,76,.18);
-  border-radius:1px;padding:2px 5px;
-  font-size:5.5px;color:rgba(201,168,76,.6);
-  letter-spacing:.3px;text-transform:uppercase;white-space:nowrap;
-}
-.pc-body{padding:9px 12px 9px 10px;display:flex;flex-direction:column;justify-content:space-between;min-height:92px;}
-.pc-cat{font-size:6px;letter-spacing:.9px;text-transform:uppercase;color:rgba(201,168,76,.3);margin-bottom:3px;}
-.pc-name{font-family:var(--font-display);font-size:13px;font-weight:400;color:var(--cream);line-height:1.25;margin-bottom:2px;}
-.pc-brand{font-size:6.5px;color:rgba(201,168,76,.32);letter-spacing:.25px;margin-bottom:5px;}
-.pc-colors{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px;}
-.pc-color{
-  width:11px;height:11px;border-radius:50%;
-  border:1.5px solid transparent;cursor:pointer;
-  transition:all .2s;flex-shrink:0;
-  box-shadow:0 1px 4px rgba(0,0,0,.4);
-}
-.pc-color:hover,.pc-color.on{border-color:var(--accent);transform:scale(1.25);box-shadow:0 0 8px rgba(123,92,240,.4);}
-.pc-sizes{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:7px;}
-.pc-size{
-  padding:2px 6px;
-  border:1px solid rgba(201,168,76,.12);
-  border-radius:1px;
-  font-size:7px;color:rgba(201,168,76,.35);
-  cursor:pointer;transition:all .18s;
-  font-family:var(--font-body);font-weight:600;
-  letter-spacing:.05em;
-}
-.pc-size:hover{border-color:rgba(201,168,76,.28);color:var(--cream2);}
-.pc-size.on{
-  background:var(--accent);
-  border-color:var(--accent);color:#fff;
-  box-shadow:0 2px 8px rgba(123,92,240,.3);
-}
-.pc-foot{display:flex;align-items:center;justify-content:space-between;gap:6px;}
-.pc-price{font-family:var(--font-display);font-size:15px;font-weight:400;color:var(--g3);}
-.pc-price sup{font-size:7.5px;vertical-align:super;}
-
-/* Ekle/Kaldır butonu — MORPH animasyonu */
-.pc-add{
-  flex:1;padding:6px 0;
-  background:transparent;
-  border:1px solid rgba(123,92,240,.22);
-  border-radius:4px;
-  color:rgba(123,92,240,.8);
-  font-family:var(--font-body);font-size:7px;
-  font-weight:700;letter-spacing:.15em;text-transform:uppercase;
-  cursor:pointer;transition:all .3s var(--ease-out-expo);
-  position:relative;overflow:hidden;
-  text-align:center;
-}
-.pc-add::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(75,45,143,.5),rgba(123,92,240,.25));
-  transform:scaleX(0);transform-origin:left;
-  transition:transform .35s var(--ease-out-expo);
-}
-.pc-add:hover{border-color:rgba(123,92,240,.5);color:var(--accent2);}
-.pc-add:hover::before{transform:scaleX(1);}
-.pc-add span{position:relative;z-index:1;}
-.pcard.sel .pc-add{
-  background:rgba(255,95,95,.07);
-  border-color:rgba(255,95,95,.22);
-  color:rgba(255,95,95,.65);
-}
-.pcard.sel .pc-add:hover{background:rgba(224,85,85,.14);border-color:rgba(224,85,85,.35);color:var(--red);}
-.pcard.sel .pc-add::before{display:none;}
-
-/* ════════════════════════════
-   YERLEŞTİR butonu (popup alt)
-════════════════════════════ */
-.pu-actions{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:4px;}
-.pu-satin-al{
-  padding:15px;border-radius:var(--radius-sm);
-  background:rgba(123,92,240,.06);
-  border:1px solid rgba(123,92,240,.25);
-  color:var(--accent);
-  font-family:var(--font-body);
-  font-size:10.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-  cursor:pointer;transition:all .28s;
-}
-.pu-satin-al:hover{background:rgba(123,92,240,.14);border-color:var(--accent);}
-.pu-ok{
-  padding:14px;
-  border-radius:var(--radius-sm);border:none;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  background-size:200% auto;
-  color:#040300;
-  font-family:var(--font-body);font-size:.6rem;
-  font-weight:700;letter-spacing:.3em;text-transform:uppercase;
-  cursor:pointer;transition:all .45s var(--ease-out-expo);
-  width:100%;
-  box-shadow:0 4px 24px rgba(201,168,76,.2),inset 0 1px 0 rgba(255,255,255,.15);
-  position:relative;overflow:hidden;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  margin-top:4px;
-}
-.pu-ok::after{
-  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
-  transition:left .7s;
-}
-.pu-ok:hover{background-position:right center;box-shadow:0 6px 36px rgba(201,168,76,.4),inset 0 1px 0 rgba(255,255,255,.2);transform:translateY(-2px);}
-.pu-ok:hover::after{left:100%;}
-.pu-ok:active{transform:translateY(0) scale(.98);}
-.pu-ok-icon{font-size:.75rem;transition:transform .3s;}
-.pu-ok:hover .pu-ok-icon{transform:rotate(10deg) scale(1.2);}
-
-/* ════════════════════════════
-   RESPONSIVE
-════════════════════════════ */
-@media(max-width:760px){
-  .sidebar{width:58px;}
-  .sb-room-info,.sb-header .sb-headline,.sb-header p{display:none;}
-  .sb-room-icon-wrap{width:58px;height:52px;border-right:none;}
-  .sb-sel-count{right:3px;top:3px;transform:none;font-size:.4rem;}
-  .layout{height:calc(100vh - 52px);}
-  .backdrop{right:0;}
-  .popup{width:100%;border-left:none;border-top:1px solid var(--border2);top:auto;bottom:0;right:0;left:0;transform:translateY(102%);max-height:85vh;}
-  .popup.show{transform:translateY(0);}
-  .hdr{padding:10px 16px;}
-  .logo{font-size:14px;letter-spacing:.3em;}
-}
+/* AUTH / TOAST (kopyalanmış) */
+.modal-overlay-auth{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.modal-overlay-auth.open{opacity:1;pointer-events:all;}
+.auth-modal-box{background:var(--bg2);border:1px solid var(--border);border-radius:20px;width:100%;max-width:420px;padding:36px;position:relative;transform:translateY(20px) scale(0.97);transition:transform 0.3s;box-shadow:0 24px 64px rgba(0,0,0,0.4);}
+.modal-overlay-auth.open .auth-modal-box{transform:translateY(0) scale(1);}
+.auth-modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;background:var(--surface);border:1px solid var(--border);border-radius:8px;cursor:pointer;color:var(--text2);font-size:18px;display:flex;align-items:center;justify-content:center;}
+.modal-logo{font-family:var(--font-display);font-size:26px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;}
+.modal-title{font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:4px;}
+.modal-sub{font-size:13px;color:var(--text2);margin-bottom:24px;}
+.auth-tabs{display:flex;gap:4px;background:var(--bg3);border-radius:var(--radius-sm);padding:4px;margin-bottom:24px;}
+.auth-tab{flex:1;padding:8px;background:none;border:none;border-radius:6px;font-family:var(--font-body);font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all 0.2s;}
+.auth-tab.active{background:var(--surface);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+.form-group{margin-bottom:14px;}
+.form-label{font-size:12px;font-weight:500;color:var(--text2);margin-bottom:6px;display:block;}
+.form-input{width:100%;padding:11px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;color:var(--text);outline:none;transition:border-color 0.2s;}
+.form-input::placeholder{color:var(--text3);}
+.form-input:focus{border-color:var(--accent);}
+.input-wrap{position:relative;}
+.input-prefix{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--accent);font-weight:700;font-size:15px;pointer-events:none;}
+.form-input.username-field{padding-left:36px;}
+.btn-submit{width:100%;padding:13px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;transition:background 0.2s;margin-top:6px;}
+.btn-submit:hover{background:#6a4de0;}
+.auth-footer{text-align:center;margin-top:16px;font-size:12px;color:var(--text3);}
+.auth-footer a{color:var(--accent);text-decoration:none;cursor:pointer;}
+.auth-panel{display:none;}
+.auth-panel.active{display:block;}
+.profile-field{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg3);border-radius:var(--radius-sm);margin-bottom:10px;}
+.profile-field-label{font-size:12px;color:var(--text2);width:90px;flex-shrink:0;}
+.profile-field-val{font-size:14px;color:var(--text);flex:1;}
+.btn-google{width:100%;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;font-weight:500;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:border-color 0.2s,background 0.2s;margin-bottom:20px;}
+.btn-google:hover{border-color:var(--accent);background:var(--bg3);}
+.google-icon{width:18px;height:18px;flex-shrink:0;}
+.divider{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.divider span{font-size:12px;color:var(--text3);}
+.toast{position:fixed;bottom:28px;right:24px;z-index:999;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent2);border-radius:var(--radius-sm);padding:12px 18px;font-size:13px;color:var(--text);box-shadow:0 8px 24px rgba(0,0,0,0.3);transform:translateY(80px);opacity:0;transition:transform 0.3s,opacity 0.3s;}
+.toast.show{transform:translateY(0);opacity:1;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.fade-up{animation:fadeUp 0.4s ease both;}
+.fade-up-2{animation:fadeUp 0.4s ease 0.1s both;}
+.fade-up-3{animation:fadeUp 0.4s ease 0.2s both;}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<nav style="position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:rgba(10,10,15,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:10px;flex-shrink:0;">
-  <a href="index.html" style="font-family:var(--font-display);font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.5px;text-decoration:none;flex-shrink:0;">GEN-Z</a>
-  <a href="magaza.html" style="background:none;border:none;color:var(--text2);font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;padding:6px 12px;border-radius:8px;transition:color 0.2s,background 0.2s;text-decoration:none;">← Mağaza</a>
-  <div style="display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;background:color-mix(in srgb,var(--accent2) 10%,transparent);border:1px solid color-mix(in srgb,var(--accent2) 25%,transparent);">
-    <span style="font-size:11px;color:var(--accent2);">🏠</span>
-    <span style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--accent2);letter-spacing:-0.2px;">Ev Stil Odası</span>
-    <span style="font-size:10px;color:var(--text3);">· Dekor Rehberi</span>
-  </div>
-  <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
-    <button id="evThemeBtn" onclick="evToggleTheme()" style="width:36px;height:36px;border:1px solid var(--border);background:var(--surface);border-radius:8px;cursor:pointer;color:var(--text2);display:flex;align-items:center;justify-content:center;font-size:16px;transition:color 0.2s,border-color 0.2s;" title="Tema">🌙</button>
-    <button onclick="Sepet.open()" style="display:flex;align-items:center;gap:7px;padding:7px 16px;background:color-mix(in srgb,var(--accent2) 8%,transparent);border:1px solid color-mix(in srgb,var(--accent2) 22%,transparent);border-radius:999px;cursor:pointer;color:var(--accent2);font-family:var(--font-body);font-size:12px;font-weight:600;letter-spacing:.5px;transition:all 0.2s;" onmouseover="this.style.background='color-mix(in srgb,var(--accent2) 16%,transparent)'" onmouseout="this.style.background='color-mix(in srgb,var(--accent2) 8%,transparent)'">
-      🛒 Sepet <span id="evSepetCount" style="background:var(--accent2);color:#0a0a0f;font-size:10px;font-weight:800;width:18px;height:18px;border-radius:50%;display:none;align-items:center;justify-content:center;"></span>
-    </button>
+<nav>
+  <div class="nav-logo" onclick="navigateTo('index.html')">GEN-Z</div>
+  <ul class="nav-links">
+    <li><a href="magaza.html" data-tr="Mağaza" data-en="Shop">Mağaza</a></li>
+    <li><a href="ustam.html" data-tr="Ustam" data-en="Ustam">Ustam</a></li>
+    <li><a href="gen-z.html" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a></li>
+    <li><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a></li>
+    <li><a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a></li>
+    <li><a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a></li>
+    <li><a href="birlikte-buyuyelim.html" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a></li>
+    <li><a href="elden-ele.html" class="active" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()" aria-label="Menü"><span></span><span></span><span></span></button>
+    <button class="btn-icon" onclick="toggleLang()" title="Dil">🌐</button>
+    <button class="btn-icon" onclick="toggleTheme()" title="Tema" id="themeBtn">🌙</button>
+    <button class="btn-signin" onclick="openAuth('signin')" id="authBtn" data-tr="Giriş Yap" data-en="Sign In">Giriş Yap</button>
   </div>
 </nav>
-<div style="height:64px;"></div>
+<nav class="mobile-menu" id="mobileMenu">
+  <a href="magaza.html">Mağaza</a><a href="ustam.html">Ustam</a><a href="gen-z.html">Genç-Z</a>
+  <a href="hakkimizda.html">Hakkımızda</a><a href="topluluk.html">Topluluk</a>
+  <a href="iletisim.html">Kurucu</a><a href="birlikte-buyuyelim.html">Birlikte Büyüyelim</a>
+  <a href="elden-ele.html">Elden Ele</a>
+</nav>
 
-<!-- LAYOUT -->
-<div class="layout">
-
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <div class="sb-header">
-      <div class="sb-headline">Odalar</div>
-      <div class="sb-headline-deco"></div>
-    </div>
-    <div class="sb-room active" id="sb-salon" onclick="setRoom('salon',this)">
-      <div class="sb-room-icon-wrap"><span class="sb-room-icon">🛋️</span></div>
-      <div class="sb-room-info">
-        <div class="sb-room-name">Salon</div>
-        <div class="sb-room-sub">Oturma & Dinlence</div>
-      </div>
-      <span class="sb-sel-count" id="cnt-salon"></span>
-    </div>
-    <div class="sb-room" id="sb-oturma" onclick="setRoom('oturma',this)">
-      <div class="sb-room-icon-wrap"><span class="sb-room-icon">📺</span></div>
-      <div class="sb-room-info">
-        <div class="sb-room-name">Oturma Odası</div>
-        <div class="sb-room-sub">TV & Kanepe</div>
-      </div>
-      <span class="sb-sel-count" id="cnt-oturma"></span>
-    </div>
-    <div class="sb-room" id="sb-yatak" onclick="setRoom('yatak',this)">
-      <div class="sb-room-icon-wrap"><span class="sb-room-icon">🛏️</span></div>
-      <div class="sb-room-info">
-        <div class="sb-room-name">Yatak Odası</div>
-        <div class="sb-room-sub">Uyku & Dinlenme</div>
-      </div>
-      <span class="sb-sel-count" id="cnt-yatak"></span>
-    </div>
-    <div class="sb-room" id="sb-mutfak" onclick="setRoom('mutfak',this)">
-      <div class="sb-room-icon-wrap"><span class="sb-room-icon">🍳</span></div>
-      <div class="sb-room-info">
-        <div class="sb-room-name">Mutfak</div>
-        <div class="sb-room-sub">Pişirme & Yemek</div>
-      </div>
-      <span class="sb-sel-count" id="cnt-mutfak"></span>
-    </div>
-    <div class="sb-room" id="sb-banyo" onclick="setRoom('banyo',this)">
-      <div class="sb-room-icon-wrap"><span class="sb-room-icon">🚿</span></div>
-      <div class="sb-room-info">
-        <div class="sb-room-name">Banyo</div>
-        <div class="sb-room-sub">Duş & Bakım</div>
-      </div>
-      <span class="sb-sel-count" id="cnt-banyo"></span>
-    </div>
-    <div class="sb-room" id="sb-tuvalet" onclick="setRoom('tuvalet',this)">
-      <div class="sb-room-icon-wrap"><span class="sb-room-icon">🚽</span></div>
-      <div class="sb-room-info">
-        <div class="sb-room-name">Tuvalet</div>
-        <div class="sb-room-sub">WC & Lavabo</div>
-      </div>
-      <span class="sb-sel-count" id="cnt-tuvalet"></span>
-    </div>
-    <div class="sb-room" id="sb-cocuk" onclick="setRoom('cocuk',this)">
-      <div class="sb-room-icon-wrap"><span class="sb-room-icon">🧸</span></div>
-      <div class="sb-room-info">
-        <div class="sb-room-name">Çocuk Odası</div>
-        <div class="sb-room-sub">Oyun & Uyku</div>
-      </div>
-      <span class="sb-sel-count" id="cnt-cocuk"></span>
-    </div>
-  </div>
-
-  <!-- MAIN -->
-  <div class="main">
-    <!-- ODA GÖRÜNÜMÜ -->
-    <div class="room-wrap" id="roomWrap">
-      <div class="room-badge" id="roomBadge">
-        <span class="room-badge-icon">🛋️</span>
-        <span class="room-badge-text" id="roomBadgeText">SALON</span>
-      </div>
-
-      <!-- SVG ODA -->
-      <div class="room-svg-wrap" id="roomSvgWrap">
-        <svg class="room-svg" id="roomSvg" viewBox="0 0 900 580" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-          <!-- Dinamik SVG buraya js ile yüklenecek -->
-        </svg>
-      </div>
-
-      <!-- Ring overlaylar - js ile yerleştirilecek -->
-      <div id="ringsContainer"></div>
-      <!-- Zone hit alanları - js ile yerleştirilecek -->
-      <div id="zonesContainer"></div>
-
-      <!-- Alt etiket -->
-      <div class="zone-label">
-        <div class="zone-name" id="zoneName">Bir bölge seç</div>
-        <div class="zone-sub" id="zoneSub">Ürünleri keşfet ve odanı tasarla</div>
-      </div>
-    </div>
-
-    <!-- SEÇİM PANELİ -->
-    <div class="secim-panel">
-      <div class="sp-head">
-        <div class="sp-title">
-          <span style="color:var(--g3)">✦</span>
-          Seçimlerim
-          <span class="sp-count" id="spCount"></span>
-        </div>
-        <div class="sp-meta">
-          <div class="ipill">Oda: <b id="infoRoom">Salon</b></div>
-          <div class="ipill">Seçim: <b id="infoSel">—</b></div>
-        </div>
-      </div>
-      <div class="sp-chips" id="sumbar"></div>
-      <div class="sp-empty" id="spEmpty">Henüz ürün seçilmedi — odadaki bölgelere tıklayın</div>
-      <div class="sp-footer" id="spFooter" style="display:none">
-        <div class="sp-total-wrap">
-          <span class="sp-total-lbl">Toplam</span>
-          <span class="sp-total-val" id="spTotal">0 ₺</span>
-        </div>
-        <div class="sp-btns">
-          <button onclick="evKombinKaydet()" style="width:100%;padding:9px 14px;background:color-mix(in srgb,var(--accent2) 10%,transparent);border:1px solid color-mix(in srgb,var(--accent2) 30%,transparent);border-radius:8px;color:var(--accent2);font-family:var(--font-body);font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-bottom:8px;" onmouseover="this.style.background='color-mix(in srgb,var(--accent2) 18%,transparent)'" onmouseout="this.style.background='color-mix(in srgb,var(--accent2) 10%,transparent)'">💾 Dekor Kombinini Kaydet</button>
-          <button class="sp-sepet-btn" onclick="topluSepeteEkleVeGor()">
-            <span>🛒</span> Sepeti Gör
-          </button>
-          <button class="sp-satin-btn" onclick="topluSatinAl()">
-            Tümünü Satın Al <span class="sp-arrow">→</span>
-          </button>
-        </div>
-      </div>
-    </div>
+<div class="page-header">
+  <div class="page-header-bg"></div>
+  <div class="page-header-inner fade-up">
+    <div class="page-tag">🔄 <span data-tr="İkinci El Pazarı" data-en="Second Hand Market">İkinci El Pazarı</span></div>
+    <h1 class="page-title"><span class="grad">Elden Ele</span></h1>
+    <p class="page-sub" data-tr="Kullanmadığın ürünlere ikinci bir hayat ver. Gençten gence, elden ele." data-en="Give your unused items a second life. From youth to youth, hand to hand.">
+      Kullanmadığın ürünlere ikinci bir hayat ver. Gençten gence, elden ele.
+    </p>
+    <div class="coming-badge-big">⏳ <span data-tr="Yakında Açılıyor" data-en="Coming Soon">Yakında Açılıyor</span></div>
   </div>
 </div>
 
-<!-- TOAST -->
-<!-- BACKDROP -->
-<div class="backdrop" id="backdrop" onclick="closeZone()"></div>
+<div class="content">
 
-<!-- POPUP -->
-<div class="popup" id="popup">
-  <div class="popup-header-strip">
-    <div class="pu-head">
-      <div>
-        <span class="pu-zone-icon" id="puIcon">🏠</span>
-        <div class="pu-title" id="puTitle">Bölge</div>
-        <div class="pu-sub" id="puSub">—</div>
-      </div>
-      <button class="pu-close" onclick="closeZone()"><span>✕</span></button>
+  <div class="section-label">NASIL ÇALIŞIR</div>
+  <h2 class="section-title">3 adımda sat, 3 adımda al</h2>
+
+  <div class="how-grid fade-up-2">
+    <div class="how-card">
+      <div class="how-step">1</div>
+      <div class="how-title">Fotoğrafla</div>
+      <div class="how-desc">Satmak istediğin ürünü çek, kısa bir açıklama yaz. 2 dakika yeter.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-step">2</div>
+      <div class="how-title">Fiyat Belirle</div>
+      <div class="how-desc">Kendi fiyatını sen koy. Platform sadece küçük bir komisyon alır.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-step">3</div>
+      <div class="how-title">Güvenli Teslim</div>
+      <div class="how-desc">Alıcı onayladıktan sonra para hesabına yatar. Kargo veya elden teslim.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-step">4</div>
+      <div class="how-title">Al & Değerlendir</div>
+      <div class="how-desc">Aldığın ürünü değerlendir. Topluluk güvenini birlikte inşa edelim.</div>
     </div>
   </div>
-  <div class="popup-inner">
-    <div class="prod-grid" id="prodGrid"></div>
-    <div class="pu-actions">
-      <button class="pu-ok" onclick="closeZone()">✦ &nbsp;Yerleştir</button>
-      <button class="pu-satin-al" id="puSatinAlBtn" onclick="tekSatinAl()">🛒 &nbsp;Satın Al</button>
-    </div>
+
+  <div class="section-label">KATEGORİLER</div>
+  <h2 class="section-title">Ne satılacak?</h2>
+
+  <div class="cat-grid fade-up-3">
+    <div class="cat-pill"><div class="cat-pill-icon">👗</div><div class="cat-pill-name">Giyim</div><span class="cat-pill-badge">Yakında</span></div>
+    <div class="cat-pill"><div class="cat-pill-icon">📱</div><div class="cat-pill-name">Teknoloji</div><span class="cat-pill-badge">Yakında</span></div>
+    <div class="cat-pill"><div class="cat-pill-icon">📚</div><div class="cat-pill-name">Kitap & Kırtasiye</div><span class="cat-pill-badge">Yakında</span></div>
+    <div class="cat-pill"><div class="cat-pill-icon">🏠</div><div class="cat-pill-name">Ev & Dekor</div><span class="cat-pill-badge">Yakında</span></div>
+    <div class="cat-pill"><div class="cat-pill-icon">🎨</div><div class="cat-pill-name">Sanat & El İşi</div><span class="cat-pill-badge">Yakında</span></div>
+    <div class="cat-pill"><div class="cat-pill-icon">🎮</div><div class="cat-pill-name">Oyun & Hobi</div><span class="cat-pill-badge">Yakında</span></div>
+    <div class="cat-pill"><div class="cat-pill-icon">🧸</div><div class="cat-pill-name">Çocuk</div><span class="cat-pill-badge">Yakında</span></div>
+    <div class="cat-pill"><div class="cat-pill-icon">🎒</div><div class="cat-pill-name">Aksesuar</div><span class="cat-pill-badge">Yakında</span></div>
+  </div>
+
+  <div class="cta-box">
+    <div class="cta-title">Haberi ilk sen al</div>
+    <div class="cta-sub">Elden Ele açılırken ilk ilanı veren sen ol. Erken kayıt listesine gir.</div>
+    <a class="btn-cta" href="birlikte-buyuyelim.html">Erken Kayıt →</a>
   </div>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const _fbApp = initializeApp({
-  apiKey:"AIzaSyBZkd61YnpEKrl8gnT4vFKfrXwA9rWFixE",
-  authDomain:"terziusta-84452.firebaseapp.com",
-  projectId:"terziusta-84452",
-  storageBucket:"terziusta-84452.firebasestorage.app",
-  messagingSenderId:"376623315",
-  appId:"1:376623315:web:c9bd92ab2c4bf0e3cd0426"
-});
-const _db = getFirestore(_fbApp);
-
-// Firestore'dan ev ürünlerini çek ve PRODS'a birleştir
-async function fbUrunleriYukle(){
-  try{
-    const snap = await getDocs(query(
-      collection(_db,'magaza_urunler'),
-      where('satisaDurumu','==','aktif'),
-      where('durum','==','onaylandi'),
-      where('evOda','!=',null)
-    ));
-    snap.docs.forEach(function(d){
-      const u = d.data();
-      const oda = u.evOda;
-      const bolge = u.evBolge;
-      if(!oda || !bolge) return;
-      if(!window.PRODS||!window.PRODS[oda]) return;
-      if(!window.PRODS[oda][bolge]) window.PRODS[oda][bolge] = [];
-      // Aynı id'den iki kez eklemeyi önle
-      const fbId = 'fb_' + d.id;
-      if(window.PRODS[oda][bolge].find(function(x){return x.id===fbId;})) return;
-      // Renkleri parse et
-      var renkler = ['#c9a84c'];
-      if(u.renkler && u.renkler.length){
-        renkler = u.renkler.map(function(r){ return r.hex||r||'#c9a84c'; });
-      }
-      // Bedenleri parse et
-      var bedenler = ['Standart'];
-      if(u.bedenler && u.bedenler.length){
-        bedenler = u.bedenler.map(function(b){ return b.ad||b||'Standart'; });
-      }
-      window.PRODS[oda][bolge].push({
-        id: fbId,
-        ad: u.ad||'—',
-        marka: u.magazaAd||'Mağaza',
-        fiyat: u.kdvDahilFiyat||u.fiyat||0,
-        renkler: renkler,
-        bedenler: bedenler,
-        emoji: '🏠',
-        kategori: u.kategori||bolge,
-        resim: (u.resimler&&u.resimler[0])||null,
-        fbId: d.id,
-      });
-    });
-  } catch(e){
-    console.warn('Firestore ev ürünleri yüklenemedi:', e.message);
-  }
-  // Yükleme bitti - aktif odayı yeniden render et
-  if(window.renderRoom) window.renderRoom(window.activeRoom||'salon');
-}
-
-// Yükleme durumu
-window._fbYuklendi = false;
-
-// Sayfa yüklenince çek
-window.addEventListener('DOMContentLoaded', function(){
-  fbUrunleriYukle().finally(function(){
-    window._fbYuklendi = true;
-  });
-});
-</script>
+<!-- AUTH MODAL -->
+<div class="modal-overlay-auth" id="authModal" onclick="closeAuthIfOutside(event)">
+  <div class="auth-modal-box">
+    <button class="auth-modal-close" onclick="closeAuth()">✕</button>
+    <div class="modal-logo">GEN-Z</div>
+    <div id="authTabs" class="auth-tabs">
+      <button class="auth-tab active" id="tab-signin" onclick="switchTab('signin')">Giriş Yap</button>
+      <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Kayıt Ol</button>
+    </div>
+    <div class="auth-panel active" id="panel-signin">
+      <div class="modal-title">Tekrar hoş geldin</div><div class="modal-sub">Hesabına giriş yap</div>
+      <button class="btn-google" onclick="showToast('Google bağlantısı yakında 🔜')"><svg class="google-icon" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>Google ile Giriş</button>
+      <div class="divider"><span>veya</span></div>
+      <div class="form-group"><label class="form-label">E-posta</label><input class="form-input" id="signin-email" type="email" placeholder="ornek@mail.com"/></div>
+      <div class="form-group"><label class="form-label">Şifre</label><input class="form-input" id="signin-pass" type="password" placeholder="••••••••"/></div>
+      <button class="btn-submit" onclick="doSignIn()">Giriş Yap</button>
+      <div class="auth-footer"><a onclick="switchTab('forgot')">Şifremi unuttum</a></div>
+    </div>
+    <div class="auth-panel" id="panel-signup">
+      <div class="modal-title">Hesap oluştur</div><div class="modal-sub">Ücretsiz katıl</div>
+      <div class="form-group"><label class="form-label">Kullanıcı Adı</label><div class="input-wrap"><span class="input-prefix">@</span><input class="form-input username-field" id="signup-username" type="text" placeholder="kullaniciadin"/></div></div>
+      <div class="form-group"><label class="form-label">E-posta</label><input class="form-input" id="signup-email" type="email" placeholder="ornek@mail.com"/></div>
+      <div class="form-group"><label class="form-label">Şifre</label><input class="form-input" id="signup-pass" type="password" placeholder="En az 8 karakter"/></div>
+      <button class="btn-submit" onclick="doSignUp()">Kayıt Ol</button>
+    </div>
+    <div class="auth-panel" id="panel-forgot">
+      <div class="modal-title">Şifre Sıfırla</div><div class="modal-sub">E-postana sıfırlama bağlantısı gönderilecek</div>
+      <div class="form-group"><label class="form-label">E-posta</label><input class="form-input" id="forgot-email" type="email" placeholder="ornek@mail.com"/></div>
+      <button class="btn-submit" onclick="doForgot()">Bağlantı Gönder</button>
+      <div class="auth-footer"><a onclick="switchTab('signin')">← Giriş yap</a></div>
+    </div>
+    <div class="auth-panel" id="panel-profile">
+      <div class="modal-title">Profilim</div><div class="modal-sub">Hesap bilgilerin</div>
+      <div class="profile-field"><span class="profile-field-label">Kullanıcı Adı</span><span class="profile-field-val" id="profile-username">@kullanici</span></div>
+      <div class="profile-field"><span class="profile-field-label">E-posta</span><span class="profile-field-val" id="profile-email">ornek@mail.com</span></div>
+      <button class="btn-submit" style="background:transparent;color:var(--accent);border:1px solid var(--accent);margin-top:8px" onclick="goToProfile()">👤 Profil Sayfam</button>
+      <button class="btn-submit" style="background:var(--bg3);color:var(--text2);margin-top:8px" onclick="doSignOut()">Çıkış Yap</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
 
 <script>
-
-var ROOMS = {
-  salon: {
-    label:'🛋️ SALON',
-    badge:'🛋️',
-    name:'Salon',
-    zones:{
-      perde:   {id:'perde',   icon:'🪟', name:'Perde & Stor',   sub:'Pencere dekorasyonu',   rect:{l:'10.0%',t:'22.0%',w:'10%',h:'7%'}},
-      koltuk:  {id:'koltuk',  icon:'🛋️', name:'Koltuk & Kanepe',sub:'Oturma grubu',          rect:{l:'36.0%',t:'56.5%',w:'10%',h:'7%'}},
-      hali:    {id:'hali',    icon:'🟫', name:'Halı & Zemin',   sub:'Yer kaplaması',         rect:{l:'37.5%',t:'75.5%',w:'10%',h:'7%'}},
-      aydinlatma:{id:'aydinlatma',icon:'💡',name:'Aydınlatma',  sub:'Lamba & avize',         rect:{l:'45.0%',t:'4.5%',w:'10%',h:'7%'}},
-      dekor:   {id:'dekor',   icon:'🖼️', name:'Dekorasyon',     sub:'Tablo & aksesuar',      rect:{l:'78.0%',t:'26.5%',w:'10%',h:'7%'}},
-      sehpa:   {id:'sehpa',   icon:'🪑', name:'Sehpa & Orta Masa',sub:'Yan & orta sehpa',   rect:{l:'35.0%',t:'60.5%',w:'10%',h:'7%'}},
-    }
-  },
-  oturma: {
-    label:'📺 OTURMA ODASI',
-    badge:'📺',
-    name:'Oturma Odası',
-    zones:{
-      perde:   {id:'perde',   icon:'🪟', name:'Perde & Stor',   sub:'Pencere dekorasyonu',   rect:{l:'10.0%',t:'22.0%',w:'10%',h:'7%'}},
-      koltuk:  {id:'koltuk',  icon:'🛋️', name:'Koltuk & Kanepe',sub:'Oturma grubu',          rect:{l:'35.5%',t:'58.5%',w:'10%',h:'7%'}},
-      tv:      {id:'tv',      icon:'📺', name:'TV Ünitesi',      sub:'Medya mobilyası',       rect:{l:'76.0%',t:'44.0%',w:'10%',h:'7%'}},
-      hali:    {id:'hali',    icon:'🟫', name:'Halı & Zemin',   sub:'Yer kaplaması',         rect:{l:'37.5%',t:'75.5%',w:'10%',h:'7%'}},
-      aydinlatma:{id:'aydinlatma',icon:'💡',name:'Aydınlatma',  sub:'Lamba & avize',         rect:{l:'45.0%',t:'4.5%',w:'10%',h:'7%'}},
-      dekor:   {id:'dekor',   icon:'🖼️', name:'Dekorasyon',     sub:'Tablo & aksesuar',      rect:{l:'78.0%',t:'15.5%',w:'10%',h:'7%'}},
-    }
-  },
-  yatak: {
-    label:'🛏️ YATAK ODASI',
-    badge:'🛏️',
-    name:'Yatak Odası',
-    zones:{
-      perde:    {id:'perde',   icon:'🪟', name:'Perde & Stor',    sub:'Pencere dekorasyonu',  rect:{l:'10.0%',t:'22.0%',w:'10%',h:'7%'}},
-      yatak:    {id:'yatak',   icon:'🛏️', name:'Yatak & Yorgan',  sub:'Uyku tekstili',        rect:{l:'41.0%',t:'49.0%',w:'10%',h:'7%'}},
-      hali:     {id:'hali',    icon:'🟫', name:'Halı & Zemin',    sub:'Yer kaplaması',        rect:{l:'37.5%',t:'75.5%',w:'10%',h:'7%'}},
-      aydinlatma:{id:'aydinlatma',icon:'💡',name:'Aydınlatma',    sub:'Gece lambası & avize', rect:{l:'45.0%',t:'4.5%',w:'10%',h:'7%'}},
-      gardrop:  {id:'gardrop', icon:'🚪', name:'Gardırop & Şifonyer',sub:'Depolama mobilyası',rect:{l:'79.0%',t:'39.0%',w:'10%',h:'7%'}},
-      dekor:    {id:'dekor',   icon:'🖼️', name:'Dekorasyon',      sub:'Tablo & aksesuar',    rect:{l:'8.0%',t:'56.5%',w:'10%',h:'7%'}},
-    }
-  },
-  mutfak: {
-    label:'🍳 MUTFAK',
-    badge:'🍳',
-    name:'Mutfak',
-    zones:{
-      perde:    {id:'perde',   icon:'🪟', name:'Perde & Stor',     sub:'Pencere dekorasyonu', rect:{l:'10.0%',t:'20.5%',w:'10%',h:'7%'}},
-      beyazes:  {id:'beyazes', icon:'🧊', name:'Beyaz Eşya',       sub:'Buzdolabı & fırın',   rect:{l:'79.0%',t:'34.0%',w:'10%',h:'7%'}},
-      mutfakalet:{id:'mutfakalet',icon:'🫕',name:'Mutfak Aletleri',sub:'Küçük ev aletleri',   rect:{l:'41.0%',t:'30.5%',w:'10%',h:'7%'}},
-      tezgah:   {id:'tezgah',  icon:'🍽️', name:'Tezgah & Aksesuar',sub:'Mutfak ekipmanları',  rect:{l:'38.0%',t:'54.5%',w:'10%',h:'7%'}},
-      aydinlatma:{id:'aydinlatma',icon:'💡',name:'Aydınlatma',     sub:'Mutfak aydınlatması', rect:{l:'45.0%',t:'4.5%',w:'10%',h:'7%'}},
-      dekor:    {id:'dekor',   icon:'🌿', name:'Dekorasyon',       sub:'Saksı & aksesuar',    rect:{l:'8.0%',t:'54.0%',w:'10%',h:'7%'}},
-    }
-  },
-  banyo: {
-    label:'🚿 BANYO',
-    badge:'🚿',
-    name:'Banyo',
-    zones:{
-      perde:    {id:'perde',   icon:'🪟', name:'Perde & Stor',     sub:'Pencere & duş perdesi',rect:{l:'10.0%',t:'20.5%',w:'10%',h:'7%'}},
-      banyo:    {id:'banyo',   icon:'🚿', name:'Banyo Aksesuarları',sub:'Sabunluk, kap vb.',   rect:{l:'36.0%',t:'31.5%',w:'10%',h:'7%'}},
-      havlu:    {id:'havlu',   icon:'🛁', name:'Havlu & Tekstil',  sub:'Banyo tekstili',       rect:{l:'30.0%',t:'62.5%',w:'10%',h:'7%'}},
-      aydinlatma:{id:'aydinlatma',icon:'💡',name:'Aydınlatma',     sub:'Banyo aynası & lamba', rect:{l:'45.0%',t:'4.5%',w:'10%',h:'7%'}},
-      dekor:    {id:'dekor',   icon:'🌿', name:'Dekorasyon',       sub:'Saksı & aksesuar',    rect:{l:'76.0%',t:'34.0%',w:'10%',h:'7%'}},
-    }
-  },
-  tuvalet: {
-    label:'🚽 TUVALET',
-    badge:'🚽',
-    name:'Tuvalet',
-    zones:{
-      perde:    {id:'perde',   icon:'🪟', name:'Perde & Stor',     sub:'Pencere dekorasyonu', rect:{l:'10.0%',t:'20.5%',w:'10%',h:'7%'}},
-      banyo:    {id:'banyo',   icon:'🚽', name:'WC & Aksesuar',    sub:'Kağıtlık, fırça vb.', rect:{l:'39.0%',t:'41.5%',w:'10%',h:'7%'}},
-      havlu:    {id:'havlu',   icon:'🧴', name:'El Havlusu & Sabun',sub:'Banyo tekstili',      rect:{l:'76.0%',t:'34.0%',w:'10%',h:'7%'}},
-      aydinlatma:{id:'aydinlatma',icon:'💡',name:'Aydınlatma',     sub:'Tuvalet aydınlatması',rect:{l:'45.0%',t:'4.5%',w:'10%',h:'7%'}},
-    }
-  },
-  cocuk: {
-    label:'🧸 ÇOCUK ODASI',
-    badge:'🧸',
-    name:'Çocuk Odası',
-    zones:{
-      perde:    {id:'perde',   icon:'🪟', name:'Perde & Stor',    sub:'Çocuk odası perdesi',  rect:{l:'10.0%',t:'22.0%',w:'10%',h:'7%'}},
-      yatak:    {id:'yatak',   icon:'🛏️', name:'Çocuk Yatağı',   sub:'Yatak & yatak örtüsü', rect:{l:'37.0%',t:'47.5%',w:'10%',h:'7%'}},
-      masa:     {id:'masa',    icon:'📚', name:'Masa & Sandalye', sub:'Çalışma mobilyası',    rect:{l:'75.0%',t:'39.0%',w:'10%',h:'7%'}},
-      hali:     {id:'hali',    icon:'🟫', name:'Halı & Oyun Matı',sub:'Yer kaplaması',        rect:{l:'37.5%',t:'75.5%',w:'10%',h:'7%'}},
-      aydinlatma:{id:'aydinlatma',icon:'💡',name:'Aydınlatma',   sub:'Çocuk lambası & gece lambası',rect:{l:'45.0%',t:'4.5%',w:'10%',h:'7%'}},
-      dekor:    {id:'dekor',   icon:'🎨', name:'Dekorasyon',      sub:'Duvar dekoru & oyuncak',rect:{l:'8.0%',t:'55.5%',w:'10%',h:'7%'}},
-    }
-  }
-};
-
-/* ══════════════════════════════
-   SVG ODA ÇİZİMLERİ
-══════════════════════════════ */
-
-function getRoomSVG(rid){
-  var c={
-    wall:'rgba(240,235,224,.04)',
-    wallStroke:'rgba(201,168,76,.12)',
-    floor:'rgba(201,168,76,.05)',
-    floorStroke:'rgba(201,168,76,.08)',
-    ceiling:'rgba(201,168,76,.06)',
-    gold:'rgba(201,168,76,.35)',
-    gold2:'rgba(201,168,76,.15)',
-    dim:'rgba(240,235,224,.06)',
-  };
-
-  // Ortak oda perspektif tabanı
-  var base = `
-    <!-- Tavan -->
-    <polygon points="0,0 900,0 760,140 140,140" fill="${c.ceiling}" stroke="${c.wallStroke}" stroke-width=".8"/>
-    <!-- Sol duvar -->
-    <polygon points="0,0 140,140 140,480 0,580" fill="${c.wall}" stroke="${c.wallStroke}" stroke-width=".8"/>
-    <!-- Sağ duvar -->
-    <polygon points="900,0 760,140 760,480 900,580" fill="${c.wall}" stroke="${c.wallStroke}" stroke-width=".8"/>
-    <!-- Arka duvar -->
-    <polygon points="140,140 760,140 760,480 140,480" fill="${c.wall}" stroke="${c.wallStroke}" stroke-width=".6"/>
-    <!-- Zemin -->
-    <polygon points="0,580 140,480 760,480 900,580" fill="${c.floor}" stroke="${c.floorStroke}" stroke-width=".8"/>
-    <!-- Perspektif çizgiler -->
-    <line x1="450" y1="0" x2="450" y2="140" stroke="${c.gold2}" stroke-width=".4" stroke-dasharray="4,6"/>
-    <line x1="140" y1="140" x2="760" y2="140" stroke="${c.gold}" stroke-width=".5"/>
-    <line x1="140" y1="480" x2="760" y2="480" stroke="${c.gold}" stroke-width=".5"/>
-    <!-- Köşe detayları -->
-    <line x1="0" y1="0" x2="140" y2="140" stroke="${c.wallStroke}" stroke-width=".8"/>
-    <line x1="900" y1="0" x2="760" y2="140" stroke="${c.wallStroke}" stroke-width=".8"/>
-    <line x1="0" y1="580" x2="140" y2="480" stroke="${c.wallStroke}" stroke-width=".8"/>
-    <line x1="900" y1="580" x2="760" y2="480" stroke="${c.wallStroke}" stroke-width=".8"/>
-  `;
-
-  var rooms = {
-    salon: base + `
-      <!-- Pencere sol arka -->
-      <rect x="175" y="160" width="90" height="130" fill="rgba(135,206,250,.06)" stroke="${c.gold2}" stroke-width="1"/>
-      <line x1="220" y1="160" x2="220" y2="290" stroke="${c.gold2}" stroke-width=".5"/>
-      <line x1="175" y1="225" x2="265" y2="225" stroke="${c.gold2}" stroke-width=".5"/>
-      <!-- Perde sol -->
-      <rect x="168" y="155" width="15" height="140" fill="rgba(201,168,76,.12)" stroke="none"/>
-      <rect x="270" y="155" width="15" height="140" fill="rgba(201,168,76,.12)" stroke="none"/>
-      <!-- Kanepe -->
-      <rect x="220" y="345" width="340" height="95" rx="8" fill="rgba(201,168,76,.09)" stroke="${c.gold2}" stroke-width="1"/>
-      <rect x="220" y="345" width="340" height="28" rx="8" fill="rgba(201,168,76,.07)" stroke="${c.gold2}" stroke-width=".5"/>
-      <rect x="220" y="345" width="22" height="95" rx="4" fill="rgba(201,168,76,.08)" stroke="${c.gold2}" stroke-width=".5"/>
-      <rect x="538" y="345" width="22" height="95" rx="4" fill="rgba(201,168,76,.08)" stroke="${c.gold2}" stroke-width=".5"/>
-      <!-- Yastıklar -->
-      <rect x="248" y="355" width="60" height="55" rx="6" fill="rgba(201,168,76,.1)" stroke="${c.gold2}" stroke-width=".5"/>
-      <rect x="320" y="355" width="60" height="55" rx="6" fill="rgba(201,168,76,.08)" stroke="${c.gold2}" stroke-width=".5"/>
-      <rect x="450" y="355" width="60" height="55" rx="6" fill="rgba(201,168,76,.1)" stroke="${c.gold2}" stroke-width=".5"/>
-      <!-- Sehpa -->
-      <rect x="310" y="425" width="140" height="50" rx="4" fill="rgba(201,168,76,.07)" stroke="${c.gold2}" stroke-width=".8"/>
-      <rect x="330" y="465" width="6" height="15" fill="${c.gold2}"/>
-      <rect x="440" y="465" width="6" height="15" fill="${c.gold2}"/>
-      <!-- Halı -->
-      <ellipse cx="390" cy="465" rx="220" ry="22" fill="rgba(201,168,76,.06)" stroke="${c.gold2}" stroke-width=".5"/>
-      <!-- Avize -->
-      <line x1="450" y1="0" x2="450" y2="60" stroke="${c.gold}" stroke-width="1"/>
-      <ellipse cx="450" cy="75" rx="35" ry="12" fill="rgba(201,168,76,.12)" stroke="${c.gold}" stroke-width="1"/>
-      <circle cx="450" cy="68" r="5" fill="rgba(255,220,100,.5)"/>
-      <!-- Tablo arka -->
-      <rect x="580" y="185" width="120" height="85" rx="4" fill="rgba(201,168,76,.06)" stroke="${c.gold2}" stroke-width=".8"/>
-      <rect x="590" y="195" width="100" height="65" rx="2" fill="rgba(201,168,76,.04)" stroke="${c.gold2}" stroke-width=".4"/>
-      <!-- Yer hatları -->
-      <line x1="140" y1="480" x2="760" y2="480" stroke="${c.gold}" stroke-width=".5"/>
-    `,
-    oturma: base + `
-      <!-- Pencere sol -->
-      <rect x="175" y="160" width="90" height="130" fill="rgba(135,206,250,.06)" stroke="${c.gold2}" stroke-width="1"/>
-      <line x1="220" y1="160" x2="220" y2="290" stroke="${c.gold2}" stroke-width=".5"/>
-      <line x1="175" y1="225" x2="265" y2="225" stroke="${c.gold2}" stroke-width=".5"/>
-      <rect x="168" y="155" width="15" height="140" fill="rgba(201,168,76,.12)" stroke="none"/>
-      <rect x="270" y="155" width="15" height="140" fill="rgba(201,168,76,.12)" stroke="none"/>
-      <!-- TV ünitesi sağda -->
-      <rect x="610" y="200" width="130" height="240" rx="6" fill="rgba(201,168,76,.06)" stroke="${c.gold2}" stroke-width=".8"/>
-      <rect x="620" y="210" width="110" height="140" rx="4" fill="rgba(0,0,0,.5)" stroke="${c.gold2}" stroke-width=".5"/>
-      <line x1="675" y1="210" x2="675" y2="350" stroke="${c.gold2}" stroke-width=".2" stroke-dasharray="2,4"/>
-      <!-- TV ekranı parlaması -->
-      <rect x="625" y="215" width="100" height="130" rx="3" fill="rgba(135,206,250,.04)"/>
-      <rect x="620" y="360" width="110" height="70" rx="4" fill="rgba(201,168,76,.08)" stroke="${c.gold2}" stroke-width=".5"/>
-      <!-- Kanepe -->
-      <rect x="190" y="350" width="370" height="90" rx="8" fill="rgba(201,168,76,.09)" stroke="${c.gold2}" stroke-width="1"/>
-      <rect x="190" y="350" width="370" height="26" rx="8" fill="rgba(201,168,76,.07)" stroke="${c.gold2}" stroke-width=".5"/>
-      <!-- Sehpa -->
-      <rect x="295" y="428" width="130" height="45" rx="4" fill="rgba(201,168,76,.07)" stroke="${c.gold2}" stroke-width=".8"/>
-      <!-- Halı -->
-      <ellipse cx="375" cy="462" rx="200" ry="20" fill="rgba(201,168,76,.06)" stroke="${c.gold2}" stroke-width=".5"/>
-      <!-- Avize -->
-      <line x1="450" y1="0" x2="450" y2="60" stroke="${c.gold}" stroke-width="1"/>
-      <ellipse cx="450" cy="75" rx="35" ry="12" fill="rgba(201,168,76,.12)" stroke="${c.gold}" stroke-width="1"/>
-      <circle cx="450" cy="68" r="5" fill="rgba(255,220,100,.5)"/>
-    `,
-    yatak: base + `
-      <!-- Pencere sol -->
-      <rect x="175" y="165" width="90" height="120" fill="rgba(135,206,250,.06)" stroke="${c.gold2}" stroke-width="1"/>
-      <line x1="220" y1="165" x2="220" y2="285" stroke="${c.gold2}" stroke-width=".5"/>
-      <line x1="175" y1="225" x2="265" y2="225" stroke="${c.gold2}" stroke-width=".5"/>
-      <rect x="168" y="158" width="15" height="135" fill="rgba(201,168,76,.12)" stroke="none"/>
-      <rect x="270" y="158" width="15" height="135" fill="rgba(201,168,76,.12)" stroke="none"/>
-      <!-- Başlık -->
-      <rect x="240" y="220" width="340" height="65" rx="8" fill="rgba(201,168,76,.1)" stroke="${c.gold2}" stroke-width=".8"/>
-      <!-- Yatak -->
-      <rect x="240" y="280" width="340" height="180" rx="4" fill="rgba(240,235,224,.05)" stroke="${c.gold2}" stroke-width=".8"/>
-      <!-- Yorgan / nevresim -->
-      <rect x="240" y="310" width="340" height="150" rx="4" fill="rgba(201,168,76,.07)" stroke="${c.gold2}" stroke-width=".5"/>
-      <!-- Yastıklar -->
-      <rect x="255" y="285" width="130" height="60" rx="6" fill="rgba(240,235,224,.08)" stroke="${c.gold2}" stroke-width=".5"/>
-      <rect x="435" y="285" width="130" height="60" rx="6" fill="rgba(240,235,224,.08)" stroke="${c.gold2}" stroke-width=".5"/>
-      <!-- Komodin sol -->
-      <rect x="175" y="300" width="60" height="100" rx="4" fill="rgba(201,168,76,.07)" stroke="${c.gold2}" stroke-width=".5"/>
-      <circle cx="205" cy="400" r="14" fill="rgba(201,168,76,.12)" stroke="${c.gold2}" stroke-width=".5"/>
-      <!-- Komodin sağ -->
-      <rect x="585" y="300" width="60" height="100" rx="4" fill="rgba(201,168,76,.07)" stroke="${c.gold2}" stroke-width=".5"/>
-      <circle cx="615" cy="400" r="14" fill="rgba(201,168,76,.12)" stroke="${c.gold2}" stroke-width=".5"/>
-      <!-- Gardırop sağ -->
-      <rect x="635" y="155" width="110" height="300" rx="4" fill="rgba(201,168,76,.06)" stroke="${c.gold2}" stroke-width=".8"/>
-      <line x1="690" y1="155" x2="690" y2="455" stroke="${c.gold2}" stroke-width=".4"/>
-      <circle cx="674" cy="310" r="4" fill="${c.gold2}"/>
-      <circle cx="706" cy="310" r="4" fill="${c.gold2}"/>
-      <!-- Halı -->
-      <ellipse cx="410" cy="468" rx="200" ry="20" fill="rgba(201,168,76,.06)" stroke="${c.gold2}" stroke-width=".5"/>
-      <!-- Avize -->
-      <line x1="450" y1="0" x2="450" y2="58" stroke="${c.gold}" stroke-width="1"/>
-      <ellipse cx="450" cy="70" rx="30" ry="10" fill="rgba(201,168,76,.12)" stroke="${c.gold}" stroke-width="1"/>
-      <circle cx="450" cy="64" r="5" fill="rgba(255,220,100,.5)"/>
-    `,
-    mutfak: base + `
-      <!-- Pencere sol -->
-      <rect x="175" y="165" width="80" height="110" fill="rgba(135,206,250,.06)" stroke="${c.gold2}" stroke-width="1"/>
-      <line x1="215" y1="165" x2="215" y2="275" stroke="${c.gold2}" stroke-width=".5"/>
-      <line x1="175" y1="220" x2="255" y2="220" stroke="${c.gold2}" stroke-width=".5"/>
-      <rect x="170" y="158" width="12" height="125" fill="rgba(201,168,76,.12)" stroke="none"/>
-      <rect x="255" y="158" width="12" height="125" fill="rgba(201,168,76,.12)" stroke="none"/>
-      <!-- Alt mutfak dolabı -->
-      <rect x="175" y="360" width="560" height="105" rx="4" fill="rgba(201,168,76,.06)" stroke="${c.gold2}" stroke-width=".8"/>
-      <!-- Tezgah -->
-      <rect x="175" y="350" width="560" height="16" rx="2" fill="rgba(201,168,76,.12)" stroke="${c.gold}" stroke-width=".6"/>
-      <!-- Üst dolap -->
-      <rect x="175" y="155" width="200" height="120" rx="4" fill="rgba(201,168,76,.06)" stroke="${c.gold2}" stroke-width=".6"/>
-      <line x1="280" y1="155" x2="280" y2="275" stroke="${c.gold2}" stroke-width=".4"/>
-      <!-- Buzdolabı -->
-      <rect x="635" y="155" width="110" height="305" rx="4" fill="rgba(201,168,76,.07)" stroke="${c.gold2}" stroke-width=".8"/>
-      <rect x="635" y="155" width="110" height="150" rx="4" fill="rgba(201,168,76,.05)" stroke="${c.gold2}" stroke-width=".4"/>
-      <circle cx="730" cy="230" r="5" fill="${c.gold2}"/>
-      <circle cx="730" cy="370" r="5" fill="${c.gold2}"/>
-      <!-- Ocak -->
-      <rect x="330" y="355" width="120" height="10" rx="2" fill="rgba(201,168,76,.15)" stroke="${c.gold}" stroke-width=".5"/>
-      <circle cx="355" cy="330" r="18" fill="rgba(201,168,76,.08)" stroke="${c.gold2}" stroke-width=".8"/>
-      <circle cx="425" cy="330" r="18" fill="rgba(201,168,76,.08)" stroke="${c.gold2}" stroke-width=".8"/>
-      <circle cx="355" cy="330" r="6" fill="rgba(201,168,76,.15)"/>
-      <circle cx="425" cy="330" r="6" fill="rgba(201,168,76,.15)"/>
-      <!-- Aydınlatma -->
-      <line x1="450" y1="0" x2="450" y2="55" stroke="${c.gold}" stroke-width="1"/>
-      <rect x="380" y="55" width="140" height="18" rx="4" fill="rgba(201,168,76,.12)" stroke="${c.gold}" stroke-width=".8"/>
-      <rect x="386" y="61" width="128" height="6" rx="2" fill="rgba(255,220,100,.25)"/>
-    `,
-    banyo: base + `
-      <!-- Pencere -->
-      <rect x="195" y="165" width="75" height="100" fill="rgba(135,206,250,.06)" stroke="${c.gold2}" stroke-width="1"/>
-      <line x1="233" y1="165" x2="233" y2="265" stroke="${c.gold2}" stroke-width=".5"/>
-      <line x1="195" y1="215" x2="270" y2="215" stroke="${c.gold2}" stroke-width=".5"/>
-      <rect x="190" y="160" width="10" height="110" fill="rgba(201,168,76,.12)" stroke="none"/>
-      <rect x="268" y="160" width="10" height="110" fill="rgba(201,168,76,.12)" stroke="none"/>
-      <!-- Duş kabini / küvet -->
-      <rect x="230" y="175" width="310" height="220" rx="6" fill="rgba(135,206,250,.04)" stroke="${c.gold2}" stroke-width=".8"/>
-      <!-- Duş başlığı -->
-      <line x1="480" y1="175" x2="480" y2="225" stroke="${c.gold}" stroke-width="1.5"/>
-      <ellipse cx="480" cy="230" rx="18" ry="6" fill="rgba(201,168,76,.2)" stroke="${c.gold}" stroke-width=".8"/>
-      <!-- Fayans çizgileri -->
-      <line x1="230" y1="245" x2="540" y2="245" stroke="${c.gold2}" stroke-width=".3" stroke-dasharray="3,4"/>
-      <line x1="230" y1="315" x2="540" y2="315" stroke="${c.gold2}" stroke-width=".3" stroke-dasharray="3,4"/>
-      <line x1="310" y1="175" x2="310" y2="395" stroke="${c.gold2}" stroke-width=".3" stroke-dasharray="3,4"/>
-      <line x1="390" y1="175" x2="390" y2="395" stroke="${c.gold2}" stroke-width=".3" stroke-dasharray="3,4"/>
-      <!-- Lavabo -->
-      <ellipse cx="640" cy="295" rx="75" ry="45" fill="rgba(135,206,250,.04)" stroke="${c.gold2}" stroke-width=".8"/>
-      <rect x="575" y="280" width="130" height="18" rx="4" fill="rgba(201,168,76,.08)" stroke="${c.gold2}" stroke-width=".5"/>
-      <!-- Ayna -->
-      <rect x="595" y="165" width="130" height="100" rx="4" fill="rgba(135,206,250,.06)" stroke="${c.gold}" stroke-width=".8"/>
-      <!-- Havlu askısı -->
-      <line x1="590" y1="370" x2="720" y2="370" stroke="${c.gold}" stroke-width="2"/>
-      <rect x="590" y="363" width="4" height="14" rx="2" fill="${c.gold2}"/>
-      <rect x="716" y="363" width="4" height="14" rx="2" fill="${c.gold2}"/>
-      <!-- Lamba -->
-      <line x1="450" y1="0" x2="450" y2="55" stroke="${c.gold}" stroke-width="1"/>
-      <rect x="400" y="55" width="100" height="14" rx="4" fill="rgba(201,168,76,.12)" stroke="${c.gold}" stroke-width=".8"/>
-    `,
-    tuvalet: base + `
-      <!-- Pencere küçük -->
-      <rect x="200" y="170" width="65" height="85" fill="rgba(135,206,250,.06)" stroke="${c.gold2}" stroke-width="1"/>
-      <line x1="233" y1="170" x2="233" y2="255" stroke="${c.gold2}" stroke-width=".5"/>
-      <line x1="200" y1="212" x2="265" y2="212" stroke="${c.gold2}" stroke-width=".5"/>
-      <!-- WC kloset -->
-      <ellipse cx="400" cy="390" rx="80" ry="55" fill="rgba(240,235,224,.04)" stroke="${c.gold2}" stroke-width=".8"/>
-      <rect x="330" y="310" width="140" height="80" rx="8" fill="rgba(240,235,224,.04)" stroke="${c.gold2}" stroke-width=".8"/>
-      <rect x="315" y="285" width="170" height="38" rx="6" fill="rgba(201,168,76,.06)" stroke="${c.gold2}" stroke-width=".6"/>
-      <!-- Lavabo -->
-      <ellipse cx="595" cy="295" rx="65" ry="40" fill="rgba(135,206,250,.04)" stroke="${c.gold2}" stroke-width=".8"/>
-      <rect x="540" y="280" width="110" height="16" rx="4" fill="rgba(201,168,76,.08)" stroke="${c.gold2}" stroke-width=".5"/>
-      <!-- Ayna -->
-      <rect x="550" y="165" width="110" height="90" rx="4" fill="rgba(135,206,250,.06)" stroke="${c.gold}" stroke-width=".8"/>
-      <!-- Rulo kağıt -->
-      <circle cx="270" cy="340" r="20" fill="rgba(240,235,224,.06)" stroke="${c.gold2}" stroke-width=".6"/>
-      <rect x="264" y="318" width="4" height="22" fill="${c.gold2}"/>
-      <!-- Fayans -->
-      <line x1="140" y1="280" x2="760" y2="280" stroke="${c.gold2}" stroke-width=".3" stroke-dasharray="3,5"/>
-      <line x1="140" y1="350" x2="760" y2="350" stroke="${c.gold2}" stroke-width=".3" stroke-dasharray="3,5"/>
-      <!-- Lamba -->
-      <line x1="450" y1="0" x2="450" y2="55" stroke="${c.gold}" stroke-width="1"/>
-      <rect x="415" y="55" width="70" height="14" rx="4" fill="rgba(201,168,76,.12)" stroke="${c.gold}" stroke-width=".8"/>
-    `,
-    cocuk: base + `
-      <!-- Pencere -->
-      <rect x="175" y="165" width="80" height="115" fill="rgba(135,206,250,.06)" stroke="${c.gold2}" stroke-width="1"/>
-      <line x1="215" y1="165" x2="215" y2="280" stroke="${c.gold2}" stroke-width=".5"/>
-      <line x1="175" y1="222" x2="255" y2="222" stroke="${c.gold2}" stroke-width=".5"/>
-      <rect x="168" y="158" width="12" height="130" fill="rgba(201,168,76,.12)" stroke="none"/>
-      <rect x="253" y="158" width="12" height="130" fill="rgba(201,168,76,.12)" stroke="none"/>
-      <!-- Çocuk yatağı -->
-      <rect x="240" y="240" width="300" height="210" rx="8" fill="rgba(201,168,76,.06)" stroke="${c.gold2}" stroke-width=".8"/>
-      <!-- Başlık -->
-      <rect x="240" y="240" width="300" height="55" rx="8" fill="rgba(201,168,76,.09)" stroke="${c.gold2}" stroke-width=".6"/>
-      <!-- Nevresim -->
-      <rect x="248" y="295" width="284" height="150" rx="4" fill="rgba(201,168,76,.07)" stroke="${c.gold2}" stroke-width=".4"/>
-      <!-- Yastık -->
-      <rect x="258" y="248" width="130" height="55" rx="6" fill="rgba(240,235,224,.07)" stroke="${c.gold2}" stroke-width=".4"/>
-      <rect x="400" y="248" width="130" height="55" rx="6" fill="rgba(240,235,224,.07)" stroke="${c.gold2}" stroke-width=".4"/>
-      <!-- Çalışma masası sağ -->
-      <rect x="600" y="205" width="145" height="10" rx="2" fill="rgba(201,168,76,.1)" stroke="${c.gold2}" stroke-width=".6"/>
-      <rect x="600" y="215" width="145" height="220" rx="4" fill="rgba(201,168,76,.05)" stroke="${c.gold2}" stroke-width=".6"/>
-      <line x1="640" y1="215" x2="640" y2="435" stroke="${c.gold2}" stroke-width=".3"/>
-      <!-- Sandalye -->
-      <rect x="630" y="410" width="70" height="55" rx="4" fill="rgba(201,168,76,.07)" stroke="${c.gold2}" stroke-width=".5"/>
-      <rect x="630" y="395" width="70" height="20" rx="4" fill="rgba(201,168,76,.08)" stroke="${c.gold2}" stroke-width=".5"/>
-      <!-- Halı oyun matı -->
-      <rect x="155" y="448" width="420" height="30" rx="6" fill="rgba(201,168,76,.06)" stroke="${c.gold2}" stroke-width=".5"/>
-      <!-- Yıldız dekor -->
-      <text x="300" y="165" font-size="16" fill="rgba(201,168,76,.15)" text-anchor="middle">★</text>
-      <text x="340" y="175" font-size="10" fill="rgba(201,168,76,.12)" text-anchor="middle">✦</text>
-      <text x="260" y="175" font-size="12" fill="rgba(201,168,76,.12)" text-anchor="middle">✦</text>
-      <!-- Lamba -->
-      <line x1="450" y1="0" x2="450" y2="58" stroke="${c.gold}" stroke-width="1"/>
-      <ellipse cx="450" cy="70" rx="28" ry="10" fill="rgba(201,168,76,.15)" stroke="${c.gold}" stroke-width="1"/>
-      <circle cx="450" cy="64" r="5" fill="rgba(255,220,100,.6)"/>
-    `
-  };
-  return rooms[rid] || rooms['salon'];
-}
-
-/* ══════════════════════════════
-   ÜRÜN VERİSİ
-══════════════════════════════ */
-var PRODS = window.PRODS = {
-  salon:{
-    perde:[
-      {id:'sp1',ad:'Kadife Stor',marka:'IKEA',fiyat:299,renkler:['#2c3e50','#8b7355','#c0392b'],bedenler:['140cm','160cm','200cm'],emoji:'🪟',kategori:'Perde & Stor'},
-      {id:'sp2',ad:'Tül Perde',marka:'English Home',fiyat:189,renkler:['#f5f5f5','#e8d5a0'],bedenler:['200cm','240cm','280cm'],emoji:'🪟',kategori:'Perde & Stor'},
-      {id:'sp3',ad:'Blackout Perde',marka:'Madame Coco',fiyat:449,renkler:['#2c3e50','#8b7355','#c0392b','#4a235a'],bedenler:['140cm','200cm','240cm'],emoji:'🪟',kategori:'Perde & Stor'},
-      {id:'sp4',ad:'Jakar Perde',marka:'Özdilek',fiyat:599,renkler:['#f5f5f5','#8b7355','#e8d5a0'],bedenler:['200cm','240cm'],emoji:'🪟',kategori:'Perde & Stor'},
-    ],
-    koltuk:[
-      {id:'sk1',ad:'3lü Kanepe',marka:'İstikbal',fiyat:8999,renkler:['#8b7355','#2c3e50','#c0392b','#95a5a6'],bedenler:['3lü','2li','1li'],emoji:'🛋️',kategori:'Mobilya'},
-      {id:'sk2',ad:'L Koltuk Takımı',marka:'Bellona',fiyat:12499,renkler:['#8b7355','#2c3e50','#f5f5f5'],bedenler:['Sol Köşe','Sağ Köşe'],emoji:'🛋️',kategori:'Mobilya'},
-      {id:'sk3',ad:'Chesterfield Kanepe',marka:'Yataş',fiyat:6999,renkler:['#8b7355','#2c3e50','#c0392b'],bedenler:['2li','3lü'],emoji:'🛋️',kategori:'Mobilya'},
-      {id:'sk4',ad:'Berjer Koltuk',marka:'İstikbal',fiyat:2999,renkler:['#8b7355','#2c3e50','#95a5a6','#e8b4b8'],bedenler:['Tek Beden'],emoji:'🪑',kategori:'Mobilya'},
-    ],
-    hali:[
-      {id:'sha1',ad:'Pamuk Halı',marka:'Özipek',fiyat:1299,renkler:['#8b7355','#f5f5f5','#2c3e50','#e8d5a0'],bedenler:['120x170','160x230','200x290'],emoji:'🟫',kategori:'Halı & Kilim & Paspas'},
-      {id:'sha2',ad:'Tüylü Halı',marka:'Saray Halı',fiyat:2499,renkler:['#f5f5f5','#e8d5a0','#8b7355'],bedenler:['160x230','200x290'],emoji:'🟫',kategori:'Halı & Kilim & Paspas'},
-      {id:'sha3',ad:'Kilim Desenli',marka:'Altınyıldız',fiyat:899,renkler:['#c0392b','#2c3e50','#8b7355'],bedenler:['120x170','160x230'],emoji:'🟫',kategori:'Halı & Kilim & Paspas'},
-    ],
-    aydinlatma:[
-      {id:'say1',ad:'Sarkıt Avize',marka:'Tepe Home',fiyat:1499,renkler:['#f5d78e','#bdc3c7','#2c3e50'],bedenler:['Tek Beden'],emoji:'💡',kategori:'Aydınlatma & Lamba'},
-      {id:'say2',ad:'Yerden Lamba',marka:'IKEA',fiyat:799,renkler:['#2c3e50','#f5d78e','#f5f5f5'],bedenler:['Tek Beden'],emoji:'🕯️',kategori:'Aydınlatma & Lamba'},
-      {id:'say3',ad:'Led Panel',marka:'Philips',fiyat:449,renkler:['#f5f5f5','#f5d78e'],bedenler:['60x60','120x30'],emoji:'💡',kategori:'Aydınlatma & Lamba'},
-    ],
-    dekor:[
-      {id:'sd1',ad:'Kanvas Tablo',marka:'Artı Sanat',fiyat:299,renkler:['#2c3e50','#8b7355','#f5f5f5'],bedenler:['40x60','60x90','90x120'],emoji:'🖼️',kategori:'Çerçeve & Tablo'},
-      {id:'sd2',ad:'Dekoratif Vazo',marka:'English Home',fiyat:149,renkler:['#2c3e50','#f5d78e','#f5f5f5'],bedenler:['Küçük','Orta','Büyük'],emoji:'🏺',kategori:'Dekorasyon & Aksesuar'},
-      {id:'sd3',ad:'Duvar Saati',marka:'Tepe Home',fiyat:399,renkler:['#2c3e50','#f5d78e','#f5f5f5'],bedenler:['30cm','40cm','60cm'],emoji:'🕰️',kategori:'Saat (Ev)'},
-      {id:'sd4',ad:'Aromaterapi Mum',marka:'Bath&Body',fiyat:199,renkler:['#f5f5f5','#e8d5a0','#f9b7b7'],bedenler:['Küçük','Orta'],emoji:'🕯️',kategori:'Mum & Oda Kokusu'},
-    ],
-    sehpa:[
-      {id:'sse1',ad:'Orta Sehpa',marka:'İstikbal',fiyat:1299,renkler:['#8b7355','#2c3e50','#f5f5f5'],bedenler:['60x60','80x80'],emoji:'🪑',kategori:'Mobilya'},
-      {id:'sse2',ad:'Yan Sehpa',marka:'IKEA',fiyat:399,renkler:['#2c3e50','#8b7355','#f5d78e'],bedenler:['Tek Beden'],emoji:'🪑',kategori:'Mobilya'},
-      {id:'sse3',ad:'Mermer Sehpa',marka:'Tepe Home',fiyat:2499,renkler:['#f5f5f5','#2c3e50'],bedenler:['60x60','90x90'],emoji:'🪨',kategori:'Mobilya'},
-    ],
-  },
-  oturma:{
-    perde:[
-      {id:'op1',ad:'Karartma Perde',marka:'Madame Coco',fiyat:449,renkler:['#2c3e50','#4a235a','#8b7355'],bedenler:['140cm','200cm','240cm'],emoji:'🪟',kategori:'Perde & Stor'},
-      {id:'op2',ad:'Tül Perde',marka:'English Home',fiyat:189,renkler:['#f5f5f5','#e8d5a0'],bedenler:['200cm','240cm'],emoji:'🪟',kategori:'Perde & Stor'},
-      {id:'op3',ad:'Bantlı Stor',marka:'IKEA',fiyat:249,renkler:['#2c3e50','#8b7355','#f5f5f5'],bedenler:['120cm','160cm'],emoji:'🪟',kategori:'Perde & Stor'},
-    ],
-    koltuk:[
-      {id:'ok1',ad:'Köşe Koltuk Takımı',marka:'Bellona',fiyat:14999,renkler:['#8b7355','#2c3e50','#f5f5f5'],bedenler:['Sol','Sağ'],emoji:'🛋️',kategori:'Mobilya'},
-      {id:'ok2',ad:'3+2+1 Koltuk',marka:'İstikbal',fiyat:11999,renkler:['#8b7355','#c0392b','#2c3e50'],bedenler:['Takım'],emoji:'🛋️',kategori:'Mobilya'},
-    ],
-    tv:[
-      {id:'otv1',ad:'TV Ünitesi',marka:'İstikbal',fiyat:3499,renkler:['#2c3e50','#8b7355','#f5f5f5'],bedenler:['160cm','180cm','200cm'],emoji:'📺',kategori:'Mobilya'},
-      {id:'otv2',ad:'Kitaplıklı TV Ünitesi',marka:'Tepe Home',fiyat:4999,renkler:['#2c3e50','#8b7355'],bedenler:['200cm','240cm'],emoji:'📺',kategori:'Mobilya'},
-      {id:'otv3',ad:'TV Sehpası',marka:'IKEA',fiyat:1299,renkler:['#2c3e50','#8b7355','#f5f5f5'],bedenler:['120cm','150cm'],emoji:'🪑',kategori:'Mobilya'},
-    ],
-    hali:[
-      {id:'oha1',ad:'Salon Halısı',marka:'Saray Halı',fiyat:1899,renkler:['#8b7355','#2c3e50','#c0392b'],bedenler:['160x230','200x290'],emoji:'🟫',kategori:'Halı & Kilim & Paspas'},
-      {id:'oha2',ad:'Modern Halı',marka:'Özipek',fiyat:2499,renkler:['#f5f5f5','#8b7355','#2c3e50'],bedenler:['160x230','200x290'],emoji:'🟫',kategori:'Halı & Kilim & Paspas'},
-    ],
-    aydinlatma:[
-      {id:'oay1',ad:'Tasarım Avize',marka:'Tepe Home',fiyat:2999,renkler:['#f5d78e','#bdc3c7','#2c3e50'],bedenler:['Tek Beden'],emoji:'💡',kategori:'Aydınlatma & Lamba'},
-      {id:'oay2',ad:'Sconce Aplik',marka:'Philips',fiyat:599,renkler:['#2c3e50','#f5d78e'],bedenler:['Tek Beden'],emoji:'🔆',kategori:'Aydınlatma & Lamba'},
-    ],
-    dekor:[
-      {id:'od1',ad:'Büyük Tablo',marka:'Artı Sanat',fiyat:499,renkler:['#2c3e50','#8b7355'],bedenler:['90x120','120x150'],emoji:'🖼️',kategori:'Çerçeve & Tablo'},
-      {id:'od2',ad:'Galeri Duvar Seti',marka:'English Home',fiyat:349,renkler:['#2c3e50','#f5d78e','#f5f5f5'],bedenler:['3lü','5li','7li'],emoji:'🖼️',kategori:'Çerçeve & Tablo'},
-    ],
-  },
-  yatak:{
-    perde:[
-      {id:'yp1',ad:'Blackout Perde',marka:'Madame Coco',fiyat:449,renkler:['#2c3e50','#8b7355','#4a235a','#c0392b'],bedenler:['140cm','200cm','240cm'],emoji:'🪟',kategori:'Perde & Stor'},
-      {id:'yp2',ad:'Kadife Perde',marka:'Özdilek',fiyat:599,renkler:['#2c3e50','#8b7355','#e8b4b8'],bedenler:['200cm','240cm'],emoji:'🪟',kategori:'Perde & Stor'},
-      {id:'yp3',ad:'Tek Kanat Stor',marka:'IKEA',fiyat:199,renkler:['#f5f5f5','#2c3e50','#8b7355'],bedenler:['100cm','120cm','140cm'],emoji:'🪟',kategori:'Perde & Stor'},
-    ],
-    yatak:[
-      {id:'yy1',ad:'Nevresim Takımı',marka:'Özdilek',fiyat:899,renkler:['#f5f5f5','#e8d5a0','#e8b4b8','#2c3e50'],bedenler:['Tek','Çift','King'],emoji:'🛏️',kategori:'Yatak Örtüsü & Nevresim'},
-      {id:'yy2',ad:'Yorgan',marka:'Madame Coco',fiyat:699,renkler:['#f5f5f5','#e8d5a0'],bedenler:['Tek','Çift','King'],emoji:'🛏️',kategori:'Battaniye & Yorgan'},
-      {id:'yy3',ad:'Pike Takımı',marka:'English Home',fiyat:499,renkler:['#f5f5f5','#e8d5a0','#e8b4b8'],bedenler:['Tek','Çift'],emoji:'🛏️',kategori:'Yatak Örtüsü & Nevresim'},
-      {id:'yy4',ad:'Yastık Kılıfı Seti',marka:'Özdilek',fiyat:249,renkler:['#f5f5f5','#e8d5a0','#e8b4b8','#2c3e50'],bedenler:['50x70','70x70'],emoji:'🛌',kategori:'Yastık & Yastık Kılıfı'},
-    ],
-    hali:[
-      {id:'yha1',ad:'Yatak Önü Halısı',marka:'Saray Halı',fiyat:799,renkler:['#f5f5f5','#8b7355','#e8b4b8'],bedenler:['60x120','80x150'],emoji:'🟫',kategori:'Halı & Kilim & Paspas'},
-      {id:'yha2',ad:'Tüylü Halı',marka:'Özipek',fiyat:1299,renkler:['#f5f5f5','#e8d5a0','#e8b4b8'],bedenler:['120x170','160x230'],emoji:'🟫',kategori:'Halı & Kilim & Paspas'},
-    ],
-    aydinlatma:[
-      {id:'yay1',ad:'Gece Lambası',marka:'Philips',fiyat:299,renkler:['#f5d78e','#bdc3c7','#f5f5f5'],bedenler:['Tek Beden'],emoji:'🌙',kategori:'Aydınlatma & Lamba'},
-      {id:'yay2',ad:'Başucu Lambası',marka:'IKEA',fiyat:399,renkler:['#f5d78e','#2c3e50','#f5f5f5'],bedenler:['Tek Beden'],emoji:'💡',kategori:'Aydınlatma & Lamba'},
-      {id:'yay3',ad:'Tavan Lambası',marka:'Tepe Home',fiyat:899,renkler:['#f5d78e','#bdc3c7'],bedenler:['Tek Beden'],emoji:'💡',kategori:'Aydınlatma & Lamba'},
-    ],
-    gardrop:[
-      {id:'yg1',ad:'Sürgülü Gardırop',marka:'İstikbal',fiyat:7499,renkler:['#f5f5f5','#8b7355','#2c3e50'],bedenler:['150cm','200cm','240cm'],emoji:'🚪',kategori:'Mobilya'},
-      {id:'yg2',ad:'Açık Gardırop',marka:'IKEA',fiyat:3999,renkler:['#f5f5f5','#8b7355'],bedenler:['150cm','200cm'],emoji:'🚪',kategori:'Mobilya'},
-      {id:'yg3',ad:'Şifonyer',marka:'İstikbal',fiyat:2499,renkler:['#8b7355','#2c3e50','#f5f5f5'],bedenler:['3 Çekmece','5 Çekmece'],emoji:'🗄️',kategori:'Mobilya'},
-    ],
-    dekor:[
-      {id:'yd1',ad:'Ayna',marka:'English Home',fiyat:599,renkler:['#f5d78e','#bdc3c7','#2c3e50'],bedenler:['40x60','60x90','80x120'],emoji:'🪞',kategori:'Dekorasyon & Aksesuar'},
-      {id:'yd2',ad:'Tablo',marka:'Artı Sanat',fiyat:299,renkler:['#2c3e50','#8b7355','#f5f5f5'],bedenler:['40x60','60x80'],emoji:'🖼️',kategori:'Çerçeve & Tablo'},
-    ],
-  },
-  mutfak:{
-    perde:[
-      {id:'mp1',ad:'Mutfak Perdesi',marka:'English Home',fiyat:149,renkler:['#f5f5f5','#e8d5a0','#a8d8b9'],bedenler:['120cm','140cm','160cm'],emoji:'🪟',kategori:'Perde & Stor'},
-      {id:'mp2',ad:'Mini Stor',marka:'IKEA',fiyat:179,renkler:['#f5f5f5','#e8d5a0','#c0392b'],bedenler:['80cm','100cm','120cm'],emoji:'🪟',kategori:'Perde & Stor'},
-    ],
-    beyazes:[
-      {id:'mb1',ad:'Buzdolabı',marka:'Bosch',fiyat:14999,renkler:['#f5f5f5','#bdc3c7','#2c3e50'],bedenler:['A+','A++','A+++'],emoji:'🧊',kategori:'Mobilya'},
-      {id:'mb2',ad:'Ankastre Fırın',marka:'Arçelik',fiyat:6999,renkler:['#bdc3c7','#2c3e50'],bedenler:['60cm'],emoji:'🫕',kategori:'Mobilya'},
-      {id:'mb3',ad:'Bulaşık Makinesi',marka:'Bosch',fiyat:9999,renkler:['#f5f5f5','#bdc3c7'],bedenler:['5 Kişilik','8 Kişilik','12 Kişilik'],emoji:'🫧',kategori:'Mobilya'},
-      {id:'mb4',ad:'Çamaşır Makinesi',marka:'Arçelik',fiyat:8999,renkler:['#f5f5f5','#bdc3c7'],bedenler:['6 kg','8 kg','10 kg'],emoji:'🫧',kategori:'Mobilya'},
-    ],
-    mutfakalet:[
-      {id:'ma1',ad:'Espresso Makinesi',marka:'DeLonghi',fiyat:4999,renkler:['#2c3e50','#bdc3c7','#c0392b'],bedenler:['Tek Beden'],emoji:'☕',kategori:'Mutfak Eşyaları'},
-      {id:'ma2',ad:'Tost Makinesi',marka:'Tefal',fiyat:699,renkler:['#bdc3c7','#2c3e50'],bedenler:['2li','4lü'],emoji:'🍞',kategori:'Pişirme & Yemek Yapımı'},
-      {id:'ma3',ad:'Blender Set',marka:'Fakir',fiyat:799,renkler:['#bdc3c7','#c0392b'],bedenler:['Tek Beden'],emoji:'🥤',kategori:'Mutfak Eşyaları'},
-      {id:'ma4',ad:'Hava Fritözü',marka:'Philips',fiyat:2299,renkler:['#2c3e50','#bdc3c7'],bedenler:['2.5L','4L','6L'],emoji:'🍟',kategori:'Pişirme & Yemek Yapımı'},
-      {id:'ma5',ad:'Kettle',marka:'Tefal',fiyat:499,renkler:['#bdc3c7','#2c3e50','#c0392b'],bedenler:['1.5L','1.7L'],emoji:'♨️',kategori:'Mutfak Eşyaları'},
-    ],
-    tezgah:[
-      {id:'mt1',ad:'Tencere Seti',marka:'Tefal',fiyat:2499,renkler:['#bdc3c7','#2c3e50','#c0392b'],bedenler:['3lü','5li','8li'],emoji:'🫕',kategori:'Pişirme & Yemek Yapımı'},
-      {id:'mt2',ad:'Bıçak Seti',marka:'Sabatier',fiyat:1299,renkler:['#bdc3c7','#2c3e50'],bedenler:['3lü','5li','7li'],emoji:'🔪',kategori:'Mutfak Eşyaları'},
-      {id:'mt3',ad:'Çay Seti',marka:'English Home',fiyat:399,renkler:['#f5f5f5','#e8d5a0','#2c3e50'],bedenler:['6 Kişilik','12 Kişilik'],emoji:'🫖',kategori:'Mutfak Eşyaları'},
-    ],
-    aydinlatma:[
-      {id:'may1',ad:'Tezgah Altı Led',marka:'Philips',fiyat:349,renkler:['#f5d78e','#f5f5f5'],bedenler:['30cm','60cm','90cm'],emoji:'💡',kategori:'Aydınlatma & Lamba'},
-      {id:'may2',ad:'Sarkıt Mutfak',marka:'Tepe Home',fiyat:899,renkler:['#f5d78e','#bdc3c7','#2c3e50'],bedenler:['Tek Beden'],emoji:'💡',kategori:'Aydınlatma & Lamba'},
-    ],
-    dekor:[
-      {id:'md1',ad:'Mutfak Saati',marka:'English Home',fiyat:199,renkler:['#2c3e50','#c0392b','#f5f5f5'],bedenler:['25cm','30cm'],emoji:'🕰️',kategori:'Saat (Ev)'},
-      {id:'md2',ad:'Sebzelik',marka:'IKEA',fiyat:149,renkler:['#8b7355','#2c3e50','#bdc3c7'],bedenler:['Tek Beden'],emoji:'🌿',kategori:'Dekorasyon & Aksesuar'},
-    ],
-  },
-  banyo:{
-    perde:[
-      {id:'bp1',ad:'Duş Perdesi',marka:'English Home',fiyat:149,renkler:['#f5f5f5','#2c3e50','#e8b4b8'],bedenler:['180x200'],emoji:'🚿',kategori:'Perde & Stor'},
-      {id:'bp2',ad:'Banyo Stor',marka:'IKEA',fiyat:199,renkler:['#f5f5f5','#2c3e50'],bedenler:['60cm','80cm','100cm'],emoji:'🪟',kategori:'Perde & Stor'},
-      {id:'bp3',ad:'Şeffaf Duş Perdesi',marka:'Madame Coco',fiyat:249,renkler:['#f5f5f5','#2c3e50'],bedenler:['180x200'],emoji:'🚿',kategori:'Perde & Stor'},
-    ],
-    banyo:[
-      {id:'ba1',ad:'Banyo Aksesuar Seti',marka:'Krom',fiyat:599,renkler:['#bdc3c7','#f5d78e','#2c3e50'],bedenler:['3lü','5li','7li'],emoji:'🚿',kategori:'Banyo & Tesisat Ürünleri'},
-      {id:'ba2',ad:'Duş Başlığı',marka:'Hansgrohe',fiyat:899,renkler:['#bdc3c7','#f5d78e','#2c3e50'],bedenler:['Tek Beden'],emoji:'🚿',kategori:'Banyo & Tesisat Ürünleri'},
-      {id:'ba3',ad:'Banyo Rafı',marka:'IKEA',fiyat:299,renkler:['#bdc3c7','#f5d78e','#f5f5f5'],bedenler:['Tek Beden'],emoji:'🪜',kategori:'Banyo & Tesisat Ürünleri'},
-      {id:'ba4',ad:'Sabunluk & Dispenser',marka:'English Home',fiyat:149,renkler:['#f5f5f5','#bdc3c7','#f5d78e'],bedenler:['Tek Beden'],emoji:'🧴',kategori:'Banyo & Tesisat Ürünleri'},
-    ],
-    havlu:[
-      {id:'bh1',ad:'Banyo Havlusu',marka:'Madame Coco',fiyat:199,renkler:['#f5f5f5','#2c3e50','#e8b4b8','#a8d8b9'],bedenler:['El (30x50)','Banyo (70x140)','Boy (90x180)'],emoji:'🛁',kategori:'Havlu & Banyo Tekstili'},
-      {id:'bh2',ad:'Paspas Set',marka:'English Home',fiyat:249,renkler:['#f5f5f5','#2c3e50','#e8b4b8'],bedenler:['2li Set','3lü Set'],emoji:'🟫',kategori:'Halı & Kilim & Paspas'},
-      {id:'bh3',ad:'Bornoz',marka:'Özdilek',fiyat:499,renkler:['#f5f5f5','#e8b4b8','#2c3e50'],bedenler:['S','M','L','XL'],emoji:'🧥',kategori:'Havlu & Banyo Tekstili'},
-    ],
-    aydinlatma:[
-      {id:'bay1',ad:'Ayna Lambası',marka:'Philips',fiyat:599,renkler:['#bdc3c7','#f5d78e'],bedenler:['60cm','80cm','100cm'],emoji:'🔆',kategori:'Aydınlatma & Lamba'},
-      {id:'bay2',ad:'Spot Armatür',marka:'Tepe Home',fiyat:299,renkler:['#bdc3c7','#f5d78e'],bedenler:['Tek Beden'],emoji:'💡',kategori:'Aydınlatma & Lamba'},
-    ],
-    dekor:[
-      {id:'bd1',ad:'Banyo Aynası',marka:'IKEA',fiyat:399,renkler:['#bdc3c7','#f5d78e','#2c3e50'],bedenler:['40x60','60x80'],emoji:'🪞',kategori:'Dekorasyon & Aksesuar'},
-      {id:'bd2',ad:'Saksı & Bitki',marka:'Plantler',fiyat:149,renkler:['#a8d8b9','#2c3e50'],bedenler:['Küçük','Orta'],emoji:'🌿',kategori:'Dekorasyon & Aksesuar'},
-    ],
-  },
-  tuvalet:{
-    perde:[
-      {id:'tp1',ad:'Küçük Stor Perde',marka:'IKEA',fiyat:149,renkler:['#f5f5f5','#2c3e50','#e8d5a0'],bedenler:['60cm','80cm'],emoji:'🪟',kategori:'Perde & Stor'},
-      {id:'tp2',ad:'Dantel Tül',marka:'English Home',fiyat:89,renkler:['#f5f5f5'],bedenler:['60cm','80cm'],emoji:'🪟',kategori:'Perde & Stor'},
-    ],
-    banyo:[
-      {id:'ta1',ad:'WC Aksesuar Seti',marka:'Krom',fiyat:399,renkler:['#bdc3c7','#f5d78e','#2c3e50'],bedenler:['3lü','5li'],emoji:'🚽',kategori:'Banyo & Tesisat Ürünleri'},
-      {id:'ta2',ad:'Tuvalet Fırçası',marka:'IKEA',fiyat:99,renkler:['#bdc3c7','#2c3e50','#f5d78e'],bedenler:['Tek Beden'],emoji:'🪥',kategori:'Banyo & Tesisat Ürünleri'},
-      {id:'ta3',ad:'Kağıtlık',marka:'English Home',fiyat:149,renkler:['#bdc3c7','#f5d78e','#2c3e50'],bedenler:['Duvar','Masa'],emoji:'🧻',kategori:'Banyo & Tesisat Ürünleri'},
-    ],
-    havlu:[
-      {id:'th1',ad:'El Havlusu',marka:'Madame Coco',fiyat:79,renkler:['#f5f5f5','#e8b4b8','#2c3e50','#a8d8b9'],bedenler:['30x50'],emoji:'🧴',kategori:'Havlu & Banyo Tekstili'},
-      {id:'th2',ad:'Sıvı Sabun Dispenseri',marka:'English Home',fiyat:99,renkler:['#f5f5f5','#bdc3c7','#f5d78e'],bedenler:['Tek Beden'],emoji:'🧴',kategori:'Dekorasyon & Aksesuar'},
-    ],
-    aydinlatma:[
-      {id:'tay1',ad:'Tuvalet Lambası',marka:'Philips',fiyat:249,renkler:['#bdc3c7','#f5d78e'],bedenler:['Tek Beden'],emoji:'💡',kategori:'Aydınlatma & Lamba'},
-      {id:'tay2',ad:'Gece Işığı',marka:'Philips',fiyat:149,renkler:['#f5d78e','#f5f5f5'],bedenler:['Tek Beden'],emoji:'🌙',kategori:'Aydınlatma & Lamba'},
-    ],
-  },
-  cocuk:{
-    perde:[
-      {id:'cp1',ad:'Çocuk Odası Perdesi',marka:'English Home',fiyat:299,renkler:['#e8b4b8','#a8d8b9','#f9e4b7','#2980b9'],bedenler:['140cm','200cm'],emoji:'🪟',kategori:'Perde & Stor'},
-      {id:'cp2',ad:'Blackout Perde',marka:'Madame Coco',fiyat:349,renkler:['#2980b9','#e8b4b8','#a8d8b9'],bedenler:['140cm','200cm'],emoji:'🪟',kategori:'Perde & Stor'},
-    ],
-    yatak:[
-      {id:'cy1',ad:'Çocuk Nevresim',marka:'Özdilek',fiyat:449,renkler:['#e8b4b8','#a8d8b9','#f9e4b7','#2980b9'],bedenler:['Tek (90x190)'],emoji:'🛏️',kategori:'Yatak Örtüsü & Nevresim'},
-      {id:'cy2',ad:'Çocuk Yorganı',marka:'Madame Coco',fiyat:349,renkler:['#e8b4b8','#a8d8b9','#f9e4b7'],bedenler:['Tek'],emoji:'🛌',kategori:'Battaniye & Yorgan'},
-      {id:'cy3',ad:'Çocuk Yatağı',marka:'İstikbal',fiyat:2999,renkler:['#f5f5f5','#e8b4b8','#a8d8b9'],bedenler:['90x190','100x200'],emoji:'🛏️',kategori:'Mobilya'},
-    ],
-    masa:[
-      {id:'cm1',ad:'Çalışma Masası',marka:'İstikbal',fiyat:2499,renkler:['#f5f5f5','#8b7355','#2980b9'],bedenler:['100cm','120cm'],emoji:'📚',kategori:'Mobilya'},
-      {id:'cm2',ad:'Çalışma Sandalyesi',marka:'IKEA',fiyat:999,renkler:['#2c3e50','#c0392b','#2980b9','#f5f5f5'],bedenler:['Tek Beden'],emoji:'🪑',kategori:'Mobilya'},
-      {id:'cm3',ad:'Kitaplık',marka:'IKEA',fiyat:1499,renkler:['#f5f5f5','#8b7355'],bedenler:['60cm','80cm','100cm'],emoji:'📚',kategori:'Mobilya'},
-    ],
-    hali:[
-      {id:'cha1',ad:'Çocuk Halısı',marka:'Saray Halı',fiyat:799,renkler:['#e8b4b8','#a8d8b9','#f9e4b7','#2980b9'],bedenler:['120x170','160x230'],emoji:'🟫',kategori:'Halı & Kilim & Paspas'},
-      {id:'cha2',ad:'Oyun Matı',marka:'Puzzle Mat',fiyat:399,renkler:['#e8b4b8','#a8d8b9','#f9e4b7'],bedenler:['120x180','150x200'],emoji:'🎮',kategori:'Halı & Kilim & Paspas'},
-    ],
-    aydinlatma:[
-      {id:'cay1',ad:'Çocuk Masa Lambası',marka:'Philips',fiyat:299,renkler:['#2980b9','#e8b4b8','#f9e4b7'],bedenler:['Tek Beden'],emoji:'💡',kategori:'Aydınlatma & Lamba'},
-      {id:'cay2',ad:'Gece Lambası',marka:'Philips',fiyat:149,renkler:['#f9e4b7','#e8b4b8','#a8d8b9'],bedenler:['Tek Beden'],emoji:'🌙',kategori:'Aydınlatma & Lamba'},
-      {id:'cay3',ad:'Tavan Lambası',marka:'Tepe Home',fiyat:599,renkler:['#f5f5f5','#f9e4b7','#2980b9'],bedenler:['Tek Beden'],emoji:'⭐',kategori:'Aydınlatma & Lamba'},
-    ],
-    dekor:[
-      {id:'cd1',ad:'Duvar Sticker',marka:'Dekorjoy',fiyat:99,renkler:['#e8b4b8','#a8d8b9','#f9e4b7'],bedenler:['Küçük Set','Büyük Set'],emoji:'🎨',kategori:'Dekorasyon & Aksesuar'},
-      {id:'cd2',ad:'Çocuk Saati',marka:'Miniso',fiyat:149,renkler:['#2980b9','#e8b4b8','#a8d8b9'],bedenler:['25cm'],emoji:'🕰️',kategori:'Saat (Ev)'},
-    ],
-  }
-};
-
-/* ══════════════════════════════
-   STATE
-══════════════════════════════ */
-var activeRoom = window.activeRoom = 'salon';
-var activeZone = null;
-var sel = {};        // {oda: {zone: {id, renk, beden}}}
-var cardSel = {};
-var tempSel = {};
-
-function getRoomSel(rid){ return sel[rid] || (sel[rid]={}); }
-function getZoneSel(rid,zid){ var r=getRoomSel(rid); return r[zid]; }
-function setZoneSel(rid,zid,v){ getRoomSel(rid)[zid]=v; }
-function delZoneSel(rid,zid){ var r=getRoomSel(rid); delete r[zid]; }
-
-function getProds(rid,zid){
-  return ((PRODS[rid]||{})[zid])||[];
-}
-
-function fmt(n){return n.toLocaleString('tr-TR');}
-
-/* ══════════════════════════════
-   ODA RENDER
-══════════════════════════════ */
-window.renderRoom=function renderRoom(rid){
-  activeRoom = rid; window.activeRoom = rid;
-  var room = ROOMS[rid];
-  // Badge
-  document.getElementById('roomBadgeText').textContent = room.name.toUpperCase();
-  var badgeIconEl = document.querySelector('.room-badge-icon');
-  if(badgeIconEl) badgeIconEl.textContent = room.badge;
-  document.getElementById('infoRoom').textContent = room.name;
-  // SVG
-  document.getElementById('roomSvg').innerHTML = getRoomSVG(rid);
-  // Zones
-  renderZones(rid);
-  // Summary
-  updateSummary();
-  updateSidebarCounts();
-}
-
-function renderZones(rid){
-  var room = ROOMS[rid];
-  var wrap = document.getElementById('roomWrap');
-  var rings = document.getElementById('ringsContainer');
-  var zones = document.getElementById('zonesContainer');
-  rings.innerHTML = '';
-  zones.innerHTML = '';
-
-  Object.values(room.zones).forEach(function(z){
-    var r = z.rect;
-    var hasSel = !!getZoneSel(rid, z.id);
-
-    // Ring
-    var ring = document.createElement('div');
-    ring.className = 'ring';
-    ring.id = 'ring-' + z.id;
-    ring.style.cssText = 'left:'+r.l+';top:'+r.t+';width:'+r.w+';height:'+r.h+';';
-    rings.appendChild(ring);
-
-    // Hit zone
-    var hit = document.createElement('div');
-    hit.className = 'zone-hit' + (hasSel ? ' selected' : '');
-    hit.style.cssText = 'left:'+r.l+';top:'+r.t+';width:'+r.w+';height:'+r.h+';';
-
-    // İç bracket helper
-    var inner = document.createElement('div');
-    inner.className = 'zh-inner';
-    hit.appendChild(inner);
-
-    // Zone label overlay
-    var lbl = document.createElement('div');
-    lbl.className = 'zh-label';
-    lbl.innerHTML = (hasSel ? '<span class="zh-label-sel">✦</span>' : '') +
-      '<span class="zh-label-icon">' + z.icon + '</span>' + z.name;
-    hit.appendChild(lbl);
-
-    hit.onclick = (function(zid){ return function(){ openZone(zid); }; })(z.id);
-    hit.onmouseenter = (function(z){ return function(){
-      document.getElementById('zoneName').textContent = z.icon + ' ' + z.name;
-      document.getElementById('zoneSub').textContent = z.sub;
-    }; })(z);
-    hit.onmouseleave = function(){
-      document.getElementById('zoneName').textContent = 'Bir bölge seç';
-      document.getElementById('zoneSub').textContent = 'Ürünleri keşfet ve odanı tasarla';
-    };
-    zones.appendChild(hit);
-  });
-}
-
-/* ══════════════════════════════
-   ZONE AÇ / KAPAT
-══════════════════════════════ */
-function openZone(zid){
-  activeZone = zid;
-  cardSel = {};
-  tempSel = {};
-
-  var cur = getZoneSel(activeRoom, zid);
-  if(cur) cardSel[cur.id] = {renk:cur.renk, beden:cur.beden};
-
-  var room = ROOMS[activeRoom];
-  var z = room.zones[zid];
-
-  // Ring
-  document.querySelectorAll('.ring').forEach(function(r){r.classList.remove('show');});
-  var ring = document.getElementById('ring-'+zid);
-  if(ring) setTimeout(function(){ring.classList.add('show');},100);
-
-  // ── ZOOM ──
-  (function(){
-    var svgWrap = document.getElementById('roomSvgWrap');
-    if(!svgWrap) return;
-    var r = z.rect;
-    function pct(v){ return parseFloat(v)/100; }
-    var cl = pct(r.l), ct = pct(r.t), cw = pct(r.w), ch = pct(r.h);
-    var cx = cl + cw/2;
-    var cy = ct + ch/2;
-    var scaleX = 0.55 / cw;
-    var scaleY = 0.55 / ch;
-    var scale = Math.min(Math.max(Math.min(scaleX, scaleY), 1.5), 3.0);
-    var tx = (0.5 - cx) * 100;
-    var ty = (0.5 - cy) * 100;
-    svgWrap.style.transform = 'scale('+scale+') translate('+tx+'%,'+ty+'%)';
-  })();
-
-  // Popup
-  var puIcon = document.getElementById('puIcon');
-  if(puIcon){ puIcon.textContent = z.icon; }
-  document.getElementById('puTitle').textContent = z.name;
-  document.getElementById('puSub').textContent = z.sub;
-  renderCards(activeRoom, zid);
-
-  var bd = document.getElementById('backdrop');
-  var pp = document.getElementById('popup');
-  bd.style.display='block';
-  requestAnimationFrame(function(){bd.classList.add('show');pp.classList.add('show');});
-}
-
-function closeZone(){
-  if(activeZone){
-    var keys = Object.keys(cardSel);
-    if(keys.length > 0){
-      var id = keys[0];
-      var prods = getProds(activeRoom, activeZone);
-      var p = prods.find(function(x){return x.id===id;});
-      setZoneSel(activeRoom, activeZone, {
-        id:id,
-        renk: cardSel[id].renk || (p?p.renkler[0]:'#c9a84c'),
-        beden: cardSel[id].beden || (p?p.bedenler[0]:'')
-      });
-    } else {
-      delZoneSel(activeRoom, activeZone);
-    }
-  }
-  document.querySelectorAll('.ring').forEach(function(r){r.classList.remove('show');});
-  // Zoom sıfırla
-  var svgWrap = document.getElementById('roomSvgWrap');
-  if(svgWrap) svgWrap.style.transform = 'scale(1) translate(0,0)';
-  var bd=document.getElementById('backdrop'), pp=document.getElementById('popup');
-  pp.classList.remove('show'); bd.classList.remove('show');
-  setTimeout(function(){bd.style.display='none';},340);
-  document.getElementById('zoneName').textContent='Bir bölge seç';
-  document.getElementById('zoneSub').textContent='Ürünleri keşfet ve odanı tasarla';
-  activeZone = null;
-  renderZones(activeRoom);
-  updateSummary();
-  updateSidebarCounts();
-}
-
-/* ══════════════════════════════
-   KART RENDER
-══════════════════════════════ */
-function renderCards(rid, zid){
-  var grid = document.getElementById('prodGrid');
-  grid.innerHTML = '';
-  var prods = getProds(rid, zid);
-  if(!prods.length){
-    if(!window._fbYuklendi){
-      grid.innerHTML='<div style="color:rgba(201,168,76,.35);font-size:12px;padding:24px;text-align:center;font-family:\'Cormorant Garamond\',serif;font-style:italic">⏳ Mağaza ürünleri yükleniyor…</div>';
-    } else {
-      grid.innerHTML='<div style="color:rgba(201,168,76,.25);font-size:12px;padding:24px;text-align:center;font-family:\'Cormorant Garamond\',serif;font-style:italic">Bu bölge için ürün bulunamadı</div>';
-    }
-    return;
-  }
-  prods.forEach(function(p){
-    var cs = cardSel[p.id]||{};
-    var secili = !!cardSel[p.id];
-    var d = document.createElement('div');
-    d.className='pcard'+(secili?' sel':'');
-    d.id='pc-'+p.id;
-    var bgColor = cs.renk||p.renkler[0]||'#1a1400';
-
-    var renkHtml = p.renkler.map(function(r,i){
-      var on = cs.renk ? cs.renk===r : i===0;
-      return '<div class="pc-color'+(on?' on':'')+'" style="background:'+r+';box-shadow:'+(on?'0 0 0 2px rgba(201,168,76,.8)':'none')+'" data-r="'+r+'" onclick="pickRenk(\''+p.id+'\',\''+r+'\',event)"></div>';
-    }).join('');
-
-    var bedenHtml = p.bedenler.map(function(b){
-      var on = cs.beden ? cs.beden===b : p.bedenler[0]===b;
-      return '<div class="pc-size'+(on?' on':'')+'" onclick="pickBeden(\''+p.id+'\',\''+b+'\',event)">'+b+'</div>';
-    }).join('');
-
-    d.innerHTML =
-      '<div class="pc-img" style="background:linear-gradient(160deg,'+bgColor+'22,'+bgColor+'18)">'+
-        '<div class="pc-img-bg" style="background:radial-gradient(ellipse at 50% 50%,'+bgColor+'30,transparent 70%)"></div>'+
-        (p.resim
-          ? '<img src="'+p.resim+'" alt="'+p.ad+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;border-radius:0;" onerror="this.style.display=\'none\'">'
-          : '<span class="pc-emoji-main">'+p.emoji+'</span>'
-        )+
-        '<div class="pc-badge">'+p.kategori+'</div>'+(p.id.startsWith('fb_')?'<div class="pc-badge" style="background:rgba(76,175,130,.15);color:#4caf82;border-color:rgba(76,175,130,.3);">🏪 Mağaza</div>':'')+
-      '</div>'+
-      '<div class="pc-body">'+
-        '<div class="pc-cat">'+ROOMS[rid].zones[zid].name+'</div>'+
-        '<div class="pc-name">'+p.ad+'</div>'+
-        '<div class="pc-brand">'+p.marka+'</div>'+
-        '<div class="pc-colors">'+renkHtml+'</div>'+
-        '<div class="pc-sizes">'+bedenHtml+'</div>'+
-        '<div class="pc-foot">'+
-          '<div class="pc-price"><sup>₺</sup>'+fmt(p.fiyat)+'</div>'+
-          '<button class="pc-add" onclick="toggleCardVeSepet(\''+p.id+'\',event)"><span>'+(secili?'✕ Kaldır':'🛒 Sepete Ekle')+'</span></button>'+
-        '</div>'+
-      '</div>';
-    grid.appendChild(d);
-  });
-}
-
-/* ══════════════════════════════
-   RENK / BEDEN / TOGGLE
-══════════════════════════════ */
-function pickRenk(pid,r,e){
-  e.stopPropagation();
-  if(!tempSel[pid]) tempSel[pid]={};
-  tempSel[pid].renk=r;
-  if(cardSel[pid]) cardSel[pid].renk=r;
-  var card=document.getElementById('pc-'+pid);
-  if(card){
-    var img=card.querySelector('.pc-img');
-    if(img) img.style.background='linear-gradient(160deg,'+r+'22,'+r+'18)';
-    card.querySelectorAll('.pc-color').forEach(function(el){
-      var on=el.dataset.r===r;
-      el.classList.toggle('on',on);
-      el.style.boxShadow=on?'0 0 0 2px rgba(201,168,76,.8)':'none';
-    });
-  }
-}
-
-function pickBeden(pid,b,e){
-  e.stopPropagation();
-  if(!tempSel[pid]) tempSel[pid]={};
-  tempSel[pid].beden=b;
-  if(cardSel[pid]) cardSel[pid].beden=b;
-  var card=document.getElementById('pc-'+pid);
-  if(card){
-    card.querySelectorAll('.pc-size').forEach(function(el){
-      el.classList.toggle('on',el.textContent.trim()===b);
-    });
-  }
-}
-
-function toggleCard(pid,e){
-  e.stopPropagation();
-  var prods=getProds(activeRoom,activeZone);
-  var p=prods.find(function(x){return x.id===pid;});
-  if(!p)return;
-
-  if(cardSel[pid]){
-    delete cardSel[pid];
-    var card=document.getElementById('pc-'+pid);
-    if(card){card.classList.remove('sel');var btn=card.querySelector('.pc-add span');if(btn)btn.textContent='+ Ekle';}
-  } else {
-    var cardEl=document.getElementById('pc-'+pid);
-    var domBeden=null,domRenk=null;
-    if(cardEl){
-      var ab=cardEl.querySelector('.pc-size.on');if(ab)domBeden=ab.textContent.trim();
-      var ar=cardEl.querySelector('.pc-color.on');if(ar)domRenk=ar.dataset.r;
-    }
-    Object.keys(cardSel).forEach(function(k){
-      delete cardSel[k];
-      var old=document.getElementById('pc-'+k);
-      if(old){old.classList.remove('sel');var ob=old.querySelector('.pc-add');if(ob)ob.textContent='+ Ekle';}
-    });
-    var tmp=tempSel[pid]||{};
-    cardSel[pid]={renk:domRenk||tmp.renk||p.renkler[0],beden:domBeden||tmp.beden||p.bedenler[0]};
-    if(cardEl){cardEl.classList.add('sel');var btn2=cardEl.querySelector('.pc-add span');if(btn2)btn2.textContent='✕ Kaldır';}
-  }
-}
-
-/* Hem seç hem sepete ekle (tek buton akışı) */
-function toggleCardVeSepet(pid,e){
-  e.stopPropagation();
-  var prods=getProds(activeRoom,activeZone);
-  var p=prods.find(function(x){return x.id===pid;});
-  if(!p)return;
-
-  var cardEl=document.getElementById('pc-'+pid);
-
-  if(cardSel[pid]){
-    // Sepetten kaldır
-    delete cardSel[pid];
-    Sepet.remove(p.id,'Ev Stil Odası · '+p.marka);
-    if(cardEl){cardEl.classList.remove('sel');var btn=cardEl.querySelector('.pc-add span');if(btn)btn.textContent='🛒 Sepete Ekle';}
-    setZoneSel(activeRoom, activeZone, null);
-    delZoneSel(activeRoom, activeZone);
-  } else {
-    // Önce diğer seçimleri temizle (bölge başına 1 ürün)
-    Object.keys(cardSel).forEach(function(k){
-      var oldProds=getProds(activeRoom,activeZone);
-      var oldP=oldProds.find(function(x){return x.id===k;});
-      if(oldP) Sepet.remove(oldP.id,'Ev Stil Odası · '+oldP.marka);
-      delete cardSel[k];
-      var old=document.getElementById('pc-'+k);
-      if(old){old.classList.remove('sel');var ob=old.querySelector('.pc-add span');if(ob)ob.textContent='🛒 Sepete Ekle';}
-    });
-
-    // Renk & beden al
-    var domBeden=null,domRenk=null;
-    if(cardEl){
-      var ab=cardEl.querySelector('.pc-size.on');if(ab)domBeden=ab.textContent.trim();
-      var ar=cardEl.querySelector('.pc-color.on');if(ar)domRenk=ar.dataset.r;
-    }
-    var tmp=tempSel[pid]||{};
-    var secRenk=domRenk||tmp.renk||p.renkler[0];
-    var secBeden=domBeden||tmp.beden||p.bedenler[0];
-    cardSel[pid]={renk:secRenk,beden:secBeden};
-    if(cardEl){cardEl.classList.add('sel');var btn2=cardEl.querySelector('.pc-add span');if(btn2)btn2.textContent='✕ Kaldır';}
-
-    // Oda seçimine kaydet
-    setZoneSel(activeRoom, activeZone, {id:p.id, renk:secRenk, beden:secBeden});
-
-    // Sepete ekle (v3 mantığı - renk adı, marka, kategori dahil)
-    Sepet.add({
-      id:p.id, name:p.ad, price:p.fiyat, emoji:p.emoji||'🏠',
-      src:'Ev Stil Odası · '+p.marka,
-      marka:p.marka, beden:secBeden,
-      renk:secRenk, renkAd:secRenk,
-      kategori:p.kategori||''
-    });
-
-    // Toast bildirimi
-    showToastSepet(p.ad, p.emoji||'🏠');
-  }
-  updateSummary();
-  updateSidebarCounts();
-}
-
-function showToastSepet(ad, emoji){
-  var t=document.getElementById('_toast');
-  if(!t){
-    t=document.createElement('div');t.id='_toast';
-    t.style.cssText='position:fixed;bottom:6.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(10,8,0,.95);border:1px solid rgba(201,168,76,.35);border-radius:8px;padding:.6rem 1.2rem;color:#c9a84c;font-family:Raleway,sans-serif;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;z-index:9999;transition:all .3s;opacity:0;pointer-events:none;white-space:nowrap;backdrop-filter:blur(8px);';
-    document.body.appendChild(t);
-  }
-  t.textContent=emoji+' '+ad+' sepete eklendi';
-  t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';
-  clearTimeout(t._tm);
-  t._tm=setTimeout(function(){t.style.opacity='0';t.style.transform='translateX(-50%) translateY(20px)';},2200);
-}
-
-/* ══════════════════════════════
-   ODA DEĞİŞTİR
-══════════════════════════════ */
-function setRoom(rid, el){
-  document.querySelectorAll('.sb-room').forEach(function(r){r.classList.remove('active');});
-  el.classList.add('active');
-  renderRoom(rid);
-}
-
-/* ══════════════════════════════
-   ÖZET PANELİ
-══════════════════════════════ */
-function updateSummary(){
-  var rid = activeRoom;
-  var roomSel = getRoomSel(rid);
-  var room = ROOMS[rid];
-  var bar = document.getElementById('sumbar');
-  var footer = document.getElementById('spFooter');
-  var empty = document.getElementById('spEmpty');
-  var count = document.getElementById('spCount');
-  var total = document.getElementById('spTotal');
-
-  /* Aktif oda chip'leri */
-  var keys = Object.keys(roomSel);
-  var n = keys.length;
-
-  /* Tüm odalardaki toplam seçim sayısı ve fiyat */
-  var totalN = 0;
-  var totalFiyat = 0;
-  Object.keys(ROOMS).forEach(function(r){
-    var rs = getRoomSel(r);
-    Object.keys(rs).forEach(function(zid){
-      var s = rs[zid]; if(!s) return;
-      totalN++;
-      var prods = getProds(r, zid);
-      var p = prods.find(function(x){return x.id===s.id;});
-      if(p) totalFiyat += p.fiyat;
-    });
-  });
-
-  empty.style.display = totalN===0 ? 'block':'none';
-  footer.style.display = totalN>0 ? 'flex':'none';
-  count.textContent = totalN;
-  count.className = 'sp-count'+(totalN>0?' v':'');
-  document.getElementById('infoSel').textContent = totalN>0 ? totalN+' ürün':'—';
-
-  if(total){
-    total.textContent = totalFiyat.toLocaleString('tr-TR')+' ₺';
-  }
-
-  /* Aktif odanın chip'lerini göster */
-  bar.innerHTML='';
-  Object.keys(room.zones).forEach(function(zid){
-    var z=room.zones[zid];
-    var s=roomSel[zid];
-    var chip=document.createElement('div');
-    if(s){
-      var prods=getProds(rid,zid);
-      var p=prods.find(function(x){return x.id===s.id;});
-      var ad=p?p.ad:s.id;
-      var fiyat=p?p.fiyat:0;
-      chip.className='schip filled';
-      chip.innerHTML=z.icon+' <span class="schip-val">'+ad+(s.beden?' · <em style="opacity:.7">'+s.beden+'</em>':'')+'</span>'+
-        ' <span style="font-size:.45rem;color:rgba(201,168,76,.45);margin-left:.2rem">'+fiyat.toLocaleString('tr-TR')+'₺</span>'+
-        '<button class="schip-rm" onclick="event.stopPropagation();removeZone(\''+zid+'\')">✕</button>';
-      chip.onclick=function(){openZone(zid);};
-    } else {
-      chip.className='schip';
-      chip.innerHTML='<span style="opacity:.35">'+z.icon+'&nbsp;'+z.name+'</span>';
-      chip.onclick=function(){openZone(zid);};
-    }
-    bar.appendChild(chip);
-  });
-}
-
-function removeZone(zid){
-  delZoneSel(activeRoom, zid);
-  renderZones(activeRoom);
-  updateSummary();
-  updateSidebarCounts();
-}
-
-/* ══════════════════════════════
-   SIDEBAR SAYAÇLARI
-══════════════════════════════ */
-function updateSidebarCounts(){
-  Object.keys(ROOMS).forEach(function(rid){
-    var n = Object.keys(getRoomSel(rid)).length;
-    var el = document.getElementById('cnt-'+rid);
-    if(el){ el.textContent=n; el.className='sb-sel-count'+(n>0?' v':''); }
-  });
-}
-
-/* ══════════════════════════════
-   SEPET İŞLEMLERİ
-══════════════════════════════ */
-/* ── TOPLU SEPET FONKSİYONLARI (v3 mantığıyla) ── */
-function _evSepetItemOlustur(rid, zid, item){
-  var prods = getProds(rid, zid);
-  var p = prods.find(function(x){return x.id===item.id;});
-  if(!p) return null;
-  var renk = item.renk || p.renkler[0] || '';
-  return {
-    id:p.id, name:p.ad, price:p.fiyat, emoji:p.emoji||'🏠',
-    src:'Ev Stil Odası · '+p.marka,
-    marka:p.marka, beden:item.beden||'',
-    renk:renk, renkAd:renk, kategori:p.kategori||''
-  };
-}
-
-function topluSepeteEkleVeGor(){
-  /* Tüm odaların seçimlerini tek seferde sepete ekle */
-  var n = 0;
-  Object.keys(ROOMS).forEach(function(rid){
-    var roomSel = getRoomSel(rid);
-    Object.keys(roomSel).forEach(function(zid){
-      var item = roomSel[zid]; if(!item) return;
-      var obj = _evSepetItemOlustur(rid, zid, item);
-      if(!obj) return;
-      Sepet.add(obj); n++;
-    });
-  });
-  if(n>0) Sepet.open();
-  else showToastSepet('Önce ürün seçin', '⚠️');
-}
-
-function topluSatinAl(){
-  var n = 0;
-  Object.keys(sel).forEach(function(rid){
-    var roomSel = sel[rid]||{};
-    Object.keys(roomSel).forEach(function(zid){
-      var item = roomSel[zid]; if(!item) return;
-      var obj = _evSepetItemOlustur(rid, zid, item);
-      if(!obj) return;
-      Sepet.add(obj); n++;
-    });
-  });
-  if(n>0) window.location.href='siparis.html';
-  else showToastSepet('Önce ürün seçin', '⚠️');
-}
-
-/* Popup içi tek ürün satın al */
-function tekSatinAl(){
-  var rid = activeRoom;
-  var zid = activeZone;
-  if(!zid) return;
-  var keys = Object.keys(cardSel);
-  if(!keys.length){ showToastSepet('Önce ürün seçin', '⚠️'); return; }
-  var pid = keys[0];
-  var prods = getProds(rid, zid);
-  var p = prods.find(function(x){return x.id===pid;});
-  if(!p) return;
-  var cs = cardSel[pid]||{};
-  var obj = {
-    id:p.id, name:p.ad, price:p.fiyat, emoji:p.emoji||'🏠',
-    src:'Ev Stil Odası · '+p.marka,
-    marka:p.marka, beden:cs.beden||p.bedenler[0]||'',
-    renk:cs.renk||p.renkler[0]||'', renkAd:cs.renk||p.renkler[0]||'',
-    kategori:p.kategori||''
-  };
-  Sepet.add(obj);
-  closeZone();
-  Sepet.open();
-}
-// İlk render
-renderRoom('salon');
-
-// Firebase ürünlerini yükle
-
-
-/* ══════════════════════════════
-   SEPET SİSTEMİ
-══════════════════════════════ */
-const SEPET_CSS=`
-#_spBtn{position:fixed;bottom:5.5rem;right:3.5rem;z-index:9000;width:52px;height:52px;border-radius:50%;background:color-mix(in srgb,var(--accent2) 12%,transparent);border:1.5px solid color-mix(in srgb,var(--accent2) 35%,transparent);color:var(--accent2);font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;box-shadow:0 6px 24px rgba(0,0,0,.3);backdrop-filter:blur(10px);}
-#_spBtn:hover{background:rgba(184,146,42,.26);transform:scale(1.08);}
-#_spBadge{position:absolute;top:-4px;right:-4px;width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#c9a84c,#e8c96a);color:#0a0800;font-size:.58rem;font-weight:800;display:none;align-items:center;justify-content:center;font-family:var(--font-body);box-shadow:0 2px 8px rgba(0,0,0,.3);}
-#_spBadge.v{display:flex;}
-#_spOv{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9001;display:none;backdrop-filter:blur(4px);}
-#_spOv.v{display:block;}
-#_spPanel{position:fixed;top:0;right:0;width:min(460px,97vw);height:100vh;background:var(--bg2);border-left:1px solid var(--border);z-index:9002;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .42s cubic-bezier(.22,1,.36,1);box-shadow:-16px 0 60px rgba(0,0,0,.6);}
-#_spPanel.v{transform:translateX(0);}
-._spH{padding:1.4rem 1.6rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
-._spHT{font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:var(--text);letter-spacing:-.02em;}
-._spHC{background:var(--surface);border:1px solid var(--border);color:var(--text2);font-size:1rem;cursor:pointer;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .2s;}
-._spHC:hover{border-color:var(--accent2);color:var(--accent2);}
-._spL{flex:1;overflow-y:auto;padding:1.2rem 1.9rem;}
-._spL::-webkit-scrollbar{width:3px;}
-._spL::-webkit-scrollbar-thumb{background:rgba(184,146,42,.25);border-radius:2px;}
-._spEmpty{text-align:center;padding:3rem 1rem;color:var(--text3);font-family:var(--font-display);font-style:italic;font-size:1rem;}
-._spItem{display:flex;gap:.9rem;align-items:flex-start;padding:.95rem 0;border-bottom:1px solid rgba(184,146,42,.07);}
-._spEm{font-size:2rem;flex-shrink:0;line-height:1;}
-._spInfo{flex:1;min-width:0;}
-._spName{font-size:.85rem;color:var(--text);font-family:var(--font-display);font-weight:600;}
-._spSrc{font-size:.57rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-top:.12rem;}._spDetay{font-size:.58rem;color:rgba(201,168,76,.4);margin-top:.28rem;letter-spacing:.04em;line-height:1.6;}
-._spCtrl{display:flex;align-items:center;gap:.45rem;margin-top:.5rem;}
-._spAB{width:24px;height:24px;border-radius:6px;background:var(--surface);border:1px solid var(--border);color:var(--text2);font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;}
-._spAB:hover{border-color:var(--accent2);color:var(--accent2);}
-._spAN{font-size:.78rem;color:var(--text);min-width:18px;text-align:center;font-weight:700;}
-._spR{display:flex;flex-direction:column;align-items:flex-end;gap:.3rem;flex-shrink:0;}
-._spP{font-family:var(--font-display);font-size:1rem;color:var(--accent2);font-weight:800;}
-._spDel{background:none;border:none;color:var(--text3);cursor:pointer;font-size:.8rem;transition:color .2s;}
-._spDel:hover{color:#e05555;}
-._spF{padding:1.2rem 1.6rem;border-top:1px solid var(--border);flex-shrink:0;background:var(--bg2);}
-._spTotal{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1.2rem;}
-._spTotal span{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);}
-._spTotal strong{font-family:var(--font-display);font-size:1.8rem;color:var(--accent2);}
-._spOBtn{width:100%;padding:.9rem;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#0a0a0f;border:none;font-family:var(--font-body);font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:8px;font-weight:700;}
-._spOBtn:hover{opacity:.9;letter-spacing:.32em;}
-._spClr{width:100%;padding:.45rem;margin-top:.5rem;background:none;border:1px solid color-mix(in srgb,#ff5f5f 20%,transparent);color:#ff8a8a;font-family:var(--font-body);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:3px;}
-._spClr:hover{border-color:#ff5f5f;color:#ff5f5f;}
-._spKombin{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:12px;}
-._spKombinTitle{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;}
-._spDetaylar{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.4rem;}
-._spDetay{font-size:.52rem;letter-spacing:.06em;color:var(--text2);background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.15rem .5rem;display:inline-flex;align-items:center;gap:.2rem;}
-`;
-
-const Sepet=(function(){
-  const K='usta_sepet';
-  function load(){try{return JSON.parse(localStorage.getItem(K))||[];}catch{return[];}}
-  function save(a){try{localStorage.setItem(K,JSON.stringify(a));}catch{}window.dispatchEvent(new CustomEvent('sepetChanged'));}
-  function add(u){const a=load();const x=a.find(i=>i.id===u.id&&i.src===u.src);x?x.qty=(x.qty||1)+1:a.push({...u,qty:1});save(a);}
-  function remove(id,src){save(load().filter(i=>!(i.id===id&&i.src===src)));}
-  function qty(id,src,d){const a=load();const x=a.find(i=>i.id===id&&i.src===src);if(!x)return;x.qty=Math.max(0,(x.qty||1)+d);if(x.qty===0)return save(a.filter(i=>!(i.id===id&&i.src===src)));save(a);}
-  function clear(){save([]);}
-  function total(){return load().reduce((t,i)=>t+i.price*(i.qty||1),0);}
-  function count(){return load().reduce((t,i)=>t+(i.qty||1),0);}
-  function updateTopbarBadge(){
-    var c=count();
-    var el=document.getElementById('evSepetCount');
-    if(el){el.textContent=c;el.className='sepet-topbar-count'+(c>0?' v':'');}
-  }
-  function initUI(){
-    if(document.getElementById('_spBtn'))return;
-    const s=document.createElement('style');s.textContent=SEPET_CSS;document.head.appendChild(s);
-    const ov=document.createElement('div');ov.id='_spOv';ov.onclick=close;
-    const panel=document.createElement('div');panel.id='_spPanel';
-    panel.innerHTML='<div class="_spH"><span class="_spHT">🏠 Ev Sepetim</span><button class="_spHC" onclick="Sepet.close()">✕</button></div><div class="_spL" id="_spL"></div><div class="_spF" id="_spF" style="display:none"><div class="_spKombin"><div class="_spKombinTitle">💾 Kayıtlı Dekor Kombinlerim</div><div id="evKombinSlotlar"><div style="color:var(--text3);font-size:11px;text-align:center;padding:8px 0;font-style:italic;">Henüz kaydedilmiş kombin yok</div></div></div><div class="_spTotal"><span>Toplam</span><strong id="_spTV">0 ₺</strong></div><button class="_spOBtn" onclick="window.location.href=\'siparis.html\'">🛒 Tüm Evi Sipariş Et →</button><button class="_spClr" onclick="Sepet.clear()">Sepeti Temizle</button></div>';
-    document.body.appendChild(ov);document.body.appendChild(panel);
-    window.addEventListener('sepetChanged',render);
-    window.addEventListener('sepetChanged',updateTopbarBadge);
-    /* Sepet temizlenince stil seçimlerini de sıfırla */
-    window.addEventListener('sepetChanged',function(){
-      if(count()===0){
-        /* sel sıfırla */
-        /* Ev Stil Odası seçimlerini sıfırla */
-        Object.keys(sel).forEach(function(rid){ sel[rid]={}; });
-        cardSel={};tempSel={};
-        /* UI güncelle */
-        if(typeof renderZones==='function') renderZones(activeRoom);
-        if(typeof updateSummary==='function') updateSummary();
-        if(typeof updateSidebarCounts==='function') updateSidebarCounts();
-      }
-    });
-    render();updateTopbarBadge();
-  }
-  function render(){
-    const items=load();
-    const liste=document.getElementById('_spL');
-    const foot=document.getElementById('_spF');
-    const tv=document.getElementById('_spTV');
-    updateTopbarBadge();
-    if(!liste)return;
-    if(!items.length){liste.innerHTML='<div class="_spEmpty">Sepetiniz boş</div>';if(foot)foot.style.display='none';return;}
-    if(foot)foot.style.display='block';
-    if(tv)tv.textContent=total().toLocaleString('tr-TR')+' ₺';
-    liste.innerHTML=items.map(function(i){
-      var renkDot=i.renk?'<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+i.renk+';border:1px solid rgba(255,255,255,.2);vertical-align:middle;margin-right:.3rem;"></span>':'';
-      var detaylar=[
-        i.beden?'<span class="_spDetay">📐 '+i.beden+'</span>':'',
-        i.renk?'<span class="_spDetay">'+renkDot+i.renkAd+'</span>':'',
-        i.marka?'<span class="_spDetay" style="color:rgba(201,168,76,.35);">'+i.marka+'</span>':'',
-      ].filter(Boolean).join('');
-      return '<div class="_spItem">'+
-        '<div class="_spEm">'+(i.emoji||'🏠')+'</div>'+
-        '<div class="_spInfo">'+
-          '<div class="_spName">'+i.name+'</div>'+
-          '<div class="_spSrc">'+(i.src||'')+'</div>'+
-          (detaylar?'<div class="_spDetaylar">'+detaylar+'</div>':'')+
-          '<div class="_spCtrl">'+
-            '<button class="_spAB" onclick="Sepet.qty(\''+i.id+'\',\''+i.src+'\',-1)">−</button>'+
-            '<span class="_spAN">'+i.qty+'</span>'+
-            '<button class="_spAB" onclick="Sepet.qty(\''+i.id+'\',\''+i.src+'\',1)">+</button>'+
-          '</div>'+
-        '</div>'+
-        '<div class="_spR">'+
-          '<span class="_spP">'+(i.price*i.qty).toLocaleString('tr-TR')+' ₺</span>'+
-          '<button class="_spDel" onclick="Sepet.remove(\''+i.id+'\',\''+i.src+'\')">✕</button>'+
-        '</div>'+
-      '</div>';
-    }).join('');
-  }
-  function open(){document.getElementById('_spPanel')?.classList.add('v');document.getElementById('_spOv')?.classList.add('v');}
-  function close(){document.getElementById('_spPanel')?.classList.remove('v');document.getElementById('_spOv')?.classList.remove('v');}
-  return{add,remove,qty,clear,load,total,count,initUI,render,open,close,updateTopbarBadge};
-})();
-
-/* Stil Odası'ndan sepete ekle */
-function evKombinKaydet(){
-  var n=0;
-  Object.values(sel||{}).forEach(function(r){n+=Object.keys(r||{}).length;});
-  if(!n){showToastSepet('Kaydetmek için önce ürün seçin ⚠️','⚠️');return;}
-  var ad='Ev Kombinim '+(new Date().toLocaleDateString('tr-TR'));
-  var kayitlar=JSON.parse(localStorage.getItem('genz-ev-kombinler')||'[]');
-  kayitlar.unshift({id:Date.now(),ad:ad,secimler:JSON.parse(JSON.stringify(sel||{})),tarih:new Date().toLocaleDateString('tr-TR')});
-  if(kayitlar.length>8)kayitlar=kayitlar.slice(0,8);
-  localStorage.setItem('genz-ev-kombinler',JSON.stringify(kayitlar));
-  showToastSepet('Dekor kombini kaydedildi 💾','💾');
-  updateEvKombinSlots();
-}
-
-function updateSepetBtn(){
-  /* Ev Stil Odası'nda satın al butonu her zaman görünür */
-}
-
-/* Sepeti başlat */
-document.addEventListener('DOMContentLoaded',function(){
-  Sepet.initUI();
-  updateEvKombinSlots();
-  // Tema init
-  var t=localStorage.getItem('genz-theme')||'dark';
-  document.documentElement.setAttribute('data-theme',t);
-  var btn=document.getElementById('evThemeBtn');
-  if(btn) btn.textContent=t==='dark'?'🌙':'☀️';
-});
-
-window.evToggleTheme=function(){
-  var t=document.documentElement.getAttribute('data-theme')||'dark';
-  t=t==='dark'?'light':'dark';
-  localStorage.setItem('genz-theme',t);
-  document.documentElement.setAttribute('data-theme',t);
-  document.body.classList.add('theme-transitioning');
-  var btn=document.getElementById('evThemeBtn');
-  if(btn) btn.textContent=t==='dark'?'🌙':'☀️';
-  setTimeout(function(){document.body.classList.remove('theme-transitioning');},350);
-};
-
-/* ── EV KOMBİN SİSTEMİ ── */
-function updateEvKombinSlots(){
-  var el=document.getElementById('evKombinSlotlar');if(!el)return;
-  var kayitlar=JSON.parse(localStorage.getItem('genz-ev-kombinler')||'[]');
-  if(!kayitlar.length){el.innerHTML='<div style="color:var(--text3);font-size:11px;text-align:center;padding:8px 0;font-style:italic;">Henüz kaydedilmiş dekor kombini yok</div>';return;}
-  el.innerHTML=kayitlar.map(function(k,i){
-    var n=0;Object.values(k.secimler||{}).forEach(function(r){n+=Object.keys(r).length;});
-    return '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);margin-bottom:6px;">'+
-      '<span style="font-size:13px;">🏠</span>'+
-      '<div style="flex:1;min-width:0;">'+
-        '<div style="font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+k.ad+'</div>'+
-        '<div style="font-size:10px;color:var(--text3);">'+n+' parça · '+k.tarih+'</div>'+
-      '</div>'+
-      '<button onclick="evKombinYukle('+i+')" style="padding:4px 10px;background:var(--accent2);border:none;border-radius:6px;color:#0a0a0f;font-family:var(--font-body);font-size:10px;font-weight:700;cursor:pointer;">Yükle</button>'+
-      '<button onclick="evKombinSil('+i+')" style="padding:4px 8px;background:none;border:1px solid color-mix(in srgb,#ff5f5f 30%,transparent);border-radius:6px;color:#ff8a8a;font-family:var(--font-body);font-size:10px;cursor:pointer;">✕</button>'+
-    '</div>';
-  }).join('');
-}
-
-window.evKombinYukle=function(i){
-  var kayitlar=JSON.parse(localStorage.getItem('genz-ev-kombinler')||'[]');
-  var k=kayitlar[i];if(!k)return;
-  Object.keys(sel).forEach(function(rid){sel[rid]={};});
-  Object.keys(k.secimler||{}).forEach(function(rid){
-    sel[rid]=JSON.parse(JSON.stringify(k.secimler[rid]));
-  });
-  if(typeof renderZones==='function') renderZones(activeRoom);
-  if(typeof updateSummary==='function') updateSummary();
-  if(typeof updateSidebarCounts==='function') updateSidebarCounts();
-  showToastSepet('Dekor kombini yüklendi ✦','🏠');
-};
-
-window.evKombinSil=function(i){
-  var kayitlar=JSON.parse(localStorage.getItem('genz-ev-kombinler')||'[]');
-  kayitlar.splice(i,1);
-  localStorage.setItem('genz-ev-kombinler',JSON.stringify(kayitlar));
-  updateEvKombinSlots();
-};
-
-/* Sepet badge */
-window.addEventListener('sepetChanged',function(){
-  var c=Sepet.count();
-  var el=document.getElementById('evSepetCount');
-  if(el){el.textContent=c;el.style.display=c>0?'inline-flex':'none';}
-  updateEvKombinSlots();
-});
-
-
+const _ls={get(k,fb=null){try{const v=localStorage.getItem(k);return v!==null?v:fb;}catch(e){return fb;}},set(k,v){try{localStorage.setItem(k,v);}catch(e){}},remove(k){try{localStorage.removeItem(k);}catch(e){}},getJSON(k,fb){try{return JSON.parse(localStorage.getItem(k))??fb;}catch(e){return fb;}}};
+let currentLang=_ls.get('genz-lang','tr'),currentTheme=_ls.get('genz-theme','dark'),currentUser=_ls.getJSON('genz-user',null);
+function initThemeLang(){document.documentElement.setAttribute('data-lang',currentLang);document.documentElement.setAttribute('data-theme',currentTheme);const b=document.getElementById('themeBtn');if(b)b.textContent=currentTheme==='dark'?'🌙':'☀️';if(currentUser){const ab=document.getElementById('authBtn');if(ab)ab.textContent=currentUser.username;const pu=document.getElementById('profile-username');const pe=document.getElementById('profile-email');if(pu)pu.textContent=currentUser.username;if(pe)pe.textContent=currentUser.email;}}
+function navigateTo(url){document.body.style.transition='opacity 0.25s';document.body.style.opacity='0';setTimeout(()=>{window.location.href=url;},250);}
+let _tt;function showToast(msg){const t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),2800);}
+function toggleTheme(){currentTheme=currentTheme==='dark'?'light':'dark';_ls.set('genz-theme',currentTheme);document.body.classList.add('theme-transitioning');document.documentElement.setAttribute('data-theme',currentTheme);const b=document.getElementById('themeBtn');if(b)b.textContent=currentTheme==='dark'?'🌙':'☀️';showToast(currentTheme==='dark'?'Koyu tema 🌙':'Açık tema ☀️');setTimeout(()=>document.body.classList.remove('theme-transitioning'),350);}
+function toggleLang(){currentLang=currentLang==='tr'?'en':'tr';_ls.set('genz-lang',currentLang);document.documentElement.setAttribute('data-lang',currentLang);document.querySelectorAll('[data-tr]').forEach(el=>{el.textContent=el.getAttribute('data-'+currentLang);});if(currentUser){const ab=document.getElementById('authBtn');if(ab)ab.textContent=currentUser.username;}showToast(currentLang==='tr'?'Dil: Türkçe 🇹🇷':'Language: English 🇬🇧');}
+function toggleMobileMenu(){const mm=document.getElementById('mobileMenu');const hb=document.getElementById('hamburgerBtn');if(mm)mm.classList.toggle('open');if(hb)hb.classList.toggle('open');}
+function openAuth(tab){if(currentUser){switchTab('profile');}else{switchTab(tab||'signin');}document.getElementById('authModal').classList.add('open');}
+function closeAuth(){document.getElementById('authModal').classList.remove('open');}
+function closeAuthIfOutside(e){if(e.target===document.getElementById('authModal'))closeAuth();}
+function switchTab(tab){document.querySelectorAll('.auth-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));const panel=document.getElementById('panel-'+tab);if(panel)panel.classList.add('active');const tabBtn=document.getElementById('tab-'+tab);if(tabBtn)tabBtn.classList.add('active');const authTabs=document.getElementById('authTabs');if(authTabs)authTabs.style.display=(tab==='forgot'||tab==='profile')?'none':'flex';}
+function doSignIn(){const email=document.getElementById('signin-email').value.trim();const pass=document.getElementById('signin-pass').value;if(!email||!pass){showToast('Lütfen tüm alanları doldurun ⚠️');return;}fakeLogin(email,'Kullanıcı');}
+function doSignUp(){const username=document.getElementById('signup-username').value.trim();const email=document.getElementById('signup-email').value.trim();const pass=document.getElementById('signup-pass').value;if(!username||!email||!pass){showToast('Lütfen tüm alanları doldurun ⚠️');return;}if(pass.length<8){showToast('Şifre en az 8 karakter ⚠️');return;}fakeLogin(email,username);}
+function doForgot(){const email=document.getElementById('forgot-email').value.trim();if(!email){showToast('E-posta adresinizi girin ⚠️');return;}showToast('Sıfırlama bağlantısı gönderildi ✉️');setTimeout(()=>switchTab('signin'),1500);}
+function fakeLogin(email,username){const clean='@'+username.replace('@','');currentUser={email,username:clean};_ls.set('genz-user',JSON.stringify(currentUser));const pe=document.getElementById('profile-email');const pu=document.getElementById('profile-username');const ab=document.getElementById('authBtn');if(pe)pe.textContent=email;if(pu)pu.textContent=clean;if(ab)ab.textContent=clean;closeAuth();showToast('Hoş geldin, '+clean+' 👋');}
+function doSignOut(){currentUser=null;_ls.remove('genz-user');const ab=document.getElementById('authBtn');if(ab)ab.textContent='Giriş Yap';closeAuth();showToast('Çıkış yapıldı 👋');}
+function goToProfile(){if(currentUser){closeAuth();navigateTo('profile.html');}}
+document.addEventListener('DOMContentLoaded',()=>{initThemeLang();document.body.style.opacity='0';document.body.style.transition='opacity 0.3s';requestAnimationFrame(()=>{document.body.style.opacity='1';});document.querySelectorAll('.mobile-menu a').forEach(a=>a.addEventListener('click',()=>{document.getElementById('mobileMenu')?.classList.remove('open');document.getElementById('hamburgerBtn')?.classList.remove('open');}));});
 </script>
-
 </body>
 </html>

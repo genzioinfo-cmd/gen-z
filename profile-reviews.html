@@ -1,0 +1,101 @@
+<div class="profile-section-title">🔔 Bildirimler</div>
+
+<div class="notif-section">
+  <div class="notif-section-title">Sipariş Bildirimleri</div>
+  <div class="notif-row">
+    <span class="notif-icon">📦</span>
+    <div class="notif-info">
+      <div class="notif-label">Sipariş Güncellemeleri</div>
+      <div class="notif-desc">Siparişin hazırlandığında ve kargoya verildiğinde bildir</div>
+    </div>
+    <div class="toggle-wrap">
+      <input type="checkbox" class="toggle-input" id="notif-order" checked onchange="saveNotif(this)"/>
+      <label class="toggle-label" for="notif-order"></label>
+    </div>
+  </div>
+  <div class="notif-row">
+    <span class="notif-icon">🚚</span>
+    <div class="notif-info">
+      <div class="notif-label">Kargo Takibi</div>
+      <div class="notif-desc">Paket yola çıktığında ve teslim edildiğinde bildir</div>
+    </div>
+    <div class="toggle-wrap">
+      <input type="checkbox" class="toggle-input" id="notif-cargo" checked onchange="saveNotif(this)"/>
+      <label class="toggle-label" for="notif-cargo"></label>
+    </div>
+  </div>
+  <div class="notif-row">
+    <span class="notif-icon">↩️</span>
+    <div class="notif-info">
+      <div class="notif-label">İade & İptal</div>
+      <div class="notif-desc">İade talebin işleme alındığında bildir</div>
+    </div>
+    <div class="toggle-wrap">
+      <input type="checkbox" class="toggle-input" id="notif-return" checked onchange="saveNotif(this)"/>
+      <label class="toggle-label" for="notif-return"></label>
+    </div>
+  </div>
+</div>
+
+<div class="notif-section">
+  <div class="notif-section-title">Kampanya & Keşif</div>
+  <div class="notif-row">
+    <span class="notif-icon">🏷️</span>
+    <div class="notif-info">
+      <div class="notif-label">Kampanya Bildirimleri</div>
+      <div class="notif-desc">İndirimler ve özel fırsatlar hakkında bilgilendir</div>
+    </div>
+    <div class="toggle-wrap">
+      <input type="checkbox" class="toggle-input" id="notif-campaign" onchange="saveNotif(this)"/>
+      <label class="toggle-label" for="notif-campaign"></label>
+    </div>
+  </div>
+  <div class="notif-row">
+    <span class="notif-icon">⭐</span>
+    <div class="notif-info">
+      <div class="notif-label">Favori Mağaza Yenilikleri</div>
+      <div class="notif-desc">Takip ettiğin mağazalar yeni ürün eklediğinde bildir</div>
+    </div>
+    <div class="toggle-wrap">
+      <input type="checkbox" class="toggle-input" id="notif-favstore" checked onchange="saveNotif(this)"/>
+      <label class="toggle-label" for="notif-favstore"></label>
+    </div>
+  </div>
+  <div class="notif-row">
+    <span class="notif-icon">💬</span>
+    <div class="notif-info">
+      <div class="notif-label">Yorum Yanıtları</div>
+      <div class="notif-desc">Değerlendirmene satıcı yanıt verdiğinde bildir</div>
+    </div>
+    <div class="toggle-wrap">
+      <input type="checkbox" class="toggle-input" id="notif-reply" onchange="saveNotif(this)"/>
+      <label class="toggle-label" for="notif-reply"></label>
+    </div>
+  </div>
+</div>
+
+<div class="notif-section">
+  <div class="notif-section-title">Platform</div>
+  <div class="notif-row">
+    <span class="notif-icon">🏅</span>
+    <div class="notif-info">
+      <div class="notif-label">Rozet & Başarımlar</div>
+      <div class="notif-desc">Yeni rozet kazandığında veya seviye atladığında bildir</div>
+    </div>
+    <div class="toggle-wrap">
+      <input type="checkbox" class="toggle-input" id="notif-badge" checked onchange="saveNotif(this)"/>
+      <label class="toggle-label" for="notif-badge"></label>
+    </div>
+  </div>
+  <div class="notif-row">
+    <span class="notif-icon">📢</span>
+    <div class="notif-info">
+      <div class="notif-label">Platform Duyuruları</div>
+      <div class="notif-desc">GEN-Z'nin yeni özellik ve güncellemeleri hakkında bildir</div>
+    </div>
+    <div class="toggle-wrap">
+      <input type="checkbox" class="toggle-input" id="notif-platform" onchange="saveNotif(this)"/>
+      <label class="toggle-label" for="notif-platform"></label>
+    </div>
+  </div>
+</div>

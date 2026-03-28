@@ -1,0 +1,95 @@
+<div class="profile-section-title">🛒 Sepetim</div>
+<div id="cartList"></div>
+<div class="cart-summary" id="cartSummary" style="display:none">
+  <div class="cart-summary-row"><span>Ara toplam</span><span id="cartSubtotal">₺0</span></div>
+  <div class="cart-summary-row"><span>Kargo</span><span style="color:var(--accent3)">Ücretsiz</span></div>
+  <div class="cart-summary-row total"><span>Toplam</span><span id="cartTotal">₺0</span></div>
+  <button class="btn-checkout" onclick="window.location.href='siparis.html'">Ödemeye Geç →</button>
+</div>
+
+<script>
+(function() {
+  const KEY = 'genz-sepet';
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; }
+  }
+  function save(items) {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(items));
+      // profil badge'ini güncelle
+      const badge = document.getElementById('cart-badge');
+      if (badge) badge.textContent = items.reduce((t,i) => t + (i.qty||1), 0) || '';
+    } catch {}
+  }
+
+  function updateTotal() {
+    const items = load();
+    const total = items.reduce((t, i) => t + i.price * (i.qty||1), 0);
+    const sub = document.getElementById('cartSubtotal');
+    const tot = document.getElementById('cartTotal');
+    if (sub) sub.textContent = '₺' + total.toLocaleString('tr-TR');
+    if (tot) tot.textContent = '₺' + total.toLocaleString('tr-TR');
+  }
+
+  window._cartChangeQty = function(idx, delta) {
+    const items = load();
+    if (!items[idx]) return;
+    items[idx].qty = Math.max(1, (items[idx].qty || 1) + delta);
+    save(items);
+    document.getElementById('cqty-' + idx).textContent = items[idx].qty;
+    document.getElementById('cprice-' + idx).textContent = '₺' + (items[idx].price * items[idx].qty).toLocaleString('tr-TR');
+    updateTotal();
+  };
+
+  window._cartRemove = function(idx) {
+    const items = load();
+    const el = document.getElementById('ci-' + idx);
+    if (el) { el.style.transition = 'all 0.22s'; el.style.opacity = '0'; el.style.transform = 'translateX(20px)'; }
+    setTimeout(() => {
+      items.splice(idx, 1);
+      save(items);
+      render();
+      if (typeof showToast === 'function') showToast('Ürün sepetten çıkarıldı 🗑');
+    }, 220);
+  };
+
+  function render() {
+    const items = load();
+    const list = document.getElementById('cartList');
+    const summary = document.getElementById('cartSummary');
+
+    // badge
+    const badge = document.getElementById('cart-badge');
+    const totalQty = items.reduce((t,i) => t + (i.qty||1), 0);
+    if (badge) badge.textContent = totalQty || '';
+
+    if (items.length === 0) {
+      list.innerHTML = '<div class="cart-empty"><div class="cart-empty-icon">🛒</div><div class="cart-empty-text">Sepetiniz boş.</div></div>';
+      summary.style.display = 'none';
+      return;
+    }
+
+    list.innerHTML = items.map((item, idx) => `
+      <div class="cart-item" id="ci-${idx}">
+        <div class="cart-item-icon">${item.emoji || '📦'}</div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-seller">${item.src || ''}${item.beden ? ' · ' + item.beden : ''}</div>
+        </div>
+        <div class="cart-item-qty">
+          <button class="qty-btn" onclick="_cartChangeQty(${idx}, -1)">−</button>
+          <span class="qty-val" id="cqty-${idx}">${item.qty || 1}</span>
+          <button class="qty-btn" onclick="_cartChangeQty(${idx}, 1)">+</button>
+        </div>
+        <span class="cart-item-price" id="cprice-${idx}">₺${(item.price * (item.qty||1)).toLocaleString('tr-TR')}</span>
+        <button class="cart-item-del" onclick="_cartRemove(${idx})" title="Kaldır">✕</button>
+      </div>`).join('');
+
+    summary.style.display = '';
+    updateTotal();
+  }
+
+  render();
+})();
+</script>

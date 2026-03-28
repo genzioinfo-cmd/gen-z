@@ -1,0 +1,180 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── YARDIMCI FONKSİYONLAR ──
+    function isLoggedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isLoggedIn() && request.auth.uid == uid;
+    }
+
+    function rol() {
+      return get(/databases/$(database)/documents/kullanicilar/$(request.auth.uid)).data.rol;
+    }
+
+    function isAdmin() {
+      return isLoggedIn() && rol() == 'admin';
+    }
+
+    function isMagaza() {
+      return isLoggedIn() && (rol() == 'magaza' || rol() == 'admin');
+    }
+
+    function isUsta() {
+      return isLoggedIn() && (rol() == 'usta' || rol() == 'admin');
+    }
+
+    function isGencZ() {
+      return isLoggedIn() && (rol() == 'gencz' || rol() == 'admin');
+    }
+
+    function isAnyRole() {
+      return isLoggedIn() && rol() in ['gencz', 'magaza', 'usta', 'admin'];
+    }
+
+    // ── KULLANICILAR ──
+    match /kullanicilar/{uid} {
+      allow read: if isLoggedIn();
+      allow create: if isOwner(uid);
+      // Kullanıcı kendi profilini güncelleyebilir, admin herkesi
+      allow update: if isOwner(uid) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── MAĞAZALAR ──
+    match /magazalar/{magazaId} {
+      allow read: if true;
+      allow create: if isMagaza();
+      allow update: if isLoggedIn() && (
+        resource.data.uid == request.auth.uid || isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // ── MAĞAZA ÜRÜNLERİ ──
+    match /magaza_urunler/{urunId} {
+      // Onaylı ürünler herkese açık, diğerleri giriş gerektirir
+      allow read: if resource.data.durum == 'onaylandi' || isLoggedIn();
+      // Mağaza sahibi ürün ekleyebilir
+      allow create: if isMagaza();
+      allow update: if isLoggedIn() && (
+        resource.data.uid == request.auth.uid ||
+        resource.data.magazaId == request.auth.uid ||
+        isAdmin()
+      );
+      allow delete: if isLoggedIn() && (
+        resource.data.uid == request.auth.uid ||
+        resource.data.magazaId == request.auth.uid ||
+        isAdmin()
+      );
+    }
+
+    // ── MAĞAZA SİPARİŞLERİ ──
+    match /magaza_siparisler/{siparisId} {
+      allow read: if isLoggedIn() && (
+        resource.data.uid == request.auth.uid ||
+        resource.data.magazaId == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if isLoggedIn();
+      allow update: if isLoggedIn() && (
+        resource.data.magazaId == request.auth.uid || isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // ── USTAM İLANLAR ──
+    match /ustam_ilanlar/{id} {
+      allow read: if true;
+      allow create: if isUsta();
+      allow update: if isLoggedIn() && (
+        resource.data.saticiUid == request.auth.uid || isAdmin()
+      );
+      allow delete: if isLoggedIn() && (
+        resource.data.saticiUid == request.auth.uid || isAdmin()
+      );
+    }
+
+    // ── USTAM RANDEVULAR ──
+    match /ustam_randevular/{id} {
+      allow read: if isLoggedIn() && (
+        resource.data.uid == request.auth.uid ||
+        resource.data.ustaSaticiUid == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if isLoggedIn();
+      allow update: if isLoggedIn() && (
+        resource.data.uid == request.auth.uid ||
+        resource.data.ustaSaticiUid == request.auth.uid ||
+        isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // ── GEN-Z (GENCİM) ÜRÜNLER ──
+    match /gencim_urunler/{id} {
+      allow read: if true;
+      allow create: if isGencZ();
+      allow update: if isLoggedIn() && (
+        resource.data.uid == request.auth.uid || isAdmin()
+      );
+      allow delete: if isLoggedIn() && (
+        resource.data.uid == request.auth.uid || isAdmin()
+      );
+    }
+
+    // ── PARTNER BAŞVURULARI ──
+    match /partner_basvurular/{id} {
+      allow read: if isAdmin();
+      allow create: if isLoggedIn();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── GENCİM BAŞVURULARI ──
+    match /gencim_basvurular/{id} {
+      allow read: if isAdmin();
+      allow create: if isLoggedIn();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── ÇEKME TALEPLERİ ──
+    match /cekme_talepler/{id} {
+      allow read: if isLoggedIn() && (
+        resource.data.uid == request.auth.uid || isAdmin()
+      );
+      allow create: if isLoggedIn();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── FAVORİLER ──
+    match /favoriler/{uid}/urunler/{urunId} {
+      allow read, write: if isOwner(uid);
+    }
+
+    // ── DEĞERLENDİRMELER ──
+    match /degerlendirmeler/{id} {
+      allow read: if true;
+      allow create: if isLoggedIn();
+      allow update: if isLoggedIn() && resource.data.uid == request.auth.uid;
+      allow delete: if isLoggedIn() && (
+        resource.data.uid == request.auth.uid || isAdmin()
+      );
+    }
+
+    // ── ÖDEMELER ──
+    match /odemeler/{id} {
+      allow read: if isLoggedIn() && (
+        resource.data.uid == request.auth.uid || isAdmin()
+      );
+      allow write: if isAdmin();
+    }
+
+  }
+}

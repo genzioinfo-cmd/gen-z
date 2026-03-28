@@ -18,7 +18,7 @@ import {
 /* ── CONFIG ── */
 const firebaseConfig = {
   apiKey: "AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ",
-  authDomain: "gen-z-io.firebaseapp.com",
+  authDomain: "gen-z.io",
   projectId: "gen-z-io",
   storageBucket: "gen-z-io.firebasestorage.app",
   messagingSenderId: "97338868944",

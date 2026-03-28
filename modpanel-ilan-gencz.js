@@ -353,7 +353,7 @@ window.gzIcerikGonder = async function() {
   }
 };
 
-async function genczYukle() {
+window.genczYukle = async function genczYukle() {
   if (!window._aktifUid) return;
   try {
     const snap = await getDocs(query(
@@ -374,7 +374,7 @@ async function genczYukle() {
   } catch(e) { console.error(e); }
 }
 
-function gzListeRender() {
+window.gzListeRender = function gzListeRender() {
   const el = document.getElementById('gzIcerikListesi');
   if (!el) return;
   let liste = _gzIcerikler;

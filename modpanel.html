@@ -437,11 +437,13 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
         <span style="font-size:.6rem;color:rgba(240,235,224,.4);font-style:italic;">Bu durum sizi ve işinizi korumak adına alınmıştır.</span>
       </div>
     </div>
+    <form onsubmit="girisYap();return false;" autocomplete="on">
     <label class="l-lbl">E-posta</label>
     <input class="l-inp" type="email" id="lEmail" placeholder="magaza@gen-z.io" autocomplete="email">
     <label class="l-lbl">Şifre</label>
-    <input class="l-inp" type="password" id="lPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')girisYap()">
-    <button class="l-btn" id="lBtn" onclick="girisYap()">Giriş Yap ✦</button>
+    <input class="l-inp" type="password" id="lPass" placeholder="••••••••" autocomplete="current-password">
+    <button class="l-btn" id="lBtn" type="submit">Giriş Yap ✦</button>
+    </form>
     <div class="l-err" id="lErr">E-posta veya şifre hatalı.</div>
     <div class="l-ok" id="lOk">Şifre sıfırlama maili gönderildi ✓</div>
     <div style="text-align:center;margin-top:.6rem;">
@@ -3411,7 +3413,8 @@ window.git=function(id,btn){
   if(id==='usta-ilanlar'||id==='usta-ozet') ustaYukle();
   if(id==='stok') window.stokModulYukle && window.stokModulYukle();
   if(id==='iadeler') window._iadeTalepleriYukle && window._iadeTalepleriYukle();
-  if(id==='gencz-icerik' || id==='gencz-ozet') genczYukle && genczYukle();
+  if(id==='gencz-icerik' || id==='gencz-ozet') window.genczYukle && window.genczYukle();
+  if(id==='gencz-yeni') window.genczKatGridOlustur && window.genczKatGridOlustur();
   if(id==='finans-danisman') window.danismanYukle && window.danismanYukle();
   if(id==='vergi-takvim') window.vergiYukle && window.vergiYukle();
 };

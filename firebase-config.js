@@ -150,11 +150,18 @@ window.doForgot = async function() {
   const email = document.getElementById('forgot-email')?.value.trim();
   if (!email) { if(typeof showToast==='function') showToast('E-posta adresinizi girin ⚠️'); return; }
   try {
-    await sendPasswordResetEmail(auth, email);
+    await sendPasswordResetEmail(auth, email, {
+      url: 'https://gen-z.io/sifre-sifirla.html',
+      handleCodeInApp: false
+    });
     if (typeof showToast === 'function') showToast('Sıfırlama bağlantısı gönderildi ✉️');
     setTimeout(() => { if(typeof switchTab==='function') switchTab('signin'); }, 1500);
   } catch(e) {
-    if (typeof showToast === 'function') showToast('Geçerli bir e-posta girin ⚠️');
+    const msg = e.code === 'auth/user-not-found'    ? 'Bu e-posta kayıtlı değil ⚠️'
+              : e.code === 'auth/invalid-email'      ? 'Geçerli bir e-posta girin ⚠️'
+              : e.code === 'auth/too-many-requests'  ? 'Çok fazla istek. Biraz bekle ⚠️'
+              : 'Bir hata oluştu ⚠️';
+    if (typeof showToast === 'function') showToast(msg);
   }
 };
 

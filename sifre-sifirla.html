@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Şifre Sıfırla — GEN-Z</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent: #7B5CF0;
+  --bg: #0a0a0f;
+  --bg2: #13131a;
+  --bg3: #1c1c28;
+  --surface: #22222f;
+  --border: #2e2e3f;
+  --text: #f0eeff;
+  --text2: #9b97b8;
+  --text3: #5a5770;
+  --radius: 14px;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 8px 48px rgba(123,92,240,0.15);
+}
+.logo {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--accent);
+  text-align: center;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+.subtitle {
+  text-align: center;
+  color: var(--text2);
+  font-size: .875rem;
+  margin-bottom: 28px;
+}
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* States */
+#screen-loading { text-align: center; padding: 20px 0; }
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+  margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#screen-error, #screen-success { text-align: center; }
+.icon-big { font-size: 3rem; margin-bottom: 12px; }
+.err-text { color: #ff6b6b; font-size: .9rem; margin-bottom: 20px; line-height: 1.5; }
+.ok-text  { color: #5CF0B4; font-size: .9rem; margin-bottom: 20px; line-height: 1.5; }
+
+/* Form */
+.field { margin-bottom: 16px; }
+.field label { display: block; font-size: .8rem; color: var(--text2); margin-bottom: 6px; }
+.field input {
+  width: 100%; padding: 12px 14px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius); color: var(--text);
+  font-family: var(--font-body); font-size: .9rem;
+  transition: border-color .2s;
+  outline: none;
+}
+.field input:focus { border-color: var(--accent); }
+.field input.err { border-color: #ff6b6b; }
+
+/* Şifre güç göstergesi */
+.strength-bar {
+  height: 4px; border-radius: 4px;
+  background: var(--border); margin-top: 8px; overflow: hidden;
+}
+.strength-fill {
+  height: 100%; border-radius: 4px;
+  transition: width .3s, background .3s;
+  width: 0%;
+}
+.strength-text { font-size: .72rem; color: var(--text3); margin-top: 4px; }
+
+.hint { font-size: .75rem; color: var(--text3); margin-top: 4px; }
+.hint.ok { color: #5CF0B4; }
+.hint.err { color: #ff6b6b; }
+
+.btn {
+  width: 100%; padding: 13px;
+  background: var(--accent); color: #fff;
+  border: none; border-radius: var(--radius);
+  font-family: var(--font-display); font-size: .95rem; font-weight: 700;
+  cursor: pointer; transition: opacity .2s, transform .15s;
+  margin-top: 8px;
+}
+.btn:hover { opacity: .88; transform: translateY(-1px); }
+.btn:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+.btn-ghost {
+  width: 100%; padding: 11px;
+  background: transparent; color: var(--text2);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  font-family: var(--font-body); font-size: .85rem;
+  cursor: pointer; transition: color .2s, border-color .2s;
+  margin-top: 10px; text-decoration: none; display: block; text-align: center;
+}
+.btn-ghost:hover { color: var(--text); border-color: var(--accent); }
+
+/* Toast */
+#toast {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--text); padding: 12px 22px; border-radius: 12px;
+  font-size: .85rem; opacity: 0; transition: opacity .3s, transform .3s;
+  pointer-events: none; z-index: 9999; white-space: nowrap;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo">GEN-Z</div>
+  <p class="subtitle" id="card-subtitle">Şifrenizi sıfırlıyoruz...</p>
+
+  <!-- Yükleniyor -->
+  <div class="screen active" id="screen-loading">
+    <div class="spinner"></div>
+    <p style="color:var(--text2);font-size:.875rem;">Link doğrulanıyor...</p>
+  </div>
+
+  <!-- Hata -->
+  <div class="screen" id="screen-error">
+    <div class="icon-big">⚠️</div>
+    <p class="err-text" id="error-msg">Bu link geçersiz veya süresi dolmuş.</p>
+    <a href="index.html" class="btn-ghost">Ana Sayfaya Dön</a>
+  </div>
+
+  <!-- Yeni Şifre Formu -->
+  <div class="screen" id="screen-form">
+    <div class="field">
+      <label>Yeni Şifre</label>
+      <input type="password" id="pass1" placeholder="En az 8 karakter" autocomplete="new-password"/>
+      <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+      <div class="strength-text" id="strength-text"></div>
+    </div>
+    <div class="field">
+      <label>Yeni Şifre (Tekrar)</label>
+      <input type="password" id="pass2" placeholder="Şifreyi tekrar girin" autocomplete="new-password"/>
+      <div class="hint" id="match-hint"></div>
+    </div>
+    <button class="btn" id="submit-btn" disabled onclick="sifreDegistir()">Şifremi Güncelle</button>
+    <a href="index.html" class="btn-ghost">Vazgeç</a>
+  </div>
+
+  <!-- Başarı -->
+  <div class="screen" id="screen-success">
+    <div class="icon-big">✅</div>
+    <p class="ok-text">Şifreniz başarıyla güncellendi! Artık yeni şifrenizle giriş yapabilirsiniz.</p>
+    <a href="index.html" class="btn" style="display:block;text-align:center;text-decoration:none;">Giriş Yap</a>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getAuth,
+  verifyPasswordResetCode,
+  confirmPasswordReset,
+  checkActionCode
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ",
+  authDomain: "gen-z-io.firebaseapp.com",
+  projectId: "gen-z-io",
+  storageBucket: "gen-z-io.firebasestorage.app",
+  messagingSenderId: "97338868944",
+  appId: "1:97338868944:web:d7b429e416d8c505b14ad5"
+};
+
+const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// ── Toast ──
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ── Ekran geç ──
+function goster(id, subtitle = '') {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (subtitle) document.getElementById('card-subtitle').textContent = subtitle;
+}
+
+// ── URL'den oobCode al ──
+const params  = new URLSearchParams(window.location.search);
+const oobCode = params.get('oobCode');
+const mode    = params.get('mode');
+
+// Güvenlik: mode kontrolü
+if (!oobCode || mode !== 'resetPassword') {
+  goster('screen-error', 'Geçersiz Link');
+  document.getElementById('error-msg').textContent = 'Bu link geçersiz. Lütfen tekrar "Şifremi Unuttum" isteği gönderin.';
+} else {
+  // oobCode doğrula
+  verifyPasswordResetCode(auth, oobCode)
+    .then(email => {
+      goster('screen-form', 'Yeni şifrenizi belirleyin');
+      document.getElementById('card-subtitle').textContent = email + ' için yeni şifre';
+    })
+    .catch(err => {
+      goster('screen-error', 'Link Geçersiz');
+      if (err.code === 'auth/expired-action-code') {
+        document.getElementById('error-msg').textContent = 'Bu linkin süresi dolmuş. Lütfen tekrar şifre sıfırlama isteği gönderin.';
+      } else if (err.code === 'auth/invalid-action-code') {
+        document.getElementById('error-msg').textContent = 'Bu link daha önce kullanılmış veya geçersiz.';
+      } else {
+        document.getElementById('error-msg').textContent = 'Link doğrulanamadı. Lütfen tekrar deneyin.';
+      }
+    });
+}
+
+// ── Şifre gücü ──
+const STRENGTHS = [
+  { label: '', color: '', pct: 0 },
+  { label: 'Çok zayıf', color: '#ff4444', pct: 20 },
+  { label: 'Zayıf',     color: '#ff8800', pct: 40 },
+  { label: 'Orta',      color: '#F0C55C', pct: 60 },
+  { label: 'Güçlü',     color: '#5CF0B4', pct: 80 },
+  { label: 'Çok güçlü', color: '#7B5CF0', pct: 100 },
+];
+
+function sifireGuc(p) {
+  let score = 0;
+  if (p.length >= 8)  score++;
+  if (p.length >= 12) score++;
+  if (/[A-Z]/.test(p)) score++;
+  if (/[0-9]/.test(p)) score++;
+  if (/[^A-Za-z0-9]/.test(p)) score++;
+  return Math.min(score, 5);
+}
+
+document.getElementById('pass1')?.addEventListener('input', () => kontrol());
+document.getElementById('pass2')?.addEventListener('input', () => kontrol());
+
+function kontrol() {
+  const p1 = document.getElementById('pass1').value;
+  const p2 = document.getElementById('pass2').value;
+  const g  = sifireGuc(p1);
+  const s  = STRENGTHS[g];
+
+  document.getElementById('strength-fill').style.width = s.pct + '%';
+  document.getElementById('strength-fill').style.background = s.color;
+  document.getElementById('strength-text').textContent = p1 ? s.label : '';
+
+  const hint = document.getElementById('match-hint');
+  if (p2) {
+    if (p1 === p2) { hint.textContent = '✓ Şifreler eşleşiyor'; hint.className = 'hint ok'; }
+    else           { hint.textContent = '✗ Şifreler eşleşmiyor'; hint.className = 'hint err'; }
+  } else { hint.textContent = ''; hint.className = 'hint'; }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = !(p1.length >= 8 && p1 === p2 && g >= 2);
+}
+
+// ── Şifre değiştir ──
+window.sifreDegistir = async function() {
+  const p1  = document.getElementById('pass1').value;
+  const p2  = document.getElementById('pass2').value;
+  const btn = document.getElementById('submit-btn');
+
+  if (p1 !== p2)      { toast('Şifreler eşleşmiyor ⚠️'); return; }
+  if (p1.length < 8)  { toast('Şifre en az 8 karakter olmalı ⚠️'); return; }
+  if (sifireGuc(p1) < 2) { toast('Daha güçlü bir şifre seçin ⚠️'); return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Güncelleniyor...';
+
+  try {
+    await confirmPasswordReset(auth, oobCode, p1);
+    goster('screen-success', 'Şifre Güncellendi!');
+  } catch(err) {
+    btn.disabled = false;
+    btn.textContent = 'Şifremi Güncelle';
+    if (err.code === 'auth/expired-action-code') {
+      toast('Link süresi dolmuş, tekrar istek gönderin ⚠️');
+    } else if (err.code === 'auth/weak-password') {
+      toast('Şifre çok zayıf ⚠️');
+    } else {
+      toast('Bir hata oluştu, tekrar deneyin ⚠️');
+    }
+  }
+};
+</script>
+<script src="cookie-consent.js"></script>
+</body>
+</html>

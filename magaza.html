@@ -659,7 +659,8 @@ nav, .modal-overlay-auth, .modal-box, .toast {
     <div class="search-box">
       <span class="search-icon">🔍</span>
       <input class="search-input" id="searchInput" type="text"
-        placeholder="Gen-Z arama motoru — ürün adı, rengi, litresi, kıvamı ne yazsan buluruz..."/>
+        placeholder="Gen-Z arama motoru — ürün adı, rengi, litresi, kıvamı ne yazsan buluruz..."
+        onkeydown="if(event.key==='Enter') doSearch()"/>
       <button class="search-btn" onclick="doSearch()">Ara</button>
     </div>
     <div class="search-hint">
@@ -1041,9 +1042,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* Search */
-  const debouncedSearch = debounce(function(val) { handleSearch(val); }, 200);
   const searchEl = document.getElementById('searchInput');
-  if (searchEl) searchEl.addEventListener('input', function() { debouncedSearch(this.value); });
+  if (searchEl) searchEl.addEventListener('keydown', function(e) { if (e.key === 'Enter') doSearch(); });
 
   function handleSearch(val) {
     const q = val.toLowerCase().trim();

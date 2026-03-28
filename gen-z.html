@@ -581,7 +581,8 @@ nav {
     <div class="search-box">
       <span class="search-icon">🔍</span>
       <input class="search-input" id="searchInput" type="text"
-        placeholder="İçerik, proje, yaratıcı, konu ara..."/>
+        placeholder="İçerik, proje, yaratıcı, konu ara..."
+        onkeydown="if(event.key==='Enter') doSearch()"/>
       <button class="search-btn" onclick="doSearch()">Ara</button>
     </div>
     <div class="search-hint">
@@ -735,169 +736,84 @@ function getBadgeLevel(sales) {
 
 const GZ_CATEGORIES = [
   { id: 'all',      name: 'Tümü',              icon: '⚡', count: null },
-  { id: 'muzik',    name: 'Müzik & Beat',       icon: '🎵', count: null, coming: true },
-  { id: 'tasarim',  name: 'Tasarım & Sanat',    icon: '🎨', count: null, coming: true },
-  { id: 'yazilim',  name: 'Yazılım & Uygulama', icon: '💻', count: null, coming: true },
-  { id: 'video',    name: 'Video & Film',        icon: '📹', count: null, coming: true },
-  { id: 'fotograf', name: 'Fotoğraf',            icon: '📷', count: null, coming: true },
-  { id: 'yazi',     name: 'Yazı & Blog',         icon: '📝', count: null, coming: true },
-  { id: 'moda',     name: 'Moda & Stil',         icon: '👗', count: null, coming: true },
-  { id: 'oyun',     name: 'Oyun & Anime',        icon: '🎮', count: null, coming: true },
+  { id: 'muzik',    name: 'Müzik & Beat',       icon: '🎵', count: null },
+  { id: 'tasarim',  name: 'Tasarım & Sanat',    icon: '🎨', count: null },
+  { id: 'yazilim',  name: 'Yazılım & Uygulama', icon: '💻', count: null },
+  { id: 'video',    name: 'Video & Film',        icon: '📹', count: null },
+  { id: 'fotograf', name: 'Fotoğraf',            icon: '📷', count: null },
+  { id: 'yazi',     name: 'Yazı & Blog',         icon: '📝', count: null },
+  { id: 'moda',     name: 'Moda & Stil',         icon: '👗', count: null },
+  { id: 'oyun',     name: 'Oyun & Anime',        icon: '🎮', count: null },
 ];
 
-const GZ_PRODUCTS = [
-  {
-    id: 1, emoji: '🎵', name: 'Lo-fi Beat Pack — Midnight Study Vol.1',
-    price: 149, oldPrice: 220, rating: 4.9, reviews: 112,
-    badge: 'hot', tags: ['müzik', 'lo-fi', 'beat', 'stüdyo kalitesi'],
-    category: 'muzik',
-    desc: '20 adet üretim kalitesinde lo-fi beat. WAV ve MP3 formatları dahil. Ticari kullanım lisansı ile birlikte.',
-    gradA: 'rgba(240,197,92,0.18)', gradB: 'rgba(123,92,240,0.1)',
-    seller: {
-      id: 'beatztr', name: 'BeatzTR', initials: 'BT', sales: 340,
-      joined: '2024', rating: 4.9, ratingCount: 98,
-      desc: 'Türkiye\'nin genç beat üreticisi. Lo-fi, trap, R&B.',
-      comments: [
-        { user: 'se**', stars: 5, date: 'Mart 2025', text: 'Kalite inanılmaz, hepsini projelerimde kullandım.' },
-        { user: 'be**', stars: 5, date: 'Şubat 2025', text: 'Fiyatına göre çok değerli, tekrar alacağım.' },
-      ]
-    }
-  },
-  {
-    id: 2, emoji: '🎨', name: 'UI Kit — Gen-Z Dark Mode Components',
-    price: 299, oldPrice: null, rating: 4.8, reviews: 67,
-    badge: 'new', tags: ['ui kit', 'figma', 'dark mode', 'component'],
-    category: 'tasarim',
-    desc: '120+ Figma bileşeni. Auto-layout, variables, dark/light tema desteği. Mobil ve web için tam uyumluluk.',
-    gradA: 'rgba(123,92,240,0.18)', gradB: 'rgba(92,240,180,0.08)',
-    seller: {
-      id: 'uidesignz', name: 'UI Design Z', initials: 'UD', sales: 89,
-      joined: '2024', rating: 4.8, ratingCount: 44,
-      desc: 'Gen-Z odaklı UI/UX tasarım kitleri ve şablonlar.',
-      comments: [
-        { user: 'er**', stars: 5, date: 'Ocak 2025', text: 'Çok temiz ve kullanışlı, harika iş çıkarmışsın!' },
-      ]
-    }
-  },
-  {
-    id: 3, emoji: '💻', name: 'Next.js Başlangıç Şablonu + Auth',
-    price: 199, oldPrice: 350, rating: 4.7, reviews: 43,
-    badge: 'viral', tags: ['nextjs', 'typescript', 'auth', 'tailwind'],
-    category: 'yazilim',
-    desc: 'Next.js 14, TypeScript, TailwindCSS ve Auth.js ile hazır başlangıç şablonu. Koyu/açık tema, i18n ve Prisma dahil.',
-    gradA: 'rgba(92,240,180,0.15)', gradB: 'rgba(92,160,240,0.1)',
-    seller: {
-      id: 'codeztr', name: 'Code-Z', initials: 'CZ', sales: 156,
-      joined: '2023', rating: 4.8, ratingCount: 72,
-      desc: 'Açık kaynak sevdalısı. Modern web geliştirme şablonları.',
-      comments: [
-        { user: 'mu**', stars: 5, date: 'Mart 2025', text: 'Setup çok hızlı oldu, auth mükemmel çalışıyor.' },
-        { user: 'do**', stars: 4, date: 'Şubat 2025', text: 'Dökümantasyon gayet iyi, tavsiye ederim.' },
-      ]
-    }
-  },
-  {
-    id: 4, emoji: '📹', name: 'Vlog Preset Paketi — Cinematic TR',
-    price: 89, oldPrice: 140, rating: 4.6, reviews: 88,
-    badge: 'hot', tags: ['preset', 'lightroom', 'vlog', 'sinematik'],
-    category: 'video',
-    desc: '15 adet Lightroom & Lr Mobile preset. Türkiye sokaklarına, doğasına özel renk bilimi. XMP ve DNG formatları.',
-    gradA: 'rgba(240,140,60,0.18)', gradB: 'rgba(240,197,92,0.08)',
-    seller: {
-      id: 'visualz', name: 'Visual-Z', initials: 'VZ', sales: 620,
-      joined: '2023', rating: 4.7, ratingCount: 201,
-      desc: 'Fotoğraf ve video presetleri. Türk sahnelerine uygun tonlar.',
-      comments: [
-        { user: 'ca**', stars: 5, date: 'Mart 2025', text: 'İstanbul fotoğraflarıma çok yakıştı!' },
-      ]
-    }
-  },
-  {
-    id: 5, emoji: '📷', name: 'Portre Kompozisyon Kılavuzu PDF',
-    price: 59, oldPrice: null, rating: 4.9, reviews: 31,
-    badge: 'new', tags: ['portre', 'kompozisyon', 'pdf', 'fotoğrafçılık'],
-    category: 'fotograf',
-    desc: '45 sayfalık detaylı portre kompozisyon rehberi. Gerçek vaka incelemeleri, pratik egzersizler ve referans çekimler dahil.',
-    gradA: 'rgba(240,92,160,0.15)', gradB: 'rgba(123,92,240,0.08)',
-    seller: {
-      id: 'lenslenz', name: 'Lens & Z', initials: 'LZ', sales: 22,
-      joined: '2025', rating: 4.9, ratingCount: 18,
-      desc: 'Fotoğrafçılık eğitim materyalleri. Teori ve pratik bir arada.',
-      comments: [
-        { user: 'ay**', stars: 5, date: 'Ocak 2025', text: 'Çok öğretici, okuyunca bakış açım tamamen değişti.' },
-      ]
-    }
-  },
-  {
-    id: 6, emoji: '📝', name: 'Freelance Sözleşme Şablonları (5\'li)',
-    price: 79, oldPrice: 120, rating: 4.8, reviews: 55,
-    badge: null, tags: ['freelance', 'sözleşme', 'hukuki', 'Türkçe'],
-    category: 'yazi',
-    desc: '5 farklı freelance proje için hazır Türkçe sözleşme şablonları. Tasarım, yazılım, içerik ve danışmanlık için ayrı versiyonlar.',
-    gradA: 'rgba(92,240,120,0.15)', gradB: 'rgba(240,197,92,0.08)',
-    seller: {
-      id: 'legalzgen', name: 'Legal-Z', initials: 'LG', sales: 2100,
-      joined: '2022', rating: 4.8, ratingCount: 430,
-      desc: 'Freelancer\'lar için Türkçe hukuki şablonlar.',
-      comments: [
-        { user: 'ni**', stars: 5, date: 'Mart 2025', text: 'Çok işime yaradı, müşterilere güven verdi.' },
-        { user: 'em**', stars: 5, date: 'Şubat 2025', text: 'Dil çok sade ve anlaşılır, harika.' },
-      ]
-    }
-  },
-  {
-    id: 7, emoji: '👗', name: 'Vintage Grafik Tişört — Limited Drop',
-    price: 380, oldPrice: null, rating: 4.7, reviews: 19,
-    badge: 'collab', tags: ['tişört', 'vintage', 'limited', 'el baskı'],
-    category: 'moda',
-    desc: '%100 organik pamuk. El yapımı serigrafi baskı. Sadece 50 adet üretildi. Unisex kesim, S–XXL.',
-    gradA: 'rgba(92,160,240,0.15)', gradB: 'rgba(123,92,240,0.1)',
-    seller: {
-      id: 'threadz', name: 'Thread-Z', initials: 'TZ', sales: 12,
-      joined: '2025', rating: 4.7, ratingCount: 8,
-      desc: 'Sınırlı sayıda el yapımı giyim. Her parça özgün.',
-      comments: [
-        { user: 'ze**', stars: 5, date: 'Mart 2025', text: 'Kumaş kalitesi gerçekten çok iyi.' },
-      ]
-    }
-  },
-  {
-    id: 8, emoji: '🎮', name: 'İndie Oyun Müzik Paketi — 8-bit',
-    price: 125, oldPrice: 180, rating: 4.5, reviews: 38,
-    badge: 'viral', tags: ['oyun müziği', '8-bit', 'indie', 'loop'],
-    category: 'oyun',
-    desc: '30 adet 8-bit ve chiptune müzik loop. Oyun geliştirme için ticari lisans dahil. Unity ve Godot uyumlu.',
-    gradA: 'rgba(240,197,92,0.15)', gradB: 'rgba(92,240,120,0.08)',
-    seller: {
-      id: 'chiptunez', name: 'Chiptune-Z', initials: 'CZ', sales: 77,
-      joined: '2024', rating: 4.6, ratingCount: 35,
-      desc: 'Oyun geliştiriciler için 8-bit ve synthwave müzik.',
-      comments: [
-        { user: 'ya**', stars: 4, date: 'Şubat 2025', text: 'Oyunum için tam aradığım şeydi!' },
-      ]
-    }
-  },
-  {
-    id: 9, emoji: '🎨', name: 'Procreate Fırça Seti — Suluboya',
-    price: 69, oldPrice: null, rating: 4.9, reviews: 74,
-    badge: 'new', tags: ['procreate', 'fırça', 'suluboya', 'dijital sanat'],
-    category: 'tasarim',
-    desc: '25 adet Procreate suluboya fırçası. Gerçekçi doku ve akış simülasyonu. iPad için optimize edilmiş.',
-    gradA: 'rgba(240,92,160,0.18)', gradB: 'rgba(240,197,92,0.1)',
-    seller: {
-      id: 'brushztr', name: 'Brush-Z', initials: 'BZ', sales: 510,
-      joined: '2023', rating: 4.9, ratingCount: 198,
-      desc: 'Dijital sanatçılar için Procreate araçları.',
-      comments: [
-        { user: 'mi**', stars: 5, date: 'Mart 2025', text: 'Bu fırçalar olmasaydı hiç bu kadar iyi çizemezdim.' },
-        { user: 'bu**', stars: 5, date: 'Ocak 2025', text: 'Suluboya efekti gerçekten çok gerçekçi!' },
-      ]
-    }
-  },
-];
+let GZ_PRODUCTS = [];
+
+/* ── Firestore'dan ürünleri çek ── */
+async function fetchProducts() {
+  try {
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, collection, getDocs, query, where, orderBy } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const firebaseConfig = {
+      apiKey: 'AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ',
+      authDomain: 'gen-z-io.firebaseapp.com',
+      projectId: 'gen-z-io',
+      storageBucket: 'gen-z-io.firebasestorage.app',
+      messagingSenderId: '97338868944',
+      appId: '1:97338868944:web:d7b429e416d8c505b14ad5'
+    };
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const q = query(collection(db, 'magaza_urunler'), where('durum', '==', 'aktif'));
+    const snap = await getDocs(q);
+    const GRAD_PAIRS = [
+      ['rgba(240,197,92,0.18)', 'rgba(123,92,240,0.1)'],
+      ['rgba(92,240,180,0.15)', 'rgba(123,92,240,0.1)'],
+      ['rgba(240,92,130,0.15)', 'rgba(92,140,240,0.1)'],
+      ['rgba(92,180,240,0.15)', 'rgba(240,140,92,0.1)'],
+      ['rgba(180,92,240,0.15)', 'rgba(92,240,197,0.1)'],
+    ];
+    const CAT_EMOJI = { muzik:'🎵', tasarim:'🎨', yazilim:'💻', video:'📹',
+      fotograf:'📷', yazi:'📝', moda:'👗', oyun:'🎮' };
+    GZ_PRODUCTS = snap.docs.map((doc, i) => {
+      const d = doc.data();
+      const grad = GRAD_PAIRS[i % GRAD_PAIRS.length];
+      const initials = (d.magazaAd || 'M').split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+      const resim = (d.resimler && d.resimler.length > 0) ? d.resimler[0] : null;
+      return {
+        id: doc.id,
+        name: d.ad || '',
+        price: d.kdvDahilFiyat || d.fiyat || 0,
+        oldPrice: null,
+        rating: d.rating || 0,
+        reviews: d.reviewCount || 0,
+        badge: d.badge || null,
+        tags: d.etiketler || [],
+        category: d.kategori || 'diger',
+        desc: d.aciklama || '',
+        emoji: CAT_EMOJI[d.kategori] || '📦',
+        resim: resim,
+        gradA: grad[0],
+        gradB: grad[1],
+        seller: {
+          id: d.magazaId || doc.id,
+          name: d.magazaAd || 'Mağaza',
+          initials: initials,
+          sales: d.satisAdedi || 0,
+          joined: d.ts ? new Date(d.ts.seconds * 1000).getFullYear().toString() : '2025',
+          rating: d.magazaRating || 0,
+          ratingCount: d.magazaRatingCount || 0,
+          desc: '',
+        }
+      };
+    });
+  } catch(e) {
+    console.warn('Ürünler yüklenemedi:', e);
+    GZ_PRODUCTS = [];
+  }
+}
 
 function getProductById(id) {
-  return GZ_PRODUCTS.find(p => p.id === parseInt(id));
+  return GZ_PRODUCTS.find(p => p.id === id || p.id === parseInt(id));
 }
 function getProductsBySeller(sellerId) {
   return GZ_PRODUCTS.filter(p => p.seller.id === sellerId);
@@ -1041,7 +957,7 @@ function debounce(fn, delay) {
 
 /* ── PAGE LOGIC ── */
 initThemeLang();
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   document.querySelectorAll('.mobile-menu a').forEach(a => {
     a.addEventListener('click', () => {
       const mm = document.getElementById('mobileMenu');
@@ -1054,37 +970,40 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.style.transition = 'opacity 0.3s';
   requestAnimationFrame(() => { document.body.style.opacity = '1'; });
 
+  /* Yükleniyor göster */
+  const grid = document.getElementById('productsGrid');
+  if (grid) grid.innerHTML = '<div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-text">Ürünler yükleniyor...</div></div>';
+
+  await fetchProducts();
+
   let filteredProducts = [...GZ_PRODUCTS];
   let currentView = 'grid';
 
   /* Kategori sidebar */
   const catList = document.getElementById('categoryList');
   GZ_CATEGORIES.forEach(cat => {
+    const catCount = cat.id === 'all' ? GZ_PRODUCTS.length : GZ_PRODUCTS.filter(p => p.category === cat.id).length;
     const div = document.createElement('div');
     div.className = 'cat-item' + (cat.id === 'all' ? ' active' : '');
-    if (cat.coming) div.style.cssText = 'opacity:0.5;pointer-events:none;';
-    div.innerHTML = `<span class="cat-icon">${cat.icon}</span><span>${cat.name}</span>${cat.coming ? '<span class="coming-badge">Yakında</span>' : '<span class="cat-badge">' + GZ_PRODUCTS.length + '</span>'}`;
-    if (!cat.coming) {
-      div.onclick = () => {
-        document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('active'));
-        div.classList.add('active');
-        filteredProducts = getProductsByCategory(cat.id);
-        renderProducts();
-      };
-    }
+    div.innerHTML = `<span class="cat-icon">${cat.icon}</span><span>${cat.name}</span><span class="cat-badge">${catCount}</span>`;
+    div.onclick = () => {
+      document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('active'));
+      div.classList.add('active');
+      filteredProducts = getProductsByCategory(cat.id);
+      renderProducts();
+    };
     catList.appendChild(div);
   });
 
   /* Search */
-  const debouncedSearch = debounce(function(val) { handleSearch(val); }, 200);
   const searchEl = document.getElementById('searchInput');
-  if (searchEl) searchEl.addEventListener('input', function() { debouncedSearch(this.value); });
+  if (searchEl) searchEl.addEventListener('keydown', function(e) { if (e.key === 'Enter') doSearch(); });
 
   function handleSearch(val) {
     const q = val.toLowerCase().trim();
     if (!q) { filteredProducts = [...GZ_PRODUCTS]; renderProducts(); return; }
     filteredProducts = GZ_PRODUCTS.filter(p => {
-      const haystack = [p.name, p.desc, ...p.tags, p.seller.name].join(' ').toLowerCase();
+      const haystack = [p.name, p.desc, ...(p.tags||[]), p.seller.name].join(' ').toLowerCase();
       return haystack.includes(q);
     });
     renderProducts();
@@ -1132,7 +1051,34 @@ document.addEventListener('DOMContentLoaded', () => {
       const badgeHtml = p.badge ? '<span class="product-badge badge-' + p.badge + '">' +
         (p.badge === 'new' ? '✦ Yeni' : p.badge === 'hot' ? '🔥 Trend' : p.badge === 'viral' ? '⚡ Viral' : '🤝 Collab') +
         '</span>' : '';
-      card.innerHTML = '<div class="product-image"><div class="product-image-gradient" style="--grad-a:' + p.gradA + ';--grad-b:' + p.gradB + '"></div>' + badgeHtml + '<div class="product-image-placeholder">' + p.emoji + '</div><div class="product-wishlist" onclick="event.preventDefault();event.stopPropagation();favoriToggle(this,{id:\'' + p.id + '\',ad:\'' + p.name.replace(/'/g,'&#39;') + '\',fiyat:' + p.price + ',emoji:\'' + p.emoji + '\'})" style="font-size:18px">' + (favoriMi(p.id) ? '❤️' : '🤍') + '</div></div><div class="product-info"><div class="product-seller"><div class="seller-avatar">' + p.seller.initials + '</div><span class="seller-name seller-name-link" onclick="event.preventDefault();event.stopPropagation();navigateTo(\'gen-z.satici.html?seller=' + p.seller.id + '\')">' + p.seller.name + '</span><span class="seller-badge-icon">' + badge.emoji + '</span></div><div class="product-name">' + p.name + '</div><div class="product-meta"><div class="product-rating">' + renderStars(p.rating) + '</div><span class="product-review-count">(' + p.reviews + ')</span></div><div class="product-footer"><div class="product-price"><span class="currency">₺</span>' + p.price.toLocaleString('tr-TR') + (p.oldPrice ? '<span class="old-price">₺' + p.oldPrice + '</span>' : '') + '</div><button class="btn-add-cart" onclick="event.preventDefault();event.stopPropagation();sepeteEkle({id:\'' + p.id + '\',name:\'' + p.name.replace(/'/g,'&#39;') + '\',price:' + p.price + ',emoji:\'' + p.emoji + '\',src:\'' + (p.seller?.name||'').replace(/'/g,'&#39;') + '\'})">+ Sepet</button></div></div>';
+      const imageHtml = p.resim
+        ? '<img src="' + p.resim + '" alt="' + p.name.replace(/"/g,'&quot;') + '" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
+          '<div class="product-image-placeholder" style="display:none">' + p.emoji + '</div>'
+        : '<div class="product-image-placeholder">' + p.emoji + '</div>';
+      const nameEsc = p.name.replace(/'/g,'&#39;');
+      const sellerEsc = (p.seller?.name||'').replace(/'/g,'&#39;');
+      card.innerHTML =
+        '<div class="product-image" style="position:relative;overflow:hidden">' +
+          '<div class="product-image-gradient" style="--grad-a:' + p.gradA + ';--grad-b:' + p.gradB + '"></div>' +
+          badgeHtml + imageHtml +
+          '<div class="product-wishlist" onclick="event.preventDefault();event.stopPropagation();favoriToggle(this,{id:\'' + p.id + '\',ad:\'' + nameEsc + '\',fiyat:' + p.price + ',emoji:\'' + p.emoji + '\'})" style="font-size:18px">' + (favoriMi(p.id) ? '❤️' : '🤍') + '</div>' +
+        '</div>' +
+        '<div class="product-info">' +
+          '<div class="product-seller">' +
+            '<div class="seller-avatar">' + p.seller.initials + '</div>' +
+            '<span class="seller-name seller-name-link" onclick="event.preventDefault();event.stopPropagation();navigateTo(\'gen-z.satici.html?seller=' + p.seller.id + '\')">' + p.seller.name + '</span>' +
+            '<span class="seller-badge-icon">' + badge.emoji + '</span>' +
+          '</div>' +
+          '<div class="product-name">' + p.name + '</div>' +
+          '<div class="product-meta">' +
+            '<div class="product-rating">' + renderStars(p.rating) + '</div>' +
+            '<span class="product-review-count">(' + p.reviews + ')</span>' +
+          '</div>' +
+          '<div class="product-footer">' +
+            '<div class="product-price"><span class="currency">₺</span>' + p.price.toLocaleString('tr-TR') + (p.oldPrice ? '<span class="old-price">₺' + p.oldPrice + '</span>' : '') + '</div>' +
+            '<button class="btn-add-cart" onclick="event.preventDefault();event.stopPropagation();sepeteEkle({id:\'' + p.id + '\',name:\'' + nameEsc + '\',price:' + p.price + ',emoji:\'' + p.emoji + '\',src:\'' + sellerEsc + '\'})">+ Sepet</button>' +
+          '</div>' +
+        '</div>';
       fragment.appendChild(card);
     });
     grid.appendChild(fragment);

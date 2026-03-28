@@ -499,7 +499,12 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
         <div class="ozet-kart"><div class="ozet-ikon">🔝</div><div class="ozet-sayi" style="color:var(--cream);font-size:1.4rem" id="urunEnPahaliFiyat">—</div><div class="ozet-etiket">En Yüksek Fiyat</div><div class="ozet-alt" id="urunEnPahaliAd">—</div></div>
       </div>
       <div class="tablo-wrap">
-        <div class="tablo-baslik"><h3>🎨 Gencim — Paylaşılan Ürünler</h3><span id="urunSayiEtiket" style="font-size:.6rem;color:var(--t3)">— ürün</span></div>
+        <div class="tablo-baslik"><h3>🎨 Mağaza Ürünleri</h3><span id="urunSayiEtiket" style="font-size:.6rem;color:var(--t3)">— ürün</span></div>
+        <div class="f-tabs" style="margin-bottom:1rem;">
+          <button class="f-tab aktif" onclick="filtreUrun('bekliyor',this)">⏳ Bekliyor</button>
+          <button class="f-tab" onclick="filtreUrun('aktif',this)">✅ Aktif</button>
+          <button class="f-tab" onclick="filtreUrun('reddedildi',this)">❌ Reddedildi</button>
+        </div>
         <div id="urunTablo"><div class="yukleniyor">✦ Yükleniyor…</div></div>
       </div>
     </div>
@@ -1132,41 +1137,89 @@ function renderFinans(){
   </table>`;
 }
 
-function renderUrunler(){
-  try{
-    const satislar=JSON.parse(localStorage.getItem('usta_satis_gecmis')||'[]');
-    const katMap={};satislar.forEach(u=>{const k=(u.kat||'Diğer').split('·')[0].trim();katMap[k]=(katMap[k]||0)+1;});
-    const katlar=Object.keys(katMap);
-    const fiyatlar=satislar.map(u=>Number(u.brut)||0).filter(Boolean);
-    const ort=fiyatlar.length?fiyatlar.reduce((a,b)=>a+b,0)/fiyatlar.length:0;
-    const max=fiyatlar.length?Math.max(...fiyatlar):0;
-    const enP=satislar.find(u=>Number(u.brut)===max);
-    const f=id=>document.getElementById(id);
-    if(f('urunToplamSayi'))f('urunToplamSayi').textContent=satislar.length||'—';
-    if(f('urunKatSayi'))f('urunKatSayi').textContent=katlar.length||'—';
-    if(f('urunKatListesi'))f('urunKatListesi').textContent=katlar.slice(0,3).join(', ')+(katlar.length>3?'…':'');
-    if(f('urunOrtFiyat'))f('urunOrtFiyat').textContent=ort?paraStr(Math.round(ort)):'—';
-    if(f('urunEnPahaliFiyat'))f('urunEnPahaliFiyat').textContent=max?paraStr(max):'—';
-    if(f('urunEnPahaliAd'))f('urunEnPahaliAd').textContent=enP?.ad||'—';
-    if(f('urunSayiEtiket'))f('urunSayiEtiket').textContent=satislar.length+' ürün';
-    if(f('badgeUrun'))f('badgeUrun').textContent=satislar.length||0;
-    const el=document.getElementById('urunTablo');
-    if(!el)return;
-    if(!satislar.length){el.innerHTML='<table><tbody><tr class="bos-satir"><td>Henüz paylaşılan ürün yok ✦</td></tr></tbody></table>';return;}
-    el.innerHTML=`<table>
-      <thead><tr><th>Ürün</th><th>Kategori</th><th>Brüt</th><th>Komisyon</th><th>Net</th><th>Alıcı</th><th>Tarih</th></tr></thead>
-      <tbody>${satislar.map(u=>{const b2=Number(u.brut)||0;const k=b2*0.10;return`<tr>
-        <td><span style="margin-right:.4rem">${u.emoji||'🎨'}</span>${u.ad||'—'}</td>
-        <td style="color:var(--t2);font-size:.68rem">${u.kat||'—'}</td>
-        <td>${paraStr(b2)}</td>
-        <td style="color:var(--red);font-size:.68rem">−${paraStr(k)}</td>
-        <td style="color:var(--green);font-weight:600">${paraStr(b2-k)}</td>
-        <td style="font-size:.68rem;color:var(--t2)">${u.alici||'—'}</td>
-        <td style="font-size:.65rem">${u.tarih||'—'}</td>
-      </tr>`;}).join('')}</tbody>
+let _urunFiltre = 'bekliyor';
+window.filtreUrun = function(tip, el) {
+  _urunFiltre = tip;
+  document.querySelectorAll('#sayfa-urunler .f-tab').forEach(t => t.classList.remove('aktif'));
+  el.classList.add('aktif');
+  renderUrunler();
+};
+
+async function renderUrunler() {
+  const el = document.getElementById('urunTablo');
+  const f = id => document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = '<div class="yukleniyor">✦ Yükleniyor…</div>';
+  try {
+    const snap = await getDocs(collection(db, 'magaza_urunler'));
+    const tumUrunler = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const bekleyen = tumUrunler.filter(u => !u.durum || u.durum === 'bekliyor');
+    const aktif    = tumUrunler.filter(u => u.durum === 'aktif');
+    const red      = tumUrunler.filter(u => u.durum === 'reddedildi');
+
+    // Özet kartlar
+    if (f('urunToplamSayi')) f('urunToplamSayi').textContent = tumUrunler.length || '—';
+    if (f('badgeUrun')) { f('badgeUrun').textContent = bekleyen.length || '0'; f('badgeUrun').style.display = bekleyen.length ? '' : 'none'; }
+    const fiyatlar = aktif.map(u => Number(u.kdvDahilFiyat || u.fiyat) || 0).filter(Boolean);
+    const ort = fiyatlar.length ? fiyatlar.reduce((a, b) => a + b, 0) / fiyatlar.length : 0;
+    const max = fiyatlar.length ? Math.max(...fiyatlar) : 0;
+    const enP = aktif.find(u => (Number(u.kdvDahilFiyat || u.fiyat)) === max);
+    const katlar = [...new Set(tumUrunler.map(u => u.kategori).filter(Boolean))];
+    if (f('urunKatSayi')) f('urunKatSayi').textContent = katlar.length || '—';
+    if (f('urunKatListesi')) f('urunKatListesi').textContent = katlar.slice(0, 3).join(', ') + (katlar.length > 3 ? '…' : '');
+    if (f('urunOrtFiyat')) f('urunOrtFiyat').textContent = ort ? paraStr(Math.round(ort)) : '—';
+    if (f('urunEnPahaliFiyat')) f('urunEnPahaliFiyat').textContent = max ? paraStr(max) : '—';
+    if (f('urunEnPahaliAd')) f('urunEnPahaliAd').textContent = enP?.ad || '—';
+
+    const liste = _urunFiltre === 'aktif' ? aktif : _urunFiltre === 'reddedildi' ? red : bekleyen;
+    if (f('urunSayiEtiket')) f('urunSayiEtiket').textContent = liste.length + ' ürün';
+
+    if (!liste.length) {
+      el.innerHTML = '<table><tbody><tr class="bos-satir"><td>Bu filtrede ürün yok ✦</td></tr></tbody></table>';
+      return;
+    }
+
+    el.innerHTML = `<table>
+      <thead><tr>
+        <th>Ürün</th><th>Mağaza</th><th>Kategori</th><th>Fiyat</th><th>Durum</th><th>Tarih</th><th>İşlem</th>
+      </tr></thead>
+      <tbody>${liste.map(u => {
+        const fiyat = Number(u.kdvDahilFiyat || u.fiyat) || 0;
+        const resim = u.resimler?.[0] ? `<img src="${u.resimler[0]}" style="width:36px;height:36px;object-fit:cover;border-radius:6px;margin-right:.5rem;vertical-align:middle">` : '<span style="margin-right:.5rem">📦</span>';
+        const durumRenk = u.durum === 'aktif' ? 'var(--green)' : u.durum === 'reddedildi' ? 'var(--red)' : 'var(--gold)';
+        const durumLabel = u.durum === 'aktif' ? '✅ Aktif' : u.durum === 'reddedildi' ? '❌ Reddedildi' : '⏳ Bekliyor';
+        const islemler = u.durum !== 'aktif'
+          ? `<button class="eylem-btn onayla" onclick="urunDurum('${u.id}','aktif')">✓ Onayla</button>`
+          : `<button class="eylem-btn reddet" onclick="urunDurum('${u.id}','reddedildi')">✕ Yayından Kaldır</button>`;
+        const redBtn = u.durum === 'bekliyor' || !u.durum
+          ? `<button class="eylem-btn reddet" style="margin-left:.3rem" onclick="urunDurum('${u.id}','reddedildi')">✕ Reddet</button>`
+          : '';
+        return `<tr>
+          <td>${resim}<strong>${u.ad || '—'}</strong>${u.aciklama ? `<div style="font-size:.62rem;color:var(--t2);margin-top:.2rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.aciklama}</div>` : ''}</td>
+          <td style="font-size:.68rem;color:var(--t2)">${u.magazaAd || '—'}</td>
+          <td style="font-size:.68rem;color:var(--t2)">${u.kategori || '—'}</td>
+          <td style="color:var(--gold);font-weight:600">${paraStr(fiyat)}</td>
+          <td><span style="color:${durumRenk};font-size:.68rem;font-weight:600">${durumLabel}</span></td>
+          <td style="font-size:.65rem;color:var(--t2)">${u.ts ? tarihStr(u.ts) : '—'}</td>
+          <td style="white-space:nowrap">${islemler}${redBtn}</td>
+        </tr>`;
+      }).join('')}</tbody>
     </table>`;
-  }catch(e){}
+  } catch(e) {
+    el.innerHTML = '<table><tbody><tr class="bos-satir"><td>Yükleme hatası: ' + e.message + '</td></tr></tbody></table>';
+    console.error(e);
+  }
 }
+
+window.urunDurum = async function(id, durum) {
+  try {
+    await updateDoc(doc(db, 'magaza_urunler', id), { durum, durumGuncellendi: new Date() });
+    bildir(durum === 'aktif' ? '✅ Ürün yayınlandı!' : '❌ Ürün kaldırıldı.');
+    renderUrunler();
+  } catch(e) {
+    bildir('Hata: ' + e.message, 'hata');
+  }
+};
 
 window.finansFiltre=function(tip,el){_finansFiltre=tip;document.querySelectorAll('#sayfa-finans .f-tab').forEach(t=>t.classList.remove('aktif'));el.classList.add('aktif');renderFinans();};
 

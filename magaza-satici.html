@@ -700,7 +700,7 @@ function doForgot() {
   showToast('Sıfırlama bağlantısı gönderildi ✉️');
   setTimeout(() => switchTab('signin'), 1500);
 }
-function googleSignIn() { showToast('Google bağlantısı yakında aktif olacak 🔜'); }
+// googleSignIn -> firebase-auth.js
 function fakeLogin(email, username) {
   const clean = '@' + username.replace('@', '');
   currentUser = { email, username: clean };
@@ -836,5 +836,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('saticiContent').innerHTML = html;
 });
 </script>
+
+<script type="module" src="firebase-auth.js"></script>
 </body>
 </html>

@@ -256,6 +256,105 @@ nav {
 /* animations */
 @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
 .fade-up { animation: fadeUp 0.4s ease both; }
+
+/* ── GİZLİ BÖLME ── */
+.gizli-bolme-wrap {
+  margin-top: 8px;
+}
+.gizli-bolme-btn {
+  width: 100%; padding: 10px 14px;
+  background: var(--bg3); border: 1px dashed var(--border);
+  border-radius: var(--radius-sm); font-family: var(--font-body);
+  font-size: 12px; font-weight: 600; color: var(--text3);
+  cursor: pointer; text-align: left; transition: border-color 0.2s, color 0.2s;
+  display: flex; align-items: center; gap: 8px;
+}
+.gizli-bolme-btn:hover { border-color: var(--accent); color: var(--text2); }
+.gizli-bolme-btn .lock-icon { font-size: 14px; }
+.gizli-bolme-panel {
+  display: none; margin-top: 8px;
+  background: color-mix(in srgb, var(--accent) 6%, var(--bg2));
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: var(--radius-sm); padding: 18px;
+}
+.gizli-bolme-panel.open { display: block; animation: fadeUp 0.25s ease; }
+.gizli-title {
+  font-family: var(--font-display); font-size: 14px; font-weight: 700;
+  color: var(--text); margin-bottom: 6px; display: flex; align-items: center; gap: 8px;
+}
+.gizli-desc { font-size: 12px; color: var(--text2); line-height: 1.6; margin-bottom: 14px; }
+.gizli-quote {
+  font-size: 12px; color: var(--text3); font-style: italic;
+  border-left: 3px solid var(--accent); padding-left: 10px;
+  margin-bottom: 16px; line-height: 1.7;
+}
+.btn-gizli-onayla {
+  width: 100%; padding: 11px; background: var(--accent);
+  color: #fff; border: none; border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: background 0.2s;
+}
+.btn-gizli-onayla:hover { background: #6a4de0; }
+
+/* ── ADRES MODAL ── */
+.modal-overlay-adres {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s;
+}
+.modal-overlay-adres.open { opacity: 1; pointer-events: all; }
+.adres-modal-box {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 18px; width: 100%; max-width: 440px;
+  padding: 32px; position: relative;
+  transform: translateY(20px) scale(0.97); transition: transform 0.3s;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+}
+.modal-overlay-adres.open .adres-modal-box { transform: translateY(0) scale(1); }
+.adres-modal-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 32px; height: 32px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 8px;
+  cursor: pointer; color: var(--text2); font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+}
+.adres-modal-title {
+  font-family: var(--font-display); font-size: 18px; font-weight: 800;
+  margin-bottom: 4px; color: var(--text);
+}
+.adres-modal-sub { font-size: 13px; color: var(--text2); margin-bottom: 20px; }
+.adres-form-group { margin-bottom: 12px; }
+.adres-label {
+  font-size: 11px; font-weight: 600; color: var(--text2);
+  letter-spacing: 0.05em; text-transform: uppercase;
+  display: block; margin-bottom: 5px;
+}
+.adres-input {
+  width: 100%; padding: 10px 13px; background: var(--bg3);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: 13px; color: var(--text);
+  outline: none; transition: border-color 0.2s;
+}
+.adres-input:focus { border-color: var(--accent); }
+.adres-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.btn-adres-gonder {
+  width: 100%; padding: 13px; margin-top: 8px;
+  background: linear-gradient(135deg, var(--accent), #9d7ef5);
+  color: #fff; border: none; border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-adres-gonder:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(123,92,240,0.4); }
+
+/* ── GİZLİ BAŞARI EKRANI ── */
+.gizli-success-screen {
+  display: none; position: fixed; inset: 0; z-index: 500;
+  background: var(--bg); flex-direction: column;
+  align-items: center; justify-content: center; gap: 20px;
+  text-align: center; padding: 32px;
+}
+.gizli-success-screen.show { display: flex; }
 </style>
 </head>
 <body>
@@ -457,6 +556,66 @@ nav {
   </div>
 </div>
 
+<!-- ADRES MODAL (Gizli Bolme icin) -->
+<div class="modal-overlay-adres" id="adresModal" onclick="closeAdresIfOutside(event)">
+  <div class="adres-modal-box">
+    <button class="adres-modal-close" onclick="closeAdresModal()">&#10005;</button>
+    <div class="adres-modal-title">&#128230; Teslimat Adresi</div>
+    <div class="adres-modal-sub">Yardim istediginde adresini bizimle paylas, ürün sana ulassin.</div>
+    <div class="adres-row">
+      <div class="adres-form-group">
+        <label class="adres-label">Ad</label>
+        <input class="adres-input" id="g-ad" type="text" placeholder="Adin"/>
+      </div>
+      <div class="adres-form-group">
+        <label class="adres-label">Soyad</label>
+        <input class="adres-input" id="g-soyad" type="text" placeholder="Soyadın"/>
+      </div>
+    </div>
+    <div class="adres-form-group">
+      <label class="adres-label">Telefon</label>
+      <input class="adres-input" id="g-tel" type="tel" placeholder="05xx xxx xx xx"/>
+    </div>
+    <div class="adres-form-group">
+      <label class="adres-label">Adres</label>
+      <input class="adres-input" id="g-adres" type="text" placeholder="Mahalle, cadde, bina no, daire"/>
+    </div>
+    <div class="adres-row">
+      <div class="adres-form-group">
+        <label class="adres-label">Il</label>
+        <select class="adres-input" id="g-il">
+          <option value="">Sec</option>
+          <option>Adana</option><option>Ankara</option><option>Antalya</option>
+          <option>Bursa</option><option>Diyarbakir</option><option>Erzurum</option>
+          <option>Eskisehir</option><option>Gaziantep</option><option>Istanbul</option>
+          <option>Izmir</option><option>Kayseri</option><option>Kocaeli</option>
+          <option>Konya</option><option>Mersin</option><option>Samsun</option>
+          <option>Trabzon</option>
+        </select>
+      </div>
+      <div class="adres-form-group">
+        <label class="adres-label">Posta Kodu</label>
+        <input class="adres-input" id="g-posta" type="text" placeholder="00000" maxlength="5"/>
+      </div>
+    </div>
+    <button class="btn-adres-gonder" onclick="gizliSiparisGonder()">
+      &#129334; Yardim Iste
+    </button>
+  </div>
+</div>
+
+<!-- GIZLI BASARI EKRANI -->
+<div class="gizli-success-screen" id="gizliSuccessScreen">
+  <div class="success-icon">&#129334;</div>
+  <div class="success-title" style="font-family:var(--font-display);font-size:26px;font-weight:800;background:linear-gradient(135deg,var(--accent3),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+    Talebiniz Alindi!
+  </div>
+  <div class="success-sub" style="font-size:14px;color:var(--text2);max-width:320px;line-height:1.6;text-align:center;">
+    Yardim talebiniz Elden Ele topluluguna iletildi. Biri yardim ettiginde urunun adresine gelecek. &#128149;
+  </div>
+  <a class="btn-success-back" href="magaza.html">&#8592; Magazaya Don</a>
+</div>
+
 <!-- BAŞARI EKRANI -->
 <div class="success-screen" id="successScreen">
   <div class="success-icon">🎉</div>
@@ -563,16 +722,31 @@ function updateSummary(){
     document.getElementById('orderBtn').disabled = true;
   } else {
     document.getElementById('orderBtn').disabled = false;
-    container.innerHTML = items.map(i=>`
-      <div class="summary-item">
-        <div class="summary-item-emoji">${i.emoji||'📦'}</div>
-        <div class="summary-item-info">
-          <div class="summary-item-name">${i.name}</div>
-          <div class="summary-item-meta">${i.src||''} ${i.beden?'· '+i.beden:''}</div>
+    container.innerHTML = items.map((i,idx)=>`
+      <div class="summary-item" style="flex-direction:column;align-items:stretch;gap:8px;">
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <div class="summary-item-emoji">${i.emoji||'📦'}</div>
+          <div class="summary-item-info">
+            <div class="summary-item-name">${i.name}</div>
+            <div class="summary-item-meta">${i.src||''} ${i.beden?'· '+i.beden:''}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+            <span class="summary-item-price">&#8378;${(i.price*(i.qty||1)).toLocaleString('tr-TR')}</span>
+            ${(i.qty||1)>1?`<span class="summary-item-qty">${i.qty} adet</span>`:''}
+          </div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
-          <span class="summary-item-price">₺${(i.price*(i.qty||1)).toLocaleString('tr-TR')}</span>
-          ${(i.qty||1)>1?`<span class="summary-item-qty">${i.qty} adet</span>`:''}
+        <div class="gizli-bolme-wrap">
+          <button class="gizli-bolme-btn" onclick="toggleGizliBolme(${idx})">
+            <span class="lock-icon">&#128274;</span> Gizli Bolme
+          </button>
+          <div class="gizli-bolme-panel" id="gizli-panel-${idx}">
+            <div class="gizli-title">&#129334; Gizli Bolme</div>
+            <div class="gizli-desc">Param olmadigi icin bu urunu alamiyorum</div>
+            <div class="gizli-quote">Herkesin bir gun yardima ihtiyaci oldugu gunler olmustur</div>
+            <button class="btn-gizli-onayla" onclick="gizliSiparisAc(${idx})">
+              Siparisi Gizlice Onayla
+            </button>
+          </div>
         </div>
       </div>`).join('');
   }
@@ -646,7 +820,89 @@ function placeOrder(){
   document.getElementById('successScreen').classList.add('show');
 }
 
-/* ── INIT ── */
+/* ── GİZLİ BÖLME ── */
+let gizliAktifIdx = -1;
+let gizliAktifItems = [];
+
+function toggleGizliBolme(idx){
+  const panel = document.getElementById('gizli-panel-'+idx);
+  if(!panel) return;
+  // Diğerlerini kapat
+  document.querySelectorAll('.gizli-bolme-panel').forEach((p,i)=>{
+    if(i!==idx) p.classList.remove('open');
+  });
+  panel.classList.toggle('open');
+}
+
+function gizliSiparisAc(idx){
+  const items = readCart();
+  gizliAktifIdx = idx;
+  gizliAktifItems = items;
+  // Adres modalını aç
+  document.getElementById('adresModal').classList.add('open');
+}
+
+function closeAdresModal(){
+  document.getElementById('adresModal').classList.remove('open');
+}
+function closeAdresIfOutside(e){
+  if(e.target===document.getElementById('adresModal')) closeAdresModal();
+}
+
+function maskeKullanici(username){
+  if(!username || username.length<2) return 's**';
+  return username[0] + '**';
+}
+
+function gizliSiparisGonder(){
+  const ad = document.getElementById('g-ad').value.trim();
+  const soyad = document.getElementById('g-soyad').value.trim();
+  const tel = document.getElementById('g-tel').value.trim();
+  const adres = document.getElementById('g-adres').value.trim();
+  const il = document.getElementById('g-il').value;
+
+  if(!ad||!soyad){ showToast('Ad ve soyad zorunlu ⚠️'); return; }
+  if(!tel){ showToast('Telefon zorunlu ⚠️'); return; }
+  if(!adres){ showToast('Adres zorunlu ⚠️'); return; }
+  if(!il){ showToast('Il secimi zorunlu ⚠️'); return; }
+
+  const items = gizliAktifItems;
+  const urun = items[gizliAktifIdx];
+  if(!urun) return;
+
+  // Kullanici bilgisi
+  const currentUser = _ls.getJSON('genz-user', null);
+  const username = currentUser ? currentUser.username : 'anonim';
+  const maskeAd = maskeKullanici(username);
+
+  // Elden-ele bildirimine ekle
+  const yardimKaydi = {
+    id: 'GY-' + Math.random().toString(36).substring(2,8).toUpperCase(),
+    tarih: new Date().toLocaleDateString('tr-TR', {day:'numeric',month:'long',year:'numeric'}),
+    tarihTs: Date.now(),
+    urunAdi: urun.name,
+    urunEmoji: urun.emoji || '📦',
+    fiyat: urun.price * (urun.qty||1),
+    kullanici: maskeAd,
+    teslimatAdresi: { ad, soyad, tel, adres, il },
+    durum: 'bekliyor' // Birisi yardım et'e bastıgında 'ödendi' olacak
+  };
+
+  try {
+    const mevcutlar = JSON.parse(localStorage.getItem('genz-yardim-talepleri') || '[]');
+    mevcutlar.unshift(yardimKaydi);
+    localStorage.setItem('genz-yardim-talepleri', JSON.stringify(mevcutlar));
+  } catch(e){}
+
+  // Sepetten bu ürünü çıkar
+  const yeniSepet = items.filter((_,i)=>i!==gizliAktifIdx);
+  saveCart(yeniSepet);
+
+  closeAdresModal();
+  document.getElementById('gizliSuccessScreen').classList.add('show');
+}
+
+
 document.addEventListener('DOMContentLoaded', ()=>{
   document.body.style.opacity='0';
   document.body.style.transition='opacity 0.3s';

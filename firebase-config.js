@@ -158,10 +158,12 @@ window.doSignOut = async function() {
     await signOut(auth);
     localStorage.removeItem('genz-user');
     localStorage.removeItem('genz-sepet');
-    const authBtn = document.getElementById('authBtn');
-    if (authBtn) authBtn.textContent = 'Giriş Yap';
-    if (typeof closeAuth === 'function') closeAuth();
-    if (typeof showToast === 'function') showToast('Çıkış yapıldı 👋');
+    if (typeof showToast === 'function') {
+      showToast('Çıkış yapıldı 👋');
+      setTimeout(() => { window.location.reload(); }, 800);
+    } else {
+      window.location.reload();
+    }
   } catch(e) { console.error(e); }
 };
 

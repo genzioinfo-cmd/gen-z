@@ -1007,6 +1007,14 @@ function debounce(fn, delay) {
 
 /* ── PAGE LOGIC ── */
 initThemeLang();
+// ── Davet referans kodunu sessionStorage'a kaydet ──
+(function() {
+  try {
+    const ref = new URLSearchParams(location.search).get('ref');
+    if (ref) sessionStorage.setItem('genz-davet-ref', ref);
+  } catch(e) {}
+})();
+
 document.addEventListener('DOMContentLoaded', async () => {
   document.querySelectorAll('.mobile-menu a').forEach(a => {
     a.addEventListener('click', () => {
@@ -1153,6 +1161,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 </script>
 <script type="module" src="firebase-store.js"></script>
+<script src="data.js"></script>
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
 <script>

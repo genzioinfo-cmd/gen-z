@@ -389,6 +389,61 @@ nav, .modal-overlay-auth, .modal-box, .toast {
   .hamburger { display: flex; }
   nav { backdrop-filter: blur(12px); }
 }
+
+/* ── YASAL ONAY BLOKLARI ── */
+.yasal-blok {
+  margin: 20px 0 8px 0;
+  padding: 16px 18px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.yasal-blok-baslik {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 4px;
+}
+.yasal-onay {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.6;
+  cursor: pointer;
+}
+.yasal-onay input[type="checkbox"] {
+  margin-top: 2px;
+  flex-shrink: 0;
+  accent-color: var(--accent);
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+.yasal-onay a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+.yasal-onay a:hover { text-decoration: underline; }
+.yasal-onay span { user-select: none; }
+.yasal-bilgi {
+  font-size: 11px;
+  color: var(--text3);
+  line-height: 1.6;
+  padding: 8px 10px;
+  background: rgba(240,197,92,.05);
+  border-left: 2px solid rgba(240,197,92,.3);
+  border-radius: 0 6px 6px 0;
+}
+.yasal-bilgi strong { color: var(--accent2); }
+
 </style>
 </head>
 <body>
@@ -520,6 +575,24 @@ nav, .modal-overlay-auth, .modal-box, .toast {
       <div class="f-field full"><label>Mağaza Açıklaması</label><textarea placeholder="Mağazanı kısaca tanıt..."></textarea></div>
       <div class="f-field full"><label>Satmayı planladığın ürünler</label><textarea placeholder="Hangi ürünleri satmayı düşünüyorsun?"></textarea></div>
     </div>
+    <div class="yasal-blok">
+      <div class="yasal-blok-baslik">📋 Yasal Onaylar</div>
+      <label class="yasal-onay">
+        <input type="checkbox" id="kvkk-magaza" required/>
+        <span><a href="gizlilik.html" target="_blank">KVKK Aydınlatma Metni</a>'ni okudum; kişisel verilerimin işlenmesini kabul ediyorum. <em>(6698 sayılı Kanun)</em></span>
+      </label>
+      <label class="yasal-onay">
+        <input type="checkbox" id="sart-magaza" required/>
+        <span><a href="kullanim-sartlari.html" target="_blank">Kullanım Şartları</a>'nı ve <a href="hakkimizda.html" target="_blank">Satıcı Sözleşmesi</a>'ni okudum, kabul ediyorum.</span>
+      </label>
+      <label class="yasal-onay">
+        <input type="checkbox" id="iys-magaza"/>
+        <span>GEN-Z'den kampanya, duyuru ve platform haberlerini e-posta/SMS ile almak istiyorum. <em>(İYS — İleti Yönetim Sistemi kapsamında, istediğin zaman iptal edebilirsin)</em></span>
+      </label>
+      <div class="yasal-bilgi">
+        <strong>⚖️ Vergi Yükümlülüğü Bilgilendirmesi:</strong> GEN-Z üzerinden satış yapan tacir ve esnafların Gelir Vergisi (GVK), KDV ve gerekiyorsa ETBİS kaydı yükümlülükleri bulunmaktadır. Platform, vergi yükümlülüklerinizi yerine getirmenizi tavsiye eder; bu konuda <strong>bir mali müşavirle çalışmanızı</strong> öneririz.
+      </div>
+    </div>
     <button class="btn-apply" onclick="submitForm('magaza')">🏪 Mağaza Başvurusu Gönder</button>
   </div>
 
@@ -562,6 +635,24 @@ nav, .modal-overlay-auth, .modal-box, .toast {
         </div>
       </div>
     </div>
+    <div class="yasal-blok">
+      <div class="yasal-blok-baslik">📋 Yasal Onaylar</div>
+      <label class="yasal-onay">
+        <input type="checkbox" id="kvkk-usta" required/>
+        <span><a href="gizlilik.html" target="_blank">KVKK Aydınlatma Metni</a>'ni okudum; kişisel verilerimin işlenmesini kabul ediyorum. <em>(6698 sayılı Kanun)</em></span>
+      </label>
+      <label class="yasal-onay">
+        <input type="checkbox" id="sart-usta" required/>
+        <span><a href="kullanim-sartlari.html" target="_blank">Kullanım Şartları</a>'nı okudum, kabul ediyorum. Platform komisyon oranlarını ve ödeme koşullarını onaylıyorum.</span>
+      </label>
+      <label class="yasal-onay">
+        <input type="checkbox" id="iys-usta"/>
+        <span>GEN-Z'den iş fırsatları, duyurular ve platform haberlerini e-posta/SMS ile almak istiyorum. <em>(İYS kapsamında)</em></span>
+      </label>
+      <div class="yasal-bilgi">
+        <strong>⚖️ Vergi Yükümlülüğü Bilgilendirmesi:</strong> Platform üzerinden hizmet sunan ustalar <strong>serbest meslek erbabı</strong> sayılabilir. Bu durumda Gelir Vergisi mükellefiyeti tesis etmek, e-SMM (Serbest Meslek Makbuzu) düzenlemek ve KDV beyannamesi vermek zorunlu olabilir. Ayrıntılı bilgi için <strong>Gelir İdaresi Başkanlığı (gib.gov.tr)</strong> veya bir mali müşavir ile iletişime geçiniz.
+      </div>
+    </div>
     <button class="btn-apply" onclick="submitForm('usta')">🔧 Usta Başvurusu Gönder</button>
   </div>
 
@@ -588,6 +679,24 @@ nav, .modal-overlay-auth, .modal-box, .toast {
       <div class="f-field"><label>Telefon</label><input type="tel" placeholder="0555 000 00 00"/></div>
       <div class="f-field"><label>Şehir</label><input type="text" placeholder="Ankara"/></div>
       <div class="f-field full"><label>Kendinizi Tanıtın</label><textarea placeholder="Sanatsal ilgi alanların, ürettiğin eserler, hayallerin..."></textarea></div>
+    </div>
+    <div class="yasal-blok">
+      <div class="yasal-blok-baslik">📋 Yasal Onaylar</div>
+      <label class="yasal-onay">
+        <input type="checkbox" id="kvkk-gencz" required/>
+        <span><a href="gizlilik.html" target="_blank">KVKK Aydınlatma Metni</a>'ni okudum; kişisel verilerimin işlenmesini kabul ediyorum. <em>(6698 sayılı Kanun)</em></span>
+      </label>
+      <label class="yasal-onay">
+        <input type="checkbox" id="sart-gencz" required/>
+        <span><a href="kullanim-sartlari.html" target="_blank">Kullanım Şartları</a>'nı okudum, kabul ediyorum. İçeriklerimin platform kuralları çerçevesinde yayınlanmasını onaylıyorum.</span>
+      </label>
+      <label class="yasal-onay">
+        <input type="checkbox" id="iys-gencz"/>
+        <span>GEN-Z'den etkinlik, duyuru ve fırsat haberlerini e-posta/SMS ile almak istiyorum. <em>(İYS kapsamında)</em></span>
+      </label>
+      <div class="yasal-bilgi">
+        <strong>⚖️ Telif & Vergi Bilgilendirmesi:</strong> Şiir, hikaye, grafik, fotoğraf gibi eserlerden elde edilen gelirler <strong>GVK Madde 18</strong> kapsamında belirli bir tutara kadar gelir vergisinden muaf olabilir. Ancak gelir elde etmeye başladığınızda vergi yükümlülüğünüzü <strong>bir mali müşavire</strong> danışarak öğrenmenizi öneririz. Platforma yüklediğiniz içeriklerin telif hakları size aittir.
+      </div>
     </div>
     <button class="btn-apply" onclick="submitForm('gencz')">⚡ Genç-Z Başvurusu Gönder</button>
   </div>
@@ -717,6 +826,20 @@ window.selectPlan = function(plan) {
 window.submitForm = async function(role) {
   if (!currentUser) { openAuth('signin'); showToast('Başvuru için giriş yapman gerekiyor ⚠️'); return; }
 
+  // ── Zorunlu yasal onay kontrolü ──
+  const kvkk = document.getElementById('kvkk-' + role);
+  const sart  = document.getElementById('sart-' + role);
+  if (kvkk && !kvkk.checked) {
+    showToast('KVKK Aydınlatma Metni'ni onaylamanız gerekiyor ⚠️');
+    kvkk.closest('.yasal-blok')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  if (sart && !sart.checked) {
+    showToast('Kullanım Şartları'nı onaylamanız gerekiyor ⚠️');
+    sart.closest('.yasal-blok')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
   // Form alanlarını topla
   const block = document.getElementById('form-' + role);
   if (!block) return;
@@ -742,6 +865,7 @@ window.submitForm = async function(role) {
       email:      currentUser.email || '',
       username:   currentUser.username || '',
       roller:     role === 'magaza' ? ['magaza'] : role === 'usta' ? ['usta'] : ['gencz'],
+      iysOnay:    document.getElementById('iys-' + role)?.checked || false,
       formTipi:   role === 'gencz' ? 'gencz' : 'partner',
       tip:        role === 'gencz' ? 'gencz_basvuru' : 'partner_basvuru',
       formVerisi: formData,

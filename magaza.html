@@ -869,6 +869,14 @@ nav, .modal-overlay-auth, .modal-box, .toast {
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="categories.js"></script><script src="data.js"></script>
 <script>
+// ── Davet referans kodunu sessionStorage'a kaydet ──
+(function() {
+  try {
+    const ref = new URLSearchParams(location.search).get('ref');
+    if (ref) sessionStorage.setItem('genz-davet-ref', ref);
+  } catch(e) {}
+})();
+
 /* ── MAGAZA-DATA (inline) ── */
 /* ══════════════════════════════════════════════════════════
    GEN-Z MAĞAZA — Paylaşılan Veri & Yardımcılar

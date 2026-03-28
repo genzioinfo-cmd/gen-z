@@ -822,7 +822,8 @@ function odemeYap(){
   /* Kullanıcıya puan ekle */
   try{
     const u=_ls.getJSON('genz-user',null);
-    if(u){u.puan=(u.puan||0)+5;_ls.set('genz-user',JSON.stringify(u));}
+    // puanEkle: elden-ele kategorisine +5 ekle (data.js'den)
+    if(typeof puanEkle === 'function') puanEkle('eldenEle', 5).catch(()=>{});
   }catch(e){}
 
   closeModal();

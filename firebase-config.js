@@ -46,7 +46,7 @@ async function kullaniciyiKaydet(user, extraData = {}) {
     };
     if (!snap.exists()) {
       data.olusturuldu = serverTimestamp();
-      data.rol = 'gencz';
+      data.rol = 'uye';
       data.onboardingTamamlandi = false;
     }
     await setDoc(ref, data, { merge: true });
@@ -142,9 +142,29 @@ window.doSignUp = async function() {
   try {
     const result = await createUserWithEmailAndPassword(auth, email, pass);
     await updateProfile(result.user, { displayName: username });
-    // Kayıt olan herkes normal kullanıcı (gencz) olarak başlar.
+    // Kayıt olan herkes normal kullanıcı (uye) olarak başlar.
     // Satıcı / Usta rolü ancak başvuru doldurup admin onayından sonra verilir.
-    await kullaniciyiKaydet(result.user, { username, rol: 'gencz' });
+    await kullaniciyiKaydet(result.user, { username, rol: 'uye' });
+    // ── Davet kodu kontrolü ──
+    try {
+      const davetKod = sessionStorage.getItem('genz-davet-ref');
+      if (davetKod) {
+        const { collection, query, where, getDocs: _gd, updateDoc: _ud, doc: _doc, serverTimestamp: _sts } =
+          await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        const davetSnap = await _gd(query(collection(db, 'kullanicilar'), where('davetKod', '==', davetKod)));
+        if (!davetSnap.empty) {
+          const davetSahibi = davetSnap.docs[0];
+          const mp = davetSahibi.data().puanlar || {};
+          mp.davet = (mp.davet || 0) + 10;
+          mp.toplam = Object.entries(mp).filter(([k]) => k !== 'toplam').reduce((t, [,v]) => t + (v||0), 0);
+          await _ud(_doc(db, 'kullanicilar', davetSahibi.id), { puanlar: mp, guncellendi: _sts() });
+          sessionStorage.removeItem('genz-davet-ref');
+        }
+      }
+      // Yeni kullanıcıya benzersiz davet kodu ata
+      const yeniKod = result.user.uid.slice(0, 8).toUpperCase();
+      await kullaniciyiKaydet(result.user, { davetKod: yeniKod });
+    } catch(e) { /* davet hatası sessiz */ }
     girisYaptiktan(result.user, 'Hesabın oluşturuldu, hoş geldin 🎉');
   } catch(e) {
     const msg = e.code === 'auth/email-already-in-use' ? 'Bu e-posta zaten kayıtlı ⚠️'

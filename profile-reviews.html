@@ -42,6 +42,11 @@
       </div>`).join('');
   }
 
+  // Yeni yorum eklenince puan - dışarıdan window.yorumPuanEkle() çağrılır
+  window.yorumPuanEkle = function() {
+    if (typeof puanEkle === 'function') puanEkle('yorum', 3).catch(() => {});
+  };
+
   window.deleteReviewLS = function(idx) {
     const yorumlar = load();
     yorumlar.splice(idx, 1);
@@ -73,3 +78,5 @@
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
 <script src="cookie-consent.js"></script>
+
+<script src="data.js"></script>

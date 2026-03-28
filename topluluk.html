@@ -284,6 +284,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:rgba(
 <div class="toast" id="toast"></div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── Davet referans kodunu sessionStorage'a kaydet ──
+(function() {
+  try {
+    const ref = new URLSearchParams(location.search).get('ref');
+    if (ref) sessionStorage.setItem('genz-davet-ref', ref);
+  } catch(e) {}
+})();
+
 const _ls={get(k,fb=null){try{const v=localStorage.getItem(k);return v!==null?v:fb;}catch(e){return fb;}},set(k,v){try{localStorage.setItem(k,v);}catch(e){}},remove(k){try{localStorage.removeItem(k);}catch(e){}},getJSON(k,fb){try{return JSON.parse(localStorage.getItem(k))??fb;}catch(e){return fb;}}};
 let currentLang=_ls.get('genz-lang','tr'),currentTheme=_ls.get('genz-theme','dark'),currentUser=_ls.getJSON('genz-user',null);
 function initThemeLang(){document.documentElement.setAttribute('data-lang',currentLang);document.documentElement.setAttribute('data-theme',currentTheme);const b=document.getElementById('themeBtn');if(b)b.textContent=currentTheme==='dark'?'🌙':'☀️';if(currentUser){const ab=document.getElementById('authBtn');if(ab)ab.textContent=currentUser.username;const pu=document.getElementById('profile-username');const pe=document.getElementById('profile-email');if(pu)pu.textContent=currentUser.username;if(pe)pe.textContent=currentUser.email;}}

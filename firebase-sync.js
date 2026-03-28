@@ -52,6 +52,15 @@ async function firestoredenYukle(uid) {
       const ud = kulSnap.data();
       window._genzKullanici = ud;
       _rolBadgeGuncelle(ud);
+      // Puanları ve davetKod'u localStorage'a yaz
+      if (ud.puanlar || ud.davetKod) {
+        try {
+          const lsUser = JSON.parse(localStorage.getItem('genz-user') || '{}');
+          if (ud.puanlar) lsUser.puanlar = ud.puanlar;
+          if (ud.davetKod) lsUser.davetKod = ud.davetKod;
+          localStorage.setItem('genz-user', JSON.stringify(lsUser));
+        } catch(e) {}
+      }
     }
   } catch(e) {
     console.warn('Firestore yükleme hatası:', e);
@@ -65,6 +74,7 @@ function _rolBadgeGuncelle(ud) {
   const roller = ud.roller || [];
   const isPro  = ud.proModul === true;
   const isAdmin= rol==='admin' || roller.includes('admin');
+  const isUye  = rol==='uye'   || (!rol && !roller.length);
 
   let rozetler = [];
   if(isAdmin)              rozetler.push({txt:'👑 Admin',         bg:'rgba(201,168,76,.2)', renk:'#F0C55C', border:'rgba(201,168,76,.4)'});

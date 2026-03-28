@@ -1016,7 +1016,7 @@ window.basvuruDurum=async function(id,durum){
           ? 'satici'
           : roller.includes('usta')
           ? 'usta'
-          : 'gencz';
+          : 'uye';
         await setDoc(doc(db,'kullanicilar',b.uid),{rol:yeniRol,partnerDurum:'onaylandi',partnerRoller:roller,partnerSirket:b.sirketAdi||''},{merge:true}).catch(()=>{});
 
         // ── Mağaza kaydı: modpanel bu koleksiyona bakıyor ──
@@ -1058,6 +1058,26 @@ window.basvuruDurum=async function(id,durum){
           ts: serverTimestamp()
         }).catch(()=>{});
       }
+    }
+    // ── Onay puanı: başvurusu onaylanan kullanıcıya davet puanı benzeri ödül ──
+    if (durum === 'onaylandi' && b?.uid) {
+      try {
+        const ref = doc(db, 'kullanicilar', b.uid);
+        const snap = await getDoc(ref);
+        const mevcutPuanlar = snap.exists() ? (snap.data().puanlar || {}) : {};
+        // Hangi başvuru türü onaylandıysa o kategori için başlangıç puanı ver
+        const roller = b.roller || [];
+        if (roller.includes('magaza') || roller.includes('usta')) {
+          mevcutPuanlar.satis = (mevcutPuanlar.satis || 0) + 10; // başlangıç satış puanı
+        }
+        if (roller.includes('gencz')) {
+          mevcutPuanlar.davet = (mevcutPuanlar.davet || 0) + 10; // genç-z kabul ödülü
+        }
+        mevcutPuanlar.toplam = Object.entries(mevcutPuanlar)
+          .filter(([k]) => k !== 'toplam')
+          .reduce((t, [, v]) => t + (v || 0), 0);
+        await setDoc(ref, { puanlar: mevcutPuanlar, guncellendi: serverTimestamp() }, { merge: true }).catch(() => {});
+      } catch(e) { /* sessiz */ }
     }
     renderBasvurular();renderSonBasvurular();ozetGuncelle();
     bildir(durum==='onaylandi'?'✦ Başvuru onaylandı!':'Başvuru reddedildi.');

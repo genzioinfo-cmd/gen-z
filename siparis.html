@@ -830,6 +830,13 @@ function placeOrder(){
 
   document.getElementById('successCode').textContent = kod;
   document.getElementById('successScreen').classList.add('show');
+
+  // ── Alış puanı ekle (+2 her sipariş için) ──
+  if (typeof puanEkle === 'function') {
+    puanEkle('alis', 2).catch(() => {});
+    // Kaç ürün varsa satıcılara da satis puanı eklenir (satıcı tarafı Firestore'da)
+    showToast('⭐ +2 Alış Puanı kazandın!', 2500);
+  }
 }
 
 /* ── GİZLİ BÖLME ── */
@@ -972,6 +979,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 });
 </script>
 
+<script src="data.js"></script>
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
 <script src="cookie-consent.js"></script>

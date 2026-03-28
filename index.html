@@ -988,7 +988,7 @@ function switchTab(tab) {
 
 /* ── SIGN IN / UP — delegates to firebase-config.js window globals ── */
 // doSignIn, doSignUp, doForgot, googleSignIn are set by firebase-config.js module
-;
+function afterSignIn(email, clean) {
   _ls.set('genz-user', JSON.stringify(currentUser));
   document.getElementById('profile-email').textContent    = email;
   document.getElementById('profile-username').textContent = clean;

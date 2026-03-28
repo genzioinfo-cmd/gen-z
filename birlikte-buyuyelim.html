@@ -720,7 +720,7 @@ function switchTab(tab) {
   if (btn) btn.classList.add('active');
   document.getElementById('authTabs').style.display = (tab === 'forgot' || tab === 'profile') ? 'none' : 'flex';
 }
-;
+function afterSignIn(email, clean) {
   _ls.set('genz-user', JSON.stringify(currentUser));
   document.getElementById('profile-email').textContent    = email;
   document.getElementById('profile-username').textContent = clean;

@@ -2,9 +2,9 @@
 <html lang="tr" data-theme="dark" data-lang="tr">
 <head>
 <meta charset="UTF-8"/>
-<meta name="description" content="GEN-Z Satıcı Profili — Satıcının mağazasını, ürünlerini ve değerlendirmelerini incele."/>
+<meta name="description" content="GEN-Z · Genç-Z Kategori — Yaratıcı içerik kategorilerini keşfet."/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>GEN-Z · Genç-Z Yaratıcı Profili</title>
+<title>GEN-Z · Genç-Z Kategoriler</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
@@ -76,7 +76,7 @@ nav {
   transition: color 0.2s, background 0.2s; white-space: nowrap;
 }
 .nav-links a:hover { color: var(--text); background: var(--surface); }
-.nav-links a.active { color: var(--accent2); }
+.nav-links a.active { color: var(--accent3); }
 .nav-right { display: flex; align-items: center; gap: 10px; margin-left: auto; }
 .btn-icon {
   width: 36px; height: 36px;
@@ -135,165 +135,42 @@ nav {
 .breadcrumb .sep { color: var(--text3); font-size: 11px; }
 .breadcrumb .current { color: var(--text); font-weight: 500; }
 
-/* ── SATICI PROFİL ── */
-.satici-wrapper { padding-top: 64px; min-height: 100vh; position: relative; z-index: 1; }
-.satici-inner { max-width: 1000px; margin: 0 auto; padding: 40px 24px 80px; }
-
-.satici-header {
-  display: flex; align-items: flex-end; gap: 24px;
-  padding-bottom: 28px; border-bottom: 1px solid var(--border);
-  margin-bottom: 32px; flex-wrap: wrap;
+/* ── KATEGORİ SAYFASI ── */
+.kategori-wrapper { padding-top: 64px; min-height: 100vh; position: relative; z-index: 1; }
+.kategori-inner { max-width: 1000px; margin: 0 auto; padding: 40px 24px 80px; }
+.kategori-header {
+  text-align: center; padding: 60px 0 48px;
 }
-.satici-avatar {
-  width: 88px; height: 88px; border-radius: 50%; flex-shrink: 0;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-display); font-size: 32px; font-weight: 800; color: #fff;
-  border: 3px solid var(--border);
-  box-shadow: 0 0 0 4px var(--bg), 0 0 0 5px var(--border);
-  position: relative;
+.kategori-icon { font-size: 64px; margin-bottom: 16px; }
+.kategori-title {
+  font-family: var(--font-display); font-size: clamp(28px, 5vw, 42px);
+  font-weight: 800; letter-spacing: -1px; margin-bottom: 12px;
 }
-.satici-badge-ring {
-  position: absolute; inset: -5px; border-radius: 50%;
-  border: 2px solid transparent;
+.kategori-title .grad {
+  background: linear-gradient(135deg, var(--accent2) 0%, var(--accent) 60%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
-.satici-meta { flex: 1; }
-.satici-name {
-  font-family: var(--font-display); font-size: clamp(22px, 4vw, 30px);
-  font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px;
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+.kategori-sub { font-size: 15px; color: var(--text2); max-width: 440px; margin: 0 auto; line-height: 1.7; }
+.kategori-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px; margin-top: 40px;
 }
-.satici-desc { font-size: 14px; color: var(--text2); line-height: 1.6; margin-bottom: 12px; max-width: 500px; }
-.satici-stats-row { display: flex; gap: 24px; flex-wrap: wrap; }
-.satici-stat { text-align: center; }
-.satici-stat-num { font-family: var(--font-display); font-size: 20px; font-weight: 800; }
-.satici-stat-label { font-size: 11px; color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-
-/* ── SATICI AKSİYONLAR ── */
-.satici-actions {
-  display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap;
-}
-.btn-follow {
-  padding: 10px 24px;
-  background: var(--accent); color: #fff; border: none;
-  border-radius: var(--radius-sm);
-  font-family: var(--font-body); font-size: 13px; font-weight: 600;
-  cursor: pointer; transition: background 0.2s, transform 0.2s;
-  display: flex; align-items: center; gap: 6px;
-}
-.btn-follow:hover { background: #6a4de0; transform: translateY(-1px); }
-.btn-follow.following {
-  background: transparent;
-  border: 1px solid var(--accent3);
-  color: var(--accent3);
-}
-.btn-follow.following:hover {
-  background: color-mix(in srgb, #ff5f5f 10%, transparent);
-  border-color: #ff5f5f; color: #ff5f5f;
-}
-.btn-satici-action {
-  padding: 10px 18px;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-family: var(--font-body); font-size: 13px; font-weight: 500;
-  color: var(--text2); cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
-  display: flex; align-items: center; gap: 6px;
-}
-.btn-satici-action:hover { border-color: var(--accent); color: var(--accent); }
-
-/* ── TAKİPÇİ BİLGİ BARI ── */
-.satici-follow-bar {
-  display: flex; align-items: center; gap: 16px; margin-top: 14px;
-  font-size: 13px; color: var(--text2); flex-wrap: wrap;
-}
-.satici-follow-bar strong { color: var(--text); font-weight: 700; }
-.follow-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text3); }
-
-/* ── SATICI ÜRÜNLER ── */
-.satici-section-title {
-  font-family: var(--font-display); font-size: 18px; font-weight: 800;
-  margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
-}
-.satici-products-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 16px;
-}
-
-/* ── SATICI YORUMLAR ── */
-.satici-reviews { margin-top: 48px; border-top: 1px solid var(--border); padding-top: 28px; }
-
-/* REUSE product card styles */
-.product-card {
+.kategori-card {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: var(--radius); overflow: hidden;
-  cursor: pointer; transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  position: relative; text-decoration: none; color: inherit; display: block;
+  border-radius: var(--radius); padding: 28px 20px;
+  text-align: center; transition: transform 0.3s, border-color 0.3s;
+  cursor: pointer; position: relative;
 }
-.product-card:hover { transform: translateY(-4px); border-color: var(--accent3); box-shadow: 0 12px 40px rgba(92,240,180,0.1); }
-.product-image {
-  width: 100%; aspect-ratio: 1; background: var(--bg3);
-  display: flex; align-items: center; justify-content: center;
-  position: relative; overflow: hidden;
-}
-.product-image-placeholder { font-size: 48px; opacity: 0.4; transition: transform 0.3s; }
-.product-card:hover .product-image-placeholder { transform: scale(1.1); }
-.product-image-gradient {
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, var(--grad-a, rgba(123,92,240,0.15)), var(--grad-b, rgba(92,240,180,0.1)));
-}
-.product-badge {
-  position: absolute; top: 10px; left: 10px;
-  padding: 4px 10px; border-radius: 999px;
-  font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
-}
-.badge-new { background: rgba(92,240,180,0.2); color: var(--accent3); border: 1px solid rgba(92,240,180,0.3); }
-.badge-hot { background: rgba(240,197,92,0.2); color: var(--accent2); border: 1px solid rgba(240,197,92,0.3); }
-.badge-sold { background: rgba(123,92,240,0.2); color: var(--accent); border: 1px solid rgba(123,92,240,0.3); }
-.product-info { padding: 16px; }
-.product-name {
-  font-family: var(--font-display); font-size: 14px; font-weight: 700;
-  margin-bottom: 6px; line-height: 1.3;
-}
-.product-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
-.product-rating { font-size: 12px; color: var(--accent2); }
-.product-review-count { font-size: 11px; color: var(--text3); }
-.product-footer { display: flex; align-items: center; justify-content: space-between; }
-.product-price { font-family: var(--font-display); font-size: 18px; font-weight: 800; }
-.product-price .currency { font-size: 12px; font-weight: 500; color: var(--text2); }
-.product-price .old-price { font-size: 12px; font-weight: 400; color: var(--text3); text-decoration: line-through; margin-left: 6px; }
-
-/* Badge pills reuse */
-.seller-badge-pill { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; padding: 2px 8px; border-radius: 999px; }
-.badge-0    { background: rgba(90,87,112,0.2);    color: #5a5770; border: 1px solid rgba(90,87,112,0.3); }
-.badge-1    { background: rgba(92,240,120,0.2);   color: #5CF078; border: 1px solid rgba(92,240,120,0.4); }
-.badge-10   { background: rgba(240,197,92,0.2);   color: #F0C55C; border: 1px solid rgba(240,197,92,0.4); }
-.badge-50   { background: rgba(92,160,240,0.2);   color: #5CA0F0; border: 1px solid rgba(92,160,240,0.4); }
-.badge-100  { background: rgba(240,140,60,0.2);   color: #F08C3C; border: 1px solid rgba(240,140,60,0.4); }
-.badge-1000 { background: rgba(140,40,70,0.3);    color: #C0566A; border: 1px solid rgba(140,40,70,0.5); }
-.badge-10000{ background: rgba(123,92,240,0.25);  color: #7B5CF0; border: 1px solid rgba(123,92,240,0.5); }
-.badge-100000{ background: rgba(240,60,60,0.2);   color: #F05C5C; border: 1px solid rgba(240,60,60,0.4); }
-.badge-ring-0     { border-color: #5a5770; }
-.badge-ring-1     { border-color: #5CF078; box-shadow: 0 0 8px rgba(92,240,120,0.3); }
-.badge-ring-10    { border-color: #F0C55C; box-shadow: 0 0 8px rgba(240,197,92,0.3); }
-.badge-ring-50    { border-color: #5CA0F0; box-shadow: 0 0 8px rgba(92,160,240,0.3); }
-.badge-ring-100   { border-color: #F08C3C; box-shadow: 0 0 8px rgba(240,140,60,0.3); }
-.badge-ring-1000  { border-color: #C0566A; box-shadow: 0 0 8px rgba(140,40,70,0.4); }
-.badge-ring-10000 { border-color: #7B5CF0; box-shadow: 0 0 12px rgba(123,92,240,0.5); }
-.badge-ring-100000{ border-color: #F05C5C; box-shadow: 0 0 14px rgba(240,60,60,0.5); }
-
-/* Comments reuse */
-.comment-item { padding: 16px 0; border-bottom: 1px solid var(--border); }
-.comment-item:last-child { border-bottom: none; }
-.comment-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.comment-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--text2); }
-.comment-user { font-size: 13px; font-weight: 600; color: var(--text); }
-.comment-stars { color: var(--accent2); font-size: 12px; }
-.comment-date { font-size: 11px; color: var(--text3); margin-left: auto; }
-.comment-text { font-size: 14px; color: var(--text2); line-height: 1.7; padding-left: 42px; }
-
-@media (max-width: 640px) {
-  .satici-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+.kategori-card:hover { transform: translateY(-3px); border-color: var(--accent3); }
+.kategori-card.disabled { opacity: 0.45; pointer-events: none; }
+.kategori-card-icon { font-size: 36px; margin-bottom: 12px; }
+.kategori-card-name { font-family: var(--font-display); font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+.kategori-card-badge {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+  padding: 3px 10px; border-radius: 999px;
+  background: color-mix(in srgb, var(--accent2) 12%, transparent);
+  color: var(--accent2); border: 1px solid color-mix(in srgb, var(--accent2) 25%, transparent);
+  display: inline-block;
 }
 
 /* ── AUTH MODAL ── */
@@ -420,7 +297,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
   transform: translateZ(0);
 }
 .btn-primary, .btn-secondary, .btn-signin, .btn-icon, .footer-social-btn,
-.product-card, .review-card {
+.product-card, .seller-card {
   will-change: transform;
   backface-visibility: hidden;
 }
@@ -475,7 +352,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
 <nav class="mobile-menu" id="mobileMenu">
   <a href="magaza.html" data-tr="Mağaza" data-en="Shop">Mağaza</a>
   <a href="ustam.html" data-tr="Ustam" data-en="Ustam">Ustam</a>
-  <a href="gen-z.html" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a>
+  <a href="gen-z.html" class="active" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a>
   <a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a>
   <a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a>
   <a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a>
@@ -483,11 +360,19 @@ nav, .modal-overlay-auth, .modal-box, .toast {
   <a href="elden-ele.html" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a>
 </nav>
 
-<div class="satici-wrapper">
-  <div class="satici-inner">
-    <div class="breadcrumb" id="breadcrumb"></div>
-    <div class="satici-header" id="saticiHeader"></div>
-    <div id="saticiContent"></div>
+<div class="kategori-wrapper">
+  <div class="kategori-inner">
+    <div class="breadcrumb">
+      <a href="magaza.html">Mağaza</a>
+      <span class="sep">›</span>
+      <span class="current">Kategoriler</span>
+    </div>
+    <div class="kategori-header">
+      <div class="kategori-icon">📂</div>
+      <h1 class="kategori-title"><span class="grad">Kategoriler</span></h1>
+      <p class="kategori-sub">Ürünleri kategorilere göre keşfet. Yeni kategoriler yakında eklenecek!</p>
+    </div>
+    <div class="kategori-grid" id="kategoriGrid"></div>
   </div>
 </div>
 
@@ -579,110 +464,176 @@ nav, .modal-overlay-auth, .modal-box, .toast {
 
 /* ── ROZET SİSTEMİ ── */
 function getBadgeLevel(sales) {
-  if (sales >= 100000) return { level: '100000', label: '⚡ Efsane', emoji: '🔴' };
-  if (sales >= 10000)  return { level: '10000',  label: '⚡ Usta',   emoji: '🟣' };
-  if (sales >= 1000)   return { level: '1000',   label: '⚡ Uzman',  emoji: '🟤' };
-  if (sales >= 100)    return { level: '100',    label: '⚡ Deneyimli', emoji: '🟠' };
-  if (sales >= 50)     return { level: '50',     label: '⚡ Gelişen', emoji: '🔵' };
-  if (sales >= 10)     return { level: '10',     label: '⚡ Aktif',  emoji: '🟡' };
-  if (sales >= 1)      return { level: '1',      label: '⚡ Yeni',   emoji: '🟢' };
-  return { level: '0', label: '⚡ Başlangıç', emoji: '⚪' };
+  if (sales >= 100000) return { level: '100000', label: '🏅 Efsane', emoji: '🔴' };
+  if (sales >= 10000)  return { level: '10000',  label: '🏅 Usta',   emoji: '🟣' };
+  if (sales >= 1000)   return { level: '1000',   label: '🏅 Uzman',  emoji: '🟤' };
+  if (sales >= 100)    return { level: '100',    label: '🏅 Deneyimli', emoji: '🟠' };
+  if (sales >= 50)     return { level: '50',     label: '🏅 Gelişen', emoji: '🔵' };
+  if (sales >= 10)     return { level: '10',     label: '🏅 Aktif',  emoji: '🟡' };
+  if (sales >= 1)      return { level: '1',      label: '🏅 Yeni',   emoji: '🟢' };
+  return { level: '0', label: '🏅 Başlangıç', emoji: '⚪' };
 }
 
 /* ── KATEGORİLER (ileride doldurulacak) ── */
 const CATEGORIES = [
-  { id: 'all', name: 'Tümü', icon: '🌐', count: null },
-  { id: 'bakim', name: 'Kişisel Bakım', icon: '🧴', count: null, coming: true },
-  { id: 'dekor', name: 'Ev & Dekor', icon: '🕯️', count: null, coming: true },
-  { id: 'giyim', name: 'Giyim & Aksesuar', icon: '👟', count: null, coming: true },
-  { id: 'teknoloji', name: 'Teknoloji', icon: '🎧', count: null, coming: true },
-  { id: 'yiyecek', name: 'Yiyecek & İçecek', icon: '🍵', count: null, coming: true },
-  { id: 'sanat', name: 'Sanat & Tasarım', icon: '🎨', count: null, coming: true },
-  { id: 'kirtasiye', name: 'Kırtasiye', icon: '🖊️', count: null, coming: true },
-  { id: 'bahce', name: 'Bahçe & Doğa', icon: '🌱', count: null, coming: true },
+  { id: 'all', name: 'Tümü', icon: '⚡', count: null },
+  { id: 'muzik',    name: 'Müzik & Beat',       icon: '🎵', count: null, coming: true },
+  { id: 'tasarim',  name: 'Tasarım & Sanat',    icon: '🎨', count: null, coming: true },
+  { id: 'yazilim',  name: 'Yazılım & Uygulama', icon: '💻', count: null, coming: true },
+  { id: 'video',    name: 'Video & Film',        icon: '📹', count: null, coming: true },
+  { id: 'fotograf', name: 'Fotoğraf',            icon: '📷', count: null, coming: true },
+  { id: 'yazi',     name: 'Yazı & Blog',         icon: '📝', count: null, coming: true },
+  { id: 'moda',     name: 'Moda & Stil',         icon: '👗', count: null, coming: true },
+  { id: 'oyun',     name: 'Oyun & Anime',        icon: '🎮', count: null, coming: true },
 ];
 
+/* ── DEMO ÜRÜN VERİSİ ── */
 const DEMO_PRODUCTS = [
   {
-    id: 1, emoji: '🎵', name: 'Lo-fi Beat Pack — Midnight Study Vol.1',
-    price: 149, oldPrice: 220, rating: 4.9, reviews: 112,
-    badge: 'hot', tags: ['müzik', 'lo-fi', 'beat'],
-    category: 'muzik',
-    desc: '20 adet üretim kalitesinde lo-fi beat.',
-    gradA: 'rgba(240,197,92,0.18)', gradB: 'rgba(123,92,240,0.1)',
-    seller: { id: 'beatztr', name: 'BeatzTR', initials: 'BT', sales: 340, joined: '2024', rating: 4.9, ratingCount: 98, desc: "Türkiye'nin genç beat üreticisi.", comments: [{user:'se**',stars:5,date:'Mart 2025',text:'Kalite inanılmaz!'},{user:'be**',stars:5,date:'Şubat 2025',text:'Fiyatına değer.'}] }
+    id: 1, emoji: '🧴', name: 'Doğal Argan Yağı Şampuanı',
+    price: 189, oldPrice: 249, rating: 4.8, reviews: 47,
+    badge: 'new', tags: ['saç bakımı', 'doğal', '400ml', 'sülfatsız'],
+    category: 'bakim',
+    desc: 'Tamamen doğal argan yağı içeriğiyle formüle edilmiş, saç dökülmesini önleyen ve parlaklık veren sülfatsız şampuan. 400ml ekonomik boy.',
+    gradA: 'rgba(92,240,180,0.15)', gradB: 'rgba(123,92,240,0.1)',
+    seller: {
+      id: 'ekosac', name: 'EkoSaç Market', initials: 'ES', sales: 127,
+      joined: '2024', rating: 4.9, ratingCount: 61,
+      desc: 'Doğal ve organik saç bakım ürünleri. Sülfatsız, parabensiz, vegan formüller.',
+      comments: [
+        { user: 'ay**', stars: 5, date: 'Mart 2025', text: 'Harika ürün, saçlarım çok daha sağlıklı görünüyor!' },
+        { user: 'ze**', stars: 4, date: 'Şubat 2025', text: 'Kokusu güzel, bir sonraki siparişimde tekrar alacağım.' },
+      ]
+    }
   },
   {
-    id: 2, emoji: '🎨', name: 'UI Kit — Gen-Z Dark Mode Components',
-    price: 299, oldPrice: null, rating: 4.8, reviews: 67,
-    badge: 'new', tags: ['ui kit', 'figma'],
-    category: 'tasarim',
-    desc: '120+ Figma bileşeni.',
-    gradA: 'rgba(123,92,240,0.18)', gradB: 'rgba(92,240,180,0.08)',
-    seller: { id: 'uidesignz', name: 'UI Design Z', initials: 'UD', sales: 89, joined: '2024', rating: 4.8, ratingCount: 44, desc: 'Gen-Z odaklı UI/UX tasarım kitleri.', comments: [{user:'er**',stars:5,date:'Ocak 2025',text:'Çok temiz!'}] }
+    id: 2, emoji: '🕯️', name: 'El Yapımı Soya Mum Seti',
+    price: 320, oldPrice: null, rating: 4.9, reviews: 28,
+    badge: 'hot', tags: ['ev dekor', 'el yapımı', 'lavanta', '3\'lü set'],
+    category: 'dekor',
+    desc: 'El yapımı soya mumu seti. Lavanta, vanilya ve okaliptüs aromalı 3 farklı mum. Tamamen doğal, evcil hayvan dostu formül.',
+    gradA: 'rgba(240,197,92,0.15)', gradB: 'rgba(240,140,60,0.1)',
+    seller: {
+      id: 'atesisik', name: 'Ateş & Işık', initials: 'AI', sales: 63,
+      joined: '2024', rating: 5.0, ratingCount: 29,
+      desc: 'El yapımı mumlar ve ev kokuları. Doğal malzemeler, özgün tasarımlar.',
+      comments: [
+        { user: 'me**', stars: 5, date: 'Mart 2025', text: 'Muhteşem koku ve ambalaj, hediye olarak aldım çok beğenildi.' },
+      ]
+    }
   },
   {
-    id: 3, emoji: '💻', name: 'Next.js Başlangıç Şablonu + Auth',
-    price: 199, oldPrice: 350, rating: 4.7, reviews: 43,
-    badge: 'viral', tags: ['nextjs', 'typescript'],
-    category: 'yazilim',
-    desc: 'Next.js 14, TypeScript, TailwindCSS şablonu.',
-    gradA: 'rgba(92,240,180,0.15)', gradB: 'rgba(92,160,240,0.1)',
-    seller: { id: 'codeztr', name: 'Code-Z', initials: 'CZ', sales: 156, joined: '2023', rating: 4.8, ratingCount: 72, desc: 'Açık kaynak sevdalısı.', comments: [{user:'mu**',stars:5,date:'Mart 2025',text:'Setup çok hızlı!'},{user:'do**',stars:4,date:'Şubat 2025',text:'Dökümantasyon iyi.'}] }
+    id: 3, emoji: '🖼️', name: 'Dijital Sanat Poster Baskı',
+    price: 95, oldPrice: 130, rating: 4.6, reviews: 15,
+    badge: null, tags: ['poster', 'A3', 'dijital sanat', 'çerçevsiz'],
+    category: 'sanat',
+    desc: 'Özgün dijital sanat eserleri, A3 mat fotoğraf kağıdına baskı. Üretici tarafından imzalanmış sertifika ile birlikte gönderilir.',
+    gradA: 'rgba(123,92,240,0.15)', gradB: 'rgba(240,197,92,0.08)',
+    seller: {
+      id: 'pixelfirca', name: 'Pixel & Fırça', initials: 'PF', sales: 8,
+      joined: '2025', rating: 4.7, ratingCount: 9,
+      desc: 'Dijital sanat ve illüstrasyon. Özgün eserler, sınırlı sayıda baskılar.',
+      comments: [
+        { user: 'ka**', stars: 5, date: 'Ocak 2025', text: 'Renkler gerçekten çok canlı, beklentimin üzerinde!' },
+      ]
+    }
   },
   {
-    id: 4, emoji: '📹', name: 'Vlog Preset Paketi — Cinematic TR',
-    price: 89, oldPrice: 140, rating: 4.6, reviews: 88,
-    badge: 'hot', tags: ['preset', 'lightroom'],
-    category: 'video',
-    desc: '15 adet Lightroom & Lr Mobile preset.',
-    gradA: 'rgba(240,140,60,0.18)', gradB: 'rgba(240,197,92,0.08)',
-    seller: { id: 'visualz', name: 'Visual-Z', initials: 'VZ', sales: 620, joined: '2023', rating: 4.7, ratingCount: 201, desc: 'Fotoğraf ve video presetleri.', comments: [{user:'ca**',stars:5,date:'Mart 2025',text:'İstanbul fotoğraflarına çok yakıştı!'}] }
+    id: 4, emoji: '🧪', name: 'Vitamin C Serum 30ml',
+    price: 275, oldPrice: 310, rating: 4.7, reviews: 93,
+    badge: 'hot', tags: ['cilt bakımı', 'C vitamini', '30ml', 'parlak cilt'],
+    category: 'bakim',
+    desc: '%15 saf C vitamini içeren aydınlatıcı serum. Kolajen üretimini destekler, leke ve ton eşitsizliklerine karşı etkilidir. 30ml.',
+    gradA: 'rgba(240,197,92,0.18)', gradB: 'rgba(92,240,180,0.1)',
+    seller: {
+      id: 'glowgen', name: 'GlowGen Lab', initials: 'GL', sales: 1240,
+      joined: '2023', rating: 4.8, ratingCount: 312,
+      desc: 'Bilimsel formüllerle cilt bakım ürünleri. Dermatolojik olarak test edilmiş.',
+      comments: [
+        { user: 'su**', stars: 5, date: 'Mart 2025', text: 'Lekelerim gözle görülür şekilde azaldı, kesinlikle tavsiye.' },
+        { user: 'bu**', stars: 4, date: 'Şubat 2025', text: 'Teslimat hızlı, ürün kaliteli. Tekrar alacağım.' },
+      ]
+    }
   },
   {
-    id: 5, emoji: '📷', name: 'Portre Kompozisyon Kılavuzu PDF',
-    price: 59, oldPrice: null, rating: 4.9, reviews: 31,
-    badge: 'new', tags: ['portre', 'pdf'],
-    category: 'fotograf',
-    desc: '45 sayfalık portre rehberi.',
-    gradA: 'rgba(240,92,160,0.15)', gradB: 'rgba(123,92,240,0.08)',
-    seller: { id: 'lenslenz', name: 'Lens & Z', initials: 'LZ', sales: 22, joined: '2025', rating: 4.9, ratingCount: 18, desc: 'Fotoğrafçılık eğitim materyalleri.', comments: [{user:'ay**',stars:5,date:'Ocak 2025',text:'Bakış açım değişti!'}] }
+    id: 5, emoji: '🎒', name: 'Mini Tuval Sırt Çantası',
+    price: 445, oldPrice: null, rating: 4.5, reviews: 34,
+    badge: 'new', tags: ['çanta', 'tuval', 'unisex', 'günlük'],
+    category: 'giyim',
+    desc: 'Kalın tuval kumaştan üretilmiş, su itici kaplama ile güçlendirilmiş. Dizüstü bölmesi, USB şarj portu ve 25L hacim.',
+    gradA: 'rgba(92,160,240,0.15)', gradB: 'rgba(123,92,240,0.08)',
+    seller: {
+      id: 'urbancarry', name: 'UrbanCarry', initials: 'UC', sales: 52,
+      joined: '2024', rating: 4.6, ratingCount: 38,
+      desc: 'Şehir yaşamına uygun fonksiyonel çantalar ve aksesuarlar.',
+      comments: [
+        { user: 'al**', stars: 4, date: 'Ocak 2025', text: 'Kaliteli dikiş, kumaş sağlam. Dizüstü rahat giriyor.' },
+      ]
+    }
   },
   {
-    id: 6, emoji: '📝', name: "Freelance Sözleşme Şablonları (5'li)",
-    price: 79, oldPrice: 120, rating: 4.8, reviews: 55,
-    badge: null, tags: ['freelance', 'sözleşme'],
-    category: 'yazi',
-    desc: '5 farklı freelance proje için Türkçe sözleşme.',
+    id: 6, emoji: '🍵', name: 'Oolong Çay Koleksiyonu',
+    price: 160, oldPrice: 195, rating: 4.9, reviews: 71,
+    badge: null, tags: ['çay', 'oolong', '5\'li set', 'premium'],
+    category: 'yiyecek',
+    desc: 'Tayvan ve Çin kökenli 5 farklı oolong çeşidinden oluşan tatma seti. Her bir çeşit ayrı ayrı hava geçirmez ambalajda sunulur.',
     gradA: 'rgba(92,240,120,0.15)', gradB: 'rgba(240,197,92,0.08)',
-    seller: { id: 'legalzgen', name: 'Legal-Z', initials: 'LG', sales: 2100, joined: '2022', rating: 4.8, ratingCount: 430, desc: "Freelancer'lar için hukuki şablonlar.", comments: [{user:'ni**',stars:5,date:'Mart 2025',text:'Müşterilere güven verdi.'},{user:'em**',stars:5,date:'Şubat 2025',text:'Dil çok sade!'}] }
+    seller: {
+      id: 'cayyolu', name: 'Çay Yolu', initials: 'ÇY', sales: 15200,
+      joined: '2022', rating: 4.9, ratingCount: 890,
+      desc: 'Premium çay çeşitleri. Dünya\'nın dört bir yanından özenle seçilmiş yapraklar.',
+      comments: [
+        { user: 'fa**', stars: 5, date: 'Mart 2025', text: 'Her çeşit çok lezzetli, özellikle milky oolong favorim oldu.' },
+        { user: 'ni**', stars: 5, date: 'Şubat 2025', text: 'Ambalaj şık ve kokusu harika. Hediye olarak süper.' },
+      ]
+    }
   },
   {
-    id: 7, emoji: '👗', name: 'Vintage Grafik Tişört — Limited Drop',
-    price: 380, oldPrice: null, rating: 4.7, reviews: 19,
-    badge: 'collab', tags: ['tişört', 'limited'],
-    category: 'moda',
-    desc: '%100 organik pamuk. El yapımı baskı. Sadece 50 adet.',
-    gradA: 'rgba(92,160,240,0.15)', gradB: 'rgba(123,92,240,0.1)',
-    seller: { id: 'threadz', name: 'Thread-Z', initials: 'TZ', sales: 12, joined: '2025', rating: 4.7, ratingCount: 8, desc: 'Sınırlı sayıda el yapımı giyim.', comments: [{user:'ze**',stars:5,date:'Mart 2025',text:'Kumaş kalitesi çok iyi.'}] }
+    id: 7, emoji: '🖊️', name: 'Kişiselleştirilmiş Deri Ajanda',
+    price: 380, oldPrice: null, rating: 4.7, reviews: 22,
+    badge: null, tags: ['ajanda', 'deri', 'A5', 'isim baskısı'],
+    category: 'kirtasiye',
+    desc: 'Hakiki deri kaplı A5 ajanda. İsim veya monogram baskısı ücretsiz. 365 günlük iç sayfa, haftalık planlayıcı ve notlar bölümü.',
+    gradA: 'rgba(240,140,60,0.15)', gradB: 'rgba(123,92,240,0.08)',
+    seller: {
+      id: 'derisanat', name: 'Deri & Sanat', initials: 'DS', sales: 3,
+      joined: '2025', rating: 4.8, ratingCount: 4,
+      desc: 'El işçiliğiyle hakiki deri ürünler. Kişiselleştirme seçenekleri.',
+      comments: []
+    }
   },
   {
-    id: 8, emoji: '🎮', name: 'İndie Oyun Müzik Paketi — 8-bit',
-    price: 125, oldPrice: 180, rating: 4.5, reviews: 38,
-    badge: 'viral', tags: ['oyun müziği', '8-bit'],
-    category: 'oyun',
-    desc: '30 adet 8-bit ve chiptune loop. Unity ve Godot uyumlu.',
-    gradA: 'rgba(240,197,92,0.15)', gradB: 'rgba(92,240,120,0.08)',
-    seller: { id: 'chiptunez', name: 'Chiptune-Z', initials: 'CZ', sales: 77, joined: '2024', rating: 4.6, ratingCount: 35, desc: 'Oyun geliştiriciler için 8-bit müzik.', comments: [{user:'ya**',stars:4,date:'Şubat 2025',text:'Tam aradığım şeydi!'}] }
+    id: 8, emoji: '🎧', name: 'Vintage Retro Kulaklık',
+    price: 890, oldPrice: 1200, rating: 4.4, reviews: 56,
+    badge: 'sold', tags: ['kulaklık', 'retro', 'bluetooth', 'over-ear'],
+    category: 'teknoloji',
+    desc: '40mm sürücü üniteli Bluetooth 5.0 destekli retro tasarım kulaklık. 30 saat pil ömrü, katlanabilir tasarım ve çıkarılabilir kablo.',
+    gradA: 'rgba(123,92,240,0.18)', gradB: 'rgba(92,160,240,0.08)',
+    seller: {
+      id: 'retrosound', name: 'RetroSound TR', initials: 'RS', sales: 420,
+      joined: '2023', rating: 4.5, ratingCount: 188,
+      desc: 'Retro tasarımlı modern ses ekipmanları. Nostalji ve kalite bir arada.',
+      comments: [
+        { user: 'em**', stars: 4, date: 'Mart 2025', text: 'Ses kalitesi fiyatına göre çok iyi, bass bolca var.' },
+        { user: 'ya**', stars: 5, date: 'Ocak 2025', text: 'Tasarımı bayıldım, stüdyoda bile kullanıyorum.' },
+      ]
+    }
   },
   {
-    id: 9, emoji: '🎨', name: 'Procreate Fırça Seti — Suluboya',
-    price: 69, oldPrice: null, rating: 4.9, reviews: 74,
-    badge: 'new', tags: ['procreate', 'fırça'],
-    category: 'tasarim',
-    desc: '25 adet Procreate suluboya fırçası.',
-    gradA: 'rgba(240,92,160,0.18)', gradB: 'rgba(240,197,92,0.1)',
-    seller: { id: 'brushztr', name: 'Brush-Z', initials: 'BZ', sales: 510, joined: '2023', rating: 4.9, ratingCount: 198, desc: 'Dijital sanatçılar için Procreate araçları.', comments: [{user:'mi**',stars:5,date:'Mart 2025',text:'Bu fırçalar olmasaydı!'},{user:'bu**',stars:5,date:'Ocak 2025',text:'Suluboya gerçekçi!'}] }
+    id: 9, emoji: '🌱', name: 'Ev Bahçesi Tohum Seti',
+    price: 130, oldPrice: null, rating: 4.8, reviews: 44,
+    badge: 'new', tags: ['tohum', 'organik', '12\'li set', 'balkon'],
+    category: 'bahce',
+    desc: 'Balkon ve iç mekân için ideal 12 farklı otantik tohum çeşidi. Fesleğen, nane, kekik, biberiye dahil. Sertifikalı organik.',
+    gradA: 'rgba(92,240,180,0.18)', gradB: 'rgba(92,240,120,0.1)',
+    seller: {
+      id: 'yesilbalkon', name: 'Yeşil Balkon', initials: 'YB', sales: 85,
+      joined: '2024', rating: 4.8, ratingCount: 49,
+      desc: 'Organik tohumlar ve bitki bakım ürünleri. Şehirde doğa yetiştiriciliği.',
+      comments: [
+        { user: 'ha**', stars: 5, date: 'Şubat 2025', text: 'Hepsi çimlendi! Fesleğen özellikle çok güçlü.' },
+      ]
+    }
   },
 ];
 
@@ -894,81 +845,17 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.style.transition = 'opacity 0.3s';
   requestAnimationFrame(() => { document.body.style.opacity = '1'; });
 
-  const sellerId = getParam('seller');
-  const seller = getSellerById(sellerId);
-  const products = getProductsBySeller(sellerId);
-
-  if (!seller) {
-    document.querySelector('.satici-inner').innerHTML = '<div style="text-align:center;padding:80px 20px;color:var(--text3);"><div style="font-size:48px;margin-bottom:16px;">😕</div><div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--text2);margin-bottom:8px;">Satıcı bulunamadı</div><div style="font-size:14px;"><a href="magaza.html" style="color:var(--accent)">← Mağazaya dön</a></div></div>';
-    return;
-  }
-
-  document.title = 'GEN-Z · ' + seller.name;
-  const badge = getBadgeLevel(seller.sales);
-
-  document.getElementById('breadcrumb').innerHTML = '<a href="magaza.html">Mağaza</a><span class="sep">›</span><span class="current">' + seller.name + '</span>';
-
-  /* Takip durumu — localStorage'da kullanıcı adına bağlı */
-  const followKey = 'genz-follow-' + sellerId;
-  let isFollowing = JSON.parse(_ls.get(followKey, 'false'));
-  const fakeFollowers = Math.floor(seller.sales * 0.7) + 12;
-
-  function getFollowBtnHTML() {
-    if (isFollowing) {
-      return '<button class="btn-follow following" id="followBtn" onclick="toggleFollow()">✓ Takip Ediliyor</button>';
+  const grid = document.getElementById('kategoriGrid');
+  CATEGORIES.forEach(cat => {
+    if (cat.id === 'all') return;
+    const card = document.createElement('div');
+    card.className = 'kategori-card' + (cat.coming ? ' disabled' : '');
+    card.innerHTML = '<div class="kategori-card-icon">' + cat.icon + '</div><div class="kategori-card-name">' + cat.name + '</div>' + (cat.coming ? '<span class="kategori-card-badge">Yakında</span>' : '');
+    if (!cat.coming) {
+      card.onclick = () => navigateTo('gen-z.html?cat=' + cat.id);
     }
-    return '<button class="btn-follow" id="followBtn" onclick="toggleFollow()">+ Takip Et</button>';
-  }
-
-  function renderHeader() {
-    const followerCount = isFollowing ? fakeFollowers + 1 : fakeFollowers;
-    document.getElementById('saticiHeader').innerHTML = '<div class="satici-avatar"><div class="satici-badge-ring badge-ring-' + badge.level + '"></div>' + seller.initials + '</div><div class="satici-meta"><div class="satici-name">' + seller.name + ' <span class="seller-badge-pill badge-' + badge.level + '">' + badge.label + '</span></div><div class="satici-desc">' + (seller.desc || '') + '</div><div class="satici-stats-row"><div class="satici-stat"><div class="satici-stat-num">' + seller.sales.toLocaleString('tr-TR') + '</div><div class="satici-stat-label">Satış</div></div><div class="satici-stat"><div class="satici-stat-num">' + seller.rating + '</div><div class="satici-stat-label">Puan</div></div><div class="satici-stat"><div class="satici-stat-num">' + products.length + '</div><div class="satici-stat-label">Ürün</div></div><div class="satici-stat"><div class="satici-stat-num">' + seller.joined + '</div><div class="satici-stat-label">Üye</div></div></div><div class="satici-follow-bar"><span><strong>' + followerCount.toLocaleString('tr-TR') + '</strong> takipçi</span><span class="follow-dot"></span><span><strong>' + seller.ratingCount + '</strong> değerlendirme</span></div><div class="satici-actions">' + getFollowBtnHTML() + '<button class="btn-satici-action" onclick="sendMessage()">💬 Mesaj Gönder</button><button class="btn-satici-action" onclick="shareSeller()">↗ Paylaş</button></div></div>';
-  }
-
-  window.toggleFollow = function() {
-    if (!currentUser) { openAuth('signin'); showToast('Takip etmek için giriş yapmalısın ⚠️'); return; }
-    isFollowing = !isFollowing;
-    _ls.set(followKey, JSON.stringify(isFollowing));
-    renderHeader();
-    if (isFollowing) {
-      showToast(seller.name + ' takip ediliyor ✓');
-    } else {
-      showToast('Takipten çıkıldı');
-    }
-  };
-
-  window.sendMessage = function() {
-    if (!currentUser) { openAuth('signin'); showToast('Mesaj göndermek için giriş yapmalısın ⚠️'); return; }
-    showToast('Mesajlaşma sistemi yakında aktif olacak 🔜');
-  };
-
-  window.shareSeller = function() {
-    if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
-    showToast('Mağaza bağlantısı kopyalandı ↗');
-  };
-
-  renderHeader();
-
-  /* Ürünler */
-  let html = '<div class="satici-section-title">🏪 Ürünleri (' + products.length + ')</div><div class="satici-products-grid">';
-  products.forEach(p => {
-    const badgeHtml = p.badge ? '<span class="product-badge badge-' + p.badge + '">' + (p.badge === 'new' ? '✦ Yeni' : p.badge === 'hot' ? '🔥 Popüler' : '🏷️ İndirim') + '</span>' : '';
-    html += '<a class="product-card" href="magaza-urun.html?id=' + p.id + '"><div class="product-image"><div class="product-image-gradient" style="--grad-a:' + p.gradA + ';--grad-b:' + p.gradB + '"></div>' + badgeHtml + '<div class="product-image-placeholder">' + p.emoji + '</div></div><div class="product-info"><div class="product-name">' + p.name + '</div><div class="product-meta"><span class="product-rating">' + renderStars(p.rating) + '</span><span class="product-review-count">(' + p.reviews + ')</span></div><div class="product-footer"><div class="product-price"><span class="currency">₺</span>' + p.price.toLocaleString('tr-TR') + (p.oldPrice ? '<span class="old-price">₺' + p.oldPrice + '</span>' : '') + '</div></div></div></a>';
+    grid.appendChild(card);
   });
-  html += '</div>';
-
-  /* Yorumlar */
-  const allComments = [];
-  products.forEach(p => { p.seller.comments.forEach(c => allComments.push(c)); });
-  if (allComments.length > 0) {
-    html += '<div class="satici-reviews"><div class="satici-section-title">💬 Müşteri Yorumları (' + allComments.length + ')</div>';
-    allComments.forEach(c => {
-      html += '<div class="comment-item"><div class="comment-header"><div class="comment-avatar">' + c.user.charAt(0).toUpperCase() + '</div><span class="comment-user">' + c.user + '</span><span class="comment-stars">' + '★'.repeat(c.stars) + '</span><span class="comment-date">' + c.date + '</span></div><div class="comment-text">' + c.text + '</div></div>';
-    });
-    html += '</div>';
-  }
-
-  document.getElementById('saticiContent').innerHTML = html;
 });
 </script>
 </body>

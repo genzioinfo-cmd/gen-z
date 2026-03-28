@@ -1,26 +1,29 @@
-<div class="profile-section-title">📍 Adres Defteri</div>
-<div class="address-grid" id="addressGrid">
-  <div class="address-card default-addr" id="addr1">
-    <div class="address-icon">🏠</div>
-    <div class="address-body">
-      <div class="address-title">Ev <span class="address-default-tag">Varsayılan</span></div>
-      <div class="address-text">Kızılay Mah. Atatürk Bulvarı No:45 D:3<br>Çankaya / Ankara, 06430</div>
+<div class="profile-section-title">⭐ Değerlendirmelerim</div>
+<div id="reviewsList">
+  <div class="review-card" id="review1">
+    <div class="review-header">
+      <span class="review-product-icon">🧴</span>
+      <span class="review-product-name">Doğal Argan Yağı Şampuanı</span>
+      <span class="review-stars" id="reviewStars1">★★★★★</span>
+      <span class="review-date">15 Mart 2025</span>
     </div>
-    <div class="address-actions">
-      <button class="addr-btn addr-btn-edit" onclick="openAddrModal('addr1')">Düzenle</button>
-      <button class="addr-btn addr-btn-del" onclick="deleteAddr('addr1')">Sil</button>
+    <div class="review-text" id="reviewText1">Harika ürün, saçlarım çok daha sağlıklı görünüyor. Kesinlikle tavsiye ederim!</div>
+    <div class="review-actions">
+      <button class="review-btn review-btn-edit" onclick="openReviewModal('review1', 5, document.getElementById('reviewText1').textContent)">✏️ Düzenle</button>
+      <button class="review-btn review-btn-del" onclick="deleteReview('review1')">🗑 Sil</button>
     </div>
   </div>
-  <div class="address-card" id="addr2">
-    <div class="address-icon">🏢</div>
-    <div class="address-body">
-      <div class="address-title">İş Yeri</div>
-      <div class="address-text">Söğütözü Mah. Söğütözü Cad. No:12 K:5<br>Çankaya / Ankara, 06520</div>
+  <div class="review-card" id="review2">
+    <div class="review-header">
+      <span class="review-product-icon">🕯️</span>
+      <span class="review-product-name">El Yapımı Soya Mum Seti</span>
+      <span class="review-stars" id="reviewStars2">★★★★☆</span>
+      <span class="review-date">22 Mart 2025</span>
     </div>
-    <div class="address-actions">
-      <button class="addr-btn addr-btn-edit" onclick="openAddrModal('addr2')">Düzenle</button>
-      <button class="addr-btn addr-btn-del" onclick="deleteAddr('addr2')">Sil</button>
+    <div class="review-text" id="reviewText2">Kokusu muhteşem, ambalaj çok şıktı. Teslimat biraz gecikti ama ürün mükemmel.</div>
+    <div class="review-actions">
+      <button class="review-btn review-btn-edit" onclick="openReviewModal('review2', 4, document.getElementById('reviewText2').textContent)">✏️ Düzenle</button>
+      <button class="review-btn review-btn-del" onclick="deleteReview('review2')">🗑 Sil</button>
     </div>
   </div>
 </div>
-<button class="btn-add-addr" onclick="openAddrModal(null)">+ Yeni Adres Ekle</button>

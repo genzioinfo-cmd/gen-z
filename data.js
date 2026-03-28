@@ -1,199 +1,793 @@
-// GEN-Z Mağaza — Ortak Ürün & Kategori Verisi
-/* ── KATEGORİLER (ileride doldurulacak) ── */
-const CATEGORIES = [
-  { id: 'all', name: 'Tümü', icon: '🌐', count: null },
-  { id: 'bakim', name: 'Kişisel Bakım', icon: '🧴', count: null, coming: true },
-  { id: 'dekor', name: 'Ev & Dekor', icon: '🕯️', count: null, coming: true },
-  { id: 'giyim', name: 'Giyim & Aksesuar', icon: '👟', count: null, coming: true },
-  { id: 'teknoloji', name: 'Teknoloji', icon: '🎧', count: null, coming: true },
-  { id: 'yiyecek', name: 'Yiyecek & İçecek', icon: '🍵', count: null, coming: true },
-  { id: 'sanat', name: 'Sanat & Tasarım', icon: '🎨', count: null, coming: true },
-  { id: 'kirtasiye', name: 'Kırtasiye', icon: '🖊️', count: null, coming: true },
-  { id: 'bahce', name: 'Bahçe & Doğa', icon: '🌱', count: null, coming: true },
-];
-
-/* ── DEMO ÜRÜN VERİSİ ── */
-const DEMO_PRODUCTS = [
-  {
-    id: 1, emoji: '🧴', name: 'Doğal Argan Yağı Şampuanı',
-    price: 189, oldPrice: 249, rating: 4.8, reviews: 47,
-    badge: 'new', tags: ['saç bakımı', 'doğal', '400ml', 'sülfatsız'],
-    category: 'bakim',
-    desc: 'Tamamen doğal argan yağı içeriğiyle formüle edilmiş, saç dökülmesini önleyen ve parlaklık veren sülfatsız şampuan. 400ml ekonomik boy.',
-    gradA: 'rgba(92,240,180,0.15)', gradB: 'rgba(123,92,240,0.1)',
-    seller: {
-      id: 'ekosac', name: 'EkoSaç Market', initials: 'ES', sales: 127,
-      joined: '2024', rating: 4.9, ratingCount: 61,
-      desc: 'Doğal ve organik saç bakım ürünleri. Sülfatsız, parabensiz, vegan formüller.',
-      comments: [
-        { user: 'ay**', stars: 5, date: 'Mart 2025', text: 'Harika ürün, saçlarım çok daha sağlıklı görünüyor!' },
-        { user: 'ze**', stars: 4, date: 'Şubat 2025', text: 'Kokusu güzel, bir sonraki siparişimde tekrar alacağım.' },
-      ]
-    }
-  },
-  {
-    id: 2, emoji: '🕯️', name: 'El Yapımı Soya Mum Seti',
-    price: 320, oldPrice: null, rating: 4.9, reviews: 28,
-    badge: 'hot', tags: ['ev dekor', 'el yapımı', 'lavanta', '3\'lü set'],
-    category: 'dekor',
-    desc: 'El yapımı soya mumu seti. Lavanta, vanilya ve okaliptüs aromalı 3 farklı mum. Tamamen doğal, evcil hayvan dostu formül.',
-    gradA: 'rgba(240,197,92,0.15)', gradB: 'rgba(240,140,60,0.1)',
-    seller: {
-      id: 'atesisik', name: 'Ateş & Işık', initials: 'AI', sales: 63,
-      joined: '2024', rating: 5.0, ratingCount: 29,
-      desc: 'El yapımı mumlar ve ev kokuları. Doğal malzemeler, özgün tasarımlar.',
-      comments: [
-        { user: 'me**', stars: 5, date: 'Mart 2025', text: 'Muhteşem koku ve ambalaj, hediye olarak aldım çok beğenildi.' },
-      ]
-    }
-  },
-  {
-    id: 3, emoji: '🖼️', name: 'Dijital Sanat Poster Baskı',
-    price: 95, oldPrice: 130, rating: 4.6, reviews: 15,
-    badge: null, tags: ['poster', 'A3', 'dijital sanat', 'çerçevsiz'],
-    category: 'sanat',
-    desc: 'Özgün dijital sanat eserleri, A3 mat fotoğraf kağıdına baskı. Üretici tarafından imzalanmış sertifika ile birlikte gönderilir.',
-    gradA: 'rgba(123,92,240,0.15)', gradB: 'rgba(240,197,92,0.08)',
-    seller: {
-      id: 'pixelfirca', name: 'Pixel & Fırça', initials: 'PF', sales: 8,
-      joined: '2025', rating: 4.7, ratingCount: 9,
-      desc: 'Dijital sanat ve illüstrasyon. Özgün eserler, sınırlı sayıda baskılar.',
-      comments: [
-        { user: 'ka**', stars: 5, date: 'Ocak 2025', text: 'Renkler gerçekten çok canlı, beklentimin üzerinde!' },
-      ]
-    }
-  },
-  {
-    id: 4, emoji: '🧪', name: 'Vitamin C Serum 30ml',
-    price: 275, oldPrice: 310, rating: 4.7, reviews: 93,
-    badge: 'hot', tags: ['cilt bakımı', 'C vitamini', '30ml', 'parlak cilt'],
-    category: 'bakim',
-    desc: '%15 saf C vitamini içeren aydınlatıcı serum. Kolajen üretimini destekler, leke ve ton eşitsizliklerine karşı etkilidir. 30ml.',
-    gradA: 'rgba(240,197,92,0.18)', gradB: 'rgba(92,240,180,0.1)',
-    seller: {
-      id: 'glowgen', name: 'GlowGen Lab', initials: 'GL', sales: 1240,
-      joined: '2023', rating: 4.8, ratingCount: 312,
-      desc: 'Bilimsel formüllerle cilt bakım ürünleri. Dermatolojik olarak test edilmiş.',
-      comments: [
-        { user: 'su**', stars: 5, date: 'Mart 2025', text: 'Lekelerim gözle görülür şekilde azaldı, kesinlikle tavsiye.' },
-        { user: 'bu**', stars: 4, date: 'Şubat 2025', text: 'Teslimat hızlı, ürün kaliteli. Tekrar alacağım.' },
-      ]
-    }
-  },
-  {
-    id: 5, emoji: '🎒', name: 'Mini Tuval Sırt Çantası',
-    price: 445, oldPrice: null, rating: 4.5, reviews: 34,
-    badge: 'new', tags: ['çanta', 'tuval', 'unisex', 'günlük'],
-    category: 'giyim',
-    desc: 'Kalın tuval kumaştan üretilmiş, su itici kaplama ile güçlendirilmiş. Dizüstü bölmesi, USB şarj portu ve 25L hacim.',
-    gradA: 'rgba(92,160,240,0.15)', gradB: 'rgba(123,92,240,0.08)',
-    seller: {
-      id: 'urbancarry', name: 'UrbanCarry', initials: 'UC', sales: 52,
-      joined: '2024', rating: 4.6, ratingCount: 38,
-      desc: 'Şehir yaşamına uygun fonksiyonel çantalar ve aksesuarlar.',
-      comments: [
-        { user: 'al**', stars: 4, date: 'Ocak 2025', text: 'Kaliteli dikiş, kumaş sağlam. Dizüstü rahat giriyor.' },
-      ]
-    }
-  },
-  {
-    id: 6, emoji: '🍵', name: 'Oolong Çay Koleksiyonu',
-    price: 160, oldPrice: 195, rating: 4.9, reviews: 71,
-    badge: null, tags: ['çay', 'oolong', '5\'li set', 'premium'],
-    category: 'yiyecek',
-    desc: 'Tayvan ve Çin kökenli 5 farklı oolong çeşidinden oluşan tatma seti. Her bir çeşit ayrı ayrı hava geçirmez ambalajda sunulur.',
-    gradA: 'rgba(92,240,120,0.15)', gradB: 'rgba(240,197,92,0.08)',
-    seller: {
-      id: 'cayyolu', name: 'Çay Yolu', initials: 'ÇY', sales: 15200,
-      joined: '2022', rating: 4.9, ratingCount: 890,
-      desc: 'Premium çay çeşitleri. Dünya\'nın dört bir yanından özenle seçilmiş yapraklar.',
-      comments: [
-        { user: 'fa**', stars: 5, date: 'Mart 2025', text: 'Her çeşit çok lezzetli, özellikle milky oolong favorim oldu.' },
-        { user: 'ni**', stars: 5, date: 'Şubat 2025', text: 'Ambalaj şık ve kokusu harika. Hediye olarak süper.' },
-      ]
-    }
-  },
-  {
-    id: 7, emoji: '🖊️', name: 'Kişiselleştirilmiş Deri Ajanda',
-    price: 380, oldPrice: null, rating: 4.7, reviews: 22,
-    badge: null, tags: ['ajanda', 'deri', 'A5', 'isim baskısı'],
-    category: 'kirtasiye',
-    desc: 'Hakiki deri kaplı A5 ajanda. İsim veya monogram baskısı ücretsiz. 365 günlük iç sayfa, haftalık planlayıcı ve notlar bölümü.',
-    gradA: 'rgba(240,140,60,0.15)', gradB: 'rgba(123,92,240,0.08)',
-    seller: {
-      id: 'derisanat', name: 'Deri & Sanat', initials: 'DS', sales: 3,
-      joined: '2025', rating: 4.8, ratingCount: 4,
-      desc: 'El işçiliğiyle hakiki deri ürünler. Kişiselleştirme seçenekleri.',
-      comments: []
-    }
-  },
-  {
-    id: 8, emoji: '🎧', name: 'Vintage Retro Kulaklık',
-    price: 890, oldPrice: 1200, rating: 4.4, reviews: 56,
-    badge: 'sold', tags: ['kulaklık', 'retro', 'bluetooth', 'over-ear'],
-    category: 'teknoloji',
-    desc: '40mm sürücü üniteli Bluetooth 5.0 destekli retro tasarım kulaklık. 30 saat pil ömrü, katlanabilir tasarım ve çıkarılabilir kablo.',
-    gradA: 'rgba(123,92,240,0.18)', gradB: 'rgba(92,160,240,0.08)',
-    seller: {
-      id: 'retrosound', name: 'RetroSound TR', initials: 'RS', sales: 420,
-      joined: '2023', rating: 4.5, ratingCount: 188,
-      desc: 'Retro tasarımlı modern ses ekipmanları. Nostalji ve kalite bir arada.',
-      comments: [
-        { user: 'em**', stars: 4, date: 'Mart 2025', text: 'Ses kalitesi fiyatına göre çok iyi, bass bolca var.' },
-        { user: 'ya**', stars: 5, date: 'Ocak 2025', text: 'Tasarımı bayıldım, stüdyoda bile kullanıyorum.' },
-      ]
-    }
-  },
-  {
-    id: 9, emoji: '🌱', name: 'Ev Bahçesi Tohum Seti',
-    price: 130, oldPrice: null, rating: 4.8, reviews: 44,
-    badge: 'new', tags: ['tohum', 'organik', '12\'li set', 'balkon'],
-    category: 'bahce',
-    desc: 'Balkon ve iç mekân için ideal 12 farklı otantik tohum çeşidi. Fesleğen, nane, kekik, biberiye dahil. Sertifikalı organik.',
-    gradA: 'rgba(92,240,180,0.18)', gradB: 'rgba(92,240,120,0.1)',
-    seller: {
-      id: 'yesilbalkon', name: 'Yeşil Balkon', initials: 'YB', sales: 85,
-      joined: '2024', rating: 4.8, ratingCount: 49,
-      desc: 'Organik tohumlar ve bitki bakım ürünleri. Şehirde doğa yetiştiriciliği.',
-      comments: [
-        { user: 'ha**', stars: 5, date: 'Şubat 2025', text: 'Hepsi çimlendi! Fesleğen özellikle çok güçlü.' },
-      ]
-    }
-  },
-];
-
-/* ── ROZET SİSTEMİ ── */
-function getBadgeLevel(sales) {
-  if (sales >= 100000) return { level: '100000', label: '🏅 Efsane', emoji: '🔴' };
-  if (sales >= 10000)  return { level: '10000',  label: '🏅 Usta',   emoji: '🟣' };
-  if (sales >= 1000)   return { level: '1000',   label: '🏅 Uzman',  emoji: '🟤' };
-  if (sales >= 100)    return { level: '100',    label: '🏅 Deneyimli', emoji: '🟠' };
-  if (sales >= 50)     return { level: '50',     label: '🏅 Gelişen', emoji: '🔵' };
-  if (sales >= 10)     return { level: '10',     label: '🏅 Aktif',  emoji: '🟡' };
-  if (sales >= 1)      return { level: '1',      label: '🏅 Yeni',   emoji: '🟢' };
-  return { level: '0', label: '🏅 Başlangıç', emoji: '⚪' };
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark" data-lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="description" content="GEN-Z Birlikte Büyüyelim — Topluluğa katıl, birlikte üret ve büyü."/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GEN-Z · Birlikte Büyüyelim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --accent: #7B5CF0;
+  --accent2: #F0C55C;
+  --accent3: #5CF0B4;
+  --bg: #0a0a0f;
+  --bg2: #13131a;
+  --bg3: #1c1c28;
+  --surface: #22222f;
+  --border: #2e2e3f;
+  --text: #f0eeff;
+  --text2: #9b97b8;
+  --text3: #5a5770;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 8px 32px rgba(123,92,240,0.15);
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+[data-theme="light"] {
+  --bg: #f5f4ff; --bg2: #eeedf8; --bg3: #e4e3f2;
+  --surface: #ffffff; --border: #d0cee8; --text: #1a1830;
+  --text2: #5a5580; --text3: #9894b8;
+  --shadow: 0 8px 32px rgba(123,92,240,0.10);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100vh; }
+body.theme-transitioning { transition: background-color 0.3s ease, color 0.3s ease; }
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0; opacity: 0.4;
 }
 
-/* ── YARDIMCI FONKSİYONLAR ── */
-function getProductById(id) {
-  return DEMO_PRODUCTS.find(p => p.id === parseInt(id));
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 64px; background: rgba(10,10,15,0.85); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 24px;
 }
-function getProductsBySeller(sellerId) {
-  return DEMO_PRODUCTS.filter(p => p.seller.id === sellerId);
+[data-theme="light"] nav { background: rgba(245,244,255,0.85); }
+.nav-logo {
+  font-family: var(--font-display); font-size: 22px; font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px; cursor: pointer; flex-shrink: 0; text-decoration: none;
 }
-function getSellerById(sellerId) {
-  const product = DEMO_PRODUCTS.find(p => p.seller.id === sellerId);
-  return product ? product.seller : null;
+.nav-links { display: flex; align-items: center; gap: 2px; margin-left: 32px; flex: 1; list-style: none; }
+.nav-links a {
+  font-size: 13px; font-weight: 500; color: var(--text2); text-decoration: none;
+  padding: 6px 12px; border-radius: var(--radius-sm); transition: color 0.2s, background 0.2s; white-space: nowrap;
 }
-function getAllSellers() {
-  const map = {};
-  DEMO_PRODUCTS.forEach(p => {
-    if (!map[p.seller.id]) { map[p.seller.id] = { ...p.seller, products: [] }; }
-    map[p.seller.id].products.push(p);
+.nav-links a:hover { color: var(--text); background: var(--surface); }
+.nav-links a.active { color: var(--accent2); }
+.nav-right { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+.btn-icon {
+  width: 36px; height: 36px; border: 1px solid var(--border); background: var(--surface);
+  border-radius: var(--radius-sm); cursor: pointer; color: var(--text2);
+  display: flex; align-items: center; justify-content: center; font-size: 16px; transition: color 0.2s, border-color 0.2s;
+}
+.btn-icon:hover { color: var(--text); border-color: var(--accent); }
+.btn-signin {
+  padding: 8px 18px; background: var(--accent); color: #fff; border: none;
+  border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: background 0.2s, transform 0.2s;
+}
+.btn-signin:hover { background: #6a4de0; transform: translateY(-1px); }
+.hamburger {
+  display: none; flex-direction: column; justify-content: center; align-items: center;
+  gap: 5px; width: 36px; height: 36px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer;
+}
+.hamburger span { display: block; width: 16px; height: 2px; background: var(--text2); border-radius: 2px; transition: transform 0.3s, opacity 0.3s; }
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.mobile-menu {
+  display: none; position: fixed; top: 64px; left: 0; right: 0; z-index: 99;
+  background: var(--bg2); border-bottom: 1px solid var(--border);
+  padding: 16px 24px 20px; flex-direction: column; gap: 4px; backdrop-filter: blur(20px);
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a { font-size: 15px; font-weight: 500; color: var(--text2); text-decoration: none; padding: 10px 12px; border-radius: var(--radius-sm); transition: color 0.2s, background 0.2s; }
+.mobile-menu a:hover { color: var(--text); background: var(--surface); }
+@media (max-width: 640px) { .nav-links { display: none; } .hamburger { display: flex; } }
+
+/* ── HERO ── */
+.page-hero {
+  padding: 130px 24px 72px;
+  text-align: center; position: relative; overflow: hidden; z-index: 1;
+}
+.page-hero-bg {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 65% 55% at 25% 45%, rgba(123,92,240,0.11) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 40% at 78% 55%, rgba(92,240,180,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 30% at 55% 5%,  rgba(240,197,92,0.06) 0%, transparent 60%);
+}
+.page-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 14px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--surface);
+  font-size: 12px; color: var(--accent3); font-weight: 600; letter-spacing: 0.5px;
+  margin-bottom: 24px; position: relative; z-index: 1;
+  animation: fadeUp 0.5s ease both;
+}
+.page-title {
+  font-family: var(--font-display);
+  font-size: clamp(38px, 7vw, 76px); font-weight: 800;
+  letter-spacing: -2px; line-height: 0.95;
+  position: relative; z-index: 1;
+  animation: fadeUp 0.6s ease 0.1s both;
+}
+.page-title .grad {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.page-sub {
+  font-size: 16px; color: var(--text2); max-width: 480px;
+  margin: 22px auto 0; line-height: 1.7;
+  position: relative; z-index: 1;
+  animation: fadeUp 0.6s ease 0.2s both;
+}
+
+/* ── NEDEN GEN-Z ── */
+.why-section {
+  background: var(--bg2);
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  padding: 72px 24px; position: relative; z-index: 1;
+}
+.why-inner { max-width: 1040px; margin: 0 auto; }
+.section-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+}
+.section-title {
+  font-family: var(--font-display); font-size: clamp(24px, 4vw, 36px);
+  font-weight: 800; letter-spacing: -0.5px; margin-bottom: 36px;
+}
+.why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+.why-card {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 24px 20px; position: relative; overflow: hidden;
+  transition: transform 0.3s, border-color 0.3s;
+}
+.why-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+.why-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+}
+.why-icon { font-size: 28px; margin-bottom: 12px; }
+.why-card-title { font-family: var(--font-display); font-size: 15px; font-weight: 800; margin-bottom: 6px; }
+.why-card-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+/* ── ROL SEÇİCİ ── */
+.picker-section { max-width: 940px; margin: 0 auto; padding: 72px 24px 0; position: relative; z-index: 1; }
+.picker-label { text-align: center; margin-bottom: 28px; }
+.picker-label h2 {
+  font-family: var(--font-display); font-size: clamp(20px, 3vw, 30px);
+  font-weight: 800; letter-spacing: -0.5px; margin-bottom: 8px;
+}
+.picker-label p { font-size: 14px; color: var(--text2); }
+.role-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  animation: fadeUp 0.6s ease 0.3s both;
+}
+.role-tile {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 28px 22px;
+  text-align: center; cursor: pointer;
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  position: relative; overflow: hidden;
+}
+.role-tile::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--tile-accent, var(--accent)); transition: height 0.3s;
+}
+.role-tile:hover { transform: translateY(-4px); border-color: var(--tile-accent, var(--accent)); box-shadow: var(--shadow); }
+.role-tile:hover::before { height: 3px; }
+.role-tile.selected { border-color: var(--tile-accent, var(--accent)); box-shadow: 0 0 0 1px var(--tile-accent, var(--accent)), var(--shadow); }
+.role-tile.selected::before { height: 3px; }
+.role-tile[data-role="magaza"] { --tile-accent: var(--accent3); }
+.role-tile[data-role="usta"]   { --tile-accent: var(--accent2); }
+.role-tile[data-role="gencz"]  { --tile-accent: var(--accent); }
+.tile-check {
+  position: absolute; top: 12px; right: 12px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--tile-accent, var(--accent)); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800;
+  opacity: 0; transform: scale(0.6); transition: opacity 0.25s, transform 0.25s;
+}
+.role-tile.selected .tile-check { opacity: 1; transform: scale(1); }
+.tile-icon { font-size: 36px; margin-bottom: 14px; line-height: 1; }
+.tile-name { font-family: var(--font-display); font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+.role-tile[data-role="magaza"] .tile-name { color: var(--accent3); }
+.role-tile[data-role="usta"]   .tile-name { color: var(--accent2); }
+.role-tile[data-role="gencz"]  .tile-name { color: var(--accent); }
+.tile-desc { font-size: 13px; color: var(--text2); line-height: 1.55; }
+.tile-badge {
+  display: inline-block; margin-top: 12px;
+  padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700;
+  background: color-mix(in srgb, var(--tile-accent, var(--accent)) 14%, transparent);
+  color: var(--tile-accent, var(--accent));
+  border: 1px solid color-mix(in srgb, var(--tile-accent, var(--accent)) 28%, transparent);
+}
+@media (max-width: 640px) { .role-grid { grid-template-columns: 1fr; } }
+
+/* ── FORM BÖLÜMÜ ── */
+.forms-wrap { max-width: 720px; margin: 0 auto; padding: 0 24px 100px; }
+.form-block { display: none; animation: fadeUp 0.4s ease; margin-top: 48px; }
+.form-block.active { display: block; }
+.form-head {
+  display: flex; align-items: center; gap: 14px;
+  padding-bottom: 20px; border-bottom: 1px solid var(--border); margin-bottom: 28px;
+}
+.form-head-icon {
+  width: 48px; height: 48px; border-radius: var(--radius-sm); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 22px;
+  background: color-mix(in srgb, var(--form-accent, var(--accent)) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--form-accent, var(--accent)) 28%, transparent);
+}
+.form-head-text h3 { font-family: var(--font-display); font-size: 20px; font-weight: 800; margin-bottom: 2px; }
+.form-head-text p { font-size: 13px; color: var(--text2); }
+.f-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.f-grid .full { grid-column: 1 / -1; }
+.f-field label { font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 7px; display: block; letter-spacing: 0.3px; }
+.f-field input, .f-field select, .f-field textarea {
+  width: 100%; padding: 11px 14px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: 14px; color: var(--text);
+  outline: none; transition: border-color 0.2s;
+}
+.f-field input::placeholder, .f-field textarea::placeholder { color: var(--text3); }
+.f-field input:focus, .f-field select:focus, .f-field textarea:focus { border-color: var(--form-accent, var(--accent)); }
+.f-field textarea { min-height: 96px; resize: vertical; line-height: 1.5; }
+.f-field select { cursor: pointer; }
+@media (max-width: 640px) { .f-grid { grid-template-columns: 1fr; } .f-grid .full { grid-column: 1; } }
+
+/* ── PLAN SEÇİCİ ── */
+.plan-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.plan-opt {
+  flex: 1; min-width: 90px; padding: 12px 8px; text-align: center;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  cursor: pointer; transition: border-color 0.2s, background 0.2s; position: relative;
+}
+.plan-opt:hover { border-color: var(--accent2); }
+.plan-opt.active { border-color: var(--accent2); background: color-mix(in srgb, var(--accent2) 10%, transparent); }
+.plan-opt.popular::after {
+  content: '⭐ Popüler'; position: absolute; top: -9px; left: 50%; transform: translateX(-50%);
+  background: var(--accent2); color: #000; font-size: 9px; font-weight: 800;
+  padding: 2px 8px; border-radius: 999px; white-space: nowrap;
+}
+.plan-price { font-family: var(--font-display); font-size: 15px; font-weight: 800; color: var(--accent2); }
+.plan-name  { font-size: 11px; color: var(--text3); margin-top: 2px; font-weight: 600; }
+
+/* ── CTA BTN ── */
+.btn-apply {
+  margin-top: 28px; width: 100%; padding: 15px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff; border: none; border-radius: var(--radius);
+  font-family: var(--font-body); font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 4px 24px rgba(123,92,240,0.28);
+}
+.btn-apply:hover { opacity: 0.9; transform: translateY(-2px); }
+
+/* ── AUTH MODAL ── */
+.modal-overlay-auth {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s;
+}
+.modal-overlay-auth.open { opacity: 1; pointer-events: all; }
+.auth-modal-box {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 20px;
+  width: 100%; max-width: 420px; padding: 36px; position: relative;
+  transform: translateY(20px) scale(0.97); transition: transform 0.3s;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+}
+.modal-overlay-auth.open .auth-modal-box { transform: translateY(0) scale(1); }
+.auth-modal-close {
+  position: absolute; top: 16px; right: 16px; width: 32px; height: 32px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  cursor: pointer; color: var(--text2); font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-logo {
+  font-family: var(--font-display); font-size: 26px; font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px;
+}
+.modal-sub { font-size: 13px; color: var(--text2); margin-bottom: 24px; }
+.auth-tabs {
+  display: flex; gap: 4px; background: var(--bg3); border-radius: var(--radius-sm);
+  padding: 4px; margin-bottom: 24px;
+}
+.auth-tab {
+  flex: 1; padding: 8px; background: none; border: none; border-radius: 6px;
+  font-family: var(--font-body); font-size: 13px; font-weight: 500;
+  color: var(--text2); cursor: pointer; transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.auth-tab.active { background: var(--surface); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+.btn-google {
+  width: 100%; padding: 12px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 14px; font-weight: 500;
+  color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center;
+  gap: 10px; transition: border-color 0.2s; margin-bottom: 20px;
+}
+.btn-google:hover { border-color: var(--accent); }
+.google-icon { width: 18px; height: 18px; }
+.divider { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.divider span { font-size: 12px; color: var(--text3); }
+.form-group { margin-bottom: 14px; }
+.form-label { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 6px; display: block; }
+.form-input {
+  width: 100%; padding: 11px 14px; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 14px; color: var(--text);
+  outline: none; transition: border-color 0.2s;
+}
+.form-input::placeholder { color: var(--text3); }
+.form-input:focus { border-color: var(--accent); }
+.form-input.username-field { padding-left: 36px; }
+.input-wrap { position: relative; }
+.input-prefix { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--accent); font-weight: 700; font-size: 15px; pointer-events: none; }
+.btn-submit {
+  width: 100%; padding: 13px; background: var(--accent); color: #fff; border: none;
+  border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: background 0.2s; margin-top: 6px;
+}
+.btn-submit:hover { background: #6a4de0; }
+.auth-footer { text-align: center; margin-top: 16px; font-size: 12px; color: var(--text3); }
+.auth-footer a { color: var(--accent); text-decoration: none; cursor: pointer; }
+.auth-panel { display: none; }
+.auth-panel.active { display: block; }
+.profile-field { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--bg3); border-radius: var(--radius-sm); margin-bottom: 10px; }
+.profile-field-label { font-size: 12px; color: var(--text2); width: 90px; }
+.profile-field-val { font-size: 14px; color: var(--text); flex: 1; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 28px; right: 24px; z-index: 999;
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 3px solid var(--accent2); border-radius: var(--radius-sm);
+  padding: 12px 18px; font-size: 13px; color: var(--text);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  transform: translateY(80px); opacity: 0; transition: transform 0.3s, opacity 0.3s;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* ── ANİMASYONLAR ── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.55s ease, transform 0.55s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-d1 { transition-delay: 0.1s; }
+.reveal-d2 { transition-delay: 0.2s; }
+.reveal-d3 { transition-delay: 0.3s; }
+/* ── 60FPS PERFORMANCE ── */
+nav, .modal-overlay-auth, .modal-box, .toast {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+.btn-primary, .btn-secondary, .btn-signin, .btn-icon, .plan-card, .plan-opt {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+.page-header-bg { contain: strict; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  .reveal { opacity: 1; transform: none; }
+  nav { backdrop-filter: none; background: var(--bg2); }
+}
+@media (max-width: 640px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  nav { backdrop-filter: blur(12px); }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">GEN-Z</a>
+  <ul class="nav-links">
+    <li><a href="magaza.html" data-tr="Mağaza" data-en="Shop">Mağaza</a></li>
+    <li><a href="ustam.html" data-tr="Ustam" data-en="Ustam">Ustam</a></li>
+    <li><a href="gen-z.html" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a></li>
+    <li><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a></li>
+    <li><a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a></li>
+    <li><a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a></li>
+    <li><a href="birlikte-buyuyelim.html" class="active" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a></li>
+    <li><a href="elden-ele.html" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
+    <button class="btn-icon" onclick="toggleLang()">🌐</button>
+    <button class="btn-icon" onclick="toggleTheme()" id="themeBtn">🌙</button>
+    <button class="btn-signin" onclick="openAuth('signin')" id="authBtn">Giriş Yap</button>
+  </div>
+</nav>
+<nav class="mobile-menu" id="mobileMenu">
+  <a href="magaza.html" data-tr="Mağaza" data-en="Shop">Mağaza</a>
+  <a href="ustam.html" data-tr="Ustam" data-en="Ustam">Ustam</a>
+  <a href="gen-z.html" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a>
+  <a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a>
+  <a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a>
+  <a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a>
+  <a href="birlikte-buyuyelim.html" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a>
+  <a href="elden-ele.html" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-tag">✦ Platforma Katıl</div>
+  <h1 class="page-title">
+    <span class="grad">Birlikte</span><br/>Büyüyelim
+  </h1>
+  <p class="page-sub">
+    Rolünü seç, formunu doldur. GEN-Z ekosisteminde üretici, satıcı ya da usta olarak yerini al.
+  </p>
+</section>
+
+<!-- NEDEN GEN-Z -->
+<section class="why-section">
+  <div class="why-inner">
+    <div class="section-label">NEDEN GEN-Z?</div>
+    <h2 class="section-title">Seni büyütecek ekosistem</h2>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="why-icon">🚀</div>
+        <div class="why-card-title">Hızlı Başlangıç</div>
+        <div class="why-card-desc">Dakikalar içinde profilini oluştur, ilk ilanını ver ve müşterilere ulaş.</div>
+      </div>
+      <div class="why-card reveal reveal-d1">
+        <div class="why-icon">🛡️</div>
+        <div class="why-card-title">Güvenli Platform</div>
+        <div class="why-card-desc">Onaylı profiller, şeffaf değerlendirmeler ve güvenli ödeme altyapısı.</div>
+      </div>
+      <div class="why-card reveal reveal-d2">
+        <div class="why-icon">📈</div>
+        <div class="why-card-title">Büyüyen Topluluk</div>
+        <div class="why-card-desc">12.000+ kullanıcı, 840+ mağaza, 320+ usta. Her ay yeni isimler katılıyor.</div>
+      </div>
+      <div class="why-card reveal reveal-d3">
+        <div class="why-icon">🤝</div>
+        <div class="why-card-title">Destek Hattı</div>
+        <div class="why-card-desc">Başvurundan ilk işine kadar bire bir destek. Hiç yalnız kalmayacaksın.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROL SEÇİCİ -->
+<div class="picker-section">
+  <div class="picker-label">
+    <div class="section-label" style="text-align:center;">BAŞVURU</div>
+    <h2>Platformda kim olmak istiyorsun?</h2>
+    <p style="margin-top:8px;">Birden fazla rol seçebilirsin — her rol için ayrı form açılır.</p>
+  </div>
+  <div class="role-grid">
+    <div class="role-tile" data-role="magaza" onclick="toggleRole('magaza')">
+      <div class="tile-check">✓</div>
+      <div class="tile-icon">🏪</div>
+      <div class="tile-name">Mağaza Sahibi</div>
+      <div class="tile-desc">Ürünlerini GEN-Z Mağaza'da listele. Tekstil, el sanatı, dekor ve daha fazlası.</div>
+      <span class="tile-badge">Satıcı Rolü</span>
+    </div>
+    <div class="role-tile" data-role="usta" onclick="toggleRole('usta')">
+      <div class="tile-check">✓</div>
+      <div class="tile-icon">🔧</div>
+      <div class="tile-name">Benim Ustam</div>
+      <div class="tile-desc">Usta, zanaatkar veya hizmet profesyoneli olarak USTAM platformunda yer al.</div>
+      <span class="tile-badge">Usta Rolü · Abonelik</span>
+    </div>
+    <div class="role-tile" data-role="gencz" onclick="toggleRole('gencz')">
+      <div class="tile-check">✓</div>
+      <div class="tile-icon">⚡</div>
+      <div class="tile-name">Genç-Z</div>
+      <div class="tile-desc">Üniversite öğrencisi olarak sanat üret — şiir, kitap, tasarım ve daha fazlası.</div>
+      <span class="tile-badge">Genç Rolü · Onaylı</span>
+    </div>
+  </div>
+</div>
+
+<!-- FORMLAR -->
+<div class="forms-wrap">
+
+  <!-- MAĞAZA -->
+  <div class="form-block" id="form-magaza" style="--form-accent: var(--accent3);">
+    <div class="form-head">
+      <div class="form-head-icon">🏪</div>
+      <div class="form-head-text">
+        <h3>Mağaza Başvurusu</h3>
+        <p>Mağazanı açmak için bilgilerini doldur.</p>
+      </div>
+    </div>
+    <div class="f-grid">
+      <div class="f-field"><label>Mağaza Adı</label><input type="text" placeholder="Örn: Vintage Dükkanı"/></div>
+      <div class="f-field"><label>Kategori</label>
+        <select><option>Tekstil & Giyim</option><option>Aksesuar</option><option>El Sanatları</option><option>Ev & Dekor</option><option>Teknoloji</option><option>Yiyecek & İçecek</option><option>Diğer</option></select>
+      </div>
+      <div class="f-field"><label>Ad Soyad</label><input type="text" placeholder="Tam adın"/></div>
+      <div class="f-field"><label>Telefon</label><input type="tel" placeholder="0555 000 00 00"/></div>
+      <div class="f-field"><label>E-posta</label><input type="email" placeholder="ornek@mail.com"/></div>
+      <div class="f-field"><label>Şehir</label><input type="text" placeholder="Ankara"/></div>
+      <div class="f-field full"><label>Mağaza Açıklaması</label><textarea placeholder="Mağazanı kısaca tanıt..."></textarea></div>
+      <div class="f-field full"><label>Satmayı planladığın ürünler</label><textarea placeholder="Hangi ürünleri satmayı düşünüyorsun?"></textarea></div>
+    </div>
+    <button class="btn-apply" onclick="submitForm('magaza')">🏪 Mağaza Başvurusu Gönder</button>
+  </div>
+
+  <!-- USTA -->
+  <div class="form-block" id="form-usta" style="--form-accent: var(--accent2);">
+    <div class="form-head">
+      <div class="form-head-icon">🔧</div>
+      <div class="form-head-text">
+        <h3>Usta Başvurusu</h3>
+        <p>Uzmanlık alanını seç, bilgilerini doldur ve faaliyete geç.</p>
+      </div>
+    </div>
+    <div class="f-grid">
+      <div class="f-field"><label>Ad Soyad</label><input type="text" placeholder="Tam adın"/></div>
+      <div class="f-field"><label>İş Kolu</label>
+        <select>
+          <option>Elektrik</option><option>Doğalgaz</option><option>Su Tesisatı</option>
+          <option>Boya & Badana</option><option>İnşaat</option><option>Çatı & İzolasyon</option>
+          <option>Seramik & Zemin</option><option>Alçıpan & Asma Tavan</option>
+          <option>Beton & Zemin</option><option>Mobilya & Marangoz</option>
+          <option>Klima & Isıtma</option><option>Demir & Kaynak</option>
+          <option>Vinç & Nakliye</option><option>Hafriyat & Kazı</option><option>Diğer</option>
+        </select>
+      </div>
+      <div class="f-field"><label>Uzmanlık Alanları</label><input type="text" placeholder="Örn: Elektrik tesisatı, sigorta panosu"/></div>
+      <div class="f-field"><label>Deneyim (Yıl)</label><input type="number" placeholder="10" min="0"/></div>
+      <div class="f-field"><label>Telefon</label><input type="tel" placeholder="0555 000 00 00"/></div>
+      <div class="f-field"><label>E-posta</label><input type="email" placeholder="ornek@mail.com"/></div>
+      <div class="f-field"><label>Şehir</label><input type="text" placeholder="Ankara"/></div>
+      <div class="f-field"><label>İlçe</label><input type="text" placeholder="Çankaya"/></div>
+      <div class="f-field full"><label>Kendinizi Tanıtın</label><textarea placeholder="Deneyimleriniz, uzmanlık alanlarınız, referanslarınız..."></textarea></div>
+      <div class="f-field full">
+        <label>Abonelik Planı</label>
+        <div class="plan-row">
+          <div class="plan-opt" data-plan="deneme" onclick="selectPlan('deneme')"><div class="plan-price">Ücretsiz</div><div class="plan-name">1 Haftalık</div></div>
+          <div class="plan-opt" data-plan="1ay" onclick="selectPlan('1ay')"><div class="plan-price">₺99</div><div class="plan-name">1 Aylık</div></div>
+          <div class="plan-opt popular active" data-plan="3ay" onclick="selectPlan('3ay')"><div class="plan-price">₺269</div><div class="plan-name">3 Aylık</div></div>
+          <div class="plan-opt" data-plan="6ay" onclick="selectPlan('6ay')"><div class="plan-price">₺499</div><div class="plan-name">6 Aylık</div></div>
+          <div class="plan-opt" data-plan="1yil" onclick="selectPlan('1yil')"><div class="plan-price">₺999</div><div class="plan-name">1 Yıllık</div></div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-apply" onclick="submitForm('usta')">🔧 Usta Başvurusu Gönder</button>
+  </div>
+
+  <!-- GENÇ-Z -->
+  <div class="form-block" id="form-gencz" style="--form-accent: var(--accent);">
+    <div class="form-head">
+      <div class="form-head-icon">⚡</div>
+      <div class="form-head-text">
+        <h3>Genç-Z Başvurusu</h3>
+        <p>Üniversite öğrencisi olarak sanat ve yaratıcılık alanında yer al.</p>
+      </div>
+    </div>
+    <div class="f-grid">
+      <div class="f-field"><label>Ad Soyad</label><input type="text" placeholder="Tam adın"/></div>
+      <div class="f-field"><label>Üniversite</label><input type="text" placeholder="Ankara Üniversitesi"/></div>
+      <div class="f-field"><label>Bölüm</label><input type="text" placeholder="Grafik Tasarım"/></div>
+      <div class="f-field"><label>Sınıf</label>
+        <select><option>Hazırlık</option><option>1. Sınıf</option><option>2. Sınıf</option><option>3. Sınıf</option><option>4. Sınıf</option><option>Yüksek Lisans</option><option>Doktora</option></select>
+      </div>
+      <div class="f-field"><label>İlgi Alanı</label>
+        <select><option>Şiir</option><option>Kitap / Hikaye</option><option>Grafik Tasarım</option><option>Fotoğrafçılık</option><option>Müzik</option><option>Video / İçerik</option><option>Diğer</option></select>
+      </div>
+      <div class="f-field"><label>Öğrenci E-postası</label><input type="email" placeholder="ad@uni.edu.tr"/></div>
+      <div class="f-field"><label>Telefon</label><input type="tel" placeholder="0555 000 00 00"/></div>
+      <div class="f-field"><label>Şehir</label><input type="text" placeholder="Ankara"/></div>
+      <div class="f-field full"><label>Kendinizi Tanıtın</label><textarea placeholder="Sanatsal ilgi alanların, ürettiğin eserler, hayallerin..."></textarea></div>
+    </div>
+    <button class="btn-apply" onclick="submitForm('gencz')">⚡ Genç-Z Başvurusu Gönder</button>
+  </div>
+
+</div>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay-auth" id="authModal" onclick="closeAuthIfOutside(event)">
+  <div class="auth-modal-box">
+    <button class="auth-modal-close" onclick="closeAuth()">✕</button>
+    <div class="modal-logo">GEN-Z</div>
+    <div class="auth-tabs" id="authTabs">
+      <button class="auth-tab active" id="tab-signin" onclick="switchTab('signin')">Giriş Yap</button>
+      <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Kayıt Ol</button>
+    </div>
+    <div class="auth-panel active" id="panel-signin">
+      <div class="modal-sub">Hesabına giriş yap</div>
+      <button class="btn-google" onclick="showToast('Google bağlantısı yakında 🔜')">
+        <svg class="google-icon" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
+        Google ile Giriş
+      </button>
+      <div class="divider"><span>veya</span></div>
+      <div class="form-group"><label class="form-label">E-posta</label><input class="form-input" id="signin-email" type="email" placeholder="ornek@mail.com"/></div>
+      <div class="form-group"><label class="form-label">Şifre</label><input class="form-input" id="signin-pass" type="password" placeholder="••••••••"/></div>
+      <button class="btn-submit" onclick="doSignIn()">Giriş Yap</button>
+      <div class="auth-footer"><a onclick="switchTab('forgot')">Şifremi unuttum</a></div>
+    </div>
+    <div class="auth-panel" id="panel-signup">
+      <div class="modal-sub">Yeni hesap oluştur</div>
+      <div class="form-group"><label class="form-label">Kullanıcı Adı</label><div class="input-wrap"><span class="input-prefix">@</span><input class="form-input username-field" id="signup-username" type="text" placeholder="kullaniciadin"/></div></div>
+      <div class="form-group"><label class="form-label">E-posta</label><input class="form-input" id="signup-email" type="email" placeholder="ornek@mail.com"/></div>
+      <div class="form-group"><label class="form-label">Şifre</label><input class="form-input" id="signup-pass" type="password" placeholder="En az 8 karakter"/></div>
+      <button class="btn-submit" onclick="doSignUp()">Kayıt Ol</button>
+    </div>
+    <div class="auth-panel" id="panel-forgot">
+      <div class="modal-sub">Sıfırlama bağlantısı gönderilecek</div>
+      <div class="form-group"><label class="form-label">E-posta</label><input class="form-input" id="forgot-email" type="email" placeholder="ornek@mail.com"/></div>
+      <button class="btn-submit" onclick="doForgot()">Bağlantı Gönder</button>
+      <div class="auth-footer"><a onclick="switchTab('signin')">← Geri dön</a></div>
+    </div>
+    <div class="auth-panel" id="panel-profile">
+      <div class="modal-sub">Hesap bilgilerin</div>
+      <div class="profile-field"><span class="profile-field-label">Kullanıcı Adı</span><span class="profile-field-val" id="profile-username">@kullanici</span></div>
+      <div class="profile-field"><span class="profile-field-label">E-posta</span><span class="profile-field-val" id="profile-email">ornek@mail.com</span></div>
+      <button class="btn-submit" style="background:transparent;color:var(--accent);border:1px solid var(--accent);margin-top:8px" onclick="closeAuth();window.location.href='profile.html'">👤 Profilim</button>
+      <button class="btn-submit" style="background:var(--bg3);color:var(--text2);margin-top:8px" onclick="doSignOut()">Çıkış Yap</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── SAFE STORAGE ── */
+const _ls = {
+  get(k, fb = null) { try { const v = localStorage.getItem(k); return v !== null ? v : fb; } catch(e) { return fb; } },
+  set(k, v)         { try { localStorage.setItem(k, v); } catch(e) {} },
+  remove(k)         { try { localStorage.removeItem(k); } catch(e) {} },
+  getJSON(k, fb)    { try { return JSON.parse(localStorage.getItem(k)) ?? fb; } catch(e) { return fb; } },
+};
+let currentLang  = _ls.get('genz-lang', 'tr');
+let currentTheme = _ls.get('genz-theme', 'dark');
+let currentUser  = _ls.getJSON('genz-user', null);
+
+(function init() {
+  document.documentElement.setAttribute('data-lang',  currentLang);
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  document.getElementById('themeBtn').textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+  if (currentUser) {
+    document.getElementById('authBtn').textContent = currentUser.username;
+    document.getElementById('profile-username').textContent = currentUser.username;
+    document.getElementById('profile-email').textContent    = currentUser.email;
+  }
+})();
+
+function toggleTheme() {
+  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  _ls.set('genz-theme', currentTheme);
+  document.body.classList.add('theme-transitioning');
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  document.getElementById('themeBtn').textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+  showToast(currentTheme === 'dark' ? 'Koyu tema 🌙' : 'Açık tema ☀️');
+  setTimeout(() => document.body.classList.remove('theme-transitioning'), 350);
+}
+function toggleLang() {
+  currentLang = currentLang === 'tr' ? 'en' : 'tr';
+  _ls.set('genz-lang', currentLang);
+  showToast(currentLang === 'tr' ? 'Dil: Türkçe 🇹🇷' : 'Language: English 🇬🇧');
+}
+function toggleMobileMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+  document.getElementById('hamburgerBtn').classList.toggle('open');
+}
+
+const selectedRoles = new Set();
+window.toggleRole = function(role) {
+  const tile = document.querySelector('.role-tile[data-role="' + role + '"]');
+  const form = document.getElementById('form-' + role);
+  if (selectedRoles.has(role)) {
+    selectedRoles.delete(role); tile.classList.remove('selected'); form.classList.remove('active');
+  } else {
+    selectedRoles.add(role); tile.classList.add('selected'); form.classList.add('active');
+    setTimeout(() => form.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+  }
+};
+window.selectPlan = function(plan) {
+  document.querySelectorAll('.plan-opt').forEach(o => o.classList.remove('active'));
+  const el = document.querySelector('.plan-opt[data-plan="' + plan + '"]');
+  if (el) el.classList.add('active');
+};
+window.submitForm = function(role) {
+  if (!currentUser) { openAuth('signin'); showToast('Başvuru için giriş yapman gerekiyor ⚠️'); return; }
+  const labels = { magaza: 'Mağaza', usta: 'Usta', gencz: 'Genç-Z' };
+  showToast(labels[role] + ' başvurun alındı! En kısa sürede geri döneceğiz ✅');
+};
+
+function openAuth(tab) {
+  if (currentUser) { switchTab('profile'); } else { switchTab(tab || 'signin'); }
+  document.getElementById('authModal').classList.add('open');
+}
+function closeAuth() { document.getElementById('authModal').classList.remove('open'); }
+function closeAuthIfOutside(e) { if (e.target === document.getElementById('authModal')) closeAuth(); }
+function switchTab(tab) {
+  document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  const panel = document.getElementById('panel-' + tab);
+  if (panel) panel.classList.add('active');
+  const btn = document.getElementById('tab-' + tab);
+  if (btn) btn.classList.add('active');
+  document.getElementById('authTabs').style.display = (tab === 'forgot' || tab === 'profile') ? 'none' : 'flex';
+}
+function doSignIn() {
+  const email = document.getElementById('signin-email').value.trim();
+  const pass  = document.getElementById('signin-pass').value;
+  if (!email || !pass) { showToast('Lütfen tüm alanları doldurun ⚠️'); return; }
+  fakeLogin(email, 'Kullanıcı');
+}
+function doSignUp() {
+  const username = document.getElementById('signup-username').value.trim();
+  const email    = document.getElementById('signup-email').value.trim();
+  const pass     = document.getElementById('signup-pass').value;
+  if (!username || !email || !pass) { showToast('Lütfen tüm alanları doldurun ⚠️'); return; }
+  if (pass.length < 8) { showToast('Şifre en az 8 karakter olmalı ⚠️'); return; }
+  fakeLogin(email, username);
+}
+function doForgot() {
+  const email = document.getElementById('forgot-email').value.trim();
+  if (!email) { showToast('E-posta adresinizi girin ⚠️'); return; }
+  showToast('Sıfırlama bağlantısı gönderildi ✉️');
+  setTimeout(() => switchTab('signin'), 1500);
+}
+function fakeLogin(email, username) {
+  const clean = '@' + username.replace('@', '');
+  currentUser = { email, username: clean };
+  _ls.set('genz-user', JSON.stringify(currentUser));
+  document.getElementById('profile-email').textContent    = email;
+  document.getElementById('profile-username').textContent = clean;
+  document.getElementById('authBtn').textContent = clean;
+  closeAuth(); showToast('Hoş geldin, ' + clean + ' 👋');
+}
+function doSignOut() {
+  currentUser = null; _ls.remove('genz-user');
+  document.getElementById('authBtn').textContent = 'Giriş Yap';
+  closeAuth(); showToast('Çıkış yapıldı 👋');
+}
+
+let _toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ── SAFE INTERSECTION OBSERVER ── */
+function safeObserve(elements, callback, options) {
+  if (!('IntersectionObserver' in window)) {
+    elements.forEach(el => callback([{ isIntersecting: true, target: el }]));
+    return null;
+  }
+  const observer = new IntersectionObserver(callback, options);
+  elements.forEach(el => observer.observe(el));
+  return observer;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.mobile-menu a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.getElementById('mobileMenu').classList.remove('open');
+      document.getElementById('hamburgerBtn').classList.remove('open');
+    });
   });
-  return Object.values(map);
-}
-function getProductsByCategory(catId) {
-  if (catId === 'all') return DEMO_PRODUCTS;
-  return DEMO_PRODUCTS.filter(p => p.category === catId);
-}
+  const _revealObs = safeObserve([...document.querySelectorAll('.reveal')], entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); if (_revealObs) _revealObs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.body.style.opacity = '0';
+  document.body.style.transition = 'opacity 0.3s';
+  requestAnimationFrame(() => { document.body.style.opacity = '1'; });
+});
+</script>
+</body>
+</html>

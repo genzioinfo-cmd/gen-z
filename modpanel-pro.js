@@ -1019,3 +1019,72 @@ window.proBannerGoster = async function(konteyner) {
 };
 
 console.log('[GEN-Z] modpanel-pro.js yüklendi ✦');
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  PAKETLER SAYFASI
+// ═══════════════════════════════════════════════════════════════════════════
+
+window.paketlerYukle = async function() {
+  await proKontrol();
+
+  const planAd   = document.getElementById('mevcutPlanAd');
+  const planBadge= document.getElementById('mevcutPlanBadge');
+  const buyukKart= document.getElementById('paketBuyuk');
+  const kucukKart= document.getElementById('paketKucuk');
+  const btn      = document.getElementById('proSatinAlBtn');
+
+  if(_isPro) {
+    if(planAd)    planAd.textContent = 'Büyük İşletme';
+    if(planBadge) {
+      planBadge.textContent = '⚡ Pro Aktif';
+      planBadge.style.background = 'rgba(92,240,180,.12)';
+      planBadge.style.borderColor = 'rgba(92,240,180,.3)';
+      planBadge.style.color = '#5CF0B4';
+    }
+    if(buyukKart) {
+      buyukKart.style.borderColor = '#5CF0B4';
+    }
+    if(btn) {
+      btn.textContent = '✅ Aktif — Büyük İşletme Modülü';
+      btn.style.background = 'rgba(92,240,180,.15)';
+      btn.style.border = '1px solid rgba(92,240,180,.3)';
+      btn.style.color = '#5CF0B4';
+      btn.onclick = null;
+      btn.style.cursor = 'default';
+    }
+    if(kucukKart) kucukKart.style.opacity = '.6';
+  } else {
+    if(planAd)    planAd.textContent = 'Küçük İşletme';
+    if(planBadge) planBadge.textContent = 'Ücretsiz';
+  }
+};
+
+window.proSatinAlSayfadan = async function() {
+  const btn = document.getElementById('proSatinAlBtn');
+  if(btn) { btn.textContent = 'İşleniyor…'; btn.disabled = true; }
+
+  // Demo — gerçek ödeme entegrasyonu buraya
+  await new Promise(r => setTimeout(r, 1200));
+
+  if(!confirm('999₺ Büyük İşletme Modülü satın almak istiyor musunuz?\n\n✦ Tek seferlik ödeme\n✦ Anında aktivasyon\n✦ Ömür boyu kullanım\n✦ 14 gün iade garantisi')) {
+    if(btn) { btn.textContent = '✦ Hemen Yükselt — 999₺'; btn.disabled = false; }
+    return;
+  }
+
+  try {
+    const mag = window._magaza;
+    const uid = window._aktifUid;
+    if(mag) await updateDoc(doc(db,'magazalar',mag.id),{ proModul:true, proModulTs:serverTimestamp() });
+    if(uid) await updateDoc(doc(db,'kullanicilar',uid),{ proModul:true, proModulTs:serverTimestamp() });
+    _isPro = true;
+
+    if(typeof toast==='function') toast('🎉 Büyük İşletme Modülü aktif! Tüm özellikler açıldı.');
+
+    // Sayfayı güncelle
+    await window.paketlerYukle();
+
+  } catch(e) {
+    if(typeof toast==='function') toast('Hata: '+e.message,'err');
+    if(btn) { btn.textContent = '✦ Hemen Yükselt — 999₺'; btn.disabled = false; }
+  }
+};

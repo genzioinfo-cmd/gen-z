@@ -1122,6 +1122,149 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
       </div>
 
 
+
+      <!-- ████ PAKETLER & MODÜLLER ████ -->
+      <div class="sayfa" id="sayfa-paketler">
+        <div class="sh"><span class="eyebrow">GEN-Z Platform</span><h1>Paket & <em>Modüller</em></h1></div>
+
+        <!-- Mevcut durum banner -->
+        <div id="mevcutPaketBanner" style="background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.4rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;">
+          <div>
+            <div style="font-size:.55rem;color:var(--t2);text-transform:uppercase;letter-spacing:.2em;margin-bottom:.3rem;">Mevcut Planınız</div>
+            <div style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;" id="mevcutPlanAd">Küçük İşletme</div>
+          </div>
+          <div id="mevcutPlanBadge" style="padding:.4rem 1rem;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:20px;font-size:.65rem;color:var(--t2);">Ücretsiz</div>
+        </div>
+
+        <!-- Paket kartları -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;max-width:780px;margin-bottom:2rem;">
+
+          <!-- KÜÇÜK İŞLETME -->
+          <div id="paketKucuk" style="background:rgba(255,255,255,.025);border:2px solid var(--border);border-radius:16px;padding:1.8rem;position:relative;transition:border-color .2s;">
+            <div style="font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--t2);margin-bottom:.8rem;">🏪 Küçük İşletme</div>
+            <div style="font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;color:var(--cream);line-height:1;margin-bottom:.3rem;">Ücretsiz</div>
+            <div style="font-size:.62rem;color:var(--t2);margin-bottom:1.4rem;">Başlamak için ideal</div>
+
+            <div style="display:flex;flex-direction:column;gap:.55rem;margin-bottom:1.6rem;">
+              ${[
+                '✅ Ürün ekleme & yönetimi',
+                '✅ Sipariş takibi',
+                '✅ Temel stok güncelleme',
+                '✅ İade yönetimi',
+                '✅ İlan verme (Usta)',
+                '✅ İçerik ekleme (Genç-Z)',
+                '✅ Randevu sistemi',
+                '✅ Temel özet dashboard',
+                '❌ Gelişmiş analitik',
+                '❌ Müşteri CRM',
+                '❌ Kampanya & kupon',
+                '❌ Muhasebe modülü',
+                '❌ Barkod & QR & Raf',
+              ].map(f => `<div style="font-size:.65rem;color:${f.startsWith('✅')?'var(--t2)':'rgba(255,255,255,.2)'};">${f}</div>`).join('')}
+            </div>
+
+            <div id="kucukBtn" style="width:100%;padding:.8rem;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;font-size:.65rem;color:var(--t2);text-align:center;font-weight:700;">
+              ✓ Mevcut Planınız
+            </div>
+          </div>
+
+          <!-- BÜYÜK İŞLETME -->
+          <div id="paketBuyuk" style="background:linear-gradient(160deg,rgba(201,168,76,.06),rgba(123,92,240,.06));border:2px solid rgba(201,168,76,.4);border-radius:16px;padding:1.8rem;position:relative;overflow:hidden;transition:all .2s;">
+            <!-- Popüler rozet -->
+            <div style="position:absolute;top:16px;right:16px;background:linear-gradient(135deg,#c9a84c,#d4a83e);color:#000;font-size:.48rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;padding:.3rem .8rem;border-radius:20px;">⚡ PRO</div>
+
+            <div style="font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem;">🏢 Büyük İşletme</div>
+            <div style="font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;color:var(--cream);line-height:1;margin-bottom:.2rem;">999₺</div>
+            <div style="font-size:.62rem;color:var(--t2);margin-bottom:1.4rem;">Tek seferlik · Ömür boyu</div>
+
+            <div style="display:flex;flex-direction:column;gap:.55rem;margin-bottom:1.6rem;">
+              ${[
+                '✅ Küçük İşletme'nin her şeyi',
+                '✅ Gelişmiş Analitik & Grafikler',
+                '✅ Müşteri CRM (CLV, segmentasyon)',
+                '✅ Kampanya & Kupon Yönetimi',
+                '✅ Tam Muhasebe (KDV, Fatura)',
+                '✅ Barkod, QR Kod, Raf Sistemi',
+                '✅ Usta: Profil, Muhasebe, Yorumlar',
+                '✅ Genç-Z: Dijital Mağaza, Portföy',
+                '✅ İçerik Analitik',
+                '✅ Mağaza Ayarları',
+                '✅ Vergi Takvimi (Gelişmiş)',
+                '✅ Öncelikli Destek 🎖️',
+                '✅ Tüm yeni özellikler otomatik',
+              ].map(f => `<div style="font-size:.65rem;color:var(--t2);">${f}</div>`).join('')}
+            </div>
+
+            <button id="proSatinAlBtn" onclick="proSatinAlSayfadan()" style="width:100%;padding:.9rem;background:linear-gradient(135deg,#c9a84c,#d4a83e);color:#000;border:none;border-radius:8px;font-family:'Syne',sans-serif;font-size:.75rem;font-weight:800;letter-spacing:.05em;cursor:pointer;transition:all .2s;"
+              onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+              ✦ Hemen Yükselt — 999₺
+            </button>
+            <div style="text-align:center;font-size:.58rem;color:var(--t2);margin-top:.6rem;">Güvenli ödeme · Anında aktivasyon · İade garantisi</div>
+          </div>
+        </div>
+
+        <!-- Karşılaştırma tablosu -->
+        <div style="background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:12px;padding:1.4rem;max-width:780px;">
+          <div style="font-size:.68rem;font-weight:700;color:var(--cream);margin-bottom:1.2rem;">📊 Detaylı Karşılaştırma</div>
+          <div style="overflow-x:auto;">
+            <table style="width:100%;min-width:500px;">
+              <thead>
+                <tr style="font-size:.6rem;">
+                  <th style="text-align:left;padding:.6rem 0;color:var(--t2);font-weight:600;">Özellik</th>
+                  <th style="text-align:center;padding:.6rem;color:var(--t2);font-weight:600;">🏪 Küçük İşletme</th>
+                  <th style="text-align:center;padding:.6rem;color:var(--gold);font-weight:700;">⚡ Büyük İşletme</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${[
+                  ['Ürün Ekleme & Yönetim','✅','✅'],
+                  ['Sipariş Takibi','✅','✅'],
+                  ['İade Yönetimi','✅','✅'],
+                  ['Temel Stok (Adet)','✅','✅'],
+                  ['Randevu & Sohbet','✅','✅'],
+                  ['İlan & İçerik Ekleme','✅','✅'],
+                  ['Gelişmiş Analitik','❌','✅'],
+                  ['Müşteri CRM','❌','✅'],
+                  ['Kampanya & Kupon','❌','✅'],
+                  ['Muhasebe Paneli','❌','✅'],
+                  ['KDV & Fatura Takibi','❌','✅'],
+                  ['Barkod, QR, Raf No.','❌','✅'],
+                  ['Usta Muhasebe & Yorumlar','❌','✅'],
+                  ['Genç-Z Dijital Mağaza','❌','✅'],
+                  ['Portföy & Analitik','❌','✅'],
+                  ['Öncelikli Destek','❌','✅'],
+                ].map(([ozellik,kucuk,buyuk])=>`
+                  <tr style="border-top:1px solid rgba(255,255,255,.04);">
+                    <td style="padding:.55rem 0;font-size:.65rem;color:var(--t2);">${ozellik}</td>
+                    <td style="text-align:center;font-size:.75rem;">${kucuk}</td>
+                    <td style="text-align:center;font-size:.75rem;font-weight:700;color:${buyuk==='✅'?'#5CF0B4':'rgba(255,255,255,.2)'};">${buyuk}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SSS -->
+        <div style="max-width:780px;margin-top:1.5rem;">
+          <div style="font-size:.68rem;font-weight:700;color:var(--cream);margin-bottom:1rem;">❓ Sık Sorulan Sorular</div>
+          <div style="display:flex;flex-direction:column;gap:.6rem;">
+            ${[
+              ['Ödeme nasıl yapılır?','Güvenli ödeme sayfamız üzerinden kredi kartı veya banka kartıyla ödeme yapabilirsiniz. Ödeme anında işlenir.'],
+              ['Aktivasyon ne zaman olur?','Ödeme onaylandıktan sonra saniyeler içinde Pro modülünüz aktif olur. Sayfayı yenilemeniz yeterli.'],
+              ['İade hakkı var mı?','Evet, aktivasyondan sonra 14 gün içinde memnun kalmazsanız tam iade yapıyoruz.'],
+              ['Yeni özellikler ücretli mi?','Hayır. Büyük İşletme paketini alan kullanıcılar tüm yeni özelliklere otomatik erişir.'],
+            ].map(([s,c])=>`
+              <div style="background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;padding:.9rem 1.1rem;">
+                <div style="font-size:.68rem;font-weight:700;color:var(--cream);margin-bottom:.35rem;">Q: ${s}</div>
+                <div style="font-size:.63rem;color:var(--t2);line-height:1.7;">${c}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+      </div>
+
       <!-- ████ ANALİTİK ████ -->
       <div class="sayfa" id="sayfa-analitik">
         <div class="sh"><span class="eyebrow">Mağaza Performansı</span><h1>Analitik <em>Paneli</em></h1></div>

@@ -357,6 +357,68 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
   .me-cta{font-size:clamp(1.4rem,7vw,2rem)!important;padding:.5rem 1.5rem!important;}
 }
 
+
+/* ── CHAT MODAL ── */
+.chat-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:999;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.chat-overlay.open{display:flex;}
+.chat-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;width:100%;max-width:520px;max-height:80vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.6);}
+.chat-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.chat-head-info{display:flex;flex-direction:column;gap:2px;}
+.chat-head-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--cream);}
+.chat-head-sub{font-size:11px;color:var(--t2);}
+.chat-close{background:none;border:none;color:var(--t2);font-size:20px;cursor:pointer;padding:4px 8px;border-radius:6px;transition:color .2s;}
+.chat-close:hover{color:var(--cream);}
+.chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;}
+.chat-messages::-webkit-scrollbar{width:4px;}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+.chat-bubble{max-width:80%;padding:10px 14px;border-radius:14px;font-size:13px;line-height:1.5;word-break:break-word;}
+.chat-bubble.benden{align-self:flex-end;background:var(--accent);color:#fff;border-bottom-right-radius:4px;}
+.chat-bubble.karsidan{align-self:flex-start;background:var(--bg3);color:var(--cream);border-bottom-left-radius:4px;}
+.chat-bubble-time{font-size:10px;opacity:.6;margin-top:3px;text-align:right;}
+.chat-bubble.karsidan .chat-bubble-time{text-align:left;}
+.chat-empty-msg{text-align:center;color:var(--t2);font-size:12px;padding:2rem;opacity:.6;}
+.chat-footer{padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;}
+.chat-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--cream);font-family:'DM Sans',sans-serif;resize:none;min-height:42px;max-height:100px;outline:none;transition:border-color .2s;}
+.chat-input:focus{border-color:var(--accent);}
+.chat-send{background:var(--accent);border:none;border-radius:10px;padding:0 16px;color:#fff;cursor:pointer;font-size:18px;transition:opacity .2s;}
+.chat-send:hover{opacity:.85;}
+.chat-send:disabled{opacity:.4;cursor:default;}
+
+
+/* ── STOK & FİNANS CSS ── */
+.stk-ozet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.8rem;margin-bottom:1.4rem;}
+.stk-k{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:8px;padding:1rem 1.2rem;}
+.stk-n{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:700;margin-bottom:.2rem;}
+.stk-l{font-size:.58rem;color:var(--t2);text-transform:uppercase;letter-spacing:.1em;}
+.stk-pm-btn{width:32px;height:38px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:6px;color:var(--cream);font-size:16px;cursor:pointer;flex-shrink:0;}
+.stk-pm-btn:hover{border-color:var(--accent);color:var(--accent);}
+.stk-durum-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;}
+.dan-kart{background:rgba(255,255,255,.022);border:1px solid var(--border);border-radius:10px;padding:1.4rem 1.6rem;}
+.dan-baslik{font-family:'Syne',sans-serif;font-size:.95rem;color:var(--cream);margin-bottom:.3rem;}
+.dan-desc{font-size:.65rem;color:var(--t2);line-height:1.7;}
+.dan-lbl{font-size:.6rem;color:var(--t2);font-weight:600;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:.35rem;}
+.dan-sonuc-row{display:flex;justify-content:space-between;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.7rem;}
+.dan-sonuc-row:last-child{border:none;}
+.dan-sonuc-val{font-weight:700;}
+.vergi-kart{background:rgba(255,255,255,.022);border:1px solid var(--border);border-radius:8px;padding:1rem 1.2rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+.vergi-kart.acil{border-color:rgba(240,80,80,.35);background:rgba(240,80,80,.05);}
+.vergi-kart.yakin{border-color:rgba(240,197,92,.3);background:rgba(240,197,92,.04);}
+.vergi-kart.normal{border-color:rgba(92,240,180,.2);background:rgba(92,240,180,.03);}
+.vergi-tarih{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;min-width:90px;}
+.vergi-tur{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem;}
+.vergi-aciklama{font-size:.65rem;color:var(--t2);line-height:1.6;}
+.vergi-badge{padding:.25rem .7rem;border-radius:20px;font-size:.52rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
+.vergi-badge.acil{background:rgba(240,80,80,.15);color:#ff6b6b;border:1px solid rgba(240,80,80,.3);}
+.vergi-badge.yakin{background:rgba(240,197,92,.12);color:var(--gold);border:1px solid rgba(240,197,92,.25);}
+.vergi-badge.normal{background:rgba(92,240,180,.1);color:var(--accent3);border:1px solid rgba(92,240,180,.2);}
+.vergi-rehber-k{background:rgba(255,255,255,.022);border:1px solid var(--border);border-radius:8px;padding:1rem;}
+.vergi-rehber-k h4{font-family:'Syne',sans-serif;font-size:.8rem;color:var(--cream);margin-bottom:.5rem;}
+.vergi-rehber-k p{font-size:.64rem;color:var(--t2);line-height:1.7;}
+.sm-blok{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;padding:1rem 1.1rem;}
+.sm-blok-baslik{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem;}
+.stok-row-kritik{background:rgba(255,80,80,.04)!important;}
+.stok-row-bitti{background:rgba(80,80,80,.06)!important;opacity:.7;}
+
 </style>
 </head>
 <body>
@@ -405,7 +467,10 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
           <button class="sb-btn on" onclick="git('ozet',this)"><span class="ikon">📊</span> Özet</button>
           <button class="sb-btn" onclick="git('urunler',this)"><span class="ikon">🛍</span> Ürünlerim</button>
           <button class="sb-btn" onclick="git('siparisler',this)"><span class="ikon">📦</span> Siparişler <span class="sb-badge" id="bekBadge" style="display:none">!</span></button>
+          <button class="sb-btn" onclick="git('stok',this)"><span class="ikon">📦</span> Stok Yönetimi <span class="sb-badge" id="stokKritikBadge" style="display:none;background:#ff6b6b;"></span></button>
           <button class="sb-btn" onclick="git('finans',this)"><span class="ikon">💰</span> Finans</button>
+          <button class="sb-btn" onclick="git('finans-danisman',this)"><span class="ikon">🧠</span> Finansal Danışman</button>
+          <button class="sb-btn" onclick="git('vergi-takvim',this)"><span class="ikon">🗓️</span> Vergi Takvimi <span class="sb-badge" id="vergiAlertBadge" style="display:none;background:#ff6b6b;">!</span></button>
           <button class="sb-btn" onclick="git('one-cikar',this)"><span class="ikon">⭐</span> Öne Çıkar</button>
         </div>
         <!-- USTA BÖLÜMÜ -->
@@ -657,6 +722,223 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
       </div>
 
       <!-- FİNANS -->
+
+      <!-- ████ STOK YÖNETİMİ ████ -->
+      <div class="sayfa" id="sayfa-stok">
+        <div class="sh"><span class="eyebrow">Depo & Envanter</span><h1>Stok <em>Yönetimi</em></h1></div>
+
+        <!-- 600₺ Kilit Banner -->
+        <div id="stokKilitDiv" style="display:none;background:linear-gradient(135deg,rgba(201,168,76,.07),rgba(123,92,240,.05));border:1px solid rgba(201,168,76,.22);border-radius:10px;padding:1.4rem 1.8rem;margin-bottom:1.4rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+          <div>
+            <div style="font-family:'Syne',sans-serif;font-size:.95rem;color:var(--gold);margin-bottom:.3rem;">🔒 Gelişmiş Stok & QR Sistemi</div>
+            <div style="font-size:.62rem;color:var(--t2);line-height:1.8;">Raf numarası · Barkod üretimi · QR kod · Kritik stok uyarıları · CSV dışa aktarma<br>Tek seferlik ödeme — ömür boyu kullanım</div>
+          </div>
+          <button onclick="stokSatinAl()" style="padding:.8rem 2rem;background:linear-gradient(135deg,#c9a84c,#d4a83e);color:#000;border:none;border-radius:6px;font-family:'Syne',sans-serif;font-size:.68rem;font-weight:800;cursor:pointer;letter-spacing:.08em;white-space:nowrap;">₺600 — Satın Al ✦</button>
+        </div>
+
+        <!-- Özet kartlar -->
+        <div class="stk-ozet-grid" id="stkOzetGrid">
+          <div class="stk-k"><div class="stk-n" id="stkToplamUrun">—</div><div class="stk-l">Toplam Ürün</div></div>
+          <div class="stk-k"><div class="stk-n" style="color:var(--accent3)" id="stkToplamAdet">—</div><div class="stk-l">Toplam Stok</div></div>
+          <div class="stk-k"><div class="stk-n" style="color:#ff6b6b" id="stkKritikSay">—</div><div class="stk-l">Kritik Stok (≤5)</div></div>
+          <div class="stk-k"><div class="stk-n" style="color:var(--gold)" id="stkDeger">—</div><div class="stk-l">Stok Değeri</div></div>
+        </div>
+
+        <!-- Araçlar -->
+        <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin-bottom:1rem;">
+          <input class="fi" id="stokArama" placeholder="Ürün ara…" oninput="stokAraFn(this.value)" style="flex:1;min-width:180px;max-width:260px;padding:.5rem .8rem;font-size:.68rem;">
+          <div class="filtre-row" style="margin:0;">
+            <button class="f-btn on" onclick="stokFiltreFn('hepsi',this)">Tümü</button>
+            <button class="f-btn" onclick="stokFiltreFn('kritik',this)" style="color:#ff6b6b;">🔴 Kritik</button>
+            <button class="f-btn" onclick="stokFiltreFn('bitti',this)">⚫ Bitti</button>
+            <button class="f-btn" onclick="stokFiltreFn('normal',this)">🟢 Normal</button>
+          </div>
+          <button onclick="stokCSV()" style="padding:.48rem 1rem;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;color:var(--t2);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">📤 CSV</button>
+          <button onclick="stokYenile()" style="padding:.48rem 1rem;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;color:var(--t2);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">🔄 Yenile</button>
+        </div>
+
+        <!-- Tablo -->
+        <div class="twrap" style="overflow-x:auto;">
+          <table id="stokTabloEl" style="min-width:820px;">
+            <thead><tr>
+              <th style="width:32px;"></th>
+              <th>Ürün</th><th>SKU / Barkod</th><th>Raf Konumu</th>
+              <th>Stok</th><th>Eşik</th><th>KDV Hariç</th><th>Stok Değeri</th>
+              <th>Durum</th><th>İşlem</th>
+            </tr></thead>
+            <tbody id="stokGovde"><tr><td colspan="10" style="text-align:center;padding:2rem;color:var(--t2);font-style:italic;">Yükleniyor…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ████ FİNANSAL DANIŞMAN ████ -->
+      <div class="sayfa" id="sayfa-finans-danisman">
+        <div class="sh"><span class="eyebrow">Yapay Zeka Destekli</span><h1>Finansal <em>Danışman</em></h1></div>
+
+        <!-- Fiyat Optimizasyonu -->
+        <div class="dan-kart">
+          <div class="dan-baslik">💡 Optimum Fiyat Hesaplayıcı</div>
+          <div class="dan-desc">Maliyet ve hedef kâr marjınızı girin, KDV + komisyon dahil müşteriye yansıyacak ideal satış fiyatını hesaplayalım.</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.8rem;margin-top:1rem;">
+            <div><label class="dan-lbl">Ürün Maliyeti (₺)</label><input class="fi" id="danMaliyet" type="number" placeholder="0.00" oninput="danHesapla()" style="font-size:.72rem;"></div>
+            <div><label class="dan-lbl">Genel Gider Payı (₺)</label><input class="fi" id="danGider" type="number" placeholder="kargo, ambalaj…" oninput="danHesapla()" style="font-size:.72rem;"></div>
+            <div><label class="dan-lbl">Hedef Kâr Marjı (%)</label><input class="fi" id="danMarj" type="number" placeholder="20" min="0" max="500" oninput="danHesapla()" style="font-size:.72rem;"></div>
+            <div><label class="dan-lbl">KDV Oranı (%)</label>
+              <select class="fi" id="danKdv" onchange="danHesapla()" style="font-size:.72rem;">
+                <option value="1">%1 (Gıda temel)</option>
+                <option value="10">%10 (Giyim, tekstil)</option>
+                <option value="20" selected>%20 (Genel)</option>
+              </select>
+            </div>
+          </div>
+          <div id="danSonuc" style="display:none;margin-top:1.2rem;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:8px;padding:1.2rem;">
+            <div style="font-size:.55rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.9rem;">📊 Hesaplama Sonucu</div>
+            <div id="danSonucIcerik"></div>
+          </div>
+        </div>
+
+        <!-- Kâr-Zarar Analizi -->
+        <div class="dan-kart" style="margin-top:1rem;">
+          <div class="dan-baslik">📈 Aylık Kâr-Zarar Analizi</div>
+          <div class="dan-desc">Satışlarınızdan elde ettiğiniz gelirin gerçek kâra dönüşümünü görün.</div>
+          <div id="danAnalizIcerik" style="margin-top:1rem;"><div style="color:var(--t2);font-size:.7rem;font-style:italic;">Satış verisi yükleniyor…</div></div>
+        </div>
+
+        <!-- Öneriler -->
+        <div class="dan-kart" style="margin-top:1rem;">
+          <div class="dan-baslik">🎯 Akıllı Öneriler</div>
+          <div id="danOneriler" style="margin-top:.8rem;display:flex;flex-direction:column;gap:.6rem;">
+            <div style="color:var(--t2);font-size:.7rem;font-style:italic;">Veri yükleniyor…</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ████ VERGİ TAKVİMİ ████ -->
+      <div class="sayfa" id="sayfa-vergi-takvim">
+        <div class="sh"><span class="eyebrow">Yasal Yükümlülükler</span><h1>Vergi <em>Takvimi</em></h1></div>
+
+        <!-- Mükellef Tipi Seçimi -->
+        <div class="dan-kart" style="margin-bottom:1.2rem;">
+          <div class="dan-baslik">👤 Mükellef Profiliniz</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.8rem;margin-top:.8rem;">
+            <div><label class="dan-lbl">Mükellef Tipi</label>
+              <select class="fi" id="vMukTip" onchange="vergiYukle()" style="font-size:.72rem;">
+                <option value="gercek">Gerçek Kişi (Esnaf/Serbest)</option>
+                <option value="basit">Basit Usul Mükellef</option>
+                <option value="sirket">Şirket (Ltd./A.Ş.)</option>
+                <option value="sahis">Şahıs Şirketi</option>
+              </select>
+            </div>
+            <div><label class="dan-lbl">Yıllık Tahmini Ciro (₺)</label>
+              <input class="fi" id="vCiro" type="number" placeholder="Satış geliriniz" oninput="vergiYukle()" style="font-size:.72rem;"></div>
+            <div><label class="dan-lbl">KDV Mükellefi mi?</label>
+              <select class="fi" id="vKdvMuk" onchange="vergiYukle()" style="font-size:.72rem;">
+                <option value="evet">Evet</option>
+                <option value="hayir">Hayır (İstisna)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Yaklaşan Vergiler -->
+        <div style="margin-bottom:.6rem;font-family:'Syne',sans-serif;font-size:.85rem;color:var(--cream);">📅 Yaklaşan Beyan & Ödeme Tarihleri</div>
+        <div id="vergiTakvimListe" style="display:flex;flex-direction:column;gap:.7rem;margin-bottom:1.5rem;">
+          <div style="color:var(--t2);font-size:.7rem;font-style:italic;">Mükellef tipinizi seçin…</div>
+        </div>
+
+        <!-- Vergi Bilgi Kartları -->
+        <div style="margin-bottom:.6rem;font-family:'Syne',sans-serif;font-size:.85rem;color:var(--cream);">📚 Vergi Rehberi</div>
+        <div id="vergiRehberGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.8rem;"></div>
+      </div>
+
+      <!-- STOK DÜZENLE MODAL -->
+      <div class="chat-overlay" id="stokModal" onclick="stokModalKapat(event)">
+        <div class="chat-box" style="max-width:640px;max-height:94vh;overflow-y:auto;">
+          <div class="chat-head">
+            <div class="chat-head-info">
+              <div class="chat-head-name" id="stokModalBaslik">Stok Düzenle</div>
+              <div class="chat-head-sub" id="stokModalSku" style="font-family:monospace;font-size:11px;color:var(--t2);"></div>
+            </div>
+            <button class="chat-close" onclick="stokModalKapat()">✕</button>
+          </div>
+          <div style="padding:1.4rem;display:flex;flex-direction:column;gap:1rem;" id="stokModalBody">
+
+            <!-- Raf & Konum -->
+            <div class="sm-blok">
+              <div class="sm-blok-baslik">📍 Depo Konumu</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;">
+                <div><label class="dan-lbl">Bölge / Alan</label><input class="fi" id="smBolge" placeholder="A, B, C…" style="font-size:.7rem;" oninput="rafOnizle()"></div>
+                <div><label class="dan-lbl">Raf No</label><input class="fi" id="smRaf" placeholder="01, 02…" style="font-size:.7rem;" oninput="rafOnizle()"></div>
+                <div><label class="dan-lbl">Göz / Slot</label><input class="fi" id="smGoz" placeholder="A1, B2…" style="font-size:.7rem;" oninput="rafOnizle()"></div>
+              </div>
+              <div id="rafOnizleDiv" style="display:none;margin-top:.6rem;padding:.45rem .8rem;background:rgba(201,168,76,.05);border:1px solid rgba(201,168,76,.12);border-radius:4px;font-size:.62rem;color:rgba(201,168,76,.7);">
+                📍 Konum: <strong id="rafOnizleTxt">—</strong>
+              </div>
+            </div>
+
+            <!-- Stok & Eşik -->
+            <div class="sm-blok">
+              <div class="sm-blok-baslik">📦 Stok Bilgisi</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
+                <div>
+                  <label class="dan-lbl">Mevcut Stok</label>
+                  <div style="display:flex;align-items:center;gap:.4rem;">
+                    <button onclick="smStokDeg(-1)" class="stk-pm-btn">−</button>
+                    <input class="fi" id="smStok" type="number" min="0" style="font-size:.8rem;font-weight:700;text-align:center;">
+                    <button onclick="smStokDeg(1)" class="stk-pm-btn">+</button>
+                  </div>
+                </div>
+                <div>
+                  <label class="dan-lbl">Kritik Eşik (uyarı)</label>
+                  <input class="fi" id="smEsik" type="number" min="0" placeholder="5" style="font-size:.7rem;">
+                  <div style="font-size:.58rem;color:var(--t2);margin-top:.3rem;">Bu seviyenin altına düşünce uyarı alırsın</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SKU & Barkod -->
+            <div class="sm-blok">
+              <div class="sm-blok-baslik">🏷️ SKU & Barkod</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
+                <div>
+                  <label class="dan-lbl">SKU Kodu</label>
+                  <div style="display:flex;gap:.4rem;">
+                    <input class="fi" id="smSku" placeholder="GNZ-001" style="font-size:.7rem;font-family:monospace;">
+                    <button onclick="skuUret()" style="padding:.5rem .8rem;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2);border-radius:4px;color:var(--gold);font-size:.6rem;cursor:pointer;white-space:nowrap;">🎲 Üret</button>
+                  </div>
+                </div>
+                <div>
+                  <label class="dan-lbl">Barkod (EAN/UPC)</label>
+                  <div style="display:flex;gap:.4rem;">
+                    <input class="fi" id="smBarkod" placeholder="Barkod numarası" style="font-size:.7rem;font-family:monospace;">
+                    <button onclick="barkodUret()" style="padding:.5rem .8rem;background:rgba(92,240,180,.08);border:1px solid rgba(92,240,180,.15);border-radius:4px;color:var(--accent3);font-size:.6rem;cursor:pointer;white-space:nowrap;">🎲 Üret</button>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;gap:.4rem;margin-top:.7rem;flex-wrap:wrap;">
+                <button onclick="qrGoster()" style="padding:.5rem 1.2rem;background:rgba(123,92,240,.1);border:1px solid rgba(123,92,240,.25);border-radius:4px;color:#a78bfa;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">📱 QR Kod Oluştur</button>
+                <button onclick="barkodGoster()" style="padding:.5rem 1.2rem;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;color:var(--t2);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">🖨️ Barkod Yazdır</button>
+              </div>
+              <div id="qrBarkodAlani" style="display:none;margin-top:.8rem;padding:1rem;background:#fff;border-radius:8px;text-align:center;">
+                <canvas id="qrCanvas" style="max-width:160px;"></canvas>
+                <div id="barkodSvgDiv"></div>
+                <div id="qrUrunAd" style="font-size:11px;color:#333;margin-top:.4rem;font-family:monospace;"></div>
+                <button onclick="qrIndir()" style="margin-top:.6rem;padding:.4rem 1rem;background:#7B5CF0;color:#fff;border:none;border-radius:4px;font-size:11px;cursor:pointer;">⬇ İndir</button>
+              </div>
+            </div>
+
+            <!-- Not -->
+            <div class="sm-blok">
+              <div class="sm-blok-baslik">📝 Depo Notu</div>
+              <textarea class="fi" id="smNot" placeholder="Kırılgan, nemden korunmalı, soğuk zincir… gibi notlar" style="font-size:.7rem;min-height:64px;resize:vertical;"></textarea>
+            </div>
+
+            <div class="ferr" id="stokModalErr" style="display:none;"></div>
+            <button onclick="stokKaydet()" style="padding:1rem;background:linear-gradient(135deg,#5a3eb0,#7B5CF0);color:#fff;border:none;border-radius:6px;font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.1em;cursor:pointer;">✦ Kaydet</button>
+          </div>
+        </div>
+      </div>
+
       <div class="sayfa" id="sayfa-finans">
         <div class="sh"><span class="eyebrow">Mali Özet</span><h1>Gelir & <em>Gider</em></h1></div>
         <div class="fin-grid">
@@ -859,7 +1141,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
 <script src="categories.js"></script>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getFirestore,doc,getDoc,collection,addDoc,getDocs,updateDoc,deleteDoc,query,where,orderBy,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import{getFirestore,doc,getDoc,collection,addDoc,getDocs,updateDoc,deleteDoc,query,where,orderBy,serverTimestamp,onSnapshot,limit}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import{getStorage,ref,uploadBytes,getDownloadURL}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged,sendPasswordResetEmail}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
@@ -1132,12 +1414,26 @@ async function randevulariYukle(){
   }
   document.getElementById('rdvTablo').innerHTML='<div style="padding:2.5rem;text-align:center;color:rgba(240,235,224,.3);">Yükleniyor…</div>';
   try{
+    // Önce ustaUid ile dene (Firebase UID eşleşmesi)
     const snap = await getDocs(query(
       collection(db,'ustam_randevular'),
       where('ustaUid','==',_aktifUid),
       orderBy('ts','desc')
-    ));
-    _rdvListesi = snap.docs.map(d=>({id:d.id,...d.data()}));
+    )).catch(()=>null);
+
+    let liste = snap ? snap.docs.map(d=>({id:d.id,...d.data()})) : [];
+
+    // Eğer sonuç boşsa ustaId ile de dene (static id fallback)
+    if(liste.length === 0){
+      const snap2 = await getDocs(query(
+        collection(db,'ustam_randevular'),
+        where('ustaId','==',_aktifUid),
+        orderBy('ts','desc')
+      )).catch(()=>null);
+      if(snap2) liste = snap2.docs.map(d=>({id:d.id,...d.data()}));
+    }
+
+    _rdvListesi = liste;
   }catch(e){ _rdvListesi=[]; }
   renderRdvTablo();
   rdvBadgeGuncelle();
@@ -1176,6 +1472,7 @@ function renderRdvTablo(){
             ${r.durum!=='onaylandi'?`<button class="aksiyon duz" style="font-size:.5rem;padding:.25rem .6rem;color:rgba(76,175,130,.9);border-color:rgba(76,175,130,.3);" onclick="rdvDurum('${r.id}','onaylandi')">✅ Onayla</button>`:''}
             ${r.durum!=='reddedildi'?`<button class="aksiyon sil" style="font-size:.5rem;padding:.25rem .6rem;" onclick="rdvDurum('${r.id}','reddedildi')">❌ Reddet</button>`:''}
             ${!r.okundu?`<button class="aksiyon duz" style="font-size:.5rem;padding:.25rem .6rem;opacity:.6;" onclick="rdvOkundu('${r.id}')">✓ Okundu</button>`:''}
+            ${r.durum==='onaylandi'?`<button class="aksiyon duz" style="font-size:.5rem;padding:.25rem .6rem;color:rgba(123,92,240,.9);border-color:rgba(123,92,240,.4);" onclick="chatAc('${r.id}','${(r.musteriAd||'Müşteri').replace(/'/g,'\\'')}','${(r.hizmet||'').replace(/'/g,'\\'')}')" >💬 Sohbet</button>`:''}
           </div>
         </td>
       </tr>`;
@@ -1192,9 +1489,26 @@ window.rdvFiltre=function(tip,btn){
 
 window.rdvDurum=async function(id,yeniDurum){
   try{
-    await updateDoc(doc(db,'ustam_randevular',id),{durum:yeniDurum,okundu:true});
+    await updateDoc(doc(db,'ustam_randevular',id),{durum:yeniDurum,okundu:true,durumGuncellendi:serverTimestamp()});
     const idx=_rdvListesi.findIndex(r=>r.id===id);
     if(idx>-1){_rdvListesi[idx].durum=yeniDurum;_rdvListesi[idx].okundu=true;}
+
+    // Müşteriye bildirim yaz (varsa)
+    const rdv = _rdvListesi[idx];
+    if(rdv && rdv.musteriUid){
+      const bildirimMesaj = yeniDurum==='onaylandi'
+        ? `📅 ${rdv.ustaAdi||'Ustanız'} randevunuzu onayladı! Tarih: ${rdv.tarihGoster||rdv.tarih||'—'}`
+        : `📅 ${rdv.ustaAdi||'Ustanız'} randevunuzu reddetti. Farklı bir tarih için tekrar deneyebilirsiniz.`;
+      await addDoc(collection(db,'kullanicilar',rdv.musteriUid,'bildirimler'),{
+        tip: 'randevu',
+        mesaj: bildirimMesaj,
+        link: 'profile.html?tab=randevular',
+        linkEtiket: 'Randevularım →',
+        okundu: false,
+        ts: serverTimestamp()
+      }).catch(()=>{});
+    }
+
     renderRdvTablo();
     rdvBadgeGuncelle();
     toast(yeniDurum==='onaylandi'?'✅ Randevu onaylandı.':'❌ Randevu reddedildi.');
@@ -2873,6 +3187,9 @@ window.git=function(id,btn){
   document.getElementById('sayfa-'+id).classList.add('on');
   btn.classList.add('on');
   if(id==='usta-randevular') randevulariYukle();
+  if(id==='stok') window.stokModulYukle && window.stokModulYukle();
+  if(id==='finans-danisman') window.danismanYukle && window.danismanYukle();
+  if(id==='vergi-takvim') window.vergiYukle && window.vergiYukle();
 };
 window.toggle=function(bodyId,arrId){
   const b=document.getElementById(bodyId);
@@ -3034,8 +3351,96 @@ window.katSec = function(el){
 };
 
 </script>
+<script type="module" src="modpanel-stok.js"></script>
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
 <script src="cookie-consent.js"></script>
+
+<!-- CHAT MODAL -->
+<div class="chat-overlay" id="chatOverlay" onclick="chatKapat(event)">
+  <div class="chat-box">
+    <div class="chat-head">
+      <div class="chat-head-info">
+        <div class="chat-head-name" id="chatBaslik">Sohbet</div>
+        <div class="chat-head-sub" id="chatAlt">Randevu sohbeti</div>
+      </div>
+      <button class="chat-close" onclick="chatKapat()">✕</button>
+    </div>
+    <div class="chat-messages" id="chatMesajlar">
+      <div class="chat-empty-msg">Henüz mesaj yok. İlk mesajı sen gönder!</div>
+    </div>
+    <div class="chat-footer">
+      <textarea class="chat-input" id="chatInput" placeholder="Mesaj yaz…" rows="1"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();chatGonder();}"></textarea>
+      <button class="chat-send" id="chatSendBtn" onclick="chatGonder()">➤</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+/* ── CHAT ── */
+let _chatRdvId = null;
+let _chatUnsub = null;
+
+window.chatAc = function(rdvId, musteriAd, hizmet) {
+  _chatRdvId = rdvId;
+  document.getElementById('chatBaslik').textContent = '💬 ' + musteriAd;
+  document.getElementById('chatAlt').textContent = hizmet || 'Randevu sohbeti';
+  document.getElementById('chatOverlay').classList.add('open');
+  document.getElementById('chatInput').focus();
+  chatDinle(rdvId);
+};
+
+window.chatKapat = function(e) {
+  if (e && e.target !== document.getElementById('chatOverlay')) return;
+  document.getElementById('chatOverlay').classList.remove('open');
+  if (_chatUnsub) { _chatUnsub(); _chatUnsub = null; }
+  _chatRdvId = null;
+};
+
+function chatDinle(rdvId) {
+  if (_chatUnsub) _chatUnsub();
+  const ref = query(
+    collection(db, 'ustam_randevular', rdvId, 'mesajlar'),
+    orderBy('ts', 'asc'),
+    limit(100)
+  );
+  _chatUnsub = onSnapshot(ref, snap => {
+    const el = document.getElementById('chatMesajlar');
+    if (!snap.docs.length) {
+      el.innerHTML = '<div class="chat-empty-msg">Henüz mesaj yok. İlk mesajı sen gönder!</div>';
+      return;
+    }
+    el.innerHTML = snap.docs.map(d => {
+      const m = d.data();
+      const benden = m.gonderenUid === _aktifUid;
+      const saat = m.ts?.toDate ? m.ts.toDate().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}) : '';
+      return `<div class="chat-bubble ${benden?'benden':'karsidan'}">
+        ${m.metin}
+        <div class="chat-bubble-time">${saat}</div>
+      </div>`;
+    }).join('');
+    el.scrollTop = el.scrollHeight;
+  });
+}
+
+window.chatGonder = async function() {
+  const inp = document.getElementById('chatInput');
+  const metin = inp.value.trim();
+  if (!metin || !_chatRdvId || !_aktifUid) return;
+  inp.value = '';
+  document.getElementById('chatSendBtn').disabled = true;
+  try {
+    await addDoc(collection(db, 'ustam_randevular', _chatRdvId, 'mesajlar'), {
+      metin,
+      gonderenUid : _aktifUid,
+      gonderenAd  : 'Usta',
+      taraf       : 'usta',
+      ts          : serverTimestamp()
+    });
+  } catch(e) { toast('Gönderilemedi ⚠️','err'); }
+  finally { document.getElementById('chatSendBtn').disabled = false; }
+};
+</script>
 </body>
 </html>

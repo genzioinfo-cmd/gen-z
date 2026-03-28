@@ -662,6 +662,10 @@ nav, .toast, .edit-modal-overlay, .edit-modal,
           <span class="nav-icon">🛒</span> Sepetim
           <span class="nav-badge" id="cart-badge"></span>
         </button>
+        <button class="profile-nav-item" onclick="loadTab('randevular')" id="pnav-randevular">
+          <span class="nav-icon">📅</span> Randevularım
+          <span class="nav-badge" id="rdv-badge"></span>
+        </button>
         <button class="profile-nav-item" onclick="loadTab('reviews')" id="pnav-reviews">
           <span class="nav-icon">⭐</span> Değerlendirmelerim
           <span class="nav-badge" id="reviews-badge">2</span>
@@ -812,6 +816,7 @@ const TAB_FILES = {
   orders:        'profile-orders.html',
   favorites:     'profile-favorites.html',
   cart:          'profile-cart.html',
+  randevular:    'profile-randevular.html',
   reviews:       'profile-reviews.html',
   addresses:     'profile-addresses.html',
   notifications: 'profile-notifications.html',
@@ -1100,7 +1105,9 @@ document.getElementById('editModal').addEventListener('click', e => {
 
 /* ── İLK SEKME YÜKLEMESİ ── */
 document.addEventListener('DOMContentLoaded', () => {
-  loadTab('orders');
+  // URL'den tab parametresi oku (sepet ikonu bağlantısı için)
+  const _urlTab = new URLSearchParams(window.location.search).get('tab');
+  loadTab(_urlTab && ['orders','favorites','cart','reviews','addresses','notifications','info','randevular'].includes(_urlTab) ? _urlTab : 'orders');
 
   /* ── SEPET BADGE INIT ── */
   (function() {

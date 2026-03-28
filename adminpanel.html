@@ -1007,6 +1007,16 @@ window.basvuruDurum=async function(id,durum){
         if(roller.includes('magaza'))profil.magazaOnay=true;
         if(roller.includes('usta'))profil.ustaOnay=true;
         await setDoc(doc(db,'users',b.uid),profil,{merge:true}).catch(()=>{});
+        // Kullanıcının ana rol alanını güncelle (kullanicilar koleksiyonu)
+        // Başvurusu onaylanan kişiye uygun rol verilir; her iki rol de varsa 'satici' önceliklidir.
+        const yeniRol = roller.includes('magaza') && roller.includes('usta')
+          ? 'satici'  // hem mağaza hem usta → satici (modpanel erişimi)
+          : roller.includes('magaza')
+          ? 'satici'
+          : roller.includes('usta')
+          ? 'usta'
+          : 'gencz';
+        await setDoc(doc(db,'kullanicilar',b.uid),{rol:yeniRol,partnerDurum:'onaylandi',partnerRoller:roller,partnerSirket:b.sirketAdi||''},{merge:true}).catch(()=>{});
         // Kullanıcıya bildirim yaz
         const bildirimMesaj = roller.includes('magaza') && roller.includes('usta')
           ? 'Mağaza ve Usta başvurunuz onaylandı! Panelinize giriş yapabilirsiniz.'

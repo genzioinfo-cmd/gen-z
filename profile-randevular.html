@@ -1,0 +1,269 @@
+<div class="profile-section-title">📅 Randevularım</div>
+<div id="rdvList"><div class="rdv-loading">Yükleniyor…</div></div>
+
+<!-- CHAT OVERLAY -->
+<div class="rdv-chat-overlay" id="rdvChatOverlay" onclick="mstChatKapat(event)">
+  <div class="rdv-chat-box">
+    <div class="rdv-chat-head">
+      <div>
+        <div class="rdv-chat-name" id="mstChatBaslik">Sohbet</div>
+        <div class="rdv-chat-sub" id="mstChatAlt">Usta ile iletişim</div>
+      </div>
+      <button class="rdv-chat-close" onclick="mstChatKapat()">✕</button>
+    </div>
+    <div class="rdv-chat-messages" id="mstChatMesajlar">
+      <div class="rdv-chat-empty">Henüz mesaj yok. Merhaba de!</div>
+    </div>
+    <div class="rdv-chat-footer">
+      <textarea class="rdv-chat-input" id="mstChatInput" placeholder="Mesaj yaz…" rows="1"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();mstChatGonder();}"></textarea>
+      <button class="rdv-chat-send" id="mstChatSendBtn" onclick="mstChatGonder()">➤</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.rdv-loading{text-align:center;color:var(--text3);padding:2rem;font-size:13px;}
+.rdv-empty{text-align:center;padding:3rem 1rem;}
+.rdv-empty-icon{font-size:48px;margin-bottom:12px;}
+.rdv-empty-text{font-size:14px;color:var(--text3);margin-bottom:16px;}
+.rdv-empty-link{display:inline-block;padding:10px 22px;background:var(--accent);color:#fff;border-radius:var(--radius-sm);font-size:13px;font-weight:600;text-decoration:none;}
+.rdv-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:12px;transition:border-color .2s;}
+.rdv-card:hover{border-color:var(--accent2);}
+.rdv-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
+.rdv-usta-name{font-weight:700;font-size:15px;color:var(--text);}
+.rdv-usta-icon{font-size:22px;margin-right:8px;}
+.rdv-status{font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.5px;white-space:nowrap;}
+.rdv-status.bekliyor{background:rgba(240,197,92,.12);color:var(--accent2);border:1px solid rgba(240,197,92,.25);}
+.rdv-status.onaylandi{background:rgba(92,240,180,.12);color:var(--accent3);border:1px solid rgba(92,240,180,.25);}
+.rdv-status.reddedildi,.rdv-status.iptal{background:rgba(240,80,80,.10);color:#ff6b6b;border:1px solid rgba(240,80,80,.2);}
+.rdv-details{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px;}
+.rdv-detail-item{font-size:12px;}
+.rdv-detail-label{color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;font-size:10px;margin-bottom:3px;}
+.rdv-detail-val{color:var(--text);}
+.rdv-mesaj{font-size:12px;color:var(--text2);background:var(--bg3);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:12px;line-height:1.6;}
+.rdv-mesaj-label{font-size:10px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.rdv-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.rdv-btn{padding:8px 16px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text2);transition:all .2s;}
+.rdv-btn:hover{border-color:var(--accent);color:var(--accent);}
+.rdv-btn.cancel{color:#ff6b6b;border-color:rgba(240,80,80,.3);}
+.rdv-btn.cancel:hover{background:rgba(240,80,80,.08);}
+.rdv-btn.chat{color:#7B5CF0;border-color:rgba(123,92,240,.4);background:rgba(123,92,240,.08);font-weight:700;font-size:13px;padding:10px 20px;}
+.rdv-btn.chat:hover{background:rgba(123,92,240,.18);border-color:var(--accent);}
+.rdv-onay-banner{display:flex;align-items:center;gap:10px;background:rgba(92,240,180,.07);border:1px solid rgba(92,240,180,.2);border-radius:var(--radius-sm);padding:12px 14px;font-size:12px;color:var(--accent3);margin-top:10px;}
+.rdv-red-banner{background:rgba(240,80,80,.07);border:1px solid rgba(240,80,80,.2);border-radius:var(--radius-sm);padding:10px 14px;font-size:12px;color:#ff6b6b;margin-top:10px;}
+/* Chat */
+.rdv-chat-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9999;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.rdv-chat-overlay.open{display:flex;}
+.rdv-chat-box{background:var(--bg2,#13131a);border:1px solid var(--border,#2e2e3f);border-radius:16px;width:calc(100% - 32px);max-width:480px;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.7);}
+.rdv-chat-head{padding:16px 18px;border-bottom:1px solid var(--border,#2e2e3f);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.rdv-chat-name{font-size:15px;font-weight:700;color:var(--text,#f0eeff);}
+.rdv-chat-sub{font-size:11px;color:var(--text3,#5a5770);margin-top:2px;}
+.rdv-chat-close{background:none;border:none;color:var(--text3,#5a5770);font-size:20px;cursor:pointer;padding:4px 8px;border-radius:6px;transition:color .2s;}
+.rdv-chat-close:hover{color:var(--text,#f0eeff);}
+.rdv-chat-messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;}
+.rdv-chat-messages::-webkit-scrollbar{width:4px;}
+.rdv-chat-messages::-webkit-scrollbar-thumb{background:var(--border,#2e2e3f);border-radius:4px;}
+.rdv-chat-empty{text-align:center;color:var(--text3,#5a5770);font-size:12px;padding:2rem;opacity:.7;}
+.rdv-bubble{max-width:82%;padding:10px 14px;border-radius:14px;font-size:13px;line-height:1.5;word-break:break-word;}
+.rdv-bubble.benden{align-self:flex-end;background:var(--accent,#7B5CF0);color:#fff;border-bottom-right-radius:4px;}
+.rdv-bubble.karsidan{align-self:flex-start;background:var(--bg3,#1c1c28);color:var(--text,#f0eeff);border-bottom-left-radius:4px;}
+.rdv-bubble-meta{font-size:10px;opacity:.55;margin-top:4px;}
+.rdv-bubble.benden .rdv-bubble-meta{text-align:right;}
+.rdv-chat-footer{padding:10px 14px;border-top:1px solid var(--border,#2e2e3f);display:flex;gap:8px;flex-shrink:0;}
+.rdv-chat-input{flex:1;background:var(--bg3,#1c1c28);border:1px solid var(--border,#2e2e3f);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--text,#f0eeff);font-family:'DM Sans',sans-serif;resize:none;min-height:42px;max-height:100px;outline:none;transition:border-color .2s;}
+.rdv-chat-input:focus{border-color:var(--accent,#7B5CF0);}
+.rdv-chat-send{background:var(--accent,#7B5CF0);border:none;border-radius:10px;padding:0 16px;color:#fff;cursor:pointer;font-size:18px;transition:opacity .2s;}
+.rdv-chat-send:hover{opacity:.85;}
+.rdv-chat-send:disabled{opacity:.35;cursor:default;}
+</style>
+
+<script type="module">
+import {
+  getFirestore, collection, query, where, orderBy,
+  getDocs, updateDoc, addDoc, doc, serverTimestamp, onSnapshot, limit
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const db = getFirestore();
+let _mstUid = null;
+let _chatUnsub = null;
+let _chatRdvId = null;
+
+async function uidBekle() {
+  return new Promise(resolve => {
+    const iv = setInterval(() => {
+      const uid = window._genzAuth?.auth?.currentUser?.uid
+        || JSON.parse(localStorage.getItem('genz-user') || 'null')?.uid;
+      if (uid) { clearInterval(iv); resolve(uid); }
+    }, 150);
+    setTimeout(() => { clearInterval(iv); resolve(null); }, 5000);
+  });
+}
+
+async function yukle() {
+  const el = document.getElementById('rdvList');
+  _mstUid = await uidBekle();
+
+  if (!_mstUid) {
+    el.innerHTML = `<div class="rdv-empty">
+      <div class="rdv-empty-icon">🔐</div>
+      <div class="rdv-empty-text">Randevularını görmek için giriş yapmalısın.</div>
+    </div>`;
+    return;
+  }
+
+  try {
+    const snap = await getDocs(query(
+      collection(db, 'ustam_randevular'),
+      where('musteriUid', '==', _mstUid),
+      orderBy('ts', 'desc')
+    ));
+
+    const liste = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+    const bekleyen = liste.filter(r => r.durum === 'bekliyor').length;
+    const badge = document.getElementById('rdv-badge');
+    if (badge) badge.textContent = bekleyen || '';
+
+    if (!liste.length) {
+      el.innerHTML = `<div class="rdv-empty">
+        <div class="rdv-empty-icon">📅</div>
+        <div class="rdv-empty-text">Henüz randevu talebinde bulunmadın.</div>
+        <a class="rdv-empty-link" href="ustam.html">Usta Bul →</a>
+      </div>`;
+      return;
+    }
+
+    el.innerHTML = liste.map(r => {
+      const durum = r.durum || 'bekliyor';
+      const tarih = r.tarihGoster || r.tarih || '—';
+      const durumMap = { bekliyor:'⏳ Bekliyor', onaylandi:'✅ Onaylandı', reddedildi:'❌ Reddedildi', iptal:'🚫 İptal Edildi' };
+
+      const ustaAdSafe = (r.ustaAdi||'Usta').replace(/'/g,"\\'");
+      const hizmetSafe = (r.hizmet||'').replace(/'/g,"\\'");
+
+      return `<div class="rdv-card" id="rdvc-${r.id}">
+        <div class="rdv-card-head">
+          <div style="display:flex;align-items:center;">
+            <span class="rdv-usta-icon">🔧</span>
+            <div>
+              <div class="rdv-usta-name">${r.ustaAdi||'—'}</div>
+              <div style="font-size:11px;color:var(--text3);">${r.hizmet||'—'}</div>
+            </div>
+          </div>
+          <span class="rdv-status ${durum}">${durumMap[durum]||'⏳ Bekliyor'}</span>
+        </div>
+        <div class="rdv-details">
+          <div class="rdv-detail-item">
+            <div class="rdv-detail-label">Tarih</div>
+            <div class="rdv-detail-val">📆 ${tarih}</div>
+          </div>
+          <div class="rdv-detail-item">
+            <div class="rdv-detail-label">Talep Tarihi</div>
+            <div class="rdv-detail-val">${r.ts?.toDate?r.ts.toDate().toLocaleDateString('tr-TR'):'—'}</div>
+          </div>
+        </div>
+        ${r.mesaj?`<div class="rdv-mesaj"><div class="rdv-mesaj-label">Notunuz</div>${r.mesaj}</div>`:''}
+        ${durum==='onaylandi'?`
+          <div class="rdv-onay-banner">
+            <span style="font-size:22px;">🎉</span>
+            <div><strong>Randevunuz onaylandı!</strong><br><span style="opacity:.8;">Usta ile detayları konuşabilirsiniz.</span></div>
+          </div>
+          <div class="rdv-actions">
+            <button class="rdv-btn chat" onclick="mstChatAc('${r.id}','${ustaAdSafe}','${hizmetSafe}')">💬 Sohbet Et</button>
+          </div>`:''}
+        ${durum==='reddedildi'?`
+          <div class="rdv-red-banner">❌ Bu randevu reddedildi.
+            <a href="ustam.html" style="color:#ff6b6b;text-decoration:underline;margin-left:6px;">Tekrar Randevu Al →</a>
+          </div>`:''}
+        ${durum==='bekliyor'?`
+          <div class="rdv-actions">
+            <button class="rdv-btn cancel" onclick="rdvIptal('${r.id}')">✕ İptal Et</button>
+          </div>`:''}
+      </div>`;
+    }).join('');
+
+  } catch(e) {
+    console.error(e);
+    el.innerHTML = '<div class="rdv-loading">Yüklenemedi, tekrar dene.</div>';
+  }
+}
+
+window.mstChatAc = function(rdvId, ustaAdi, hizmet) {
+  _chatRdvId = rdvId;
+  document.getElementById('mstChatBaslik').textContent = '💬 ' + ustaAdi;
+  document.getElementById('mstChatAlt').textContent = hizmet || 'Usta ile iletişim';
+  document.getElementById('rdvChatOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('mstChatInput').focus(), 100);
+  chatDinle(rdvId);
+};
+
+window.mstChatKapat = function(e) {
+  if (e && e.target !== document.getElementById('rdvChatOverlay')) return;
+  document.getElementById('rdvChatOverlay').classList.remove('open');
+  if (_chatUnsub) { _chatUnsub(); _chatUnsub = null; }
+  _chatRdvId = null;
+};
+
+function chatDinle(rdvId) {
+  if (_chatUnsub) _chatUnsub();
+  const ref = query(
+    collection(db, 'ustam_randevular', rdvId, 'mesajlar'),
+    orderBy('ts', 'asc'), limit(100)
+  );
+  _chatUnsub = onSnapshot(ref, snap => {
+    const el = document.getElementById('mstChatMesajlar');
+    if (!snap.docs.length) {
+      el.innerHTML = '<div class="rdv-chat-empty">Henüz mesaj yok. Merhaba de! 👋</div>';
+      return;
+    }
+    el.innerHTML = snap.docs.map(d => {
+      const m = d.data();
+      const benden = m.gonderenUid === _mstUid;
+      const saat = m.ts?.toDate ? m.ts.toDate().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}) : '';
+      return `<div class="rdv-bubble ${benden?'benden':'karsidan'}">
+        ${m.metin}
+        <div class="rdv-bubble-meta">${benden?saat:(m.gonderenAd||'Usta')+' · '+saat}</div>
+      </div>`;
+    }).join('');
+    el.scrollTop = el.scrollHeight;
+  });
+}
+
+window.mstChatGonder = async function() {
+  const inp = document.getElementById('mstChatInput');
+  const metin = inp.value.trim();
+  if (!metin || !_chatRdvId || !_mstUid) return;
+  inp.value = '';
+  document.getElementById('mstChatSendBtn').disabled = true;
+  try {
+    const user = JSON.parse(localStorage.getItem('genz-user') || '{}');
+    await addDoc(collection(db, 'ustam_randevular', _chatRdvId, 'mesajlar'), {
+      metin,
+      gonderenUid: _mstUid,
+      gonderenAd : user.username || user.email || 'Müşteri',
+      taraf      : 'musteri',
+      ts         : serverTimestamp()
+    });
+  } catch(e) { console.error(e); }
+  finally { document.getElementById('mstChatSendBtn').disabled = false; }
+};
+
+window.rdvIptal = async function(id) {
+  if (!confirm('Bu randevu talebini iptal etmek istediğinden emin misin?')) return;
+  try {
+    await updateDoc(doc(db, 'ustam_randevular', id), { durum:'iptal', iptalTarihi:serverTimestamp() });
+    const kart = document.getElementById('rdvc-'+id);
+    if (kart) {
+      kart.querySelector('.rdv-status').className = 'rdv-status iptal';
+      kart.querySelector('.rdv-status').textContent = '🚫 İptal Edildi';
+      kart.querySelector('.rdv-actions').innerHTML = '';
+    }
+    if (typeof showToast === 'function') showToast('Randevu iptal edildi.');
+  } catch(e) {
+    if (typeof showToast === 'function') showToast('İptal edilemedi ⚠️');
+  }
+};
+
+yukle();
+</script>

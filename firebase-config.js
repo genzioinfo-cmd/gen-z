@@ -128,14 +128,14 @@ window.doSignUp = async function() {
   const username = document.getElementById('signup-username')?.value.trim();
   const email    = document.getElementById('signup-email')?.value.trim();
   const pass     = document.getElementById('signup-pass')?.value;
-  const rolEl    = document.getElementById('signup-rol');
-  const seciliRol = rolEl ? rolEl.value : 'gencz';
   if (!username || !email || !pass) { if(typeof showToast==='function') showToast('Lütfen tüm alanları doldurun ⚠️'); return; }
   if (pass.length < 8) { if(typeof showToast==='function') showToast('Şifre en az 8 karakter olmalı ⚠️'); return; }
   try {
     const result = await createUserWithEmailAndPassword(auth, email, pass);
     await updateProfile(result.user, { displayName: username });
-    await kullaniciyiKaydet(result.user, { username, rol: seciliRol || 'gencz' });
+    // Kayıt olan herkes normal kullanıcı (gencz) olarak başlar.
+    // Satıcı / Usta rolü ancak başvuru doldurup admin onayından sonra verilir.
+    await kullaniciyiKaydet(result.user, { username, rol: 'gencz' });
     girisYaptiktan(result.user, 'Hesabın oluşturuldu, hoş geldin 🎉');
   } catch(e) {
     const msg = e.code === 'auth/email-already-in-use' ? 'Bu e-posta zaten kayıtlı ⚠️'

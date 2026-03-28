@@ -380,10 +380,76 @@ window.openRV=function(){if(!user){openAuth('signin');toast('Randevu için giri�
 window.closeRV=function(){document.getElementById('rvModal').classList.remove('open');};
 window.closeRVOO=function(e){if(e.target===document.getElementById('rvModal'))closeRV();};
 window.toggleEG=function(){const i=document.getElementById('rcustom');i.style.display=i.style.display==='none'?'block':'none';};
-window.sendRV=function(){
-  if(!document.getElementById('rn').value.trim()||!document.getElementById('re').value.trim()||!document.getElementById('rp2').value.trim()){toast('Ad, e-posta ve telefon zorunlu ⚠️');return;}
+window.sendRV=async function(){
+  const ad   = (document.getElementById('rn')?.value||'').trim();
+  const mail = (document.getElementById('re')?.value||'').trim();
+  const tel  = (document.getElementById('rp2')?.value||'').trim();
+  const not_ = (document.getElementById('rnotes')?.value||'').trim();
+  const rcustom = (document.getElementById('rcustom')?.value||'').trim();
+
+  if(!ad||!mail||!tel){toast('Ad, e-posta ve telefon zorunlu ⚠️');return;}
   if(!selDay){toast('Lütfen bir tarih seçin 📅');return;}
-  closeRV();toast('Randevu talebiniz gönderildi ✅');
+
+  // Seçili hizmet
+  const aktifSvc = document.querySelector('.stag.active,.htm.active');
+  const hizmet   = rcustom || (aktifSvc ? aktifSvc.textContent.trim() : '');
+
+  // Tarih formatlı
+  const tarihObj    = new Date(calD.getFullYear(), calD.getMonth(), selDay);
+  const tarihGoster = tarihObj.toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
+
+  // Gönder butonu kilitle
+  const btn = document.querySelector('.btn-send');
+  if(btn){btn.disabled=true;btn.textContent='Gönderiliyor…';}
+
+  try {
+    const { getFirestore, collection, addDoc, serverTimestamp } =
+      await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const _db = getFirestore();
+
+    // ustaUid: önce Firebase Auth'dan bağlı kullanıcıya bak, yoksa ustaId kullan
+    const ustaFirebaseUid = (typeof _genzAuth !== 'undefined' && window._genzAuth?.auth?.currentUser?.uid) || null;
+
+    await addDoc(collection(_db,'ustam_randevular'),{
+      // Usta bilgisi
+      ustaId   : curU.id,
+      ustaAdi  : curU.name,
+      ustaUid  : curU.firebaseUid || curU.id,  // modpanel bununla eşleştirir
+
+      // Müşteri bilgisi
+      musteriAd  : ad,
+      musteriMail: mail,
+      musteriTel : tel,
+      musteriUid : user ? user.uid : null,
+
+      // Randevu detayı
+      hizmet     : hizmet || '—',
+      tarih      : tarihObj.toISOString().split('T')[0],
+      tarihGoster: tarihGoster,
+      saat       : '—',
+      mesaj      : not_,
+
+      // Durum
+      durum : 'bekliyor',
+      okundu: false,
+      ts    : serverTimestamp(),
+    });
+
+    closeRV();
+    toast('Randevu talebiniz gönderildi ✅ Ustanız en kısa sürede onaylayacak.');
+
+    // Formu sıfırla
+    ['rn','re','rp2','rnotes','rcustom'].forEach(id=>{
+      const el=document.getElementById(id); if(el) el.value='';
+    });
+    selDay=null;
+
+  } catch(e) {
+    console.error('Randevu hatası:',e);
+    toast('Gönderilemedi, tekrar dene ⚠️');
+  } finally {
+    if(btn){btn.disabled=false;btn.textContent='RANDEVU TALEBİ GÖNDER +';}
+  }
 };
 
 window.switchMT=function(id){

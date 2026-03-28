@@ -651,6 +651,16 @@ let currentLang  = _ls.get('genz-lang', 'tr');
 let currentTheme = _ls.get('genz-theme', 'dark');
 let currentUser  = _ls.getJSON('genz-user', null);
 
+// Firebase Auth değiştiğinde currentUser'ı güncelle (uid için şart)
+window.onGenzAuthChange = function(user) {
+  if (user) {
+    const stored = _ls.getJSON('genz-user', {});
+    currentUser = { ...stored, uid: user.uid, email: user.email };
+  } else {
+    currentUser = null;
+  }
+};
+
 (function init() {
   document.documentElement.setAttribute('data-lang',  currentLang);
   document.documentElement.setAttribute('data-theme', currentTheme);
@@ -697,10 +707,51 @@ window.selectPlan = function(plan) {
   const el = document.querySelector('.plan-opt[data-plan="' + plan + '"]');
   if (el) el.classList.add('active');
 };
-window.submitForm = function(role) {
+window.submitForm = async function(role) {
   if (!currentUser) { openAuth('signin'); showToast('Başvuru için giriş yapman gerekiyor ⚠️'); return; }
-  const labels = { magaza: 'Mağaza', usta: 'Usta', gencz: 'Genç-Z' };
-  showToast(labels[role] + ' başvurun alındı! En kısa sürede geri döneceğiz ✅');
+
+  // Form alanlarını topla
+  const block = document.getElementById('form-' + role);
+  if (!block) return;
+  const inputs    = [...block.querySelectorAll('input, select, textarea')];
+  const labelEls  = [...block.querySelectorAll('label')];
+  const formData  = {};
+  labelEls.forEach((lbl, i) => {
+    if (inputs[i]) formData[lbl.textContent.trim()] = inputs[i].value.trim();
+  });
+
+  // Seçili abonelik planı (usta için)
+  const seciliPlan = block.querySelector('.plan-opt.active')?.dataset?.plan || null;
+
+  const koleksiyon = role === 'gencz' ? 'gencim_basvurular' : 'partner_basvurular';
+
+  try {
+    const { getFirestore, collection, addDoc, serverTimestamp } =
+      await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const db2 = getFirestore();
+
+    await addDoc(collection(db2, koleksiyon), {
+      uid:        currentUser.uid   || '',
+      email:      currentUser.email || '',
+      username:   currentUser.username || '',
+      roller:     role === 'magaza' ? ['magaza'] : role === 'usta' ? ['usta'] : ['gencz'],
+      formTipi:   role === 'gencz' ? 'gencz' : 'partner',
+      tip:        role === 'gencz' ? 'gencz_basvuru' : 'partner_basvuru',
+      formVerisi: formData,
+      ...(seciliPlan ? { abonelikPlan: seciliPlan } : {}),
+      durum: 'bekliyor',
+      ts:    serverTimestamp(),
+    });
+
+    const labels = { magaza: 'Mağaza', usta: 'Usta', gencz: 'Genç-Z' };
+    showToast(labels[role] + ' başvurun alındı! En kısa sürede geri döneceğiz ✅');
+
+    // Formu sıfırla
+    inputs.forEach(el => { if (el.tagName !== 'SELECT') el.value = ''; });
+  } catch(e) {
+    console.error('Başvuru hatası:', e);
+    showToast('Başvuru gönderilemedi, tekrar dene ⚠️');
+  }
 };
 
 function openAuth(tab) {

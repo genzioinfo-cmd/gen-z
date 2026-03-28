@@ -337,6 +337,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
       <button class="sb-item" onclick="sayfaGit('finans',this)">💰 <span>Finans Özeti</span></button>
       <button class="sb-item" onclick="sayfaGit('cekim',this)">💸 <span>Çekim Talepleri</span></button>
       <div class="sb-ayrac">Kullanıcılar</div>
+      <button class="sb-item" onclick="sayfaGit('iadeler',this)">🔄 <span>İade Talepleri</span> <span class="sb-badge" id="badgeIade" style="display:none;background:#ff6b6b;"></span></button>
       <button class="sb-item" onclick="sayfaGit('kullanicilar',this)">👥 <span>Kullanıcılar</span></button>
       <div class="sb-ayrac">Platform</div>
       <button class="sb-item" onclick="sayfaGit('urunler',this)">🎨 <span>Paylaşılan Ürünler</span> <span class="sb-badge" id="badgeUrun" style="background:var(--gold);color:var(--ink)">—</span></button>
@@ -1072,6 +1073,77 @@ window.adminYap=async function(uid){
     if(k)k.rol='admin';
     renderKullanicilar();bildir('Kullanıcı admin yapıldı!');
   }catch(e){bildir('Hata: '+e.message,'hata');}
+};
+
+
+/* ══ ADMIN İADE YÖNETİMİ ══ */
+let _adminIadeler = [];
+let _adminIadeFiltre = 'hepsi';
+
+async function adminIadeleriYukle() {
+  try {
+    const snap = await getDocs(query(collection(db,'iade_talepleri'), orderBy('olusturuldu','desc'))).catch(()=>null);
+    _adminIadeler = snap ? snap.docs.map(d=>({id:d.id,...d.data()})) : [];
+    adminIadeOzetGuncelle();
+    adminIadeTabloCiz();
+    // Badge
+    const bekl = _adminIadeler.filter(t=>t.durum==='bekliyor').length;
+    const badge = document.getElementById('badgeIade');
+    if(badge){badge.textContent=bekl||'';badge.style.display=bekl?'inline-flex':'none';}
+  } catch(e) { console.error(e); }
+}
+
+function adminIadeOzetGuncelle() {
+  const t = _adminIadeler;
+  const onay = t.filter(x=>x.durum==='onaylandi');
+  const tutar = onay.reduce((s,x)=>s+(x.iadeTutari||0),0);
+  const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  s('adminIadeToplam', t.length);
+  s('adminIadeBekliyor', t.filter(x=>x.durum==='bekliyor').length);
+  s('adminIadeBeklAlt', t.filter(x=>x.durum==='bekliyor').length+' onay bekliyor');
+  s('adminIadeOnay', onay.length);
+  s('adminIadeTutar', '₺'+tutar.toLocaleString('tr-TR'));
+}
+
+function adminIadeTabloCiz() {
+  const el = document.getElementById('adminIadeTablo');
+  if(!el) return;
+  let liste = _adminIadeler;
+  if(_adminIadeFiltre!=='hepsi') liste=liste.filter(t=>t.durum===_adminIadeFiltre);
+  if(!liste.length){el.innerHTML='<table><tbody><tr class="bos-satir"><td colspan="10">İade talebi bulunamadı</td></tr></tbody></table>';return;}
+  el.innerHTML=`<table style="min-width:1000px;">
+    <thead><tr>
+      <th>Tarih</th><th>Sipariş</th><th>Satıcı/Mağaza</th><th>Ürün & Kategori</th>
+      <th>Neden</th><th>Brüt İade</th><th>KDV</th><th>Net</th><th>Kargo</th><th>Durum</th>
+    </tr></thead>
+    <tbody>${liste.map(t=>{
+      const tarih=t.olusturuldu?.toDate?t.olusturuldu.toDate().toLocaleDateString('tr-TR'):'—';
+      const durumRenk=t.durum==='onaylandi'?'var(--green)':t.durum==='reddedildi'?'var(--red)':'var(--orange)';
+      const durumTxt=t.durum==='onaylandi'?'✅ Onaylandı':t.durum==='reddedildi'?'❌ Reddedildi':'⏳ Bekliyor';
+      return `<tr>
+        <td style="font-size:.6rem;color:var(--t2);">${tarih}</td>
+        <td style="font-size:.62rem;font-family:monospace;">${t.siparisKod||'—'}</td>
+        <td style="font-size:.65rem;">${t.magazaAd||'—'}</td>
+        <td style="font-size:.62rem;max-width:160px;">
+          <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${t.urunAd||'—'}</div>
+          <div style="color:var(--t2);font-size:.55rem;">${t.kategori||'—'}</div>
+        </td>
+        <td style="font-size:.62rem;color:var(--t2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${t.neden||'—'}</td>
+        <td style="font-weight:700;color:var(--gold);">₺${(t.iadeTutari||0).toLocaleString('tr-TR')}</td>
+        <td style="font-size:.62rem;color:#ff9966;">₺${(t.kdvTutar||0).toFixed(2)}<br><span style="color:var(--t2);">%${t.kdvOran||20}</span></td>
+        <td style="font-size:.68rem;">₺${(t.netTutar||0).toFixed(2)}</td>
+        <td style="font-size:.6rem;">${t.kargoSorumlu==='satici'?'<span style="color:var(--accent3)">Satıcı</span>':'<span style="color:var(--gold)">Alıcı</span>'}</td>
+        <td><span style="font-size:.58rem;font-weight:700;color:${durumRenk};">${durumTxt}</span>${t.redSebep?`<br><span style="font-size:.52rem;color:var(--t2);">${t.redSebep}</span>`:''}</td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>`;
+}
+
+window.adminIadeFiltre = function(tip, btn) {
+  _adminIadeFiltre = tip;
+  document.querySelectorAll('#sayfa-iadeler .f-tab').forEach(b=>b.classList.remove('aktif'));
+  btn.classList.add('aktif');
+  adminIadeTabloCiz();
 };
 
 window.modalKapat=function(){document.getElementById('modalOverlay').classList.remove('v');};

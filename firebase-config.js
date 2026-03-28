@@ -1,5 +1,6 @@
 // GEN-Z Firebase Config + Auth Modülü
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
 import {
   getAuth, GoogleAuthProvider,
   signInWithPopup, signOut,
@@ -28,6 +29,19 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+export const analytics = getAnalytics(app);
+
+// Uygulama açılışını logla
+const _platform = window.electronAPI?.isElectron ? "electron" : "web";
+logEvent(analytics, "app_open", { platform: _platform });
+
+// Sayfa değişimlerini takip et
+window.addEventListener("hashchange", () => {
+  logEvent(analytics, "page_view", { page_path: location.pathname + location.hash, platform: _platform });
+});
+
+// Global helper - her yerden kullanılabilir
+window.genzLog = (eventName, params = {}) => logEvent(analytics, eventName, { ...params, platform: _platform });
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
 

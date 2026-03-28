@@ -2181,5 +2181,13 @@ document.addEventListener('DOMContentLoaded',function(){Sepet.initUI();});
 
 <!-- GEN-Z Reklam Alanı: Sayfa altı (Admin'den yönet) -->
 <div id="genz-rek-1" style="display:none;max-width:960px;margin:0 auto 20px auto;padding:0 24px;"></div>
+<script type="module" src="analytics-events.js"></script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(() => {});
+  });
+}
+</script>
 </body>
 </html>

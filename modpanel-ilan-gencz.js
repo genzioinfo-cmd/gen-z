@@ -78,7 +78,7 @@ const USTA_KAT_HIZMETLER = {
 // Usta ilanı modal aç
 window.ilanModalAc = function() {
   // Ustanın kategorisini belirle
-  const katRaw = (_ustaVeri?.kategori || _ustaVeri?.isKolu || '').toLowerCase();
+  const katRaw = (window._ustaVeri?.kategori || window._ustaVeri?.isKolu || '').toLowerCase();
   const hizmetler = USTA_KAT_HIZMETLER[katRaw] || null;
 
   // Modal içeriği oluştur
@@ -132,11 +132,11 @@ window.ilanModalAc = function() {
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
             <div>
               <label class="dan-lbl">Şehir</label>
-              <input class="fi" id="ilanSehir" placeholder="Ankara" style="font-size:.72rem;" value="${_ustaVeri?.sehir||''}">
+              <input class="fi" id="ilanSehir" placeholder="Ankara" style="font-size:.72rem;" value="${window._ustaVeri?.sehir||''}">
             </div>
             <div>
               <label class="dan-lbl">İlçe</label>
-              <input class="fi" id="ilanIlce" placeholder="Çankaya" style="font-size:.72rem;" value="${_ustaVeri?.ilce||''}">
+              <input class="fi" id="ilanIlce" placeholder="Çankaya" style="font-size:.72rem;" value="${window._ustaVeri?.ilce||''}">
             </div>
           </div>
           <div>
@@ -145,7 +145,7 @@ window.ilanModalAc = function() {
           </div>
           <div>
             <label class="dan-lbl">Müsait Günler / Saatler</label>
-            <input class="fi" id="ilanMusait" placeholder="Hafta içi 08:00-18:00, Cumartesi 09:00-14:00" style="font-size:.72rem;" value="${_ustaVeri?.availability||''}">
+            <input class="fi" id="ilanMusait" placeholder="Hafta içi 08:00-18:00, Cumartesi 09:00-14:00" style="font-size:.72rem;" value="${window._ustaVeri?.availability||''}">
           </div>
         </div>
       </div>
@@ -199,10 +199,10 @@ window.ilanGonder = async function() {
 
   try {
     await addDoc(collection(db,'ustam_ilanlar'),{
-      ustaUid    : _aktifUid,
-      ustaAdi    : _ustaVeri?.displayName || _ustaVeri?.ad || '',
-      ustaEmail  : _ustaVeri?.email || '',
-      kategori   : (_ustaVeri?.kategori||_ustaVeri?.isKolu||hizmet).toLowerCase(),
+      ustaUid    : window._aktifUid,
+      ustaAdi    : window._ustaVeri?.displayName || window._ustaVeri?.ad || '',
+      ustaEmail  : window._ustaVeri?.email || '',
+      kategori   : (window._ustaVeri?.kategori||_ustaVeri?.isKolu||hizmet).toLowerCase(),
       hizmet,
       ad         : baslik,
       fiyat,
@@ -333,8 +333,8 @@ window.gzIcerikGonder = async function() {
 
   try {
     await addDoc(collection(db,'gencz_icerikler'),{
-      uid      : _aktifUid,
-      email    : _ustaVeri?.email||'',
+      uid      : window._aktifUid,
+      email    : window._ustaVeri?.email||'',
       kategori : _gzSeciliKat,
       ...veri,
       durum    : 'bekliyor',
@@ -358,7 +358,7 @@ async function genczYukle() {
   try {
     const snap = await getDocs(query(
       collection(db,'gencz_icerikler'),
-      where('uid','==',_aktifUid),
+      where('uid','==',window._aktifUid),
       orderBy('ts','desc')
     )).catch(()=>null);
     _gzIcerikler = snap ? snap.docs.map(d=>({id:d.id,...d.data()})) : [];

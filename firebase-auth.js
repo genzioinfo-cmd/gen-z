@@ -90,24 +90,17 @@ onAuthStateChanged(auth, (user) => {
 /* ── Google Giriş ── */
 window.googleSignIn = async function() {
   try {
-    await signInWithRedirect(auth, googleProvider);
+    const result = await signInWithPopup(auth, googleProvider);
+    await kullaniciyiKaydet(result.user);
+    uiGuncelle(result.user);
+    if (typeof closeAuth === 'function') closeAuth();
+    if (typeof showToast === 'function') showToast('Hoş geldin, ' + (result.user.displayName || result.user.email) + ' 👋');
   } catch(e) {
+    if (e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') return;
     console.error('Google giriş hatası:', e);
     if (typeof showToast === 'function') showToast('Google girişi başarısız ⚠️');
   }
 };
-
-/* Redirect sonucu işle */
-getRedirectResult(auth).then(async (result) => {
-  if (result && result.user) {
-    const user = result.user;
-    await kullaniciyiKaydet(user);
-    uiGuncelle(user);
-    if (typeof showToast === 'function') showToast('Hoş geldin, ' + (user.displayName || user.email) + ' 👋');
-  }
-}).catch((e) => {
-  if (e.code !== 'auth/no-auth-event') console.error('Redirect result hatası:', e);
-});
 
 /* ── E-posta Giriş ── */
 window.doSignIn = async function() {

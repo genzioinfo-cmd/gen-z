@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="tr" data-theme="dark" data-lang="tr">
+<html lang="tr" data-theme="dark">
 <head>
 <meta charset="UTF-8"/>
-<meta name="description" content="GEN-Z Ürün Detayı — Ürün incele, sepete ekle, satıcı profilini keşfet."/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>GEN-Z · Genç-Z İçerik Detay</title>
+<meta name="description" content="GEN-Z — Hakkımızda. Yasin İnce ve GEN-Z'nin hikayesi."/>
+<title>GEN-Z · Hakkımızda</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
@@ -36,48 +36,47 @@
 html { scroll-behavior: smooth; }
 body {
   font-family: var(--font-body);
-  background: var(--bg); color: var(--text);
+  background: var(--bg);
+  color: var(--text);
   min-height: 100vh;
+  overflow-x: hidden;
 }
-body.theme-transitioning { transition: background-color 0.3s ease, color 0.3s ease; }
+body.theme-transitioning {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
 body::before {
-  content: ''; position: fixed; inset: 0;
+  content: '';
+  position: fixed; inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   pointer-events: none; z-index: 0; opacity: 0.4;
-  will-change: auto; transform: translateZ(0); contain: strict;
 }
 
-/* ── NAVBAR ── */
+/* NAV */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   height: 64px;
   background: rgba(10,10,15,0.85);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
-  display: flex; align-items: center;
-  padding: 0 24px; gap: 0;
+  display: flex; align-items: center; padding: 0 24px; gap: 12px;
 }
 [data-theme="light"] nav { background: rgba(245,244,255,0.85); }
 .nav-logo {
   font-family: var(--font-display); font-size: 22px; font-weight: 800;
   background: linear-gradient(135deg, var(--accent), var(--accent2));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  letter-spacing: -0.5px; cursor: pointer; flex-shrink: 0;
-  text-decoration: none;
+  letter-spacing: -0.5px; text-decoration: none; flex-shrink: 0;
 }
-.nav-links {
-  display: flex; align-items: center; gap: 2px;
-  margin-left: 32px; flex: 1; list-style: none;
-}
-.nav-links a {
-  font-family: var(--font-body); font-size: 13px; font-weight: 500;
-  color: var(--text2); text-decoration: none;
+.nav-back {
+  display: flex; align-items: center; gap: 6px;
+  background: none; border: none;
+  color: var(--text2); font-family: var(--font-body);
+  font-size: 14px; font-weight: 500; cursor: pointer;
   padding: 6px 12px; border-radius: var(--radius-sm);
-  transition: color 0.2s, background 0.2s; white-space: nowrap;
+  transition: color 0.2s, background 0.2s; text-decoration: none;
 }
-.nav-links a:hover { color: var(--text); background: var(--surface); }
-.nav-links a.active { color: var(--accent2); }
-.nav-right { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+.nav-back:hover { color: var(--text); background: var(--surface); }
+.nav-right { margin-left: auto; }
 .btn-icon {
   width: 36px; height: 36px;
   border: 1px solid var(--border); background: var(--surface);
@@ -86,896 +85,482 @@ nav {
   font-size: 16px; transition: color 0.2s, border-color 0.2s;
 }
 .btn-icon:hover { color: var(--text); border-color: var(--accent); }
-.btn-signin {
-  padding: 8px 18px; background: var(--accent);
-  color: #fff; border: none; border-radius: var(--radius-sm);
-  font-family: var(--font-body); font-size: 13px; font-weight: 500;
-  cursor: pointer; transition: background 0.2s, transform 0.2s;
-}
-.btn-signin:hover { background: #6a4de0; transform: translateY(-1px); }
-.hamburger {
-  display: none; flex-direction: column; justify-content: center;
-  align-items: center; gap: 5px; width: 36px; height: 36px;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); cursor: pointer; transition: border-color 0.2s;
-}
-.hamburger span {
-  display: block; width: 16px; height: 2px;
-  background: var(--text2); border-radius: 2px; transition: transform 0.3s, opacity 0.3s;
-}
-.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-.hamburger:hover { border-color: var(--accent); }
-.mobile-menu {
-  display: none; position: fixed; top: 64px; left: 0; right: 0; z-index: 99;
-  background: var(--bg2); border-bottom: 1px solid var(--border);
-  padding: 16px 24px 20px; flex-direction: column; gap: 4px;
-  backdrop-filter: blur(20px); animation: slideDown 0.25s ease;
-}
-.mobile-menu.open { display: flex; }
-.mobile-menu a {
-  font-size: 15px; font-weight: 500; color: var(--text2);
-  text-decoration: none; padding: 10px 12px; border-radius: var(--radius-sm);
-  transition: color 0.2s, background 0.2s;
-}
-.mobile-menu a:hover { color: var(--text); background: var(--surface); }
 
-/* ── BREADCRUMB ── */
-.breadcrumb {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 13px; color: var(--text3); margin-bottom: 24px;
-  flex-wrap: wrap;
+/* PAGE */
+.page {
+  position: relative; z-index: 1;
+  padding-top: 64px;
 }
-.breadcrumb a {
-  color: var(--text2); text-decoration: none;
-  transition: color 0.2s;
-}
-.breadcrumb a:hover { color: var(--accent); }
-.breadcrumb .sep { color: var(--text3); font-size: 11px; }
-.breadcrumb .current { color: var(--text); font-weight: 500; }
 
-/* ── ÜRÜN DETAY ── */
-.urun-wrapper {
-  padding-top: 64px; min-height: 100vh; position: relative; z-index: 1;
+/* HERO */
+.hero {
+  position: relative;
+  min-height: 480px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  padding: 80px 24px;
 }
-.urun-inner {
-  max-width: 1000px; margin: 0 auto; padding: 40px 24px 80px;
+.hero-glow {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 50%, rgba(123,92,240,0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 80% 30%, rgba(240,197,92,0.10) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 60% 80%, rgba(92,240,180,0.08) 0%, transparent 70%);
 }
-.urun-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
-  margin-bottom: 48px;
+.hero-inner {
+  position: relative; z-index: 1;
+  max-width: 760px; margin: 0 auto; text-align: center;
 }
-.urun-image {
-  border-radius: var(--radius); overflow: hidden;
-  background: var(--bg2); border: 1px solid var(--border);
-  aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
-  font-size: 96px; position: relative;
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 16px; border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent); font-size: 12px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  margin-bottom: 28px;
+  opacity: 0; animation: fadeUp 0.6s ease forwards 0.1s;
 }
-.urun-image-gradient { position: absolute; inset: 0; }
-.urun-image-emoji { position: relative; z-index: 1; }
-.urun-details {}
-.urun-name {
-  font-family: var(--font-display); font-size: clamp(24px, 4vw, 32px);
-  font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; line-height: 1.2;
-}
-.urun-rating { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
-.urun-stars { color: var(--accent2); font-size: 16px; letter-spacing: 1px; }
-.urun-rating-val { font-size: 14px; font-weight: 700; }
-.urun-rating-count { font-size: 13px; color: var(--text2); }
-.urun-price {
-  font-family: var(--font-display); font-size: 36px; font-weight: 800;
+.hero-title {
+  font-family: var(--font-display); font-size: clamp(42px, 8vw, 80px);
+  font-weight: 800; line-height: 1.05; letter-spacing: -2px;
   margin-bottom: 24px;
+  opacity: 0; animation: fadeUp 0.7s ease forwards 0.25s;
 }
-.urun-price .old { font-size: 18px; color: var(--text3); text-decoration: line-through; margin-left: 10px; font-weight: 400; }
-.urun-desc {
-  font-size: 15px; color: var(--text2); line-height: 1.8; margin-bottom: 24px;
+.hero-title .grad {
+  background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
-.urun-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 28px; }
-.urun-tag {
-  padding: 5px 14px; border-radius: 999px;
-  background: var(--bg3); border: 1px solid var(--border);
-  font-size: 12px; color: var(--text2);
-}
-.urun-actions { display: flex; gap: 10px; margin-bottom: 32px; }
-.btn-buy-lg {
-  flex: 1; padding: 16px;
-  background: linear-gradient(135deg, var(--accent3), var(--accent));
-  color: #fff; border: none; border-radius: var(--radius);
-  font-family: var(--font-body); font-size: 16px; font-weight: 600;
-  cursor: pointer; transition: opacity 0.2s, transform 0.2s;
-  box-shadow: 0 4px 20px rgba(123,92,240,0.3);
-}
-.btn-buy-lg:hover { opacity: 0.9; transform: translateY(-2px); }
-.btn-share-lg {
-  width: 52px; height: 52px; border: 1px solid var(--border);
-  background: var(--surface); border-radius: var(--radius);
-  cursor: pointer; color: var(--text2); font-size: 20px;
-  display: flex; align-items: center; justify-content: center;
-  transition: border-color 0.2s, color 0.2s;
-}
-.btn-share-lg:hover { border-color: var(--accent); color: var(--accent); }
-
-/* ── SELLER CARD (inline) ── */
-.seller-section { border-top: 1px solid var(--border); padding-top: 28px; }
-.seller-section-title {
-  font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
-  text-transform: uppercase; color: var(--text3); margin-bottom: 14px;
-}
-.seller-card-inline {
-  background: var(--bg2); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 20px;
-  display: flex; align-items: center; gap: 16px;
-  cursor: pointer; transition: border-color 0.2s; text-decoration: none; color: inherit;
-}
-.seller-card-inline:hover { border-color: var(--accent); }
-.seller-avatar-md {
-  width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; font-weight: 800; color: #fff;
-}
-.seller-card-info { flex: 1; }
-.seller-card-name {
-  font-family: var(--font-display); font-size: 16px; font-weight: 700;
-  margin-bottom: 4px; display: flex; align-items: center; gap: 8px;
-}
-.seller-badge-pill {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
-  padding: 2px 8px; border-radius: 999px;
-}
-.seller-card-stats { font-size: 12px; color: var(--text2); }
-.seller-card-stats strong { color: var(--text); }
-.seller-card-arrow { font-size: 18px; color: var(--text3); }
-
-/* ── MİNİ TAKİP BUTONU ── */
-.btn-follow-mini {
-  margin-top: 10px; width: 100%; padding: 10px;
-  background: var(--accent); color: #fff; border: none;
-  border-radius: var(--radius-sm);
-  font-family: var(--font-body); font-size: 13px; font-weight: 600;
-  cursor: pointer; transition: background 0.2s, transform 0.2s;
-}
-.btn-follow-mini:hover { background: #6a4de0; transform: translateY(-1px); }
-.btn-follow-mini.following {
-  background: transparent;
-  border: 1px solid var(--accent3);
-  color: var(--accent3);
-}
-.btn-follow-mini.following:hover {
-  background: color-mix(in srgb, #ff5f5f 10%, transparent);
-  border-color: #ff5f5f; color: #ff5f5f;
+.hero-sub {
+  font-size: 17px; color: var(--text2); line-height: 1.7;
+  max-width: 560px; margin: 0 auto;
+  opacity: 0; animation: fadeUp 0.7s ease forwards 0.4s;
 }
 
-/* ── YORUM BÖLÜMÜ ── */
-.comments-section {
-  margin-top: 48px; border-top: 1px solid var(--border); padding-top: 28px;
+/* SECTIONS */
+.section {
+  max-width: 900px; margin: 0 auto; padding: 80px 24px;
 }
-.comments-title {
-  font-family: var(--font-display); font-size: 18px; font-weight: 800;
+.section-divider {
+  border: none; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 0;
+}
+
+/* STORY */
+.story-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+}
+.story-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 16px;
+}
+.story-title {
+  font-family: var(--font-display); font-size: clamp(28px, 4vw, 42px);
+  font-weight: 800; letter-spacing: -1px; line-height: 1.1;
   margin-bottom: 20px;
 }
-.comment-item {
-  padding: 16px 0; border-bottom: 1px solid var(--border);
+.story-body {
+  font-size: 15px; color: var(--text2); line-height: 1.8;
 }
-.comment-item:last-child { border-bottom: none; }
-.comment-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.comment-avatar {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--surface); border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 700; color: var(--text2);
-}
-.comment-user { font-size: 13px; font-weight: 600; color: var(--text); }
-.comment-stars { color: var(--accent2); font-size: 12px; }
-.comment-date { font-size: 11px; color: var(--text3); margin-left: auto; }
-.comment-text { font-size: 14px; color: var(--text2); line-height: 1.7; padding-left: 42px; }
+.story-body p + p { margin-top: 14px; }
 
-@media (max-width: 768px) {
-  .urun-grid { grid-template-columns: 1fr; }
-  .urun-image { max-height: 300px; }
+.quote-block {
+  position: relative;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent2);
+  border-radius: var(--radius);
+  padding: 28px 28px 28px 32px;
+  margin-top: 28px;
 }
-
-/* ── AUTH MODAL ── */
-.modal-overlay-auth {
-  position: fixed; inset: 0; z-index: 200;
-  background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; pointer-events: none; transition: opacity 0.3s;
+.quote-text {
+  font-family: var(--font-display); font-size: 16px;
+  font-style: italic; line-height: 1.7; color: var(--text);
+  margin-bottom: 12px;
 }
-.modal-overlay-auth.open { opacity: 1; pointer-events: all; }
-.auth-modal-box {
+.quote-author {
+  font-size: 12px; font-weight: 700; color: var(--accent2);
+  letter-spacing: 0.5px; text-transform: uppercase;
+}
+.quote-icon {
+  position: absolute; top: -14px; left: 24px;
+  width: 28px; height: 28px;
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 20px; width: 100%; max-width: 420px; padding: 36px;
-  position: relative; transform: translateY(20px) scale(0.97);
-  transition: transform 0.3s; box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
 }
-.modal-overlay-auth.open .auth-modal-box { transform: translateY(0) scale(1); }
-.auth-modal-close {
-  position: absolute; top: 16px; right: 16px;
-  width: 32px; height: 32px; background: var(--surface);
-  border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
-  color: var(--text2); font-size: 18px;
+
+/* CEO CARD */
+.ceo-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 36px;
+  position: relative; overflow: hidden;
+}
+.ceo-card::before {
+  content: '';
+  position: absolute; top: 0; right: 0;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(123,92,240,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.ceo-avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
   display: flex; align-items: center; justify-content: center;
-  transition: color 0.2s;
+  font-family: var(--font-display); font-size: 28px; font-weight: 800; color: #fff;
+  border: 3px solid var(--border);
+  box-shadow: 0 0 0 4px var(--bg2), 0 0 0 5px var(--border);
+  margin-bottom: 20px; flex-shrink: 0;
 }
-.auth-modal-close:hover { color: var(--text); }
-.modal-logo {
-  font-family: var(--font-display); font-size: 26px; font-weight: 800;
+.ceo-name {
+  font-family: var(--font-display); font-size: 24px; font-weight: 800;
+  letter-spacing: -0.5px; margin-bottom: 4px;
+}
+.ceo-title {
+  font-size: 12px; font-weight: 700; color: var(--accent);
+  letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px;
+}
+.ceo-location {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--text3); margin-bottom: 20px;
+}
+.ceo-bio {
+  font-size: 14px; color: var(--text2); line-height: 1.75;
+  border-top: 1px solid var(--border); padding-top: 20px;
+}
+
+/* EXPERIENCE */
+.exp-list { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+.exp-item {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 14px 18px;
+  transition: border-color 0.2s;
+}
+.exp-item:hover { border-color: var(--accent); }
+.exp-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0;
+}
+.exp-company { font-size: 13px; font-weight: 600; flex: 1; }
+.exp-years {
+  font-size: 11px; font-weight: 700;
+  color: var(--accent2); letter-spacing: 0.5px;
+  background: color-mix(in srgb, var(--accent2) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent2) 20%, transparent);
+  padding: 3px 10px; border-radius: 999px;
+}
+
+/* VALUES */
+.values-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  margin-top: 40px;
+}
+.value-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 28px 22px;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  cursor: default;
+}
+.value-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+.value-icon { font-size: 32px; margin-bottom: 14px; }
+.value-title {
+  font-family: var(--font-display); font-size: 16px; font-weight: 700;
+  margin-bottom: 8px; letter-spacing: -0.3px;
+}
+.value-desc { font-size: 13px; color: var(--text2); line-height: 1.65; }
+
+/* MISSION BANNER */
+.mission-banner {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--accent) 15%, var(--bg2)),
+    color-mix(in srgb, var(--accent2) 8%, var(--bg2))
+  );
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: 20px;
+  padding: 56px 48px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.mission-banner::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.mission-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--accent2); margin-bottom: 16px;
+}
+.mission-text {
+  font-family: var(--font-display); font-size: clamp(22px, 4vw, 36px);
+  font-weight: 800; letter-spacing: -0.5px; line-height: 1.2;
+  max-width: 620px; margin: 0 auto 20px;
+}
+.mission-sub {
+  font-size: 15px; color: var(--text2); max-width: 480px; margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* STATS */
+.stats-row {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  margin-top: 40px;
+}
+.stat-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px 20px; text-align: center;
+  transition: border-color 0.2s;
+}
+.stat-card:hover { border-color: var(--accent); }
+.stat-num {
+  font-family: var(--font-display); font-size: 36px; font-weight: 800;
   background: linear-gradient(135deg, var(--accent), var(--accent2));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  margin-bottom: 6px;
+  letter-spacing: -1px; margin-bottom: 6px;
 }
-.modal-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; margin-bottom: 4px; }
-.modal-sub { font-size: 13px; color: var(--text2); margin-bottom: 24px; }
-.auth-tabs {
-  display: flex; gap: 4px; background: var(--bg3);
-  border-radius: var(--radius-sm); padding: 4px; margin-bottom: 24px;
-}
-.auth-tab {
-  flex: 1; padding: 8px; background: none; border: none;
-  border-radius: 6px; font-family: var(--font-body);
-  font-size: 13px; font-weight: 500; color: var(--text2);
-  cursor: pointer; transition: color 0.2s, background 0.2s, box-shadow 0.2s;
-}
-.auth-tab.active { background: var(--surface); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-.btn-google {
-  width: 100%; padding: 12px; background: var(--surface);
-  border: 1px solid var(--border); border-radius: var(--radius-sm);
-  font-family: var(--font-body); font-size: 14px; font-weight: 500;
-  color: var(--text); cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  transition: border-color 0.2s, background 0.2s; margin-bottom: 20px;
-}
-.btn-google:hover { border-color: var(--accent); background: var(--bg3); }
-.google-icon { width: 18px; height: 18px; flex-shrink: 0; }
-.divider { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-.divider span { font-size: 12px; color: var(--text3); }
-.form-group { margin-bottom: 14px; }
-.form-label { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 6px; display: block; }
-.form-input {
-  width: 100%; padding: 11px 14px; background: var(--bg3);
-  border: 1px solid var(--border); border-radius: var(--radius-sm);
-  font-family: var(--font-body); font-size: 14px; color: var(--text);
-  outline: none; transition: border-color 0.2s;
-}
-.form-input::placeholder { color: var(--text3); }
-.form-input:focus { border-color: var(--accent); }
-.form-input.username-field { padding-left: 36px; }
-.input-wrap { position: relative; }
-.input-prefix {
-  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-  color: var(--accent); font-weight: 700; font-size: 15px; pointer-events: none;
-}
-.btn-submit {
-  width: 100%; padding: 13px; background: var(--accent); color: #fff;
-  border: none; border-radius: var(--radius-sm);
-  font-family: var(--font-body); font-size: 14px; font-weight: 500;
-  cursor: pointer; transition: background 0.2s; margin-top: 6px;
-}
-.btn-submit:hover { background: #6a4de0; }
-.auth-footer { text-align: center; margin-top: 16px; font-size: 12px; color: var(--text3); }
-.auth-footer a { color: var(--accent); text-decoration: none; cursor: pointer; }
-.auth-footer a:hover { text-decoration: underline; }
-.auth-panel { display: none; }
-.auth-panel.active { display: block; }
-.profile-field {
-  display: flex; align-items: center; gap: 10px; padding: 12px 14px;
-  background: var(--bg3); border-radius: var(--radius-sm); margin-bottom: 10px;
-}
-.profile-field-label { font-size: 12px; color: var(--text2); width: 90px; flex-shrink: 0; }
-.profile-field-val { font-size: 14px; color: var(--text); flex: 1; }
+.stat-label { font-size: 12px; color: var(--text3); font-weight: 500; }
 
-/* ── TOAST ── */
-.toast {
-  position: fixed; bottom: 28px; right: 24px; z-index: 999;
-  background: var(--surface); border: 1px solid var(--border);
-  border-left: 3px solid var(--accent2); border-radius: var(--radius-sm);
-  padding: 12px 18px; font-size: 13px; color: var(--text);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-  transform: translateY(80px); opacity: 0; transition: transform 0.3s, opacity 0.3s;
-  will-change: transform, opacity;
+/* FOOTER NOTE */
+.footer-note {
+  text-align: center; padding: 40px 24px 60px;
+  border-top: 1px solid var(--border);
+  color: var(--text3); font-size: 13px;
+  position: relative; z-index: 1;
 }
-.toast.show { transform: translateY(0); opacity: 1; }
+.footer-note strong { color: var(--text2); }
 
-/* ── ANIMATIONS ── */
+/* ANIMATIONS */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(18px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-8px); }
+  from { opacity: 0; transform: translateY(24px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 .reveal {
   opacity: 0; transform: translateY(20px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* ── 60FPS PERFORMANCE ── */
-nav, .modal-overlay-auth, .modal-box, .toast {
-  will-change: transform, opacity;
-  transform: translateZ(0);
+/* RESPONSIVE */
+@media (max-width: 680px) {
+  .story-grid { grid-template-columns: 1fr; gap: 32px; }
+  .values-grid { grid-template-columns: 1fr; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .mission-banner { padding: 40px 24px; }
+  .section { padding: 60px 20px; }
 }
-.btn-primary, .btn-secondary, .btn-signin, .btn-icon, .footer-social-btn,
-.review-card, .related-card {
-  will-change: transform;
-  backface-visibility: hidden;
-}
-.page-header-bg { contain: strict; }
-
-/* ── REDUCED MOTION ── */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  .reveal { opacity: 1; transform: none; }
-  nav { backdrop-filter: none; background: var(--bg2); }
-  .modal-overlay-auth { backdrop-filter: none; }
-}
-@media (max-width: 640px) {
-  .nav-links { display: none; }
-  .hamburger { display: flex; }
-  nav { backdrop-filter: blur(12px); }
-  .modal-overlay-auth { backdrop-filter: blur(4px); }
-}
-
-.badge-0    { background: rgba(90,87,112,0.2);    color: #5a5770; border: 1px solid rgba(90,87,112,0.3); }
-.badge-1    { background: rgba(92,240,120,0.2);   color: #5CF078; border: 1px solid rgba(92,240,120,0.4); }
-.badge-10   { background: rgba(240,197,92,0.2);   color: #F0C55C; border: 1px solid rgba(240,197,92,0.4); }
-.badge-50   { background: rgba(92,160,240,0.2);   color: #5CA0F0; border: 1px solid rgba(92,160,240,0.4); }
-.badge-100  { background: rgba(240,140,60,0.2);   color: #F08C3C; border: 1px solid rgba(240,140,60,0.4); }
-.badge-1000 { background: rgba(140,40,70,0.3);    color: #C0566A; border: 1px solid rgba(140,40,70,0.5); }
-.badge-10000{ background: rgba(123,92,240,0.25);  color: #7B5CF0; border: 1px solid rgba(123,92,240,0.5); }
-.badge-100000{ background: rgba(240,60,60,0.2);   color: #F05C5C; border: 1px solid rgba(240,60,60,0.4); }
-
 </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo" onclick="navigateTo('index.html')">GEN-Z</div>
-  <ul class="nav-links">
-    <li><a href="magaza.html" data-tr="Mağaza" data-en="Shop">Mağaza</a></li>
-    <li><a href="ustam.html" data-tr="Ustam" data-en="Ustam">Ustam</a></li>
-    <li><a href="gen-z.html" class="active" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a></li>
-    <li><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a></li>
-    <li><a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a></li>
-    <li><a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a></li>
-    <li><a href="birlikte-buyuyelim.html" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a></li>
-    <li><a href="elden-ele.html" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a></li>
-  </ul>
+  <a class="nav-logo" href="index.html">GEN-Z</a>
+  <a class="nav-back" href="index.html">← Geri</a>
   <div class="nav-right">
-    <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()" aria-label="Menü">
-      <span></span><span></span><span></span>
-    </button>
-    <button class="btn-icon" onclick="toggleLang()" title="Dil">🌐</button>
-    <button class="btn-icon" onclick="toggleTheme()" title="Tema" id="themeBtn">🌙</button>
-    <button class="btn-signin" onclick="openAuth('signin')" id="authBtn" data-tr="Giriş Yap" data-en="Sign In">Giriş Yap</button>
+    <button class="btn-icon" onclick="toggleTheme()" id="themeBtn" title="Tema">🌙</button>
   </div>
 </nav>
 
-<!-- MOBILE MENU -->
-<nav class="mobile-menu" id="mobileMenu">
-  <a href="magaza.html" data-tr="Mağaza" data-en="Shop">Mağaza</a>
-  <a href="ustam.html" data-tr="Ustam" data-en="Ustam">Ustam</a>
-  <a href="gen-z.html" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a>
-  <a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a>
-  <a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a>
-  <a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a>
-  <a href="birlikte-buyuyelim.html" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a>
-  <a href="elden-ele.html" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a>
-</nav>
+<div class="page">
 
-<div class="urun-wrapper">
-  <div class="urun-inner">
-    <div class="breadcrumb" id="breadcrumb"></div>
-    <div class="urun-grid">
-      <div class="urun-image" id="urunImage">
-        <div class="urun-image-gradient" id="urunGrad"></div>
-        <span class="urun-image-emoji" id="urunEmoji">📦</span>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-inner">
+      <div class="hero-tag">✦ Hakkımızda</div>
+      <h1 class="hero-title">
+        Ezilenlerin sesi,<br>
+        <span class="grad">yeni neslin platformu.</span>
+      </h1>
+      <p class="hero-sub">
+        Bir kuşağı yeniden ayağa kaldırmak için kurulduk. Umutla, azimle ve bir babanın bize öğrettiği değerlerle.
+      </p>
+    </div>
+  </section>
+
+  <hr class="section-divider"/>
+
+  <!-- STORY -->
+  <section class="section reveal">
+    <div class="story-grid">
+      <div>
+        <div class="story-label">✦ Hikayemiz</div>
+        <h2 class="story-title">Bir hayalin kökleri var.</h2>
+        <div class="story-body">
+          <p>
+            GEN-Z, Ankara'nın kalbinden doğdu. Yenilikçi bir kuşağın ekonomik sistem içinde görünmez kılındığını, sesinin bastırıldığını gördük. Bu adaletsizliğe seyirci kalmak yerine çözümün bir parçası olmayı seçtik.
+          </p>
+          <p>
+            Platformumuz; genç girişimcilere, zanaatkarlara ve esnafa güvenli, adil ve büyüme odaklı bir ekosistem sunmak için kuruldu. Büyük sistemlerin gölgesinde ezilenlere işte bu platform.
+          </p>
+        </div>
+
+        <div class="quote-block">
+          <div class="quote-icon">💬</div>
+          <p class="quote-text">"İnsan çalışırsa, dürüst kalırsa ve pes etmezse — kapılar eninde sonunda açılır. Babam bunu bütün hayatıyla ispat etti."</p>
+          <div class="quote-author">— Yasin İnce, Kurucu & CEO</div>
+        </div>
       </div>
-      <div class="urun-details">
-        <div class="urun-name" id="urunName">Yükleniyor...</div>
-        <div class="urun-rating">
-          <span class="urun-stars" id="urunStars"></span>
-          <span class="urun-rating-val" id="urunRatingVal"></span>
-          <span class="urun-rating-count" id="urunRatingCount"></span>
-        </div>
-        <div class="urun-price" id="urunPrice"></div>
-        <div class="urun-desc" id="urunDesc"></div>
-        <div class="urun-tags" id="urunTags"></div>
-        <div class="urun-actions">
-          <button class="btn-buy-lg" onclick="showToast('Ödeme sistemi yakında aktif olacak 🔜')">🛒 Satın Al</button>
-          <button class="btn-share-lg" onclick="if(navigator.clipboard)navigator.clipboard.writeText(window.location.href);showToast('Bağlantı kopyalandı ↗')" title="Paylaş">↗</button>
-        </div>
-        <div class="seller-section">
-          <div class="seller-section-title">SATICI MAĞAZA</div>
-          <a class="seller-card-inline" id="sellerCard" href="#">
-            <div class="seller-avatar-md" id="sellerInitial"></div>
-            <div class="seller-card-info">
-              <div class="seller-card-name">
-                <span id="sellerName"></span>
-                <span class="seller-badge-pill" id="sellerBadge"></span>
-              </div>
-              <div class="seller-card-stats">
-                <strong id="sellerSales"></strong> satış · <span id="sellerStars"></span> <span id="sellerRatingVal"></span>
-              </div>
+
+      <div>
+        <!-- CEO CARD -->
+        <div class="ceo-card">
+          <div style="display:flex;align-items:center;gap:20px;margin-bottom:20px;">
+            <div class="ceo-avatar">Y</div>
+            <div>
+              <div class="ceo-name">Yasin İnce</div>
+              <div class="ceo-title">Kurucu & CEO</div>
+              <div class="ceo-location">📍 Yenimahalle, Ankara · 1994</div>
             </div>
-            <span class="seller-card-arrow">→</span>
-          </a>
-          <button class="btn-follow-mini" id="followBtnMini" onclick="toggleFollowMini()">+ Takip Et</button>
+          </div>
+
+          <div class="exp-list">
+            <div class="exp-item">
+              <div class="exp-dot"></div>
+              <div class="exp-company">Doranet A.Ş — Lojistik Uzmanı</div>
+              <div class="exp-years">7 yıl</div>
+            </div>
+            <div class="exp-item">
+              <div class="exp-dot" style="background:var(--accent2)"></div>
+              <div class="exp-company">Yiğit Akü A.Ş — Lojistik Uzmanı</div>
+              <div class="exp-years">4 yıl</div>
+            </div>
+          </div>
+
+          <div class="ceo-bio">
+            11 yılı aşkın sektör deneyimiyle, tüm depo yönetim sistemlerini ve lojistik süreçleri derinlemesine bilen Yasin İnce; bu birikimi girişimciliğe taşıyarak GEN-Z'yi kurdu. 5 kardeşiyle büyümenin kazandırdığı dayanışma ruhu, platformun DNA'sına işlemiştir.
+          </div>
         </div>
       </div>
     </div>
-    <div class="comments-section" id="commentsSection"></div>
-  </div>
-</div>
+  </section>
 
-<!-- AUTH MODAL -->
-<div class="modal-overlay-auth" id="authModal" onclick="closeAuthIfOutside(event)">
-  <div class="auth-modal-box">
-    <button class="auth-modal-close" onclick="closeAuth()">✕</button>
-    <div class="modal-logo">GEN-Z</div>
-    <div id="authTabs" class="auth-tabs">
-      <button class="auth-tab active" id="tab-signin" onclick="switchTab('signin')" data-tr="Giriş Yap" data-en="Sign In">Giriş Yap</button>
-      <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')" data-tr="Kayıt Ol" data-en="Sign Up">Kayıt Ol</button>
-    </div>
-    <div class="auth-panel active" id="panel-signin">
-      <div class="modal-title" data-tr="Tekrar hoş geldin" data-en="Welcome back">Tekrar hoş geldin</div>
-      <div class="modal-sub" data-tr="Hesabına giriş yap" data-en="Sign in to your account">Hesabına giriş yap</div>
-      <button class="btn-google" onclick="googleSignIn()">
-        <svg class="google-icon" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
-        Google ile Giriş
-      </button>
-      <div class="divider"><span>veya</span></div>
-      <div class="form-group">
-        <label class="form-label">E-posta</label>
-        <input class="form-input" id="signin-email" type="email" placeholder="ornek@mail.com"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Şifre</label>
-        <input class="form-input" id="signin-pass" type="password" placeholder="••••••••"/>
-      </div>
-      <button class="btn-submit" onclick="doSignIn()">Giriş Yap</button>
-      <div class="auth-footer"><a onclick="switchTab('forgot')">Şifremi unuttum</a></div>
-    </div>
-    <div class="auth-panel" id="panel-signup">
-      <div class="modal-title" data-tr="Hesap oluştur" data-en="Create account">Hesap oluştur</div>
-      <div class="modal-sub" data-tr="Ücretsiz katıl" data-en="Join for free">Ücretsiz katıl</div>
-      <div class="form-group">
-        <label class="form-label">Kullanıcı Adı</label>
-        <div class="input-wrap">
-          <span class="input-prefix">@</span>
-          <input class="form-input username-field" id="signup-username" type="text" placeholder="kullaniciadin"/>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">E-posta</label>
-        <input class="form-input" id="signup-email" type="email" placeholder="ornek@mail.com"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Şifre</label>
-        <input class="form-input" id="signup-pass" type="password" placeholder="En az 8 karakter"/>
-      </div>
-      <button class="btn-submit" onclick="doSignUp()">Kayıt Ol</button>
-    </div>
-    <div class="auth-panel" id="panel-forgot">
-      <div class="modal-title">Şifre Sıfırla</div>
-      <div class="modal-sub">E-postana sıfırlama bağlantısı gönderilecek</div>
-      <div class="form-group">
-        <label class="form-label">E-posta</label>
-        <input class="form-input" id="forgot-email" type="email" placeholder="ornek@mail.com"/>
-      </div>
-      <button class="btn-submit" onclick="doForgot()">Bağlantı Gönder</button>
-      <div class="auth-footer"><a onclick="switchTab('signin')">← Giriş yap</a></div>
-    </div>
-    <div class="auth-panel" id="panel-profile">
-      <div class="modal-title">Profilim</div>
-      <div class="modal-sub">Hesap bilgilerin</div>
-      <div class="profile-field">
-        <span class="profile-field-label">Kullanıcı Adı</span>
-        <span class="profile-field-val" id="profile-username">@kullanici</span>
-      </div>
-      <div class="profile-field">
-        <span class="profile-field-label">E-posta</span>
-        <span class="profile-field-val" id="profile-email">ornek@mail.com</span>
-      </div>
-      <button class="btn-submit" style="background:transparent;color:var(--accent);border:1px solid var(--accent);margin-top:8px" onclick="goToProfile()">
-        👤 Profil Sayfam
-      </button>
-      <button class="btn-submit" style="background:var(--bg3);color:var(--text2);margin-top:8px" onclick="doSignOut()">Çıkış Yap</button>
-    </div>
-  </div>
-</div>
+  <hr class="section-divider"/>
 
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
+  <!-- MISSION BANNER -->
+  <section class="section reveal">
+    <div class="mission-banner">
+      <div class="mission-label">✦ Misyonumuz</div>
+      <h2 class="mission-text">Yeni kuşağı yeniden ayağa kaldırmak.</h2>
+      <p class="mission-sub">
+        Sistemin kenarına itilmiş herkese bir merkez olmak istiyoruz. GEN-Z; sadece bir alışveriş platformu değil, bir hareket.
+      </p>
+    </div>
+  </section>
+
+  <hr class="section-divider"/>
+
+  <!-- VALUES -->
+  <section class="section reveal">
+    <div style="text-align:center;margin-bottom:8px;">
+      <div class="story-label" style="display:inline-block;">✦ Değerlerimiz</div>
+    </div>
+    <h2 class="story-title" style="text-align:center;margin-bottom:0;">Neye inandığımız.</h2>
+
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="value-icon">⚡</div>
+        <div class="value-title">Yenilikçilik</div>
+        <div class="value-desc">Alışılagelmiş sistemlere meydan okuyoruz. Her özelliğimiz, her kararımız gençlerin gözünden tasarlandı.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🤝</div>
+        <div class="value-title">Dayanışma</div>
+        <div class="value-desc">5 kardeşin büyütüldüğü o evde öğrendiğimiz şey: gerçek güç birlikte olmaktan gelir.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🎯</div>
+        <div class="value-title">Dürüstlük</div>
+        <div class="value-desc">Babamızdan gördüğümüz en büyük miras: ne olursa olsun dürüst kalmak. Bu bize rehber olmaya devam ediyor.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🌱</div>
+        <div class="value-title">Büyüme</div>
+        <div class="value-desc">Kullanıcılarımız büyüdükçe biz büyüyoruz. Birlikte büyümek sadece sloganımız değil, modelimiz.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🔥</div>
+        <div class="value-title">Azim</div>
+        <div class="value-desc">11 yıl boyunca sahadaki her soruna çözüm üreten birinin kurduğu platform — pes etmeyi bilmiyoruz.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">📍</div>
+        <div class="value-title">Yerellik</div>
+        <div class="value-desc">Ankara'dan dünyaya. Kökleri olan bir ağaç gibi: ne kadar büyürsek büyüyelim, topraktan kopmamalıyız.</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider"/>
+
+  <!-- STATS -->
+  <section class="section reveal">
+    <div style="text-align:center;margin-bottom:8px;">
+      <div class="story-label" style="display:inline-block;">✦ Rakamlarla GEN-Z</div>
+    </div>
+    <h2 class="story-title" style="text-align:center;margin-bottom:0;">Tecrübe konuşur.</h2>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num">11+</div>
+        <div class="stat-label">Yıllık Sektör Deneyimi</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">2</div>
+        <div class="stat-label">Köklü Firmada Görev</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Kardeşin Kurduğu Ruh</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Büyüme Hedefi</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER NOTE -->
+  <footer class="footer-note">
+    <strong>GEN-Z</strong> · Ankara, Türkiye · Tüm hakları saklıdır.
+  </footer>
+
+</div><!-- /page -->
 
 <script>
-/* ── MAGAZA-DATA (inline) ── */
-/* ══════════════════════════════════════════════════════════
-   GEN-Z MAĞAZA — Paylaşılan Veri & Yardımcılar
-   ══════════════════════════════════════════════════════════ */
-
-/* ── ROZET SİSTEMİ ── */
-function getBadgeLevel(sales) {
-  if (sales >= 100000) return { level: '100000', label: '⚡ Efsane', emoji: '🔴' };
-  if (sales >= 10000)  return { level: '10000',  label: '⚡ Usta',   emoji: '🟣' };
-  if (sales >= 1000)   return { level: '1000',   label: '⚡ Uzman',  emoji: '🟤' };
-  if (sales >= 100)    return { level: '100',    label: '⚡ Deneyimli', emoji: '🟠' };
-  if (sales >= 50)     return { level: '50',     label: '⚡ Gelişen', emoji: '🔵' };
-  if (sales >= 10)     return { level: '10',     label: '⚡ Aktif',  emoji: '🟡' };
-  if (sales >= 1)      return { level: '1',      label: '⚡ Yeni',   emoji: '🟢' };
-  return { level: '0', label: '⚡ Başlangıç', emoji: '⚪' };
-}
-
-/* ── KATEGORİLER (ileride doldurulacak) ── */
-const CATEGORIES = [
-  { id: 'all', name: 'Tümü', icon: '🌐', count: null },
-  { id: 'bakim', name: 'Kişisel Bakım', icon: '🧴', count: null, coming: true },
-  { id: 'dekor', name: 'Ev & Dekor', icon: '🕯️', count: null, coming: true },
-  { id: 'giyim', name: 'Giyim & Aksesuar', icon: '👟', count: null, coming: true },
-  { id: 'teknoloji', name: 'Teknoloji', icon: '🎧', count: null, coming: true },
-  { id: 'yiyecek', name: 'Yiyecek & İçecek', icon: '🍵', count: null, coming: true },
-  { id: 'sanat', name: 'Sanat & Tasarım', icon: '🎨', count: null, coming: true },
-  { id: 'kirtasiye', name: 'Kırtasiye', icon: '🖊️', count: null, coming: true },
-  { id: 'bahce', name: 'Bahçe & Doğa', icon: '🌱', count: null, coming: true },
-];
-
-const DEMO_PRODUCTS = [
-  {
-    id: 1, emoji: '🎵', name: 'Lo-fi Beat Pack — Midnight Study Vol.1',
-    price: 149, oldPrice: 220, rating: 4.9, reviews: 112,
-    badge: 'hot', tags: ['müzik', 'lo-fi', 'beat', 'stüdyo kalitesi'],
-    category: 'muzik',
-    desc: '20 adet üretim kalitesinde lo-fi beat. WAV ve MP3 formatları dahil. Ticari kullanım lisansı ile birlikte.',
-    gradA: 'rgba(240,197,92,0.18)', gradB: 'rgba(123,92,240,0.1)',
-    seller: { id: 'beatztr', name: 'BeatzTR', initials: 'BT', sales: 340, joined: '2024', rating: 4.9, ratingCount: 98, desc: "Türkiye'nin genç beat üreticisi. Lo-fi, trap, R&B.", comments: [{user:'se**',stars:5,date:'Mart 2025',text:'Kalite inanılmaz, hepsini projelerimde kullandım.'},{user:'be**',stars:5,date:'Şubat 2025',text:'Fiyatına göre çok değerli, tekrar alacağım.'}] }
-  },
-  {
-    id: 2, emoji: '🎨', name: 'UI Kit — Gen-Z Dark Mode Components',
-    price: 299, oldPrice: null, rating: 4.8, reviews: 67,
-    badge: 'new', tags: ['ui kit', 'figma', 'dark mode', 'component'],
-    category: 'tasarim',
-    desc: '120+ Figma bileşeni. Auto-layout, variables, dark/light tema desteği. Mobil ve web için tam uyumluluk.',
-    gradA: 'rgba(123,92,240,0.18)', gradB: 'rgba(92,240,180,0.08)',
-    seller: { id: 'uidesignz', name: 'UI Design Z', initials: 'UD', sales: 89, joined: '2024', rating: 4.8, ratingCount: 44, desc: 'Gen-Z odaklı UI/UX tasarım kitleri ve şablonlar.', comments: [{user:'er**',stars:5,date:'Ocak 2025',text:'Çok temiz ve kullanışlı, harika iş çıkarmışsın!'}] }
-  },
-  {
-    id: 3, emoji: '💻', name: 'Next.js Başlangıç Şablonu + Auth',
-    price: 199, oldPrice: 350, rating: 4.7, reviews: 43,
-    badge: 'viral', tags: ['nextjs', 'typescript', 'auth', 'tailwind'],
-    category: 'yazilim',
-    desc: 'Next.js 14, TypeScript, TailwindCSS ve Auth.js ile hazır başlangıç şablonu. Koyu/açık tema, i18n ve Prisma dahil.',
-    gradA: 'rgba(92,240,180,0.15)', gradB: 'rgba(92,160,240,0.1)',
-    seller: { id: 'codeztr', name: 'Code-Z', initials: 'CZ', sales: 156, joined: '2023', rating: 4.8, ratingCount: 72, desc: 'Açık kaynak sevdalısı. Modern web geliştirme şablonları.', comments: [{user:'mu**',stars:5,date:'Mart 2025',text:'Setup çok hızlı oldu, auth mükemmel çalışıyor.'},{user:'do**',stars:4,date:'Şubat 2025',text:'Dökümantasyon gayet iyi, tavsiye ederim.'}] }
-  },
-  {
-    id: 4, emoji: '📹', name: 'Vlog Preset Paketi — Cinematic TR',
-    price: 89, oldPrice: 140, rating: 4.6, reviews: 88,
-    badge: 'hot', tags: ['preset', 'lightroom', 'vlog', 'sinematik'],
-    category: 'video',
-    desc: '15 adet Lightroom & Lr Mobile preset. Türkiye sokaklarına, doğasına özel renk bilimi.',
-    gradA: 'rgba(240,140,60,0.18)', gradB: 'rgba(240,197,92,0.08)',
-    seller: { id: 'visualz', name: 'Visual-Z', initials: 'VZ', sales: 620, joined: '2023', rating: 4.7, ratingCount: 201, desc: 'Fotoğraf ve video presetleri. Türk sahnelerine uygun tonlar.', comments: [{user:'ca**',stars:5,date:'Mart 2025',text:'İstanbul fotoğraflarıma çok yakıştı!'}] }
-  },
-  {
-    id: 5, emoji: '📷', name: 'Portre Kompozisyon Kılavuzu PDF',
-    price: 59, oldPrice: null, rating: 4.9, reviews: 31,
-    badge: 'new', tags: ['portre', 'kompozisyon', 'pdf', 'fotoğrafçılık'],
-    category: 'fotograf',
-    desc: '45 sayfalık detaylı portre kompozisyon rehberi. Gerçek vaka incelemeleri, pratik egzersizler.',
-    gradA: 'rgba(240,92,160,0.15)', gradB: 'rgba(123,92,240,0.08)',
-    seller: { id: 'lenslenz', name: 'Lens & Z', initials: 'LZ', sales: 22, joined: '2025', rating: 4.9, ratingCount: 18, desc: 'Fotoğrafçılık eğitim materyalleri. Teori ve pratik bir arada.', comments: [{user:'ay**',stars:5,date:'Ocak 2025',text:'Okuyunca bakış açım tamamen değişti.'}] }
-  },
-  {
-    id: 6, emoji: '📝', name: "Freelance Sözleşme Şablonları (5'li)",
-    price: 79, oldPrice: 120, rating: 4.8, reviews: 55,
-    badge: null, tags: ['freelance', 'sözleşme', 'hukuki', 'Türkçe'],
-    category: 'yazi',
-    desc: '5 farklı freelance proje için hazır Türkçe sözleşme şablonları.',
-    gradA: 'rgba(92,240,120,0.15)', gradB: 'rgba(240,197,92,0.08)',
-    seller: { id: 'legalzgen', name: 'Legal-Z', initials: 'LG', sales: 2100, joined: '2022', rating: 4.8, ratingCount: 430, desc: "Freelancer'lar için Türkçe hukuki şablonlar.", comments: [{user:'ni**',stars:5,date:'Mart 2025',text:'Çok işime yaradı, müşterilere güven verdi.'},{user:'em**',stars:5,date:'Şubat 2025',text:'Dil çok sade ve anlaşılır, harika.'}] }
-  },
-  {
-    id: 7, emoji: '👗', name: 'Vintage Grafik Tişört — Limited Drop',
-    price: 380, oldPrice: null, rating: 4.7, reviews: 19,
-    badge: 'collab', tags: ['tişört', 'vintage', 'limited', 'el baskı'],
-    category: 'moda',
-    desc: '%100 organik pamuk. El yapımı serigrafi baskı. Sadece 50 adet üretildi. Unisex kesim, S–XXL.',
-    gradA: 'rgba(92,160,240,0.15)', gradB: 'rgba(123,92,240,0.1)',
-    seller: { id: 'threadz', name: 'Thread-Z', initials: 'TZ', sales: 12, joined: '2025', rating: 4.7, ratingCount: 8, desc: 'Sınırlı sayıda el yapımı giyim. Her parça özgün.', comments: [{user:'ze**',stars:5,date:'Mart 2025',text:'Kumaş kalitesi gerçekten çok iyi.'}] }
-  },
-  {
-    id: 8, emoji: '🎮', name: 'İndie Oyun Müzik Paketi — 8-bit',
-    price: 125, oldPrice: 180, rating: 4.5, reviews: 38,
-    badge: 'viral', tags: ['oyun müziği', '8-bit', 'indie', 'loop'],
-    category: 'oyun',
-    desc: '30 adet 8-bit ve chiptune müzik loop. Oyun geliştirme için ticari lisans dahil.',
-    gradA: 'rgba(240,197,92,0.15)', gradB: 'rgba(92,240,120,0.08)',
-    seller: { id: 'chiptunez', name: 'Chiptune-Z', initials: 'CZ', sales: 77, joined: '2024', rating: 4.6, ratingCount: 35, desc: 'Oyun geliştiriciler için 8-bit ve synthwave müzik.', comments: [{user:'ya**',stars:4,date:'Şubat 2025',text:'Oyunum için tam aradığım şeydi!'}] }
-  },
-  {
-    id: 9, emoji: '🎨', name: 'Procreate Fırça Seti — Suluboya',
-    price: 69, oldPrice: null, rating: 4.9, reviews: 74,
-    badge: 'new', tags: ['procreate', 'fırça', 'suluboya', 'dijital sanat'],
-    category: 'tasarim',
-    desc: '25 adet Procreate suluboya fırçası. Gerçekçi doku ve akış simülasyonu.',
-    gradA: 'rgba(240,92,160,0.18)', gradB: 'rgba(240,197,92,0.1)',
-    seller: { id: 'brushztr', name: 'Brush-Z', initials: 'BZ', sales: 510, joined: '2023', rating: 4.9, ratingCount: 198, desc: 'Dijital sanatçılar için Procreate araçları.', comments: [{user:'mi**',stars:5,date:'Mart 2025',text:'Bu fırçalar olmasaydı hiç bu kadar iyi çizemezdim.'},{user:'bu**',stars:5,date:'Ocak 2025',text:'Suluboya efekti gerçekten çok gerçekçi!'}] }
-  },
-];
-
-/* ── YARDIMCI FONKSİYONLAR ── */
-function getProductById(id) {
-  return DEMO_PRODUCTS.find(p => p.id === parseInt(id));
-}
-
-function getProductsBySeller(sellerId) {
-  return DEMO_PRODUCTS.filter(p => p.seller.id === sellerId);
-}
-
-function getSellerById(sellerId) {
-  const product = DEMO_PRODUCTS.find(p => p.seller.id === sellerId);
-  return product ? product.seller : null;
-}
-
-function getAllSellers() {
-  const map = {};
-  DEMO_PRODUCTS.forEach(p => {
-    if (!map[p.seller.id]) {
-      map[p.seller.id] = { ...p.seller, products: [] };
-    }
-    map[p.seller.id].products.push(p);
-  });
-  return Object.values(map);
-}
-
-function getProductsByCategory(catId) {
-  if (catId === 'all') return DEMO_PRODUCTS;
-  return DEMO_PRODUCTS.filter(p => p.category === catId);
-}
-
-/* ── URL YARDIMCILARI ── */
-function getParam(key) {
-  return new URLSearchParams(window.location.search).get(key);
-}
-
-function navigateTo(url) {
-  document.body.style.transition = 'opacity 0.25s';
-  document.body.style.opacity = '0';
-  setTimeout(() => { window.location.href = url; }, 250);
-}
-
-/* ── ORTAK TOAST ── */
-let _toastTimer;
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  if (!t) return;
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
-}
-
-/* ── ORTAK THEME / LANG ── */
-/* ── SAFE STORAGE ── */
-const _ls = {
-  get(k, fb = null) { try { const v = localStorage.getItem(k); return v !== null ? v : fb; } catch(e) { return fb; } },
-  set(k, v)         { try { localStorage.setItem(k, v); } catch(e) {} },
-  remove(k)         { try { localStorage.removeItem(k); } catch(e) {} },
-  getJSON(k, fb)    { try { return JSON.parse(localStorage.getItem(k)) ?? fb; } catch(e) { return fb; } },
-};
-let currentLang  = _ls.get('genz-lang', 'tr');
-let currentTheme = _ls.get('genz-theme', 'dark');
-let currentUser  = _ls.getJSON('genz-user', null);
-
-function initThemeLang() {
-  document.documentElement.setAttribute('data-lang',  currentLang);
-  document.documentElement.setAttribute('data-theme', currentTheme);
-  const themeBtn = document.getElementById('themeBtn');
-  if (themeBtn) themeBtn.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
-  if (currentUser) {
-    const authBtn = document.getElementById('authBtn');
-    if (authBtn) authBtn.textContent = currentUser.username;
-    const pu = document.getElementById('profile-username');
-    const pe = document.getElementById('profile-email');
-    if (pu) pu.textContent = currentUser.username;
-    if (pe) pe.textContent = currentUser.email;
-  }
-}
+/* THEME */
+let currentTheme = (() => { try { return localStorage.getItem('genz-theme') || 'dark'; } catch(e) { return 'dark'; } })();
+document.documentElement.setAttribute('data-theme', currentTheme);
+document.getElementById('themeBtn').textContent = currentTheme === 'dark' ? '🌙' : '☀️';
 
 function toggleTheme() {
   currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-  _ls.set('genz-theme', currentTheme);
+  try { localStorage.setItem('genz-theme', currentTheme); } catch(e) {}
   document.body.classList.add('theme-transitioning');
   document.documentElement.setAttribute('data-theme', currentTheme);
-  const themeBtn = document.getElementById('themeBtn');
-  if (themeBtn) themeBtn.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
-  showToast(currentTheme === 'dark' ? 'Koyu tema 🌙' : 'Açık tema ☀️');
+  document.getElementById('themeBtn').textContent = currentTheme === 'dark' ? '🌙' : '☀️';
   setTimeout(() => document.body.classList.remove('theme-transitioning'), 350);
 }
 
-function toggleLang() {
-  currentLang = currentLang === 'tr' ? 'en' : 'tr';
-  _ls.set('genz-lang', currentLang);
-  document.documentElement.setAttribute('data-lang', currentLang);
-  document.querySelectorAll('[data-tr]').forEach(el => {
-    el.textContent = el.getAttribute('data-' + currentLang);
-  });
-  if (currentUser) {
-    const authBtn = document.getElementById('authBtn');
-    if (authBtn) authBtn.textContent = currentUser.username;
-  }
-  showToast(currentLang === 'tr' ? 'Dil: Türkçe 🇹🇷' : 'Language: English 🇬🇧');
-}
-
-function toggleMobileMenu() {
-  const mm = document.getElementById('mobileMenu');
-  const hb = document.getElementById('hamburgerBtn');
-  if (mm) mm.classList.toggle('open');
-  if (hb) hb.classList.toggle('open');
-}
-
-/* ── ORTAK AUTH MODAL ── */
-function openAuth(tab) {
-  if (currentUser) { switchTab('profile'); }
-  else { switchTab(tab || 'signin'); }
-  document.getElementById('authModal').classList.add('open');
-}
-function closeAuth() { document.getElementById('authModal').classList.remove('open'); }
-function closeAuthIfOutside(e) { if (e.target === document.getElementById('authModal')) closeAuth(); }
-function switchTab(tab) {
-  document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-  const panel = document.getElementById('panel-' + tab);
-  if (panel) panel.classList.add('active');
-  const tabBtn = document.getElementById('tab-' + tab);
-  if (tabBtn) tabBtn.classList.add('active');
-  const authTabs = document.getElementById('authTabs');
-  if (authTabs) authTabs.style.display = (tab === 'forgot' || tab === 'profile') ? 'none' : 'flex';
-}
-function doSignIn() {
-  const email = document.getElementById('signin-email').value.trim();
-  const pass  = document.getElementById('signin-pass').value;
-  if (!email || !pass) { showToast('Lütfen tüm alanları doldurun ⚠️'); return; }
-  fakeLogin(email, 'Kullanıcı');
-}
-function doSignUp() {
-  const username = document.getElementById('signup-username').value.trim();
-  const email    = document.getElementById('signup-email').value.trim();
-  const pass     = document.getElementById('signup-pass').value;
-  if (!username || !email || !pass) { showToast('Lütfen tüm alanları doldurun ⚠️'); return; }
-  if (pass.length < 8) { showToast('Şifre en az 8 karakter olmalı ⚠️'); return; }
-  fakeLogin(email, username);
-}
-function doForgot() {
-  const email = document.getElementById('forgot-email').value.trim();
-  if (!email) { showToast('E-posta adresinizi girin ⚠️'); return; }
-  showToast('Sıfırlama bağlantısı gönderildi ✉️');
-  setTimeout(() => switchTab('signin'), 1500);
-}
-function googleSignIn() { showToast('Google bağlantısı yakında aktif olacak 🔜'); }
-function fakeLogin(email, username) {
-  const clean = '@' + username.replace('@', '');
-  currentUser = { email, username: clean };
-  _ls.set('genz-user', JSON.stringify(currentUser));
-  const pe = document.getElementById('profile-email');
-  const pu = document.getElementById('profile-username');
-  const ab = document.getElementById('authBtn');
-  if (pe) pe.textContent = email;
-  if (pu) pu.textContent = clean;
-  if (ab) ab.textContent = clean;
-  closeAuth();
-  showToast('Hoş geldin, ' + clean + ' 👋');
-}
-function doSignOut() {
-  currentUser = null;
-  _ls.remove('genz-user');
-  const ab = document.getElementById('authBtn');
-  if (ab) ab.textContent = currentLang === 'tr' ? 'Giriş Yap' : 'Sign In';
-  closeAuth();
-  showToast('Çıkış yapıldı 👋');
-}
-function goToProfile() {
-  if (currentUser) {
-    closeAuth();
-    navigateTo('profile.html');
-  }
-}
-
-/* ── DEBOUNCE ── */
-function debounce(fn, delay) {
-  let timer;
-  return function(...args) {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn.apply(this, args), delay);
-  };
-}
-
-/* ── YILDIZ RENDER ── */
-function renderStars(rating) {
-  return '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating));
-}
-
-
-/* ── PAGE SCRIPT ── */
-initThemeLang();
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.mobile-menu a').forEach(a => {
-    a.addEventListener('click', () => {
-      const mm = document.getElementById('mobileMenu');
-      const hb = document.getElementById('hamburgerBtn');
-      if (mm) mm.classList.remove('open');
-      if (hb) hb.classList.remove('open');
-    });
-  });
-  document.body.style.opacity = '0';
-  document.body.style.transition = 'opacity 0.3s';
-  requestAnimationFrame(() => { document.body.style.opacity = '1'; });
-
-  const id = getParam('id');
-  const p = getProductById(id);
-  if (!p) { document.querySelector('.urun-inner').innerHTML = '<div class="empty-state"><div class="empty-icon">😕</div><div class="empty-text">Ürün bulunamadı</div><div class="empty-sub"><a href="magaza.html" style="color:var(--accent)">← Mağazaya dön</a></div></div>'; return; }
-
-  document.title = 'GEN-Z · ' + p.name;
-  document.getElementById('breadcrumb').innerHTML = '<a href="magaza.html">Mağaza</a><span class="sep">›</span><span class="current">' + p.name + '</span>';
-  document.getElementById('urunEmoji').textContent = p.emoji;
-  document.getElementById('urunGrad').style.background = 'linear-gradient(135deg, ' + p.gradA + ', ' + p.gradB + ')';
-  document.getElementById('urunName').textContent = p.name;
-  document.getElementById('urunStars').textContent = renderStars(p.rating);
-  document.getElementById('urunRatingVal').textContent = p.rating;
-  document.getElementById('urunRatingCount').textContent = '(' + p.reviews + ' değerlendirme)';
-  document.getElementById('urunPrice').innerHTML = '₺' + p.price.toLocaleString('tr-TR') + (p.oldPrice ? '<span class="old">₺' + p.oldPrice + '</span>' : '');
-  document.getElementById('urunDesc').textContent = p.desc;
-  document.getElementById('urunTags').innerHTML = p.tags.map(t => '<span class="urun-tag">' + t + '</span>').join('');
-
-  const badge = getBadgeLevel(p.seller.sales);
-  document.getElementById('sellerCard').href = 'gen-z.satici.html?seller=' + p.seller.id;
-  document.getElementById('sellerInitial').textContent = p.seller.initials;
-  document.getElementById('sellerName').textContent = p.seller.name;
-  document.getElementById('sellerBadge').textContent = badge.label;
-  document.getElementById('sellerBadge').className = 'seller-badge-pill badge-' + badge.level;
-  document.getElementById('sellerSales').textContent = p.seller.sales.toLocaleString('tr-TR');
-  document.getElementById('sellerStars').textContent = renderStars(p.seller.rating);
-  document.getElementById('sellerRatingVal').textContent = p.seller.rating;
-
-  /* Takip butonu — localStorage ile kullanıcıya bağlı */
-  const followKey = 'genz-follow-' + p.seller.id;
-  let isFollowing = JSON.parse(_ls.get(followKey, 'false'));
-  function updateFollowBtn() {
-    const btn = document.getElementById('followBtnMini');
-    if (isFollowing) {
-      btn.textContent = '✓ Takip Ediliyor';
-      btn.classList.add('following');
-    } else {
-      btn.textContent = '+ Takip Et';
-      btn.classList.remove('following');
+/* SCROLL REVEAL */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
     }
-  }
-  updateFollowBtn();
-  window.toggleFollowMini = function() {
-    if (!currentUser) { openAuth('signin'); showToast('Takip etmek için giriş yapmalısın ⚠️'); return; }
-    isFollowing = !isFollowing;
-    _ls.set(followKey, JSON.stringify(isFollowing));
-    updateFollowBtn();
-    showToast(isFollowing ? p.seller.name + ' takip ediliyor ✓' : 'Takipten çıkıldı');
-  };
-
-  /* Yorumlar */
-  const cs = document.getElementById('commentsSection');
-  if (p.seller.comments.length > 0) {
-    cs.innerHTML = '<div class="comments-title">💬 Değerlendirmeler</div>' + p.seller.comments.map(c => '<div class="comment-item"><div class="comment-header"><div class="comment-avatar">' + c.user.charAt(0).toUpperCase() + '</div><span class="comment-user">' + c.user + '</span><span class="comment-stars">' + '★'.repeat(c.stars) + '</span><span class="comment-date">' + c.date + '</span></div><div class="comment-text">' + c.text + '</div></div>').join('');
-  } else {
-    cs.innerHTML = '<div class="comments-title">💬 Değerlendirmeler</div><div style="color:var(--text3);font-size:13px;font-style:italic;">Henüz değerlendirme yok.</div>';
-  }
-});
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 </body>
 </html>

@@ -1017,6 +1017,31 @@ window.basvuruDurum=async function(id,durum){
           ? 'usta'
           : 'gencz';
         await setDoc(doc(db,'kullanicilar',b.uid),{rol:yeniRol,partnerDurum:'onaylandi',partnerRoller:roller,partnerSirket:b.sirketAdi||''},{merge:true}).catch(()=>{});
+
+        // ── Mağaza kaydı: modpanel bu koleksiyona bakıyor ──
+        if(roller.includes('magaza')){
+          // magazalar koleksiyonunda bu uid'ye ait kayıt var mı kontrol et
+          const magSnap = await getDocs(query(collection(db,'magazalar'),where('uid','==',b.uid))).catch(()=>null);
+          if(!magSnap || magSnap.empty){
+            // Yoksa oluştur
+            const formVeri = b.formVerisi || {};
+            await addDoc(collection(db,'magazalar'),{
+              uid      : b.uid,
+              ad       : b.sirketAdi || formVeri['Mağaza Adı'] || formVeri['Ad Soyad'] || 'Mağazam',
+              email    : b.email || '',
+              kategori : formVeri['Kategori'] || '',
+              sehir    : formVeri['Şehir'] || formVeri['İl'] || '',
+              telefon  : formVeri['Telefon'] || '',
+              aciklama : formVeri['Mağaza Açıklaması'] || '',
+              durum    : 'aktif',
+              olusturuldu: serverTimestamp()
+            }).catch(()=>{});
+          }
+        }
+
+        // ── Usta kaydı: ustaOnay flag'i zaten var ──
+        // kullanicilar/{uid}.ustaOnay = true ile modpanel erişim veriyor (yukarıda yazıldı)
+
         // Kullanıcıya bildirim yaz
         const bildirimMesaj = roller.includes('magaza') && roller.includes('usta')
           ? 'Mağaza ve Usta başvurunuz onaylandı! Panelinize giriş yapabilirsiniz.'

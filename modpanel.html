@@ -1472,7 +1472,7 @@ function renderRdvTablo(){
             ${r.durum!=='onaylandi'?`<button class="aksiyon duz" style="font-size:.5rem;padding:.25rem .6rem;color:rgba(76,175,130,.9);border-color:rgba(76,175,130,.3);" onclick="rdvDurum('${r.id}','onaylandi')">✅ Onayla</button>`:''}
             ${r.durum!=='reddedildi'?`<button class="aksiyon sil" style="font-size:.5rem;padding:.25rem .6rem;" onclick="rdvDurum('${r.id}','reddedildi')">❌ Reddet</button>`:''}
             ${!r.okundu?`<button class="aksiyon duz" style="font-size:.5rem;padding:.25rem .6rem;opacity:.6;" onclick="rdvOkundu('${r.id}')">✓ Okundu</button>`:''}
-            ${r.durum==='onaylandi'?`<button class="aksiyon duz" style="font-size:.5rem;padding:.25rem .6rem;color:rgba(123,92,240,.9);border-color:rgba(123,92,240,.4);" onclick="chatAc('${r.id}','${(r.musteriAd||'Müşteri').replace(/'/g,'\\'')}','${(r.hizmet||'').replace(/'/g,'\\'')}')" >💬 Sohbet</button>`:''}
+            ${r.durum==='onaylandi'?`<button class="aksiyon duz" style="font-size:.5rem;padding:.25rem .6rem;color:rgba(123,92,240,.9);border-color:rgba(123,92,240,.4);" onclick="chatAcById('${r.id}')">💬 Sohbet</button>`:''}
           </div>
         </td>
       </tr>`;
@@ -3351,9 +3351,9 @@ window.katSec = function(el){
 };
 
 </script>
-<script type="module" src="modpanel-stok.js"></script>
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
+<script type="module" src="modpanel-stok.js"></script>
 <script src="cookie-consent.js"></script>
 
 <!-- CHAT MODAL -->
@@ -3381,6 +3381,12 @@ window.katSec = function(el){
 /* ── CHAT ── */
 let _chatRdvId = null;
 let _chatUnsub = null;
+
+window.chatAcById = function(rdvId) {
+  const rdv = _rdvListesi.find(r => r.id === rdvId);
+  if (!rdv) return;
+  window.chatAc(rdvId, rdv.musteriAd || 'Müşteri', rdv.hizmet || '');
+};
 
 window.chatAc = function(rdvId, musteriAd, hizmet) {
   _chatRdvId = rdvId;

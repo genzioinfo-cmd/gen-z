@@ -8,6 +8,7 @@ import {
   doc, updateDoc, getDoc, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
+// firebase-config.js zaten initializeApp yaptı, sadece getFirestore çağırıyoruz
 const db = getFirestore();
 
 // ── QR kütüphanesi (CDN) ─────────────────────────────────────────────────

@@ -682,8 +682,9 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
               </label>
             </div>
 
-            <div style="display:flex;gap:.6rem;margin-top:.6rem;">
-              <button class="submit-btn" id="ekleBtn" onclick="urunEkle()" style="margin-top:0;flex:1;" disabled>✦ Ürünü Gönder — Admin Onayına Gider</button>
+            <div style="display:flex;gap:.6rem;margin-top:.6rem;flex-wrap:wrap;">
+              <button class="submit-btn" id="ekleBtn" onclick="urunEkle()" style="margin-top:0;flex:2;min-width:200px;" disabled>✦ Yayınla — Admin Onayına Gider</button>
+              <button class="submit-btn" id="stogaEkleBtn" onclick="stogaEkle()" style="margin-top:0;flex:1;min-width:140px;background:linear-gradient(135deg,#1a3a2a,#2a5a3a);color:var(--accent3);border:1px solid rgba(92,240,180,.3);" disabled>📦 Sadece Stoğa Ekle</button>
               <button type="button" onclick="formuSifirla()" style="padding:.9rem 1.2rem;background:transparent;border:1px solid rgba(201,168,76,.22);color:var(--t2);font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;border-radius:3px;transition:all .2s;white-space:nowrap;"
                 onmouseover="this.style.borderColor='rgba(201,168,76,.5)';this.style.color='var(--cream)'"
                 onmouseout="this.style.borderColor='rgba(201,168,76,.22)';this.style.color='var(--t2)'">✕ Sıfırla</button>
@@ -696,6 +697,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
           <div style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:300;">Ürünlerim</div>
           <div class="filtre-row">
             <button class="f-btn on" onclick="urunFiltre('hepsi',this)">Tümü</button>
+            <button class="f-btn" onclick="urunFiltre('stok',this)">📦 Stokta</button>
             <button class="f-btn" onclick="urunFiltre('bekliyor',this)">⏳ Bekliyor</button>
             <button class="f-btn" onclick="urunFiltre('onaylandi',this)">✅ Onaylı</button>
             <button class="f-btn" onclick="urunFiltre('reddedildi',this)">❌ Reddedildi</button>
@@ -1580,7 +1582,7 @@ function renderUrunler(){
   grid.innerHTML=liste.map(u=>{
     const resim=u.resimler&&u.resimler[0];
     const durum=u.durum||'bekliyor';
-    const durumT=durum==='onaylandi'?'✅ Onaylı':durum==='reddedildi'?'❌ Reddedildi':'⏳ Bekliyor';
+    const durumT=durum==='onaylandi'?'✅ Onaylı':durum==='reddedildi'?'❌ Reddedildi':durum==='stok'?'📦 Stokta':durum==='bekliyor'?'⏳ Bekliyor':'⏳ Bekliyor';
     const olcuStr=u.miktar&&u.olcuBirim?`${u.miktar} ${u.olcuBirim}`:'';
     return`<div class="u-kart">
       <div class="u-img">
@@ -1602,12 +1604,55 @@ function renderUrunler(){
       </div>
       <div class="u-eylem">
         <button class="aksiyon duz" onclick="mAc('${u.id}')">✏️ Düzenle</button>
-        <button class="aksiyon duz" onclick="oneCikarAc('${u.id}','${(u.ad||u.name||'').replace(/'/g,"\\'")}')" style="color:rgba(201,168,76,.8);border-color:rgba(201,168,76,.3);">⭐ Öne Çıkar</button>
+        ${durum==='stok'?`<button class="aksiyon duz" onclick="urunYayinla('${u.id}')" style="color:rgba(92,240,180,.9);border-color:rgba(92,240,180,.3);">🚀 Yayınla</button>`:''}
+        ${durum==='onaylandi'||durum==='bekliyor'?`<button class="aksiyon duz" onclick="oneCikarAc('${u.id}','${(u.ad||u.name||'').replace(/'/g,"\\'")}')" style="color:rgba(201,168,76,.8);border-color:rgba(201,168,76,.3);">⭐ Öne Çıkar</button>`:''}
         <button class="aksiyon sil" onclick="urunSil('${u.id}')">🗑 Sil</button>
       </div>
     </div>`;
   }).join('');
 }
+// ── SADECE STOĞA EKLE ────────────────────────────────────────────────────
+window.stogaEkle=async function(){
+  const ad    = document.getElementById('uAd').value.trim();
+  const fiyat = parseFloat(document.getElementById('uFiyat').value)||0;
+  const stok  = parseInt(document.getElementById('uStok').value)||0;
+  const sku   = document.getElementById('uSku').value.trim();
+  const desc  = document.getElementById('uDesc').value.trim();
+  const btn   = document.getElementById('stogaEkleBtn');
+  const err   = document.getElementById('ekleErr');
+  const ok    = document.getElementById('ekleOk');
+
+  if(!ad){err.textContent='Ürün adı zorunludur.';err.classList.add('v');return;}
+  err.classList.remove('v'); ok.classList.remove('v');
+  btn.textContent='Ekleniyor…'; btn.disabled=true;
+
+  try {
+    await addDoc(collection(db,'magaza_urunler'),{
+      magazaId  : _magaza.id,
+      magazaAd  : _magaza.ad,
+      ad, fiyat, stok,
+      aciklama  : desc,
+      kategori  : _secKat||null,
+      sku       : sku||null,
+      bedenler  : _bedenler||[],
+      renkler   : _renkler||[],
+      resimler  : [],
+      durum     : 'stok',        // sadece stokta, yayında değil
+      satisaDurumu: 'pasif',
+      kdvOran   : 20,
+      ts        : serverTimestamp()
+    });
+    ok.textContent='📦 Ürün stoğa eklendi! Yayınlamak için "Ürünlerim" listesinden düzenleyebilirsin.';
+    ok.classList.add('v');
+    ['uAd','uFiyat','uStok','uDesc','uSku'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    btn.textContent='📦 Sadece Stoğa Ekle';
+    await urunleriYukle();
+  } catch(e) {
+    err.textContent='Hata: '+e.message; err.classList.add('v');
+    btn.textContent='📦 Sadece Stoğa Ekle'; btn.disabled=false;
+  }
+};
+
 window.urunFiltre=function(tip,btn){
   _uFiltre=tip;
   document.querySelectorAll('#sayfa-urunler .filtre-row .f-btn').forEach(b=>b.classList.remove('on'));
@@ -1622,11 +1667,20 @@ function formKontrol(){
   const foto=_resimler.length>0;
   const kat=!!_secKat;
   const tamam= kat && ad && fiyat>0 && foto;
+  // Yayınla butonu — foto + kat + ad + fiyat zorunlu
   const btn=document.getElementById('ekleBtn');
   if(btn){
     btn.disabled=!tamam;
     btn.style.opacity=tamam?'1':'0.4';
     btn.style.cursor=tamam?'pointer':'not-allowed';
+  }
+  // Stoğa Ekle butonu — sadece ad zorunlu
+  const stogaBtn=document.getElementById('stogaEkleBtn');
+  if(stogaBtn){
+    const stogaTamam = ad.length > 0;
+    stogaBtn.disabled=!stogaTamam;
+    stogaBtn.style.opacity=stogaTamam?'1':'0.4';
+    stogaBtn.style.cursor=stogaTamam?'pointer':'not-allowed';
   }
 }
 
@@ -1741,6 +1795,40 @@ window.urunEkle=async function(){
     ozetGuncelle();
   }catch(e){err.textContent='Hata: '+e.message;err.classList.add('v');}
   btn.textContent='✦ Ürünü Gönder — Admin Onayına Gider';btn.disabled=false;
+};
+
+// ── STOKTAN YAYINLA ─────────────────────────────────────────────────────
+window.urunYayinla=async function(id){
+  const u = _urunler.find(x=>x.id===id);
+  if(!u) return;
+  if(!confirm(`"${u.ad}" ürününü admin onayına göndermek istiyor musun?`)) return;
+
+  // Fotoğraf yoksa uyar
+  if(!u.resimler||!u.resimler.length){
+    toast('Bu ürünün fotoğrafı yok. Önce düzenle ve fotoğraf ekle.','err');
+    return;
+  }
+
+  try {
+    const kdvOran = kdvOrani(u.kategori)||20;
+    const fiyat   = u.fiyat||0;
+    const kdvTutar= fiyat*(kdvOran/100);
+    await updateDoc(doc(db,'magaza_urunler',id),{
+      durum         : 'bekliyor',
+      satisaDurumu  : 'aktif',
+      kdvOran,
+      kdvTutar      : Math.round(kdvTutar*100)/100,
+      kdvDahilFiyat : Math.round((fiyat+kdvTutar)*100)/100,
+      durumGuncellendi: serverTimestamp()
+    });
+    const idx=_urunler.findIndex(x=>x.id===id);
+    if(idx>-1){_urunler[idx].durum='bekliyor';_urunler[idx].satisaDurumu='aktif';}
+    renderUrunler();
+    ozetGuncelle();
+    toast('🚀 Ürün admin onayına gönderildi!');
+  } catch(e){
+    toast('Hata: '+e.message,'err');
+  }
 };
 
 window.urunSil=async function(id){

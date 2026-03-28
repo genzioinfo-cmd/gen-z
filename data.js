@@ -1,16 +1,5 @@
 // GEN-Z Mağaza — Ortak Ürün & Kategori Verisi
 /* ── KATEGORİLER (ileride doldurulacak) ── */
-const CATEGORIES = [
-  { id: 'all', name: 'Tümü', icon: '🌐', count: null },
-  { id: 'bakim', name: 'Kişisel Bakım', icon: '🧴', count: null, coming: true },
-  { id: 'dekor', name: 'Ev & Dekor', icon: '🕯️', count: null, coming: true },
-  { id: 'giyim', name: 'Giyim & Aksesuar', icon: '👟', count: null, coming: true },
-  { id: 'teknoloji', name: 'Teknoloji', icon: '🎧', count: null, coming: true },
-  { id: 'yiyecek', name: 'Yiyecek & İçecek', icon: '🍵', count: null, coming: true },
-  { id: 'sanat', name: 'Sanat & Tasarım', icon: '🎨', count: null, coming: true },
-  { id: 'kirtasiye', name: 'Kırtasiye', icon: '🖊️', count: null, coming: true },
-  { id: 'bahce', name: 'Bahçe & Doğa', icon: '🌱', count: null, coming: true },
-];
 
 /* ── DEMO ÜRÜN VERİSİ ── */
 const DEMO_PRODUCTS = [
@@ -196,4 +185,26 @@ function getAllSellers() {
 function getProductsByCategory(catId) {
   if (catId === 'all') return DEMO_PRODUCTS;
   return DEMO_PRODUCTS.filter(p => p.category === catId);
+}
+
+// ── Eski category id → KATEGORILER grup index eşlemesi ──
+const KATEGORI_MAP = {
+  'bakim':      'grup_7',   // Kozmetik & Kişisel Bakım & Sağlık
+  'dekor':      'grup_5',   // Ev & Yaşam
+  'giyim':      'grup_0',   // Giyim & Moda
+  'teknoloji':  'grup_8',   // Elektronik & Teknoloji
+  'yiyecek':    'grup_6',   // Gıda & İçecek
+  'sanat':      'grup_4',   // El Yapımı & Sanat & Koleksiyon
+  'kirtasiye':  'grup_11',  // Kitap & Kırtasiye & Ofis
+  'bahce':      'grup_5',   // Ev & Yaşam (bahçe alt kategorisi)
+};
+
+function getProductsByCategory(catId) {
+  if (catId === 'all') return DEMO_PRODUCTS;
+  // Eski id mi, yeni grup_N mi?
+  const mapped = KATEGORI_MAP[catId] || catId;
+  return DEMO_PRODUCTS.filter(p => {
+    const pMapped = KATEGORI_MAP[p.category] || p.category;
+    return pMapped === mapped;
+  });
 }

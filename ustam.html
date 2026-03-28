@@ -400,7 +400,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
 
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="categories.js"></script><script>
 /* ── MAGAZA-DATA (inline) ── */
 /* ══════════════════════════════════════════════════════════
    GEN-Z MAĞAZA — Paylaşılan Veri & Yardımcılar
@@ -755,22 +755,16 @@ const USTAM_PLANS = [
   { id: '1yil', name: '1 Yıllık', price: 999, period: '1 Yıl', desc: 'Aylık ₺83,25', badge: 'En Avantajlı', highlight: false },
 ];
 
+// USTAM_CATEGORIES artık categories.js'deki KATEGORILER'den otomatik türetiliyor
 const USTAM_CATEGORIES = [
   { id: 'all', name: 'Tümü', icon: '🌐' },
-  { id: 'elektrik', name: 'Elektrik', icon: '⚡', subs: ['Elektrik Tesisatı', 'Sigorta & Pano', 'Aydınlatma', 'Topraklama'] },
-  { id: 'dogalgaz', name: 'Doğalgaz', icon: '🔥', subs: ['Doğalgaz Tesisatı', 'Kombi Bakım', 'Kaçak Tespiti', 'Proje & Onay'] },
-  { id: 'su', name: 'Su Tesisatı', icon: '🚿', subs: ['Pis Su', 'Temiz Su', 'Tıkanıklık', 'Banyo Renovasyon'] },
-  { id: 'boya', name: 'Boya & Badana', icon: '🎨', subs: ['İç Cephe Boya', 'Dış Cephe', 'Dekoratif Boya', 'Alçı & Sıva'] },
-  { id: 'insaat', name: 'İnşaat', icon: '🏗️', subs: ['Kaba İnşaat', 'İnce İnşaat', 'Tadilat', 'Çatı & İzolasyon'] },
-  { id: 'cati', name: 'Çatı & İzolasyon', icon: '🏠', subs: ['Kiremit Döşeme', 'Çatı Tamiri', 'Su Yalıtımı', 'Isı Yalıtımı'] },
-  { id: 'seramik', name: 'Seramik & Zemin', icon: '🪟', subs: ['Seramik Döşeme', 'Parke', 'Mermer', 'Epoksi Zemin'] },
-  { id: 'alcipan', name: 'Alçıpan & Asma Tavan', icon: '🔲', subs: ['Asma Tavan', 'Bölme Duvar', 'Kartonpiyer', 'Ses Yalıtımı'] },
-  { id: 'beton', name: 'Beton & Zemin', icon: '🧱', subs: ['Şap Döşeme', 'Beton Enjeksiyon', 'Zemin Sertleştirme', 'Temel Güçlendirme'] },
-  { id: 'mobilya', name: 'Mobilya & Marangoz', icon: '🪑', subs: ['Mutfak Dolabı', 'Vestiyer', 'Özel Tasarım', 'Tamir'] },
-  { id: 'klima', name: 'Klima & Isıtma', icon: '❄️', subs: ['Klima Montaj', 'Klima Bakım', 'Yerden Isıtma', 'Kalorifer'] },
-  { id: 'demir', name: 'Demir & Kaynak', icon: '🔩', subs: ['Ferforje', 'Korkuluk', 'Çelik Kapı', 'Kaynak İşleri'] },
-  { id: 'vinc', name: 'Vinç & Nakliye', icon: '🏗️', subs: ['Malzeme Taşıma', 'Yıkım Atıkları', 'Hafriyat', 'İş Makinası'] },
-  { id: 'hafriyat', name: 'Hafriyat & Kazı', icon: '⛏️', subs: ['Temel Kazısı', 'Hafriyat Nakliye', 'Ekskavatör', 'Sondaj'] },
+  ...KATEGORILER.map((g, i) => ({
+    id: 'grup_' + i,
+    name: g.grup.replace(/^\S+\s/, ''),
+    icon: g.grup.split(' ')[0],
+    subs: g.liste.slice(0, 4),
+    liste: g.liste,
+  }))
 ];
 
 const DEMO_USTALAR = [

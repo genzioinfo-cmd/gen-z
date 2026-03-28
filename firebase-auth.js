@@ -4,7 +4,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
   getAuth, GoogleAuthProvider,
-  signInWithPopup, signOut,
+  signInWithPopup, signInWithRedirect, getRedirectResult, signOut,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
@@ -18,7 +18,7 @@ import {
 /* ── CONFIG ── */
 const firebaseConfig = {
   apiKey: "AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ",
-  authDomain: "gen-z.io",
+  authDomain: "gen-z-io.firebaseapp.com",
   projectId: "gen-z-io",
   storageBucket: "gen-z-io.firebasestorage.app",
   messagingSenderId: "97338868944",
@@ -90,17 +90,24 @@ onAuthStateChanged(auth, (user) => {
 /* ── Google Giriş ── */
 window.googleSignIn = async function() {
   try {
-    const result = await signInWithPopup(auth, googleProvider);
-    const user = result.user;
-    await kullaniciyiKaydet(user);
-    uiGuncelle(user);
-    if (typeof closeAuth === 'function') closeAuth();
-    if (typeof showToast === 'function') showToast('Hoş geldin, ' + (user.displayName || user.email) + ' 👋');
+    await signInWithRedirect(auth, googleProvider);
   } catch(e) {
     console.error('Google giriş hatası:', e);
     if (typeof showToast === 'function') showToast('Google girişi başarısız ⚠️');
   }
 };
+
+/* Redirect sonucu işle */
+getRedirectResult(auth).then(async (result) => {
+  if (result && result.user) {
+    const user = result.user;
+    await kullaniciyiKaydet(user);
+    uiGuncelle(user);
+    if (typeof showToast === 'function') showToast('Hoş geldin, ' + (user.displayName || user.email) + ' 👋');
+  }
+}).catch((e) => {
+  if (e.code !== 'auth/no-auth-event') console.error('Redirect result hatası:', e);
+});
 
 /* ── E-posta Giriş ── */
 window.doSignIn = async function() {

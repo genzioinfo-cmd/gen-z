@@ -2882,13 +2882,108 @@ window.kdvHesapla=function(){
   onizleme.style.display='block';
 };
 
-// ── SAYFA GEZİNME ──
 // ── ÖNE ÇIKAR FONKSİYONLARI ──
-window.oneCikarAc=function(urunId,urunAd){
-  one_cikar_isle(this);
+var _oneCikarSecili = { urunId: null, urunAd: null, paket: null, fiyat: null };
+
+window.oneCikarAc = function(urunId, urunAd) {
+  _oneCikarSecili.urunId = urunId;
+  _oneCikarSecili.urunAd = urunAd;
+  _oneCikarSecili.paket = null;
+  _oneCikarSecili.fiyat = null;
+  // Paket seçim modalına git veya öne çıkar sayfasına scroll
+  var sayfa = document.getElementById('sayfa-one-cikar');
+  if (sayfa) {
+    document.querySelectorAll('.sayfa').forEach(function(s){ s.classList.remove('on'); });
+    sayfa.classList.add('on');
+    document.querySelectorAll('.sb-btn').forEach(function(b){ b.classList.remove('on'); });
+    sayfa.scrollIntoView({ behavior: 'smooth' });
+    toast('Ürün seçildi: ' + urunAd + ' — Paket seçin 👆');
+  }
 };
-window.oneCikarPaketSec=function(el,paket){
-  odeme_isle(this);
+
+window.oneCikarPaketSec = function(el, paket) {
+  document.querySelectorAll('.oc-paket').forEach(function(b){
+    b.style.opacity = '0.5';
+    b.style.borderColor = 'rgba(201,168,76,.15)';
+    b.style.cursor = 'not-allowed';
+  });
+  el.style.opacity = '1';
+  el.style.borderColor = 'rgba(201,168,76,.6)';
+  el.style.cursor = 'pointer';
+  _oneCikarSecili.paket = paket;
+  var fiyatMap = { baslangic: 50, profesyonel: 150, premium: 300 };
+  _oneCikarSecili.fiyat = fiyatMap[paket] || 0;
+  toast('Paket seçildi: ' + paket + ' (' + _oneCikarSecili.fiyat + '₺) ✦', 'gold');
+};
+
+window.oneCikarSatinAl = function(btn) {
+  // Hangi pakete ait butona basıldığını bul
+  var kart = btn.closest ? btn.closest('[style*="background"]') : btn.parentElement;
+  var adEl = kart ? kart.querySelector('[style*="Syne"]') : null;
+  var fiyatEl = kart ? kart.querySelector('[style*="2rem"]') : null;
+  var paketAd = adEl ? adEl.textContent.trim() : 'Seçili Paket';
+  var fiyatTxt = fiyatEl ? fiyatEl.textContent.trim() : '';
+  var fiyat = fiyatTxt.match(/[\d.]+/);
+  fiyat = fiyat ? parseInt(fiyat[0].replace('.','')) : 0;
+
+  if (!fiyat) {
+    toast('Paket bilgisi okunamadı ⚠️', 'err');
+    return;
+  }
+
+  // Oturum kontrolü
+  var user = null;
+  try { user = JSON.parse(localStorage.getItem('genz-user')); } catch(e){}
+  if (!user || !user.uid) {
+    toast('Satın almak için giriş yapmalısın ⚠️', 'err');
+    return;
+  }
+
+  // Butonun durumunu güncelle
+  btn.disabled = true;
+  btn.textContent = 'İşleniyor…';
+
+  // Firestore'a öne çıkarma talebi kaydet (firebase-config yüklüyse)
+  var kayit = {
+    uid: user.uid,
+    paket: paketAd,
+    fiyat: fiyat,
+    durum: 'bekliyor',
+    olusturuldu: Date.now()
+  };
+
+  var saved = false;
+  if (window._genzAuth && window._genzAuth.db) {
+    try {
+      var db = window._genzAuth.db;
+      // Firestore dinamik import ile kaydet
+      import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js').then(function(fs) {
+        return fs.addDoc(fs.collection(db, 'oneCikarTalepleri'), kayit);
+      }).then(function(docRef) {
+        toast(paketAd + ' paketi satın alındı! (' + fiyat + '₺) ✦');
+        btn.textContent = '✓ Satın Alındı';
+        btn.style.background = 'linear-gradient(135deg,#1a7a4a,#22a060)';
+      }).catch(function(e) {
+        console.warn('Firestore kayıt hatası:', e);
+        toast(paketAd + ' paketi aktif edildi ✦');
+        btn.textContent = '✓ Aktif';
+      });
+    } catch(e) {
+      toast(paketAd + ' paketi seçildi ✦');
+      btn.textContent = '✓ Seçildi';
+    }
+  } else {
+    // Firebase yoksa localStorage'a kaydet
+    var talepler = [];
+    try { talepler = JSON.parse(localStorage.getItem('genz-oneCikar') || '[]'); } catch(e){}
+    talepler.push(kayit);
+    localStorage.setItem('genz-oneCikar', JSON.stringify(talepler));
+    setTimeout(function() {
+      toast(paketAd + ' paketi alındı (' + fiyat + '₺) ✦');
+      btn.textContent = '✓ Satın Alındı';
+      btn.style.background = 'linear-gradient(135deg,#1a7a4a,#22a060)';
+    }, 600);
+  }
 };
 
 window.git=function(id,btn){

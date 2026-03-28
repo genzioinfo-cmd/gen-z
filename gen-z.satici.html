@@ -882,9 +882,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getFollowBtnHTML() {
     if (isFollowing) {
-      return '<button class="btn-follow following" id="followBtn" onclick="toggleFollow()">✓ Takip Ediliyor</button>';
+      return '<button class="btn-follow following" id="followBtn" data-seller="' + (seller.id || '') + '" onclick="toggleFollow()">✓ Takip Ediliyor</button>';
     }
-    return '<button class="btn-follow" id="followBtn" onclick="toggleFollow()">+ Takip Et</button>';
+    return '<button class="btn-follow" id="followBtn" data-seller="' + (seller.id || '') + '" onclick="toggleFollow()">+ Takip Et</button>';
   }
 
   function renderHeader() {

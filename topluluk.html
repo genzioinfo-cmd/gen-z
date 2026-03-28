@@ -299,6 +299,5 @@ function goToProfile(){if(currentUser){closeAuth();navigateTo('profile.html');}}
 document.addEventListener('DOMContentLoaded',()=>{initThemeLang();document.body.style.opacity='0';document.body.style.transition='opacity 0.3s';requestAnimationFrame(()=>{document.body.style.opacity='1';});document.querySelectorAll('.mobile-menu a').forEach(a=>a.addEventListener('click',()=>{document.getElementById('mobileMenu')?.classList.remove('open');document.getElementById('hamburgerBtn')?.classList.remove('open');}));});
 </script>
 
-<script type="module" src="firebase-auth.js"></script>
 </body>
 </html>

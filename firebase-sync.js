@@ -68,9 +68,12 @@ async function firestoreKaydet(uid, extraData = {}) {
 
 // ── Çıkışta tüm hassas localStorage verilerini temizle ──
 function hassasVerileriTemizle() {
-  Object.keys(SYNC_KEYS).forEach(k => localStorage.removeItem(k));
+  // genz-sepet kasitli olarak silinmez — misafir kullanici sepeti korunur
+  const KORU = ['genz-sepet', 'genz-theme', 'genz-lang'];
+  Object.keys(SYNC_KEYS).forEach(k => {
+    if (!KORU.includes(k)) localStorage.removeItem(k);
+  });
   localStorage.removeItem('genz-user');
-  localStorage.removeItem('genz-sepet'); // alias
   window.dispatchEvent(new CustomEvent('genzSyncTemizlendi'));
 }
 

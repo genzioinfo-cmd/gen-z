@@ -676,9 +676,21 @@ if(kartTarihEl) kartTarihEl.addEventListener('input', function(){
 });
 
 /* ── SEPETİ OKU ── */
-// Hem giyim stil odası ('genz-sepet') hem ev stil odası okur
+// genz-sepet: tüm sayfalar bu key'i kullanır
 function readCart(){
-  return _ls.getJSON('genz-sepet',[]);
+  try {
+    const raw = localStorage.getItem('genz-sepet');
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    // id'leri string'e normalize et, price/qty sayıya zorunlu tut
+    return parsed.map(i => ({
+      ...i,
+      id: String(i.id),
+      price: Number(i.price) || 0,
+      qty: Math.max(1, parseInt(i.qty) || 1)
+    }));
+  } catch(e) { return []; }
 }
 function saveCart(items){
   _ls.set('genz-sepet', JSON.stringify(items));
@@ -908,6 +920,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
   document.body.style.transition='opacity 0.3s';
   requestAnimationFrame(()=>{ document.body.style.opacity='1'; });
   updateSummary();
+  // Firebase sync tamamlaninca sepeti yenile
+  window.addEventListener('genzSyncYuklendi', () => updateSummary());
+  // Baska sekmeden degisirse
+  window.addEventListener('storage', (e) => { if(e.key==='genz-sepet') updateSummary(); });
 
   // Kart no input listener
   const kno = document.getElementById('kart-no');

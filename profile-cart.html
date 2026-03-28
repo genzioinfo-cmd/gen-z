@@ -12,7 +12,12 @@
   const KEY = 'genz-sepet';
 
   function load() {
-    try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; }
+    try {
+      const r = localStorage.getItem(KEY);
+      if (!r) return [];
+      const p = JSON.parse(r);
+      return Array.isArray(p) ? p.map(i => ({...i, id: String(i.id), price: Number(i.price)||0, qty: Math.max(1, parseInt(i.qty)||1)})) : [];
+    } catch { return []; }
   }
   function save(items) {
     try {

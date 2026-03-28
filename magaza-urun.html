@@ -744,14 +744,18 @@ let _detayUrun = null; // renderUrun sonrası set edilecek
 function sepeteEkleDetay() {
   if (!_detayUrun) return;
   const KEY = 'genz-sepet';
-  let sepet = _ls.getJSON(KEY, []);
-  const mevcut = sepet.find(i => i.id === _detayUrun.id);
-  if (mevcut) { mevcut.qty = (mevcut.qty || 1) + 1; }
-  else { sepet.push({ id: _detayUrun.id, name: _detayUrun.name, price: _detayUrun.price, emoji: _detayUrun.emoji, src: _detayUrun.seller?.name || '', qty: 1 }); }
-  _ls.set(KEY, JSON.stringify(sepet));
-  showToast('Sepete eklendi 🛒');
-  const btn = document.getElementById('buyBtn');
-  if (btn) { btn.textContent = '✓ Sepette'; btn.style.background = 'var(--accent3)'; btn.style.color = '#000'; }
+  try {
+    let sepet = JSON.parse(localStorage.getItem(KEY) || '[]');
+    if (!Array.isArray(sepet)) sepet = [];
+    const uid = String(_detayUrun.id);
+    const mevcut = sepet.find(i => String(i.id) === uid);
+    if (mevcut) { mevcut.qty = (mevcut.qty || 1) + 1; }
+    else { sepet.push({ id: uid, name: _detayUrun.name, price: _detayUrun.price, emoji: _detayUrun.emoji, src: _detayUrun.seller?.name || '', qty: 1 }); }
+    localStorage.setItem(KEY, JSON.stringify(sepet));
+    showToast('Sepete eklendi 🛒');
+    const btn = document.getElementById('buyBtn');
+    if (btn) { btn.textContent = '✓ Sepette'; btn.style.background = 'var(--accent3)'; btn.style.color = '#000'; }
+  } catch(e) { console.warn('Sepet hatasi:', e); }
 }
 
 function favoriToggleDetay() {

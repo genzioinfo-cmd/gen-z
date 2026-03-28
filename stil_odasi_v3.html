@@ -1500,9 +1500,9 @@ const SEPET_CSS=`
 
 const Sepet=(function(){
   const K='genz-sepet';
-  function load(){try{return JSON.parse(localStorage.getItem(K))||[];}catch{return[];}}
+  function load(){try{const r=localStorage.getItem(K);if(!r)return[];const p=JSON.parse(r);return Array.isArray(p)?p.map(i=>({...i,id:String(i.id),price:Number(i.price)||0,qty:Math.max(1,parseInt(i.qty)||1)})):[];}catch{return[];}}
   function save(a){try{localStorage.setItem(K,JSON.stringify(a));}catch{}window.dispatchEvent(new CustomEvent('sepetChanged'));}
-  function add(u){const a=load();const x=a.find(i=>i.id===u.id&&i.src===u.src);x?x.qty=(x.qty||1)+1:a.push({...u,qty:1});save(a);}
+  function add(u){const a=load();const uid=String(u.id);const x=a.find(i=>String(i.id)===uid&&i.src===u.src);x?x.qty=(x.qty||1)+1:a.push({...u,id:uid,qty:1});save(a);}
   function remove(id,src){save(load().filter(i=>!(i.id===id&&i.src===src)));}
   function qty(id,src,d){const a=load();const x=a.find(i=>i.id===id&&i.src===src);if(!x)return;x.qty=Math.max(0,(x.qty||1)+d);if(x.qty===0)return save(a.filter(i=>!(i.id===id&&i.src===src)));save(a);}
   function clear(){save([]);}

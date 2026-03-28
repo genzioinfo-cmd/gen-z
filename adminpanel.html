@@ -2029,20 +2029,20 @@ function edRekRender(liste){
     return '<div class="ed-rek-kart">'
       +'<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">'
       +'<span style="font-size:11px;font-weight:700">Alan:</span>'
-      +'<input type="text" value="'+(r.alanId||'')+'" oninput="edRekG('+i+','alanId',this.value)" class="ep-inp" style="flex:1" placeholder="genz-rek-1">'
+      +'<input type="text" value="'+(r.alanId||'')+'" oninput="edRekG('+i+',\'alanId\',this.value)" class="ep-inp" style="flex:1" placeholder="genz-rek-1">'
       +'<label style="display:flex;align-items:center;gap:4px;font-size:11px;cursor:pointer;flex-shrink:0">'
-      +'<input type="checkbox"'+(r.aktif?' checked':'')+" onchange="edRekG("+i+",'aktif',this.checked)" style="accent-color:var(--gold)"> Aktif</label>"
+      +'<input type="checkbox"'+(r.aktif?' checked':'')+' onchange="edRekG('+i+',\'aktif\',this.checked)" style="accent-color:var(--gold)"> Aktif</label>'
       +'<button onclick="edRekSil('+i+')" style="background:none;border:none;color:var(--text2);cursor:pointer">🗑</button>'
       +'</div>'
-      +'<select class="ep-inp" onchange="edRekG('+i+",\'tip\',this.value);edRekRender(_edData.reklamlar)">"
+      +'<select class="ep-inp" onchange="edRekG('+i+',\'tip\',this.value);edRekRender(_edData.reklamlar)">'
       +'<option value="gorsel"'+(r.tip==='gorsel'?' selected':'')+'>📸 Görsel</option>'
       +'<option value="html"'+(r.tip==='html'?' selected':'')+'>💻 HTML</option>'
       +'<option value="metin"'+(r.tip==='metin'?' selected':'')+'>📝 Metin</option>'
       +'</select>'
-      +(r.tip==='gorsel'?'<input type="text" class="ep-inp" style="margin-top:6px" value="'+(r.gorselUrl||'')+'" oninput="edRekG('+i+",\'gorselUrl\',this.value)" placeholder="Görsel URL">"
-        +'<input type="text" class="ep-inp" style="margin-top:4px" value="'+(r.link||'')+'" oninput="edRekG('+i+",\'link\',this.value)" placeholder="Link URL">":"")
-      +(r.tip==='html'?'<textarea class="ep-inp" style="margin-top:6px;font-family:monospace;font-size:11px;resize:vertical" rows="3" oninput="edRekG('+i+",\'html\',this.value)">"+(r.html||'')+'</textarea>':'')"
-      +(r.tip==='metin'?'<input type="text" class="ep-inp" style="margin-top:6px" value="'+(r.metin||'')+'" oninput="edRekG('+i+",\'metin\',this.value)" placeholder="Metin">":"")"
+      +(r.tip==='gorsel'?'<input type="text" class="ep-inp" style="margin-top:6px" value="'+(r.gorselUrl||'')+'" oninput="edRekG('+i+',\'gorselUrl\',this.value)" placeholder="Görsel URL">'
+        +'<input type="text" class="ep-inp" style="margin-top:4px" value="'+(r.link||'')+'" oninput="edRekG('+i+',\'link\',this.value)" placeholder="Link URL">':'')
+      +(r.tip==='html'?'<textarea class="ep-inp" style="margin-top:6px;font-family:monospace;font-size:11px;resize:vertical" rows="3" oninput="edRekG('+i+',\'html\',this.value)">'+(r.html||'')+'</textarea>':'')
+      +(r.tip==='metin'?'<input type="text" class="ep-inp" style="margin-top:6px" value="'+(r.metin||'')+'" oninput="edRekG('+i+',\'metin\',this.value)" placeholder="Metin">':'')
       +'</div>';
   }).join('');
 }

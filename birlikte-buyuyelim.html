@@ -399,7 +399,8 @@ nav, .modal-overlay-auth, .modal-box, .toast {
     <li><a href="magaza.html" data-tr="Mağaza" data-en="Shop">Mağaza</a></li>
     <li><a href="ustam.html" data-tr="Ustam" data-en="Ustam">Ustam</a></li>
     <li><a href="gen-z.html" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a></li>
-    <li><a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a></li>
+    <li><a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a><a href="hakkimizda.html">Hakkımızda</a></li>
+    <li><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a></li>
     <li><a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a></li>
     <li><a href="birlikte-buyuyelim.html" class="active" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a></li>
     <li><a href="elden-ele.html" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a></li>
@@ -415,7 +416,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
   <a href="magaza.html" data-tr="Mağaza" data-en="Shop">Mağaza</a>
   <a href="ustam.html" data-tr="Ustam" data-en="Ustam">Ustam</a>
   <a href="gen-z.html" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a>
-  <a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a>
+  <a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a><a href="hakkimizda.html">Hakkımızda</a>
   <a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a>
   <a href="birlikte-buyuyelim.html" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a>
   <a href="elden-ele.html" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a>
@@ -619,6 +620,12 @@ nav, .modal-overlay-auth, .modal-box, .toast {
       <div class="form-group"><label class="form-label">Kullanıcı Adı</label><div class="input-wrap"><span class="input-prefix">@</span><input class="form-input username-field" id="signup-username" type="text" placeholder="kullaniciadin"/></div></div>
       <div class="form-group"><label class="form-label">E-posta</label><input class="form-input" id="signup-email" type="email" placeholder="ornek@mail.com"/></div>
       <div class="form-group"><label class="form-label">Şifre</label><input class="form-input" id="signup-pass" type="password" placeholder="En az 8 karakter"/></div>
+      <div class="form-group" style="margin-bottom:4px;">
+        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px;color:var(--text2);line-height:1.5;">
+          <input type="checkbox" id="signup-kvkk" style="margin-top:2px;accent-color:var(--accent);flex-shrink:0;"/>
+          <span><a href="gizlilik.html" target="_blank" style="color:var(--accent);text-decoration:none;">Gizlilik Politikası</a>'nı ve <a href="kullanim-sartlari.html" target="_blank" style="color:var(--accent);text-decoration:none;">Kullanım Şartları</a>'nı okudum, kabul ediyorum.</span>
+        </label>
+      </div>
       <button class="btn-submit" onclick="doSignUp()">Kayıt Ol</button>
     </div>
     <div class="auth-panel" id="panel-forgot">
@@ -830,5 +837,19 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 <script type="module" src="firebase-config.js"></script>
+
+<!-- FOOTER -->
+<footer style="position:relative;z-index:1;border-top:1px solid var(--border);padding:24px;text-align:center;margin-top:auto;">
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px;font-size:12px;color:var(--text3);">
+    <a href="hakkimizda.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Hakkımızda</a>
+    <span>·</span>
+    <a href="gizlilik.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Gizlilik Politikası</a>
+    <span>·</span>
+    <a href="kullanim-sartlari.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Kullanım Şartları</a>
+    <span>·</span>
+    <a href="iletisim.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">İletişim</a>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--text3);opacity:.5;">© 2025 GEN-Z · Tüm hakları saklıdır.</div>
+</footer>
 </body>
 </html>

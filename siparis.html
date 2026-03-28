@@ -919,6 +919,38 @@ document.addEventListener('DOMContentLoaded', ()=>{
   document.body.style.opacity='0';
   document.body.style.transition='opacity 0.3s';
   requestAnimationFrame(()=>{ document.body.style.opacity='1'; });
+
+  // ── Hemen Al akışı: ?hemenAl=1 ile gelindiyse geçici sepeti yükle ──
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('hemenAl') === '1') {
+    try {
+      const hemenAlSepet = JSON.parse(localStorage.getItem('genz-hemen-al') || '[]');
+      if (hemenAlSepet.length > 0) {
+        // Normal sepeti geçici olarak sakla, hemen al sepetini aktiflestir
+        const eskiSepet = localStorage.getItem('genz-sepet');
+        if (eskiSepet) localStorage.setItem('genz-sepet-yedek', eskiSepet);
+        localStorage.setItem('genz-sepet', JSON.stringify(hemenAlSepet));
+        localStorage.removeItem('genz-hemen-al');
+        // Sayfa kapatılınca/geri dönünce eski sepeti geri yükle
+        window.addEventListener('pagehide', () => {
+          const yedek = localStorage.getItem('genz-sepet-yedek');
+          if (yedek !== null) {
+            localStorage.setItem('genz-sepet', yedek);
+            localStorage.removeItem('genz-sepet-yedek');
+          } else {
+            localStorage.removeItem('genz-sepet');
+          }
+        });
+        // Hemen Al banner göster
+        const banner = document.createElement('div');
+        banner.innerHTML = '⚡ <strong>Hemen Al</strong> — Sadece bu ürün için hızlı sipariş';
+        banner.style.cssText = 'background:linear-gradient(90deg,rgba(92,240,180,.15),rgba(123,92,240,.15));border:1px solid rgba(92,240,180,.3);border-radius:12px;padding:10px 16px;font-size:13px;color:#5CF0B4;margin-bottom:16px;text-align:center;';
+        const ilkSection = document.querySelector('.checkout-section, .cart-section, main, .page-inner');
+        if (ilkSection) ilkSection.insertBefore(banner, ilkSection.firstChild);
+      }
+    } catch(e) { console.warn('Hemen Al yükleme hatası:', e); }
+  }
+
   updateSummary();
   // Firebase sync tamamlaninca sepeti yenile
   window.addEventListener('genzSyncYuklendi', () => updateSummary());

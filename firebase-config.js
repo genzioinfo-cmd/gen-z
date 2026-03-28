@@ -47,6 +47,7 @@ async function kullaniciyiKaydet(user, extraData = {}) {
     if (!snap.exists()) {
       data.olusturuldu = serverTimestamp();
       data.rol = 'gencz';
+      data.onboardingTamamlandi = false;
     }
     await setDoc(ref, data, { merge: true });
   } catch(e) { console.warn('Firestore yazma hatası:', e); }
@@ -84,13 +85,19 @@ onAuthStateChanged(auth, (user) => {
 });
 
 /* ── Giriş sonrası yenile ── */
-function girisYaptiktan(user, mesaj) {
-  if (typeof showToast === 'function') {
-    showToast(mesaj);
-    setTimeout(() => window.location.reload(), 900);
-  } else {
-    window.location.reload();
-  }
+async function girisYaptiktan(user, mesaj) {
+  if (typeof showToast === 'function') showToast(mesaj);
+  // Yeni kullanıcıysa (onboarding tamamlanmadıysa) onboarding'e yönlendir
+  try {
+    const ref  = doc(db, 'kullanicilar', user.uid);
+    const snap = await getDoc(ref);
+    const onboardingTamamlandi = snap.exists() ? snap.data().onboardingTamamlandi : true;
+    if (onboardingTamamlandi === false) {
+      setTimeout(() => { window.location.href = 'onboarding.html'; }, 900);
+      return;
+    }
+  } catch(e) { /* Firestore hatası → normal akış */ }
+  setTimeout(() => window.location.reload(), 900);
 }
 
 /* ── Google Giriş ── */
@@ -128,6 +135,8 @@ window.doSignUp = async function() {
   const username = document.getElementById('signup-username')?.value.trim();
   const email    = document.getElementById('signup-email')?.value.trim();
   const pass     = document.getElementById('signup-pass')?.value;
+  const kvkk = document.getElementById('signup-kvkk');
+  if (kvkk && !kvkk.checked) { if(typeof showToast==='function') showToast('Gizlilik Politikası ve Kullanım Şartlarını kabul etmelisiniz ⚠️'); return; }
   if (!username || !email || !pass) { if(typeof showToast==='function') showToast('Lütfen tüm alanları doldurun ⚠️'); return; }
   if (pass.length < 8) { if(typeof showToast==='function') showToast('Şifre en az 8 karakter olmalı ⚠️'); return; }
   try {

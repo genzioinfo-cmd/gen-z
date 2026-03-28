@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="GEN-Z — Sayfa Bulunamadı."/>
+<title>GEN-Z · 404 Sayfa Bulunamadı</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --accent: #7B5CF0;
+  --accent2: #F0C55C;
+  --accent3: #5CF0B4;
+  --bg: #0a0a0f;
+  --bg2: #13131a;
+  --bg3: #1c1c28;
+  --surface: #22222f;
+  --border: #2e2e3f;
+  --text: #f0eeff;
+  --text2: #9b97b8;
+  --text3: #5a5770;
+  --radius: 14px;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+[data-theme="light"] {
+  --bg: #f5f4ff; --bg2: #eeedf8; --bg3: #e4e3f2;
+  --surface: #ffffff; --border: #d0cee8; --text: #1a1830;
+  --text2: #5a5580; --text3: #9894b8;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg); color: var(--text);
+  min-height: 100vh; overflow-x: hidden;
+  display: flex; flex-direction: column;
+}
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0; opacity: 0.4;
+}
+nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 12px;
+  padding: 0 24px; height: 56px;
+  background: rgba(10,10,15,.85); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: var(--font-display); font-weight: 800; font-size: 18px;
+  color: var(--text); text-decoration: none; letter-spacing: -0.5px; margin-right: auto;
+}
+.nav-logo span { color: var(--accent); }
+.btn-icon {
+  background: none; border: 1px solid var(--border); color: var(--text2);
+  border-radius: 10px; width: 36px; height: 36px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: 16px;
+  transition: all .2s;
+}
+.btn-icon:hover { border-color: var(--accent); color: var(--text); }
+
+.page-404 {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 60px 24px; text-align: center; position: relative; z-index: 1;
+}
+.err-glow {
+  font-family: var(--font-display); font-size: clamp(80px, 20vw, 160px);
+  font-weight: 800; line-height: 1;
+  background: linear-gradient(135deg, var(--accent), var(--accent3));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 40px rgba(123,92,240,.4));
+  margin-bottom: 8px;
+}
+.err-title {
+  font-family: var(--font-display); font-size: clamp(20px, 5vw, 28px);
+  font-weight: 800; margin-bottom: 12px; color: var(--text);
+}
+.err-desc {
+  font-size: 15px; color: var(--text2); max-width: 400px;
+  line-height: 1.6; margin-bottom: 36px;
+}
+.err-links {
+  display: flex; flex-wrap: wrap; gap: 12px;
+  justify-content: center; margin-bottom: 48px;
+}
+.err-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px; border-radius: 12px; font-size: 14px;
+  font-weight: 700; text-decoration: none; transition: all .2s;
+  font-family: var(--font-body);
+}
+.err-btn-primary {
+  background: var(--accent); color: #fff;
+}
+.err-btn-primary:hover { background: #6a4de0; transform: translateY(-2px); }
+.err-btn-secondary {
+  background: var(--surface); color: var(--text);
+  border: 1px solid var(--border);
+}
+.err-btn-secondary:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+.err-suggestions { width: 100%; max-width: 480px; }
+.err-suggestions-title {
+  font-size: 12px; color: var(--text3); text-transform: uppercase;
+  letter-spacing: .1em; margin-bottom: 14px;
+}
+.err-suggestion-list {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.err-suggestion-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--border);
+  text-decoration: none; color: var(--text);
+  font-size: 14px; transition: all .2s;
+}
+.err-suggestion-item:hover {
+  border-color: var(--accent); background: var(--bg3);
+  transform: translateX(4px);
+}
+.err-suggestion-icon { font-size: 20px; flex-shrink: 0; }
+.err-suggestion-label { font-weight: 600; }
+.err-suggestion-sub { font-size: 12px; color: var(--text3); margin-top: 1px; }
+
+@media (max-width: 480px) {
+  .err-links { flex-direction: column; width: 100%; max-width: 280px; }
+  .err-btn { justify-content: center; }
+}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">GEN<span>-Z</span></a>
+  <button class="btn-icon" onclick="toggleTheme()" id="themeBtn">🌙</button>
+</nav>
+
+<div class="page-404">
+  <div class="err-glow">404</div>
+  <div class="err-title">Sayfa Bulunamadı</div>
+  <p class="err-desc">
+    Aradığın sayfa taşınmış, silinmiş ya da hiç var olmamış olabilir. 
+    Ama endişelenme — doğru yere dönmek için aşağıdaki linkleri kullanabilirsin.
+  </p>
+
+  <div class="err-links">
+    <a href="index.html" class="err-btn err-btn-primary">🏠 Ana Sayfa</a>
+    <a href="javascript:history.back()" class="err-btn err-btn-secondary">← Geri Dön</a>
+  </div>
+
+  <div class="err-suggestions">
+    <div class="err-suggestions-title">Bunlara bakmak ister misin?</div>
+    <div class="err-suggestion-list">
+      <a href="gen-z.html" class="err-suggestion-item">
+        <span class="err-suggestion-icon">⚡</span>
+        <div>
+          <div class="err-suggestion-label">Keşfet</div>
+          <div class="err-suggestion-sub">Gençlerin buluşma noktası</div>
+        </div>
+      </a>
+      <a href="magaza.html" class="err-suggestion-item">
+        <span class="err-suggestion-icon">🏪</span>
+        <div>
+          <div class="err-suggestion-label">Mağaza</div>
+          <div class="err-suggestion-sub">Ürünleri keşfet, alışveriş yap</div>
+        </div>
+      </a>
+      <a href="ustam.html" class="err-suggestion-item">
+        <span class="err-suggestion-icon">🔨</span>
+        <div>
+          <div class="err-suggestion-label">Ustam</div>
+          <div class="err-suggestion-sub">Usta bul veya usta ol</div>
+        </div>
+      </a>
+      <a href="topluluk.html" class="err-suggestion-item">
+        <span class="err-suggestion-icon">👥</span>
+        <div>
+          <div class="err-suggestion-label">Topluluk</div>
+          <div class="err-suggestion-sub">Gençlerle bağlan, paylaş</div>
+        </div>
+      </a>
+      <a href="iletisim.html" class="err-suggestion-item">
+        <span class="err-suggestion-icon">📩</span>
+        <div>
+          <div class="err-suggestion-label">İletişim</div>
+          <div class="err-suggestion-sub">Bize ulaş, yardım al</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+  try { localStorage.setItem('genz-theme', isDark ? 'light' : 'dark'); } catch(e){}
+}
+// Kaydedilmiş tema
+try {
+  const t = localStorage.getItem('genz-theme');
+  if (t) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.getElementById('themeBtn').textContent = t === 'dark' ? '🌙' : '☀️';
+  }
+} catch(e){}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.body.style.opacity = '0';
+  document.body.style.transition = 'opacity 0.3s';
+  requestAnimationFrame(() => { document.body.style.opacity = '1'; });
+  document.querySelectorAll('a[href]').forEach(a => {
+    const href = a.getAttribute('href');
+    if (href && !href.startsWith('#') && !href.startsWith('javascript') && !href.startsWith('mailto')) {
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.body.style.transition = 'opacity 0.25s';
+        document.body.style.opacity = '0';
+        setTimeout(() => { window.location.href = href; }, 270);
+      });
+    }
+  });
+});
+</script>
+</body>
+</html>

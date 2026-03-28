@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="GEN-Z — Gizlilik Politikası ve KVKK Aydınlatma Metni."/>
+<title>GEN-Z · Gizlilik Politikası</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --accent: #7B5CF0; --accent2: #F0C55C; --accent3: #5CF0B4;
+  --bg: #0a0a0f; --bg2: #13131a; --bg3: #1c1c28;
+  --surface: #22222f; --border: #2e2e3f; --text: #f0eeff;
+  --text2: #9b97b8; --text3: #5a5770; --radius: 14px; --radius-sm: 8px;
+  --font-display: 'Syne', sans-serif; --font-body: 'DM Sans', sans-serif;
+}
+[data-theme="light"] {
+  --bg: #f5f4ff; --bg2: #eeedf8; --bg3: #e4e3f2;
+  --surface: #ffffff; --border: #d0cee8; --text: #1a1830;
+  --text2: #5a5580; --text3: #9894b8;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0; opacity: 0.4;
+}
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 64px; background: rgba(10,10,15,0.85); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 24px; gap: 12px;
+}
+[data-theme="light"] nav { background: rgba(245,244,255,0.85); }
+.nav-logo {
+  font-family: var(--font-display); font-size: 22px; font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px; text-decoration: none; flex-shrink: 0;
+}
+.nav-back {
+  display: flex; align-items: center; gap: 6px; background: none; border: none;
+  color: var(--text2); font-family: var(--font-body); font-size: 14px; font-weight: 500;
+  cursor: pointer; padding: 6px 12px; border-radius: var(--radius-sm);
+  transition: color 0.2s, background 0.2s; text-decoration: none;
+}
+.nav-back:hover { color: var(--text); background: var(--surface); }
+.nav-right { margin-left: auto; }
+.btn-icon {
+  width: 36px; height: 36px; border: 1px solid var(--border); background: var(--surface);
+  border-radius: var(--radius-sm); cursor: pointer; color: var(--text2);
+  display: flex; align-items: center; justify-content: center; font-size: 16px; transition: color 0.2s, border-color 0.2s;
+}
+.btn-icon:hover { color: var(--text); border-color: var(--accent); }
+.page { position: relative; z-index: 1; padding-top: 64px; }
+.hero {
+  padding: 72px 24px 48px;
+  background: radial-gradient(ellipse 60% 60% at 30% 50%, rgba(123,92,240,0.12) 0%, transparent 70%);
+  text-align: center;
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border-radius: 999px;
+  border: 1px solid rgba(123,92,240,0.3); background: rgba(123,92,240,0.1);
+  color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; margin-bottom: 20px;
+}
+.hero-title {
+  font-family: var(--font-display); font-size: clamp(32px, 6vw, 56px);
+  font-weight: 800; letter-spacing: -1px; margin-bottom: 14px;
+}
+.hero-sub { font-size: 15px; color: var(--text2); max-width: 500px; margin: 0 auto; line-height: 1.6; }
+.doc-wrap { max-width: 780px; margin: 0 auto; padding: 48px 24px 80px; }
+.doc-section { margin-bottom: 40px; }
+.doc-section h2 {
+  font-family: var(--font-display); font-size: 20px; font-weight: 800;
+  color: var(--accent); margin-bottom: 12px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.doc-section h3 { font-size: 15px; font-weight: 700; margin: 18px 0 8px; color: var(--text); }
+.doc-section p { font-size: 14px; color: var(--text2); line-height: 1.8; margin-bottom: 10px; }
+.doc-section ul { padding-left: 20px; }
+.doc-section ul li { font-size: 14px; color: var(--text2); line-height: 1.8; margin-bottom: 6px; }
+.doc-section ul li strong { color: var(--text); }
+.doc-update { font-size: 12px; color: var(--text3); text-align: right; margin-bottom: 32px; }
+.info-box {
+  background: rgba(123,92,240,0.08); border: 1px solid rgba(123,92,240,0.2);
+  border-radius: var(--radius); padding: 16px 20px; margin: 16px 0;
+  font-size: 14px; color: var(--text2); line-height: 1.7;
+}
+.info-box strong { color: var(--accent); }
+.rights-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 16px; }
+.right-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 14px 16px;
+}
+.right-card-icon { font-size: 22px; margin-bottom: 8px; }
+.right-card-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.right-card-desc { font-size: 12px; color: var(--text3); line-height: 1.5; }
+.contact-box {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 20px 24px; text-align: center; margin-top: 32px;
+}
+.contact-box p { font-size: 14px; color: var(--text2); margin-bottom: 10px; }
+.contact-box a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.contact-box a:hover { text-decoration: underline; }
+@media (max-width: 600px) { .rights-grid { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">GEN-Z</a>
+  <a class="nav-back" href="javascript:history.back()">← Geri</a>
+  <div class="nav-right">
+    <button class="btn-icon" onclick="toggleTheme()" id="themeBtn">🌙</button>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-tag">🔒 Gizlilik</div>
+    <div class="hero-title">Gizlilik Politikası</div>
+    <p class="hero-sub">Kişisel verilerinizin nasıl toplandığı, işlendiği ve korunduğu hakkında şeffaf bilgi.</p>
+  </div>
+
+  <div class="doc-wrap">
+    <div class="doc-update">Son güncelleme: Mart 2025 · KVKK Uyumlu</div>
+
+    <div class="doc-section">
+      <h2>1. Veri Sorumlusu</h2>
+      <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında GEN-Z platformu, veri sorumlusu sıfatıyla kişisel verilerinizi aşağıda açıklanan amaçlar çerçevesinde işlemektedir.</p>
+      <div class="info-box"><strong>GEN-Z Platformu</strong> — gen-z.io · Türkiye'de yerleşik kullanıcılara yönelik gençlik, alışveriş ve hizmet platformu.</div>
+    </div>
+
+    <div class="doc-section">
+      <h2>2. Toplanan Kişisel Veriler</h2>
+      <h3>Hesap Oluşturma Sırasında</h3>
+      <ul>
+        <li><strong>Ad Soyad / Kullanıcı Adı:</strong> Kimlik doğrulama ve profil görüntüleme</li>
+        <li><strong>E-posta Adresi:</strong> Giriş, bildirim ve şifre sıfırlama</li>
+        <li><strong>Şifre (şifrelenmiş):</strong> Firebase Authentication ile güvenli saklama</li>
+      </ul>
+      <h3>Platform Kullanımı Sırasında</h3>
+      <ul>
+        <li><strong>Profil Bilgileri:</strong> Şehir, telefon, profil fotoğrafı (opsiyonel)</li>
+        <li><strong>Sipariş & İşlem Geçmişi:</strong> Satın alma, iade ve değerlendirme kayıtları</li>
+        <li><strong>Favoriler & Sepet İçeriği:</strong> Yerel depolama (localStorage) ve Firestore'da</li>
+        <li><strong>Cihaz & Tarayıcı Bilgisi:</strong> Güvenlik ve hata ayıklama amacıyla</li>
+        <li><strong>Çerez Verileri:</strong> Oturum yönetimi, tercihler ve analitik</li>
+      </ul>
+    </div>
+
+    <div class="doc-section">
+      <h2>3. Verilerin İşlenme Amaçları</h2>
+      <ul>
+        <li>Üyelik hesabı oluşturma ve kimlik doğrulama</li>
+        <li>Sipariş, ödeme ve teslimat süreçlerinin yürütülmesi</li>
+        <li>Satıcı/usta başvurularının değerlendirilmesi</li>
+        <li>Kullanıcı destek taleplerine yanıt verilmesi</li>
+        <li>Platform güvenliği ve dolandırıcılık önleme</li>
+        <li>Yasal yükümlülüklerin yerine getirilmesi</li>
+        <li>Hizmet iyileştirme ve istatistiksel analiz (anonim)</li>
+      </ul>
+    </div>
+
+    <div class="doc-section">
+      <h2>4. Hukuki İşleme Dayanakları (KVKK Madde 5)</h2>
+      <ul>
+        <li><strong>Sözleşmenin ifası:</strong> Sipariş ve üyelik hizmetleri için zorunlu veriler</li>
+        <li><strong>Açık rıza:</strong> Pazarlama bildirimleri ve çerezler için</li>
+        <li><strong>Meşru menfaat:</strong> Güvenlik, hata ayıklama ve anonim analitik</li>
+        <li><strong>Hukuki yükümlülük:</strong> Vergi, fatura ve yasal saklama süreleri</li>
+      </ul>
+    </div>
+
+    <div class="doc-section">
+      <h2>5. Verilerin Paylaşımı</h2>
+      <p>Kişisel verileriniz aşağıdaki durumlar dışında üçüncü taraflarla paylaşılmaz:</p>
+      <ul>
+        <li><strong>Google Firebase / Firestore:</strong> Veri depolama ve kimlik doğrulama altyapısı (ABD — Standard Contractual Clauses kapsamında)</li>
+        <li><strong>Kargo & Lojistik Firmaları:</strong> Sipariş teslimatı için ad, adres ve telefon</li>
+        <li><strong>Yasal Zorunluluk:</strong> Mahkeme kararı veya yetkili kurum talebi halinde</li>
+        <li><strong>Satıcı / Usta:</strong> Sipariş gerçekleştiğinde ilgili satıcıyla ad ve teslimat adresi paylaşılır</li>
+      </ul>
+    </div>
+
+    <div class="doc-section">
+      <h2>6. Çerezler (Cookies)</h2>
+      <p>GEN-Z aşağıdaki çerez kategorilerini kullanmaktadır:</p>
+      <ul>
+        <li><strong>Zorunlu Çerezler:</strong> Oturum yönetimi, güvenlik (rıza gerektirmez)</li>
+        <li><strong>Tercih Çerezleri:</strong> Tema, dil ve arayüz tercihleri</li>
+        <li><strong>Analitik Çerezler:</strong> Sayfa görüntüleme istatistikleri (anonim)</li>
+      </ul>
+      <p>Çerez tercihlerinizi tarayıcınızın ayarlarından veya platform üzerindeki çerez yönetim panelinden değiştirebilirsiniz.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2>7. Veri Güvenliği</h2>
+      <ul>
+        <li>Şifreler Firebase Authentication ile hash'lenerek saklanır; hiçbir zaman düz metin olarak tutulmaz</li>
+        <li>Firestore güvenlik kuralları ile her kullanıcı yalnızca kendi verisine erişebilir</li>
+        <li>HTTPS zorunluluğu ile tüm veri transferleri şifrelenir</li>
+        <li>Düzenli güvenlik denetimleri ve erişim logları tutulmaktadır</li>
+      </ul>
+    </div>
+
+    <div class="doc-section">
+      <h2>8. Saklama Süreleri</h2>
+      <ul>
+        <li><strong>Hesap verileri:</strong> Hesap silinene kadar + 6 ay</li>
+        <li><strong>Sipariş & fatura kayıtları:</strong> 10 yıl (Vergi Usul Kanunu gereği)</li>
+        <li><strong>Çerez verileri:</strong> Oturum çerezleri tarayıcı kapanınca; kalıcı çerezler maksimum 1 yıl</li>
+        <li><strong>Destek yazışmaları:</strong> 3 yıl</li>
+      </ul>
+    </div>
+
+    <div class="doc-section">
+      <h2>9. KVKK Kapsamında Haklarınız</h2>
+      <div class="rights-grid">
+        <div class="right-card">
+          <div class="right-card-icon">🔍</div>
+          <div class="right-card-title">Bilgi Talep Etme</div>
+          <div class="right-card-desc">Hangi verilerinizin işlendiğini öğrenme hakkı (Md. 11/a)</div>
+        </div>
+        <div class="right-card">
+          <div class="right-card-icon">📋</div>
+          <div class="right-card-title">Kopyasını İsteme</div>
+          <div class="right-card-desc">İşlenen kişisel verilerinizin kopyasını talep edebilirsiniz</div>
+        </div>
+        <div class="right-card">
+          <div class="right-card-icon">✏️</div>
+          <div class="right-card-title">Düzeltme Talep Etme</div>
+          <div class="right-card-desc">Yanlış veya eksik verilerin düzeltilmesini isteyebilirsiniz (Md. 11/d)</div>
+        </div>
+        <div class="right-card">
+          <div class="right-card-icon">🗑️</div>
+          <div class="right-card-title">Silme Talep Etme</div>
+          <div class="right-card-desc">Verilerinizin silinmesini veya anonim hale getirilmesini isteyebilirsiniz (Md. 11/e)</div>
+        </div>
+        <div class="right-card">
+          <div class="right-card-icon">🚫</div>
+          <div class="right-card-title">İtiraz Etme</div>
+          <div class="right-card-desc">Otomatik karar alma ve profil oluşturma işlemlerine itiraz hakkı (Md. 11/g)</div>
+        </div>
+        <div class="right-card">
+          <div class="right-card-icon">🏛️</div>
+          <div class="right-card-title">KVK Kurulu'na Şikayet</div>
+          <div class="right-card-desc">Yanıt vermediğimiz durumlarda KVKK Kurulu'na başvurabilirsiniz</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="doc-section">
+      <div class="contact-box">
+        <p>Haklarınızı kullanmak veya veri talepleriniz için:</p>
+        <a href="iletisim.html">📩 İletişim Formu</a>
+        <p style="margin-top:10px;font-size:12px;color:var(--text3);">Başvurular KVKK Madde 13 uyarınca 30 gün içinde yanıtlanır.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+  try { localStorage.setItem('genz-theme', isDark ? 'light' : 'dark'); } catch(e){}
+}
+try {
+  const t = localStorage.getItem('genz-theme');
+  if (t) { document.documentElement.setAttribute('data-theme', t); document.getElementById('themeBtn').textContent = t === 'dark' ? '🌙' : '☀️'; }
+} catch(e){}
+document.addEventListener('DOMContentLoaded', () => {
+  document.body.style.opacity = '0';
+  document.body.style.transition = 'opacity 0.3s';
+  requestAnimationFrame(() => { document.body.style.opacity = '1'; });
+});
+</script>
+</body>
+</html>

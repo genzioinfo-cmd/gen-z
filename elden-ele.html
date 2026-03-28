@@ -488,7 +488,8 @@ nav {
     <li><a href="magaza.html">Mağaza</a></li>
     <li><a href="ustam.html">Ustam</a></li>
     <li><a href="gen-z.html">Genç-Z</a></li>
-    <li><a href="topluluk.html">Topluluk</a></li>
+    <li><a href="topluluk.html">Topluluk</a><a href="hakkimizda.html">Hakkımızda</a></li>
+    <li><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a></li>
     <li><a href="iletisim.html">Kurucu</a></li>
     <li><a href="birlikte-buyuyelim.html">Birlikte Büyüyelim</a></li>
     <li><a href="elden-ele.html" class="active">Elden Ele</a></li>
@@ -501,7 +502,7 @@ nav {
 </nav>
 <nav class="mobile-menu" id="mobileMenu">
   <a href="magaza.html">Mağaza</a><a href="ustam.html">Ustam</a><a href="gen-z.html">Genç-Z</a>
-  <a href="topluluk.html">Topluluk</a><a href="iletisim.html">Kurucu</a>
+  <a href="topluluk.html">Topluluk</a><a href="hakkimizda.html">Hakkımızda</a><a href="iletisim.html">Kurucu</a>
   <a href="birlikte-buyuyelim.html">Birlikte Büyüyelim</a><a href="elden-ele.html">Elden Ele</a>
 </nav>
 
@@ -855,5 +856,19 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 <script type="module" src="firebase-config.js"></script>
 <script src="cookie-consent.js"></script>
+
+<!-- FOOTER -->
+<footer style="position:relative;z-index:1;border-top:1px solid var(--border);padding:24px;text-align:center;margin-top:auto;">
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px;font-size:12px;color:var(--text3);">
+    <a href="hakkimizda.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Hakkımızda</a>
+    <span>·</span>
+    <a href="gizlilik.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Gizlilik Politikası</a>
+    <span>·</span>
+    <a href="kullanim-sartlari.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Kullanım Şartları</a>
+    <span>·</span>
+    <a href="iletisim.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">İletişim</a>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--text3);opacity:.5;">© 2025 GEN-Z · Tüm hakları saklıdır.</div>
+</footer>
 </body>
 </html>

@@ -367,7 +367,8 @@ nav, .modal-overlay-auth, .modal-box, .toast {
     <li><a href="ustam.html" data-tr="Ustam" data-en="Ustam">Ustam</a></li>
     <li><a href="gen-z.html" class="active" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a></li>
     <li><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a></li>
-    <li><a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a></li>
+    <li><a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a><a href="hakkimizda.html">Hakkımızda</a></li>
+    <li><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a></li>
     <li><a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a></li>
     <li><a href="birlikte-buyuyelim.html" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a></li>
     <li><a href="elden-ele.html" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a></li>
@@ -392,7 +393,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
   <a href="ustam.html" data-tr="Ustam" data-en="Ustam">Ustam</a>
   <a href="gen-z.html" class="active" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a>
   <a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a>
-  <a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a>
+  <a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a><a href="hakkimizda.html">Hakkımızda</a>
   <a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a>
   <a href="birlikte-buyuyelim.html" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a>
   <a href="elden-ele.html" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a>
@@ -460,6 +461,12 @@ nav, .modal-overlay-auth, .modal-box, .toast {
         <label class="form-label">Şifre</label>
         <input class="form-input" id="signup-pass" type="password" placeholder="En az 8 karakter"/>
       </div>
+      <div class="form-group" style="margin-bottom:4px;">
+        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px;color:var(--text2);line-height:1.5;">
+          <input type="checkbox" id="signup-kvkk" style="margin-top:2px;accent-color:var(--accent);flex-shrink:0;"/>
+          <span><a href="gizlilik.html" target="_blank" style="color:var(--accent);text-decoration:none;">Gizlilik Politikası</a>'nı ve <a href="kullanim-sartlari.html" target="_blank" style="color:var(--accent);text-decoration:none;">Kullanım Şartları</a>'nı okudum, kabul ediyorum.</span>
+        </label>
+      </div>
       <button class="btn-submit" onclick="doSignUp()">Kayıt Ol</button>
     </div>
     <div class="auth-panel" id="panel-forgot">
@@ -525,7 +532,74 @@ const CATEGORIES = [
   { id: 'oyun',     name: 'Oyun & Anime',        icon: '🎮', count: null, coming: true },
 ];
 
-/* ── DEMO ÜRÜN VERİSİ ── */
+/* ── FİREBASE ÜRÜN VERİSİ ── */
+let GZ_PRODUCTS = [];
+
+const FB_CONFIG = {
+  apiKey: 'AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ',
+  authDomain: 'gen-z-io.firebaseapp.com', projectId: 'gen-z-io',
+  storageBucket: 'gen-z-io.firebasestorage.app',
+  messagingSenderId: '97338868944', appId: '1:97338868944:web:d7b429e416d8c505b14ad5'
+};
+const GRAD_PAIRS = [
+  ['rgba(240,197,92,0.18)','rgba(123,92,240,0.1)'],
+  ['rgba(92,240,180,0.15)','rgba(123,92,240,0.1)'],
+  ['rgba(240,92,130,0.15)','rgba(92,140,240,0.1)'],
+  ['rgba(92,180,240,0.15)','rgba(240,140,92,0.1)'],
+  ['rgba(180,92,240,0.15)','rgba(92,240,197,0.1)'],
+];
+const CAT_EMOJI = { bakim:'🧴', dekor:'🖼️', giyim:'👗', yiyecek:'🍵', kirtasiye:'🖊️', teknoloji:'🎧', bahce:'🌱', sanat:'🎨' };
+
+async function fetchProducts() {
+  try {
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, collection, getDocs, query, where, orderBy, limit } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const app = getApps().length ? getApps()[0] : initializeApp(FB_CONFIG);
+    const db = getFirestore(app);
+    let snap;
+    try {
+      snap = await getDocs(query(
+        collection(db, 'magaza_urunler'),
+        where('durum', '==', 'onaylandi'),
+        where('platform', '==', 'gencz'),
+        orderBy('ts', 'desc'), limit(300)
+      ));
+    } catch(e) {
+      snap = await getDocs(query(
+        collection(db, 'magaza_urunler'),
+        where('durum', '==', 'onaylandi'),
+        orderBy('ts', 'desc'), limit(300)
+      ));
+    }
+    GZ_PRODUCTS = snap.docs.map((doc, i) => {
+      const u = { id: doc.id, ...doc.data() };
+      const grad = GRAD_PAIRS[i % GRAD_PAIRS.length];
+      const initials = (u.magazaAd||'M').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+      const resim = u.resimler?.[0] || null;
+      return {
+        id: u.id, name: u.ad || '',
+        price: u.kdvDahilFiyat || u.fiyat || 0, oldPrice: u.eskiFiyat || null,
+        rating: u.rating || 0, reviews: u.reviewCount || 0,
+        badge: u.badge || null, tags: u.etiketler || [],
+        category: u.kategori || 'diger', desc: u.aciklama || '',
+        emoji: resim ? null : (CAT_EMOJI[u.kategori] || '📦'),
+        resim, gradA: grad[0], gradB: grad[1],
+        seller: {
+          id: u.magazaId || u.id, name: u.magazaAd || 'Mağaza',
+          initials, sales: u.satisAdedi || 0,
+          joined: u.ts ? new Date(u.ts.seconds*1000).getFullYear().toString() : '2025',
+          rating: u.magazaRating || 0, ratingCount: u.magazaRatingCount || 0,
+          desc: u.magazaAciklama || '', comments: []
+        }
+      };
+    });
+  } catch(e) {
+    console.warn('Ürünler yüklenemedi:', e);
+    GZ_PRODUCTS = [];
+  }
+}
+
+// eski adlar için shim (sayfada kullanılmıyorsa zararsız)
 const DEMO_PRODUCTS = [
   {
     id: 1, emoji: '🧴', name: 'Doğal Argan Yağı Şampuanı',
@@ -677,21 +751,21 @@ const DEMO_PRODUCTS = [
 
 /* ── YARDIMCI FONKSİYONLAR ── */
 function getProductById(id) {
-  return DEMO_PRODUCTS.find(p => p.id === parseInt(id));
+  return GZ_PRODUCTS.find(p => p.id === id || p.id === parseInt(id));
 }
 
 function getProductsBySeller(sellerId) {
-  return DEMO_PRODUCTS.filter(p => p.seller.id === sellerId);
+  return GZ_PRODUCTS.filter(p => p.seller.id === sellerId);
 }
 
 function getSellerById(sellerId) {
-  const product = DEMO_PRODUCTS.find(p => p.seller.id === sellerId);
+  const product = GZ_PRODUCTS.find(p => p.seller.id === sellerId);
   return product ? product.seller : null;
 }
 
 function getAllSellers() {
   const map = {};
-  DEMO_PRODUCTS.forEach(p => {
+  GZ_PRODUCTS.forEach(p => {
     if (!map[p.seller.id]) {
       map[p.seller.id] = { ...p.seller, products: [] };
     }
@@ -701,8 +775,8 @@ function getAllSellers() {
 }
 
 function getProductsByCategory(catId) {
-  if (catId === 'all') return DEMO_PRODUCTS;
-  return DEMO_PRODUCTS.filter(p => p.category === catId);
+  if (catId === 'all') return GZ_PRODUCTS;
+  return GZ_PRODUCTS.filter(p => p.category === catId);
 }
 
 /* ── URL YARDIMCILARI ── */
@@ -837,7 +911,7 @@ function renderStars(rating) {
 
 /* ── PAGE SCRIPT ── */
 initThemeLang();
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   document.querySelectorAll('.mobile-menu a').forEach(a => {
     a.addEventListener('click', () => {
       const mm = document.getElementById('mobileMenu');
@@ -851,16 +925,39 @@ document.addEventListener('DOMContentLoaded', () => {
   requestAnimationFrame(() => { document.body.style.opacity = '1'; });
 
   const grid = document.getElementById('kategoriGrid');
+
+  // Önce statik grid'i hızlı render et
   CATEGORIES.forEach(cat => {
     if (cat.id === 'all') return;
     const card = document.createElement('div');
     card.className = 'kategori-card' + (cat.coming ? ' disabled' : '');
-    card.innerHTML = '<div class="kategori-card-icon">' + cat.icon + '</div><div class="kategori-card-name">' + cat.name + '</div>' + (cat.coming ? '<span class="kategori-card-badge">Yakında</span>' : '');
+    card.dataset.catId = cat.id;
+    card.innerHTML = '<div class="kategori-card-icon">' + cat.icon + '</div>'
+      + '<div class="kategori-card-name">' + cat.name + '</div>'
+      + (cat.coming ? '<span class="kategori-card-badge">Yakında</span>' : '');
     if (!cat.coming) {
       card.onclick = () => navigateTo('gen-z.html?cat=' + cat.id);
     }
     grid.appendChild(card);
   });
+
+  // Ardından Firebase'den ürünleri çek, kategori sayılarını güncelle
+  await fetchProducts();
+  if (GZ_PRODUCTS.length > 0) {
+    const counts = {};
+    GZ_PRODUCTS.forEach(p => { counts[p.category] = (counts[p.category] || 0) + 1; });
+    grid.querySelectorAll('.kategori-card:not(.disabled)').forEach(card => {
+      const catId = card.dataset.catId;
+      const count = counts[catId] || 0;
+      if (count > 0) {
+        const badge = document.createElement('span');
+        badge.className = 'kategori-card-badge';
+        badge.style.cssText = 'background:rgba(92,240,180,.12);color:#5CF0B4;border:1px solid rgba(92,240,180,.25)';
+        badge.textContent = count + ' ürün';
+        card.appendChild(badge);
+      }
+    });
+  }
 });
 </script>
 
@@ -878,5 +975,19 @@ document.addEventListener('DOMContentLoaded', () => {
   } catch(e) {}
 })();
 </script>
+
+<!-- FOOTER -->
+<footer style="position:relative;z-index:1;border-top:1px solid var(--border);padding:24px;text-align:center;margin-top:auto;">
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px;font-size:12px;color:var(--text3);">
+    <a href="hakkimizda.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Hakkımızda</a>
+    <span>·</span>
+    <a href="gizlilik.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Gizlilik Politikası</a>
+    <span>·</span>
+    <a href="kullanim-sartlari.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Kullanım Şartları</a>
+    <span>·</span>
+    <a href="iletisim.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">İletişim</a>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--text3);opacity:.5;">© 2025 GEN-Z · Tüm hakları saklıdır.</div>
+</footer>
 </body>
 </html>

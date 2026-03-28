@@ -203,7 +203,8 @@ nav, .modal-overlay-auth, .modal-box, .toast {
     <li><a href="ustam.html" class="active" data-tr="Ustam" data-en="Ustam">Ustam</a></li>
     <li><a href="gen-z.html" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a></li>
     <li><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a></li>
-    <li><a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a></li>
+    <li><a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a><a href="hakkimizda.html">Hakkımızda</a></li>
+    <li><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a></li>
     <li><a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a></li>
     <li><a href="birlikte-buyuyelim.html" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a></li>
     <li><a href="elden-ele.html" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a></li>
@@ -220,7 +221,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
   <a href="ustam.html" data-tr="Ustam" data-en="Ustam">Ustam</a>
   <a href="gen-z.html" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a>
   <a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a>
-  <a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a>
+  <a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a><a href="hakkimizda.html">Hakkımızda</a>
   <a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a>
   <a href="birlikte-buyuyelim.html" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a>
   <a href="elden-ele.html" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a>
@@ -270,8 +271,47 @@ const CATEGORIES = [
   { id: 'bahce', name: 'Bahçe & Doğa', icon: '🌱', count: null, coming: true },
 ];
 
-/* ── DEMO ÜRÜN VERİSİ ── */
-const DEMO_PRODUCTS = [
+/* ── FİREBASE USTA VERİSİ ── */
+let USTALAR = [];
+
+const FB_CONFIG_USTAM = {
+  apiKey: 'AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ',
+  authDomain: 'gen-z-io.firebaseapp.com', projectId: 'gen-z-io',
+  storageBucket: 'gen-z-io.firebasestorage.app',
+  messagingSenderId: '97338868944', appId: '1:97338868944:web:d7b429e416d8c505b14ad5'
+};
+
+async function fetchUstalar(catId) {
+  try {
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, collection, getDocs, query, where, orderBy, limit } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const app = getApps().length ? getApps()[0] : initializeApp(FB_CONFIG_USTAM);
+    const db = getFirestore(app);
+    let snap;
+    try {
+      const constraints = [
+        where('durum', '==', 'onaylandi'),
+        ...(catId && catId !== 'all' ? [where('category', '==', catId)] : []),
+        orderBy('rating', 'desc'), limit(100)
+      ];
+      snap = await getDocs(query(collection(db, 'ustam_profiller'), ...constraints));
+    } catch(e) {
+      // Index yoksa filtre olmadan çek
+      snap = await getDocs(query(
+        collection(db, 'ustam_profiller'),
+        where('durum', '==', 'onaylandi'),
+        limit(100)
+      ));
+    }
+    USTALAR = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch(e) {
+    console.warn('Ustalar yüklenemedi, DEMO data kullanılıyor:', e);
+    USTALAR = DEMO_USTALAR_FALLBACK;
+  }
+}
+
+// Fallback: Firebase boşsa veya hata varsa gösterilecek DEMO ustalar
+const DEMO_PRODUCTS_UNUSED = [
   {
     id: 1, emoji: '🧴', name: 'Doğal Argan Yağı Şampuanı',
     price: 189, oldPrice: 249, rating: 4.8, reviews: 47,
@@ -618,7 +658,7 @@ const USTAM_CATEGORIES = [
   { id: 'hafriyat',  name: 'Hafriyat & Kazı',       icon: '⛏️', subs: ['Temel Kazısı','Hafriyat Nakliye','Ekskavatör','Sondaj'] },
 ];
 
-const DEMO_USTALAR = [
+const DEMO_USTALAR_FALLBACK = [
   {
     id: 'ahmet-usta', name: 'Ahmet Yılmaz', initials: 'AY',
     title: 'Elektrik Ustası', category: 'elektrik',
@@ -851,8 +891,8 @@ const DEMO_USTALAR = [
   },
 ];
 
-function getUstaById(id) { return DEMO_USTALAR.find(u => u.id === id); }
-function getUstalarByCategory(catId) { return catId === 'all' ? DEMO_USTALAR : DEMO_USTALAR.filter(u => u.category === catId); }
+function getUstaById(id) { return USTALAR.find(u => u.id === id); }
+function getUstalarByCategory(catId) { return catId === 'all' ? USTALAR : USTALAR.filter(u => u.category === catId); }
 function renderStars(r) { return '★'.repeat(Math.round(r)) + '☆'.repeat(5 - Math.round(r)); }
 
 
@@ -860,7 +900,7 @@ function renderStars(r) { return '★'.repeat(Math.round(r)) + '☆'.repeat(5 - 
 
 /* ── PAGE SCRIPT ── */
 initThemeLang();
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   document.querySelectorAll('.mobile-menu a').forEach(a => { a.addEventListener('click', () => { document.getElementById('mobileMenu')?.classList.remove('open'); document.getElementById('hamburgerBtn')?.classList.remove('open'); }); });
   document.body.style.opacity='0'; document.body.style.transition='opacity 0.3s';
   requestAnimationFrame(() => { document.body.style.opacity='1'; });
@@ -882,25 +922,31 @@ document.addEventListener('DOMContentLoaded', () => {
     '<div class="cat-header-sub">' + cat.name + ' alanında hizmet veren güvenilir ustalar</div>' +
     (cat.subs ? '<div class="cat-sub-tags">' + cat.subs.map(s => '<span class="cat-sub-tag">' + s + '</span>').join('') + '</div>' : '');
 
+  // Loading göster
+  const grid = document.getElementById('ustaGrid');
+  grid.innerHTML = '<div class="empty-state"><div class="empty-icon" style="font-size:32px;animation:pulse 1.2s ease-in-out infinite">⏳</div><div class="empty-text" style="font-size:14px">Ustalar yükleniyor…</div></div>';
+
+  // Firebase'den çek
+  await fetchUstalar(catId);
   const ustalar = getUstalarByCategory(catId);
   document.getElementById('ustaCount').textContent = ustalar.length;
-  const grid = document.getElementById('ustaGrid');
 
   if (ustalar.length === 0) {
     grid.innerHTML = '<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">Bu kategoride henüz usta yok</div><div class="empty-sub">Yakında eklenecek!</div></div>';
     return;
   }
 
+  grid.innerHTML = '';
   const fragment = document.createDocumentFragment();
   ustalar.forEach(u => {
     const card = document.createElement('a');
     card.className = 'usta-card';
     card.href = 'ustam-profil.html?usta=' + u.id;
     card.innerHTML = (u.badge === 'premium' ? '<div class="usta-card-premium">✦ Premium</div>' : '') +
-      '<div class="usta-card-top"><div class="usta-avatar">' + u.initials + '</div><div class="usta-card-info"><div class="usta-card-name">' + u.name + '</div><div class="usta-card-title">' + u.title + '</div></div></div>' +
-      '<div class="usta-card-location">📍 ' + u.district + ' / ' + u.city + '</div>' +
-      '<div class="usta-card-tags">' + u.tags.slice(0,3).map(t => '<span class="usta-tag">' + t + '</span>').join('') + '</div>' +
-      '<div class="usta-card-footer"><span class="usta-card-rating">' + renderStars(u.rating) + ' ' + u.rating + '</span><span class="usta-card-stat">📋 ' + u.jobCount + ' iş</span><span class="usta-card-stat">💬 ' + u.reviewCount + '</span></div>';
+      '<div class="usta-card-top"><div class="usta-avatar">' + (u.initials || (u.name||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)) + '</div><div class="usta-card-info"><div class="usta-card-name">' + (u.name||'') + '</div><div class="usta-card-title">' + (u.title||u.uzmanlik||'') + '</div></div></div>' +
+      '<div class="usta-card-location">📍 ' + (u.district||u.ilce||'') + ' / ' + (u.city||u.sehir||'') + '</div>' +
+      '<div class="usta-card-tags">' + (u.tags||u.hizmetler||[]).slice(0,3).map(t => '<span class="usta-tag">' + t + '</span>').join('') + '</div>' +
+      '<div class="usta-card-footer"><span class="usta-card-rating">' + renderStars(u.rating||0) + ' ' + (u.rating||'—') + '</span><span class="usta-card-stat">📋 ' + (u.jobCount||u.isAdedi||0) + ' iş</span><span class="usta-card-stat">💬 ' + (u.reviewCount||u.yorumSayisi||0) + '</span></div>';
     fragment.appendChild(card);
   });
   grid.appendChild(fragment);
@@ -910,5 +956,19 @@ document.addEventListener('DOMContentLoaded', () => {
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
 <script src="cookie-consent.js"></script>
+
+<!-- FOOTER -->
+<footer style="position:relative;z-index:1;border-top:1px solid var(--border);padding:24px;text-align:center;margin-top:auto;">
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px;font-size:12px;color:var(--text3);">
+    <a href="hakkimizda.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Hakkımızda</a>
+    <span>·</span>
+    <a href="gizlilik.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Gizlilik Politikası</a>
+    <span>·</span>
+    <a href="kullanim-sartlari.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Kullanım Şartları</a>
+    <span>·</span>
+    <a href="iletisim.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">İletişim</a>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--text3);opacity:.5;">© 2025 GEN-Z · Tüm hakları saklıdır.</div>
+</footer>
 </body>
 </html>

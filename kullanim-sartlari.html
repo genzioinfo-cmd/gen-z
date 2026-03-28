@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="GEN-Z — Kullanım Şartları ve Koşulları."/>
+<title>GEN-Z · Kullanım Şartları</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --accent: #7B5CF0; --accent2: #F0C55C; --accent3: #5CF0B4;
+  --bg: #0a0a0f; --bg2: #13131a; --bg3: #1c1c28;
+  --surface: #22222f; --border: #2e2e3f; --text: #f0eeff;
+  --text2: #9b97b8; --text3: #5a5770; --radius: 14px; --radius-sm: 8px;
+  --font-display: 'Syne', sans-serif; --font-body: 'DM Sans', sans-serif;
+}
+[data-theme="light"] {
+  --bg: #f5f4ff; --bg2: #eeedf8; --bg3: #e4e3f2;
+  --surface: #ffffff; --border: #d0cee8; --text: #1a1830;
+  --text2: #5a5580; --text3: #9894b8;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0; opacity: 0.4;
+}
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 64px; background: rgba(10,10,15,0.85); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 24px; gap: 12px;
+}
+[data-theme="light"] nav { background: rgba(245,244,255,0.85); }
+.nav-logo {
+  font-family: var(--font-display); font-size: 22px; font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px; text-decoration: none; flex-shrink: 0;
+}
+.nav-back {
+  display: flex; align-items: center; gap: 6px; background: none; border: none;
+  color: var(--text2); font-family: var(--font-body); font-size: 14px; font-weight: 500;
+  cursor: pointer; padding: 6px 12px; border-radius: var(--radius-sm);
+  transition: color 0.2s, background 0.2s; text-decoration: none;
+}
+.nav-back:hover { color: var(--text); background: var(--surface); }
+.nav-right { margin-left: auto; }
+.btn-icon {
+  width: 36px; height: 36px; border: 1px solid var(--border); background: var(--surface);
+  border-radius: var(--radius-sm); cursor: pointer; color: var(--text2);
+  display: flex; align-items: center; justify-content: center; font-size: 16px; transition: color 0.2s, border-color 0.2s;
+}
+.btn-icon:hover { color: var(--text); border-color: var(--accent); }
+.page { position: relative; z-index: 1; padding-top: 64px; }
+.hero {
+  padding: 72px 24px 48px;
+  background: radial-gradient(ellipse 60% 60% at 70% 50%, rgba(240,197,92,0.10) 0%, transparent 70%);
+  text-align: center;
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border-radius: 999px;
+  border: 1px solid rgba(240,197,92,0.3); background: rgba(240,197,92,0.1);
+  color: var(--accent2); font-size: 12px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; margin-bottom: 20px;
+}
+.hero-title { font-family: var(--font-display); font-size: clamp(32px, 6vw, 56px); font-weight: 800; letter-spacing: -1px; margin-bottom: 14px; }
+.hero-sub { font-size: 15px; color: var(--text2); max-width: 500px; margin: 0 auto; line-height: 1.6; }
+.doc-wrap { max-width: 780px; margin: 0 auto; padding: 48px 24px 80px; }
+.doc-update { font-size: 12px; color: var(--text3); text-align: right; margin-bottom: 32px; }
+.doc-toc {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 20px 24px; margin-bottom: 40px;
+}
+.doc-toc-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); margin-bottom: 12px; }
+.doc-toc a { display: block; font-size: 13px; color: var(--text2); text-decoration: none; padding: 4px 0; transition: color .2s; }
+.doc-toc a:hover { color: var(--accent); }
+.doc-section { margin-bottom: 40px; scroll-margin-top: 80px; }
+.doc-section h2 {
+  font-family: var(--font-display); font-size: 20px; font-weight: 800;
+  color: var(--accent2); margin-bottom: 12px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.doc-section p { font-size: 14px; color: var(--text2); line-height: 1.8; margin-bottom: 10px; }
+.doc-section ul { padding-left: 20px; }
+.doc-section ul li { font-size: 14px; color: var(--text2); line-height: 1.8; margin-bottom: 6px; }
+.doc-section ul li strong { color: var(--text); }
+.warn-box {
+  background: rgba(240,197,92,0.07); border: 1px solid rgba(240,197,92,0.25);
+  border-radius: var(--radius); padding: 14px 18px; margin: 14px 0;
+  font-size: 13px; color: var(--text2); line-height: 1.7;
+}
+.warn-box strong { color: var(--accent2); }
+.contact-box {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 20px 24px; text-align: center; margin-top: 32px;
+}
+.contact-box p { font-size: 14px; color: var(--text2); margin-bottom: 10px; }
+.contact-box a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.contact-box a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">GEN-Z</a>
+  <a class="nav-back" href="javascript:history.back()">← Geri</a>
+  <div class="nav-right">
+    <button class="btn-icon" onclick="toggleTheme()" id="themeBtn">🌙</button>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-tag">📋 Hukuki</div>
+    <div class="hero-title">Kullanım Şartları</div>
+    <p class="hero-sub">GEN-Z platformunu kullanmadan önce lütfen bu şartları dikkatlice okuyunuz.</p>
+  </div>
+
+  <div class="doc-wrap">
+    <div class="doc-update">Son güncelleme: Mart 2025 · Türk Hukuku Uyumlu</div>
+
+    <div class="doc-toc">
+      <div class="doc-toc-title">İçindekiler</div>
+      <a href="#s1">1. Taraflar ve Kapsam</a>
+      <a href="#s2">2. Üyelik ve Hesap</a>
+      <a href="#s3">3. Platform Kuralları</a>
+      <a href="#s4">4. Satıcı ve Usta Koşulları</a>
+      <a href="#s5">5. Siparişler ve Ödemeler</a>
+      <a href="#s6">6. İade ve İptal</a>
+      <a href="#s7">7. Fikri Mülkiyet</a>
+      <a href="#s8">8. Sorumluluk Sınırlaması</a>
+      <a href="#s9">9. Değişiklikler ve Fesih</a>
+      <a href="#s10">10. Uygulanacak Hukuk</a>
+    </div>
+
+    <div class="doc-section" id="s1">
+      <h2>1. Taraflar ve Kapsam</h2>
+      <p>Bu Kullanım Şartları ("Şartlar"), GEN-Z platformu ("Platform", "Biz") ile platformu kullanan gerçek veya tüzel kişiler ("Kullanıcı", "Siz") arasındaki ilişkiyi düzenler.</p>
+      <p>GEN-Z; gençlerin buluşma noktası olarak alışveriş, usta hizmetleri ve topluluk özelliklerini bir arada sunan bir platformdur. Platforma erişmek veya hesap oluşturmak bu Şartları kabul ettiğiniz anlamına gelir.</p>
+      <div class="warn-box"><strong>⚠️ Önemli:</strong> 18 yaşından küçükseniz platformu yalnızca ebeveyn veya vasi onayıyla kullanabilirsiniz.</div>
+    </div>
+
+    <div class="doc-section" id="s2">
+      <h2>2. Üyelik ve Hesap</h2>
+      <ul>
+        <li>Kayıt sırasında doğru ve güncel bilgi vermekle yükümlüsünüz.</li>
+        <li>Hesap güvenliğinizden (şifre, oturum) siz sorumlusunuz.</li>
+        <li>Tek bir kişi adına birden fazla hesap açılamaz.</li>
+        <li>Hesabınızı başkasına devredemez veya kiraya veremezsiniz.</li>
+        <li>Şüpheli bir erişim fark ederseniz derhal <a href="iletisim.html" style="color:var(--accent);">bize bildirin</a>.</li>
+      </ul>
+    </div>
+
+    <div class="doc-section" id="s3">
+      <h2>3. Platform Kuralları</h2>
+      <p>Aşağıdaki davranışlar kesinlikle yasaktır:</p>
+      <ul>
+        <li><strong>Sahte içerik:</strong> Yanıltıcı ürün açıklaması, sahte yorum veya fotoğraf paylaşmak</li>
+        <li><strong>Taciz ve nefret söylemi:</strong> Diğer kullanıcılara yönelik ayrımcı, tehditkar veya hakaret içeren içerik</li>
+        <li><strong>Spam ve reklam:</strong> İzinsiz promosyon mesajı veya link paylaşımı</li>
+        <li><strong>Sistem istismarı:</strong> Botlar, scraper'lar veya otomatik sistemlerle platforma zarar verme</li>
+        <li><strong>Yasadışı işlem:</strong> Kara para aklama, sahte ödeme veya dolandırıcılık girişimi</li>
+        <li><strong>Telif hakkı ihlali:</strong> Başkasına ait içeriği izinsiz kullanmak</li>
+      </ul>
+      <p>Kural ihlali durumunda hesabınız uyarısız askıya alınabilir veya kalıcı olarak kapatılabilir.</p>
+    </div>
+
+    <div class="doc-section" id="s4">
+      <h2>4. Satıcı ve Usta Koşulları</h2>
+      <ul>
+        <li>Satıcı veya usta hesabı açmak başvuru ve onay sürecine tabidir.</li>
+        <li>Listelenen ürün ve hizmetler Türk hukukuna uygun olmalıdır.</li>
+        <li>Ürün fiyatları ve stok bilgileri güncel tutulmalıdır.</li>
+        <li>Satıcılar, sipariş sonrası belirtilen sürede kargo/hizmet yükümlülüğünü yerine getirmekle sorumludur.</li>
+        <li>Platform, satıcı ile alıcı arasındaki aracı konumundadır; doğrudan taraf değildir.</li>
+        <li>Komisyon oranları ve ödeme dönemleri ayrıca bildirilir; Platform bu oranları önceden haber vererek değiştirme hakkını saklı tutar.</li>
+      </ul>
+    </div>
+
+    <div class="doc-section" id="s5">
+      <h2>5. Siparişler ve Ödemeler</h2>
+      <ul>
+        <li>Sipariş onayı, ödeme işleminin başarıyla tamamlanmasına bağlıdır.</li>
+        <li>Ödeme altyapısı üçüncü taraf sağlayıcılar aracılığıyla sunulur; kart bilgileriniz Platform sunucularında saklanmaz.</li>
+        <li>Fiyatlar Türk Lirası (₺) cinsinden belirtilir ve KDV dahildir (aksi belirtilmedikçe).</li>
+        <li>Teknik hata veya stok tükenmesi durumunda Platform siparişi iptal etme ve tam iade yapma hakkını saklı tutar.</li>
+      </ul>
+    </div>
+
+    <div class="doc-section" id="s6">
+      <h2>6. İade ve İptal</h2>
+      <p>Mesafeli Sözleşmeler Yönetmeliği kapsamında:</p>
+      <ul>
+        <li><strong>14 gün cayma hakkı:</strong> Ürünü teslim aldığınız tarihten itibaren 14 gün içinde sebep göstermeksizin iade edebilirsiniz.</li>
+        <li>İade talebini profil sayfanızdaki "Siparişlerim" bölümünden başlatabilirsiniz.</li>
+        <li>Dijital ürünler, kişiye özel üretilmiş ürünler ve hijyen ürünleri cayma hakkı kapsamı dışındadır.</li>
+        <li>İade kargo ücreti, ürün kusurlu değilse alıcıya aittir.</li>
+        <li>Onaylanan iadeler 7 iş günü içinde ödeme yönteminize iade edilir.</li>
+      </ul>
+    </div>
+
+    <div class="doc-section" id="s7">
+      <h2>7. Fikri Mülkiyet</h2>
+      <p>GEN-Z markası, logosu, tasarımı, yazılımı ve içerikleri Platform'a aittir ve Türk Fikir ve Sanat Eserleri Kanunu ile uluslararası telif hukuku kapsamında korunmaktadır.</p>
+      <ul>
+        <li>Platform içeriklerini izinsiz kopyalamak, dağıtmak veya ticari amaçla kullanmak yasaktır.</li>
+        <li>Platforma yüklediğiniz içerikler için yalnızca hizmet sunumu amacıyla sınırlı, devredilemez bir lisans vermiş olursunuz.</li>
+        <li>Başkasına ait telif hakkıyla korunan içeriği yüklemek yasaktır; bu tür içerikler bildirim üzerine kaldırılır.</li>
+      </ul>
+    </div>
+
+    <div class="doc-section" id="s8">
+      <h2>8. Sorumluluk Sınırlaması</h2>
+      <div class="warn-box">
+        <strong>Platform bir aracıdır.</strong> GEN-Z, satıcılar ile alıcılar arasındaki işlemlerde taraf değildir. Ürün kalitesi, teslimat süresi veya hizmet kalitesine ilişkin uyuşmazlıklarda birincil sorumluluk satıcıya aittir.
+      </div>
+      <ul>
+        <li>Platform, mücbir sebep (doğal afet, siber saldırı, altyapı kesintisi) nedeniyle oluşan aksaklıklardan sorumlu tutulamaz.</li>
+        <li>Üçüncü taraf bağlantılar üzerinden erişilen sitelerin içeriklerinden Platform sorumlu değildir.</li>
+        <li>Platform'un azami sorumluluğu, son 3 aylık dönemde gerçekleştirdiğiniz işlem tutarıyla sınırlıdır.</li>
+      </ul>
+    </div>
+
+    <div class="doc-section" id="s9">
+      <h2>9. Değişiklikler ve Fesih</h2>
+      <ul>
+        <li>Bu Şartlar önceden bildirim yapılarak değiştirilebilir. Değişiklikler yayımlandıktan sonra platforma devam eden erişim, değişiklikleri kabul ettiğiniz anlamına gelir.</li>
+        <li>Hesabınızı istediğiniz zaman profil ayarlarından silebilirsiniz.</li>
+        <li>Platform, kural ihlali veya şüpheli aktivite durumunda hesabı uyarısız askıya alabilir ya da silebilir.</li>
+        <li>Hesap silindiğinde kişisel verileriniz Gizlilik Politikası'nda belirtilen saklama süreleri sonunda imha edilir.</li>
+      </ul>
+    </div>
+
+    <div class="doc-section" id="s10">
+      <h2>10. Uygulanacak Hukuk ve Uyuşmazlık Çözümü</h2>
+      <p>Bu Şartlar Türk hukukuna tabidir. Uyuşmazlıklarda öncelikle Platform'un müşteri hizmetleri kanalı aracılığıyla çözüm aranmalıdır.</p>
+      <ul>
+        <li>Tüketici uyuşmazlıkları için ilgili İl Tüketici Hakem Heyetleri'ne başvurabilirsiniz.</li>
+        <li>Yargısal uyuşmazlıklarda İstanbul Mahkemeleri ve İcra Daireleri yetkilidir.</li>
+      </ul>
+
+      <div class="contact-box">
+        <p>Şartlarla ilgili sorularınız için:</p>
+        <a href="iletisim.html">📩 İletişim Formu</a>
+        <p style="margin-top:10px;font-size:12px;color:var(--text3);">Tüketici hakları hakkında bilgi için <strong>tüketici.gov.tr</strong> adresini ziyaret edebilirsiniz.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+  try { localStorage.setItem('genz-theme', isDark ? 'light' : 'dark'); } catch(e){}
+}
+try {
+  const t = localStorage.getItem('genz-theme');
+  if (t) { document.documentElement.setAttribute('data-theme', t); document.getElementById('themeBtn').textContent = t === 'dark' ? '🌙' : '☀️'; }
+} catch(e){}
+document.addEventListener('DOMContentLoaded', () => {
+  document.body.style.opacity = '0';
+  document.body.style.transition = 'opacity 0.3s';
+  requestAnimationFrame(() => { document.body.style.opacity = '1'; });
+});
+</script>
+</body>
+</html>

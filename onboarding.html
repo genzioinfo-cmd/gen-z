@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="GEN-Z — Profilini tamamla, başla!"/>
+<title>GEN-Z · Hoş Geldin!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --accent:#7B5CF0;--accent2:#F0C55C;--accent3:#5CF0B4;
+  --bg:#0a0a0f;--bg2:#13131a;--bg3:#1c1c28;
+  --surface:#22222f;--border:#2e2e3f;--text:#f0eeff;
+  --text2:#9b97b8;--text3:#5a5770;--radius:14px;--radius-sm:8px;
+  --font-display:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--font-body);background:var(--bg);color:var(--text);
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;overflow-x:hidden;padding:24px;
+}
+body::before{
+  content:'';position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 55% 50% at 15% 40%,rgba(123,92,240,.18) 0%,transparent 70%),
+    radial-gradient(ellipse 40% 55% at 85% 25%,rgba(92,240,180,.10) 0%,transparent 70%),
+    radial-gradient(ellipse 35% 40% at 60% 85%,rgba(240,197,92,.08) 0%,transparent 70%);
+  pointer-events:none;z-index:0;
+}
+
+/* ── KART ── */
+.ob-card{
+  position:relative;z-index:1;
+  width:100%;max-width:480px;
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:24px;padding:36px 32px;
+  box-shadow:0 24px 64px rgba(0,0,0,.4);
+}
+
+/* ── LOGO ── */
+.ob-logo{
+  font-family:var(--font-display);font-size:26px;font-weight:800;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  text-align:center;margin-bottom:28px;letter-spacing:-0.5px;
+}
+
+/* ── PROGRESS ── */
+.ob-progress{
+  display:flex;align-items:center;gap:0;margin-bottom:32px;
+}
+.ob-step{
+  flex:1;height:4px;border-radius:999px;
+  background:var(--border);transition:background .4s;
+}
+.ob-step.done{background:var(--accent3);}
+.ob-step.active{background:var(--accent);}
+.ob-step-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--border);
+  flex-shrink:0;transition:background .4s;margin:0 4px;
+}
+.ob-step-dot.done,.ob-step-dot.active{background:var(--accent);}
+
+/* ── STEP HEADER ── */
+.ob-step-label{
+  font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:8px;
+}
+.ob-title{
+  font-family:var(--font-display);font-size:22px;font-weight:800;
+  margin-bottom:6px;letter-spacing:-.5px;
+}
+.ob-sub{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:24px;}
+
+/* ── AVATAR ── */
+.ob-avatar-wrap{
+  display:flex;flex-direction:column;align-items:center;margin-bottom:20px;
+}
+.ob-avatar{
+  width:80px;height:80px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent3));
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;cursor:pointer;margin-bottom:8px;
+  border:3px solid var(--border);position:relative;
+  overflow:hidden;transition:border-color .2s;
+}
+.ob-avatar:hover{border-color:var(--accent);}
+.ob-avatar img{width:100%;height:100%;object-fit:cover;}
+.ob-avatar-hint{font-size:12px;color:var(--text3);}
+#avatarInput{display:none;}
+
+/* ── INPUTS ── */
+.ob-field{margin-bottom:16px;}
+.ob-label{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;display:block;}
+.ob-input{
+  width:100%;padding:12px 14px;border-radius:var(--radius-sm);
+  border:1px solid var(--border);background:var(--bg3);
+  color:var(--text);font-family:var(--font-body);font-size:14px;
+  transition:border-color .2s;outline:none;
+}
+.ob-input:focus{border-color:var(--accent);}
+.ob-input::placeholder{color:var(--text3);}
+.ob-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* ── İLGİ ALANLARI ── */
+.ob-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+.ob-tag{
+  padding:8px 14px;border-radius:999px;border:1px solid var(--border);
+  background:var(--bg3);color:var(--text2);font-size:13px;font-weight:600;
+  cursor:pointer;transition:all .2s;user-select:none;
+}
+.ob-tag:hover{border-color:var(--accent);color:var(--text);}
+.ob-tag.selected{
+  border-color:var(--accent);background:rgba(123,92,240,.18);
+  color:var(--accent);
+}
+.ob-tag-hint{font-size:11px;color:var(--text3);margin-top:8px;}
+
+/* ── BUTONLAR ── */
+.ob-actions{display:flex;gap:10px;margin-top:24px;}
+.ob-btn-skip{
+  flex:1;padding:13px;border-radius:var(--radius-sm);
+  border:1px solid var(--border);background:none;
+  color:var(--text2);font-family:var(--font-body);font-size:14px;
+  font-weight:600;cursor:pointer;transition:all .2s;
+}
+.ob-btn-skip:hover{border-color:var(--accent);color:var(--text);}
+.ob-btn-next{
+  flex:2;padding:13px;border-radius:var(--radius-sm);
+  border:none;background:var(--accent);
+  color:#fff;font-family:var(--font-body);font-size:14px;
+  font-weight:700;cursor:pointer;transition:all .2s;
+}
+.ob-btn-next:hover{background:#6a4de0;transform:translateY(-1px);}
+.ob-btn-next:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.ob-btn-finish{
+  width:100%;padding:14px;border-radius:var(--radius-sm);
+  border:none;background:linear-gradient(135deg,var(--accent3),var(--accent));
+  color:#000;font-family:var(--font-display);font-size:15px;
+  font-weight:800;cursor:pointer;transition:all .2s;margin-top:24px;
+  letter-spacing:-.3px;
+}
+.ob-btn-finish:hover{opacity:.9;transform:translateY(-2px);}
+.ob-btn-finish:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+/* ── SUCCESS ── */
+.ob-success{
+  text-align:center;padding:12px 0;
+}
+.ob-success-icon{font-size:56px;margin-bottom:16px;animation:pop .5s ease;}
+.ob-success-title{font-family:var(--font-display);font-size:26px;font-weight:800;margin-bottom:10px;}
+.ob-success-sub{font-size:14px;color:var(--text2);line-height:1.7;max-width:340px;margin:0 auto 24px;}
+@keyframes pop{0%{transform:scale(.5);opacity:0;}70%{transform:scale(1.15);}100%{transform:scale(1);opacity:1;}}
+
+/* ── STEP GEÇIŞ ANİMASYONU ── */
+.ob-panel{animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateX(16px);}to{opacity:1;transform:translateX(0);}}
+
+@media(max-width:420px){
+  .ob-card{padding:28px 20px;}
+  .ob-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="ob-card" id="obCard">
+  <div class="ob-logo">GEN-Z</div>
+
+  <!-- Progress bar -->
+  <div class="ob-progress" id="obProgress">
+    <div class="ob-step active" id="ps0"></div>
+    <div class="ob-step-dot" id="pd0"></div>
+    <div class="ob-step" id="ps1"></div>
+    <div class="ob-step-dot" id="pd1"></div>
+    <div class="ob-step" id="ps2"></div>
+  </div>
+
+  <!-- ADIM 1: Profil bilgileri -->
+  <div class="ob-panel" id="step1">
+    <div class="ob-step-label">Adım 1 / 3</div>
+    <div class="ob-title">Seni tanıyalım 👋</div>
+    <p class="ob-sub">Platformda nasıl görüneceğini belirle.</p>
+
+    <div class="ob-avatar-wrap">
+      <div class="ob-avatar" id="avatarPreview" onclick="document.getElementById('avatarInput').click()">
+        <span id="avatarEmoji">😎</span>
+      </div>
+      <span class="ob-avatar-hint">Fotoğraf seç (isteğe bağlı)</span>
+      <input type="file" id="avatarInput" accept="image/*" onchange="previewAvatar(this)"/>
+    </div>
+
+    <div class="ob-field">
+      <label class="ob-label">Kullanıcı Adı *</label>
+      <input class="ob-input" id="ob-username" type="text" placeholder="@kullanici_adi" maxlength="32" oninput="validateStep1()"/>
+    </div>
+    <div class="ob-field">
+      <label class="ob-label">Ad Soyad <span style="color:var(--text3)">(isteğe bağlı)</span></label>
+      <input class="ob-input" id="ob-displayname" type="text" placeholder="Adın Soyadın" maxlength="60"/>
+    </div>
+
+    <div class="ob-actions">
+      <button class="ob-btn-skip" onclick="skipToHome()">Şimdi Değil</button>
+      <button class="ob-btn-next" id="btn1" onclick="goStep(2)" disabled>Devam →</button>
+    </div>
+  </div>
+
+  <!-- ADIM 2: Konum & iletişim -->
+  <div class="ob-panel" id="step2" style="display:none;">
+    <div class="ob-step-label">Adım 2 / 3</div>
+    <div class="ob-title">Neredesin? 📍</div>
+    <p class="ob-sub">Yakınındaki satıcıları ve ustaları bulmana yardımcı olur.</p>
+
+    <div class="ob-row">
+      <div class="ob-field">
+        <label class="ob-label">Şehir <span style="color:var(--text3)">(isteğe bağlı)</span></label>
+        <input class="ob-input" id="ob-city" type="text" placeholder="İstanbul"/>
+      </div>
+      <div class="ob-field">
+        <label class="ob-label">İlçe <span style="color:var(--text3)">(isteğe bağlı)</span></label>
+        <input class="ob-input" id="ob-district" type="text" placeholder="Kadıköy"/>
+      </div>
+    </div>
+    <div class="ob-field">
+      <label class="ob-label">Telefon <span style="color:var(--text3)">(isteğe bağlı)</span></label>
+      <input class="ob-input" id="ob-phone" type="tel" placeholder="05xx xxx xx xx" maxlength="13" oninput="formatPhone(this)"/>
+    </div>
+
+    <div class="ob-actions">
+      <button class="ob-btn-skip" onclick="goStep(1)">← Geri</button>
+      <button class="ob-btn-next" onclick="goStep(3)">Devam →</button>
+    </div>
+  </div>
+
+  <!-- ADIM 3: İlgi alanları -->
+  <div class="ob-panel" id="step3" style="display:none;">
+    <div class="ob-step-label">Adım 3 / 3</div>
+    <div class="ob-title">Ne sever, ne ararsın? ✨</div>
+    <p class="ob-sub">İlgi alanlarını seç — sana daha iyi içerik gösterelim.</p>
+
+    <div class="ob-tags" id="obTags"></div>
+    <div class="ob-tag-hint" id="tagHint">En az 1 seç (istersen hepsini seçebilirsin)</div>
+
+    <div class="ob-actions">
+      <button class="ob-btn-skip" onclick="goStep(2)">← Geri</button>
+      <button class="ob-btn-next" id="btn3" onclick="finishOnboarding()" disabled>Tamamla 🎉</button>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="ob-panel" id="stepDone" style="display:none;">
+    <div class="ob-success">
+      <div class="ob-success-icon">🎉</div>
+      <div class="ob-success-title">Hazırsın!</div>
+      <p class="ob-success-sub">Profilin oluşturuldu. GEN-Z'nin tüm özelliklerini keşfetmeye başlayabilirsin.</p>
+      <button class="ob-btn-finish" id="btnFinish" onclick="goHome()">Platforma Gir ⚡</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  getFirestore, doc, getDoc, updateDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+  getStorage, ref as sRef, uploadBytes, getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ",
+  authDomain: "gen-z-io.firebaseapp.com",
+  projectId: "gen-z-io",
+  storageBucket: "gen-z-io.firebasestorage.app",
+  messagingSenderId: "97338868944",
+  appId: "1:97338868944:web:d7b429e416d8c505b14ad5"
+};
+
+const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+const storage = getStorage(app);
+
+let _user = null;
+let _avatarFile = null;
+
+// ── Auth kontrolü: giriş yoksa veya onboarding tamamsa → geri gönder
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { window.location.href = 'index.html'; return; }
+  _user = user;
+  try {
+    const snap = await getDoc(doc(db, 'kullanicilar', user.uid));
+    if (snap.exists() && snap.data().onboardingTamamlandi === true) {
+      window.location.href = 'gen-z.html';
+      return;
+    }
+  } catch(e) {}
+  // Mevcut displayName'i prefill et
+  const un = document.getElementById('ob-username');
+  if (un && user.displayName) un.value = user.displayName.replace('@','');
+  validateStep1();
+});
+
+// ── İlgi alanları listesi
+const INTERESTS = [
+  '👗 Moda','🎮 Oyun','🎵 Müzik','📱 Teknoloji','🍕 Yemek',
+  '⚽ Spor','🎨 Sanat','📚 Kitap','🌿 Doğa','✈️ Seyahat',
+  '🏠 Ev Dekor','🔧 Tamir & Kendin Yap','💼 Girişim','🐾 Hayvanlar','📸 Fotoğraf'
+];
+
+const tagsWrap = document.getElementById('obTags');
+INTERESTS.forEach(tag => {
+  const el = document.createElement('button');
+  el.className = 'ob-tag';
+  el.textContent = tag;
+  el.onclick = () => {
+    el.classList.toggle('selected');
+    validateStep3();
+  };
+  tagsWrap.appendChild(el);
+});
+
+// ── Validasyonlar
+window.validateStep1 = function() {
+  const val = (document.getElementById('ob-username')?.value || '').trim();
+  const btn = document.getElementById('btn1');
+  if (btn) btn.disabled = val.length < 2;
+};
+
+function validateStep3() {
+  const selected = document.querySelectorAll('#obTags .ob-tag.selected').length;
+  const btn = document.getElementById('btn3');
+  if (btn) btn.disabled = selected < 1;
+  document.getElementById('tagHint').style.display = selected > 0 ? 'none' : '';
+}
+
+// ── Progress güncelle
+function updateProgress(step) {
+  // step: 1, 2, 3
+  const steps = [0,1,2];
+  steps.forEach(i => {
+    const s = document.getElementById('ps'+i);
+    const d = document.getElementById('pd'+i);
+    if (!s) return;
+    const n = i + 1;
+    if (n < step)       { s.className = 'ob-step done'; if(d) d.className='ob-step-dot done'; }
+    else if (n === step){ s.className = 'ob-step active'; if(d) d.className='ob-step-dot active'; }
+    else                { s.className = 'ob-step'; if(d) d.className='ob-step-dot'; }
+  });
+}
+
+// ── Adım geçiş
+window.goStep = function(n) {
+  ['step1','step2','step3','stepDone'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  const target = document.getElementById('step'+n) || document.getElementById('stepDone');
+  if (target) { target.style.display = ''; target.className = 'ob-panel'; }
+  if (n <= 3) updateProgress(n);
+};
+
+// ── Avatar önizleme
+window.previewAvatar = function(input) {
+  const file = input.files?.[0];
+  if (!file) return;
+  _avatarFile = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const prev = document.getElementById('avatarPreview');
+    document.getElementById('avatarEmoji').style.display = 'none';
+    let img = prev.querySelector('img');
+    if (!img) { img = document.createElement('img'); prev.appendChild(img); }
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+};
+
+// ── Telefon formatı
+window.formatPhone = function(el) {
+  let v = el.value.replace(/\D/g,'').substring(0,11);
+  if (v.length > 4 && v.length <= 7) v = v.replace(/(\d{4})(\d+)/,'$1 $2');
+  else if (v.length > 7) v = v.replace(/(\d{4})(\d{3})(\d+)/,'$1 $2 $3');
+  el.value = v;
+};
+
+// ── Onboarding tamamla
+window.finishOnboarding = async function() {
+  if (!_user) return;
+  const btn = document.getElementById('btn3');
+  if (btn) { btn.disabled = true; btn.textContent = 'Kaydediliyor...'; }
+
+  try {
+    let photoURL = _user.photoURL || null;
+
+    // Avatar yükle (varsa)
+    if (_avatarFile) {
+      try {
+        const storageRef = sRef(storage, `avatarlar/${_user.uid}`);
+        await uploadBytes(storageRef, _avatarFile);
+        photoURL = await getDownloadURL(storageRef);
+      } catch(e) { console.warn('Avatar yüklenemedi:', e); }
+    }
+
+    const username = (document.getElementById('ob-username')?.value || '').trim();
+    const displayname = (document.getElementById('ob-displayname')?.value || '').trim();
+    const city = (document.getElementById('ob-city')?.value || '').trim();
+    const district = (document.getElementById('ob-district')?.value || '').trim();
+    const phone = (document.getElementById('ob-phone')?.value || '').trim();
+    const interests = [...document.querySelectorAll('#obTags .ob-tag.selected')].map(el => el.textContent);
+
+    // Firebase Auth profile güncelle
+    await updateProfile(_user, {
+      displayName: username || _user.displayName,
+      ...(photoURL ? { photoURL } : {})
+    });
+
+    // Firestore güncelle
+    const payload = {
+      username,
+      onboardingTamamlandi: true,
+      guncellendi: serverTimestamp(),
+    };
+    if (displayname) payload.displayName = displayname;
+    if (city)        payload.sehir = city;
+    if (district)    payload.ilce = district;
+    if (phone)       payload.telefon = phone;
+    if (photoURL)    payload.photoURL = photoURL;
+    if (interests.length) payload.ilgiAlanlari = interests;
+
+    await updateDoc(doc(db, 'kullanicilar', _user.uid), payload);
+
+    // localStorage güncelle
+    try {
+      const lsUser = JSON.parse(localStorage.getItem('genz-user') || '{}');
+      lsUser.username = '@' + username;
+      if (photoURL) lsUser.photoURL = photoURL;
+      localStorage.setItem('genz-user', JSON.stringify(lsUser));
+      localStorage.setItem('genz-sehir', city);
+      if (interests.length) localStorage.setItem('genz-ilgiler', JSON.stringify(interests));
+    } catch(e) {}
+
+    goStep('Done');
+  } catch(e) {
+    console.error('Onboarding kayıt hatası:', e);
+    if (btn) { btn.disabled = false; btn.textContent = 'Tamamla 🎉'; }
+  }
+};
+
+// ── Ana sayfaya git
+window.goHome = function() {
+  document.getElementById('btnFinish').disabled = true;
+  window.location.href = 'gen-z.html';
+};
+
+// ── Atla → onboarding'i tamamlandı say ama boş kaydet
+window.skipToHome = async function() {
+  if (!_user) { window.location.href = 'gen-z.html'; return; }
+  try {
+    await updateDoc(doc(db, 'kullanicilar', _user.uid), {
+      onboardingTamamlandi: true,
+      guncellendi: serverTimestamp()
+    });
+  } catch(e) {}
+  window.location.href = 'gen-z.html';
+};
+</script>
+</body>
+</html>

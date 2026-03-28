@@ -467,6 +467,19 @@ nav, .modal-overlay-auth, .modal-box, .toast {
   display: none;
 }
 
+
+.urun-image-wrap { display: flex; flex-direction: column; }
+.urun-image { position: relative; }
+.urun-thumbnails::-webkit-scrollbar { height: 4px; }
+.urun-thumbnails::-webkit-scrollbar-track { background: var(--bg2); border-radius: 4px; }
+.urun-thumbnails::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+.thumb-img {
+  width: 64px; height: 64px; object-fit: cover;
+  border-radius: var(--radius-sm); cursor: pointer;
+  border: 2px solid transparent; flex-shrink: 0;
+  transition: border-color 0.2s;
+}
+.thumb-img.active { border-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -479,7 +492,8 @@ nav, .modal-overlay-auth, .modal-box, .toast {
     <li><a href="ustam.html" data-tr="Ustam" data-en="Ustam">Ustam</a></li>
     <li><a href="gen-z.html" class="active" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a></li>
     <li><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a></li>
-    <li><a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a></li>
+    <li><a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a><a href="hakkimizda.html">Hakkımızda</a></li>
+    <li><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a></li>
     <li><a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a></li>
     <li><a href="birlikte-buyuyelim.html" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a></li>
     <li><a href="elden-ele.html" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a></li>
@@ -504,7 +518,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
   <a href="ustam.html" data-tr="Ustam" data-en="Ustam">Ustam</a>
   <a href="gen-z.html" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a>
   <a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a>
-  <a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a>
+  <a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a><a href="hakkimizda.html">Hakkımızda</a>
   <a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a>
   <a href="birlikte-buyuyelim.html" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a>
   <a href="elden-ele.html" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a>
@@ -514,9 +528,13 @@ nav, .modal-overlay-auth, .modal-box, .toast {
   <div class="urun-inner">
     <div class="breadcrumb" id="breadcrumb"></div>
     <div class="urun-grid">
-      <div class="urun-image" id="urunImage">
-        <div class="urun-image-gradient" id="urunGrad"></div>
-        <span class="urun-image-emoji" id="urunEmoji">📦</span>
+      <div class="urun-image-wrap">
+        <div class="urun-image" id="urunImage">
+          <div class="urun-image-gradient" id="urunGrad"></div>
+          <span class="urun-image-emoji" id="urunEmoji">📦</span>
+          <img id="urunMainImg" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:var(--radius);position:absolute;top:0;left:0;"/>
+        </div>
+        <div class="urun-thumbnails" id="urunThumbnails" style="display:none;flex-direction:row;gap:8px;margin-top:10px;overflow-x:auto;padding-bottom:4px;"></div>
       </div>
       <div class="urun-details">
         <div class="urun-name" id="urunName">Yükleniyor...</div>
@@ -543,6 +561,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
 
         <div class="urun-actions">
           <button class="btn-buy-lg" id="buyBtn" onclick="sepeteEkleDetay()">🛒 Sepete Ekle</button>
+          <button class="btn-buy-lg" id="hemenAlBtn" onclick="hemenAlDetay()" style="background:linear-gradient(135deg,#5CF0B4,#7B5CF0);color:#000;font-weight:800;">⚡ Hemen Al</button>
           <button class="btn-share-lg" id="favBtn" onclick="favoriToggleDetay()" style="min-width:44px">🤍</button>
           <button class="btn-share-lg" onclick="if(navigator.clipboard)navigator.clipboard.writeText(window.location.href);showToast('Bağlantı kopyalandı ↗')" title="Paylaş">↗</button>
         </div>
@@ -614,6 +633,12 @@ nav, .modal-overlay-auth, .modal-box, .toast {
       <div class="form-group">
         <label class="form-label">Şifre</label>
         <input class="form-input" id="signup-pass" type="password" placeholder="En az 8 karakter"/>
+      </div>
+      <div class="form-group" style="margin-bottom:4px;">
+        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px;color:var(--text2);line-height:1.5;">
+          <input type="checkbox" id="signup-kvkk" style="margin-top:2px;accent-color:var(--accent);flex-shrink:0;"/>
+          <span><a href="gizlilik.html" target="_blank" style="color:var(--accent);text-decoration:none;">Gizlilik Politikası</a>'nı ve <a href="kullanim-sartlari.html" target="_blank" style="color:var(--accent);text-decoration:none;">Kullanım Şartları</a>'nı okudum, kabul ediyorum.</span>
+        </label>
       </div>
       <button class="btn-submit" onclick="doSignUp()">Kayıt Ol</button>
     </div>
@@ -934,6 +959,20 @@ function renderStars(rating) {
 /* ── SEPET & FAVORİ YARDIMCILARI ── */
 let _detayUrun = null;
 
+function hemenAlDetay() {
+  if (!_detayUrun) return;
+  // Önce ürünü sepete ekle (tek adet, qty:1)
+  const KEY = 'genz-sepet';
+  try {
+    // Sadece bu ürün kalacak şekilde "hemen al" sepeti oluştur
+    const uid = String(_detayUrun.id);
+    const hemenAlSepet = [{ id: uid, name: _detayUrun.name, price: _detayUrun.price, emoji: _detayUrun.emoji, src: _detayUrun.seller?.name || '', qty: 1 }];
+    localStorage.setItem('genz-hemen-al', JSON.stringify(hemenAlSepet));
+    // siparis.html'e ?hemenAl=1 parametresiyle yönlendir
+    window.location.href = 'siparis.html?hemenAl=1';
+  } catch(e) { console.warn('Hemen Al hatası:', e); }
+}
+
 function sepeteEkleDetay() {
   if (!_detayUrun) return;
   const KEY = 'genz-sepet';
@@ -971,7 +1010,53 @@ function favoriToggleDetay() {
 
 /* ── PAGE SCRIPT ── */
 initThemeLang();
-document.addEventListener('DOMContentLoaded', () => {
+
+async function fetchUrunFirebase(id) {
+  try {
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const firebaseConfig = {
+      apiKey: 'AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ',
+      authDomain: 'gen-z-io.firebaseapp.com', projectId: 'gen-z-io',
+      storageBucket: 'gen-z-io.firebasestorage.app',
+      messagingSenderId: '97338868944',
+      appId: '1:97338868944:web:d7b429e416d8c505b14ad5'
+    };
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const snap = await getDoc(doc(db, 'magaza_urunler', id));
+    if (!snap.exists()) return null;
+    const u = { id: snap.id, ...snap.data() };
+    const GRAD_PAIRS = [
+      ['rgba(240,197,92,0.18)','rgba(123,92,240,0.1)'],
+      ['rgba(92,240,180,0.15)','rgba(123,92,240,0.1)'],
+      ['rgba(240,92,130,0.15)','rgba(92,140,240,0.1)'],
+      ['rgba(92,180,240,0.15)','rgba(240,140,92,0.1)'],
+      ['rgba(180,92,240,0.15)','rgba(92,240,197,0.1)'],
+    ];
+    const CAT_EMOJI = { muzik:'🎵', tasarim:'🎨', yazilim:'💻', video:'📹', fotograf:'📷', yazi:'📝', moda:'👗', oyun:'🎮' };
+    const grad = GRAD_PAIRS[Math.abs(id.split('').reduce((a,c)=>a+c.charCodeAt(0),0)) % GRAD_PAIRS.length];
+    const initials = (u.magazaAd||'M').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    return {
+      id: u.id,
+      name: u.ad || '', price: u.kdvDahilFiyat || u.fiyat || 0,
+      oldPrice: u.eskiFiyat || null, rating: u.rating || 0, reviews: u.reviewCount || 0,
+      badge: u.badge || null, tags: u.etiketler || [], category: u.kategori || 'diger',
+      desc: u.aciklama || '', emoji: CAT_EMOJI[u.kategori] || '📦',
+      resim: u.resimler?.[0] || null, resimler: u.resimler || [],
+      gradA: grad[0], gradB: grad[1],
+      seller: {
+        id: u.magazaId || u.id, name: u.magazaAd || 'Satıcı', initials,
+        sales: u.satisAdedi || 0,
+        joined: u.ts ? new Date(u.ts.seconds*1000).getFullYear().toString() : '2025',
+        rating: u.magazaRating || 0, ratingCount: u.magazaRatingCount || 0,
+        desc: u.magazaAciklama || '', comments: []
+      }
+    };
+  } catch(e) { console.warn('Firebase urun fetch hatasi:', e); return null; }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
   document.querySelectorAll('.mobile-menu a').forEach(a => {
     a.addEventListener('click', () => {
       const mm = document.getElementById('mobileMenu');
@@ -985,8 +1070,12 @@ document.addEventListener('DOMContentLoaded', () => {
   requestAnimationFrame(() => { document.body.style.opacity = '1'; });
 
   const id = getParam('id');
-  const p = getProductById(id);
-  if (!p) { document.querySelector('.urun-inner').innerHTML = '<div class="empty-state"><div class="empty-icon">😕</div><div class="empty-text">Ürün bulunamadı</div><div class="empty-sub"><a href="magaza.html" style="color:var(--accent)">← Mağazaya dön</a></div></div>'; return; }
+  let p = getProductById(id); // DEMO fallback (integer id)
+  if (!p && id) {
+    // Firebase'den string id ile çek
+    p = await fetchUrunFirebase(id);
+  }
+  if (!p) { document.querySelector('.urun-inner').innerHTML = '<div class="empty-state"><div class="empty-icon">😕</div><div class="empty-text">Ürün bulunamadı</div><div class="empty-sub"><a href="gen-z.html" style="color:var(--accent)">← Genç-Z\'ye dön</a></div></div>'; return; }
 
   _detayUrun = p;
   document.title = 'GEN-Z · ' + p.name;
@@ -999,8 +1088,32 @@ document.addEventListener('DOMContentLoaded', () => {
     _buyBtn.textContent = '✓ Sepette'; _buyBtn.style.background = 'var(--accent3)'; _buyBtn.style.color = '#000';
   }
   document.getElementById('breadcrumb').innerHTML = '<a href="magaza.html">Mağaza</a><span class="sep">›</span><span class="current">' + p.name + '</span>';
-  document.getElementById('urunEmoji').textContent = p.emoji;
   document.getElementById('urunGrad').style.background = 'linear-gradient(135deg, ' + p.gradA + ', ' + p.gradB + ')';
+  const _mainImg = document.getElementById('urunMainImg');
+  const _thumbCont = document.getElementById('urunThumbnails');
+  const _emojiEl = document.getElementById('urunEmoji');
+  if (p.resimler && p.resimler.length > 0) {
+    _mainImg.src = p.resimler[0]; _mainImg.style.display = 'block'; _emojiEl.style.display = 'none';
+    document.getElementById('urunGrad').style.opacity = '0.3';
+    if (p.resimler.length > 1) {
+      _thumbCont.style.display = 'flex';
+      p.resimler.forEach((src, i) => {
+        const img = document.createElement('img');
+        img.src = src; img.alt = ''; img.className = 'thumb-img' + (i === 0 ? ' active' : '');
+        img.addEventListener('click', () => {
+          _mainImg.src = src;
+          _thumbCont.querySelectorAll('.thumb-img').forEach(t => t.classList.remove('active'));
+          img.classList.add('active');
+        });
+        _thumbCont.appendChild(img);
+      });
+    }
+  } else if (p.resim) {
+    _mainImg.src = p.resim; _mainImg.style.display = 'block'; _emojiEl.style.display = 'none';
+    document.getElementById('urunGrad').style.opacity = '0.3';
+  } else {
+    _emojiEl.textContent = p.emoji;
+  }
   document.getElementById('urunName').textContent = p.name;
   document.getElementById('urunStars').textContent = renderStars(p.rating);
   document.getElementById('urunRatingVal').textContent = p.rating;
@@ -1078,5 +1191,19 @@ document.addEventListener('DOMContentLoaded', () => {
   } catch(e) {}
 })();
 </script>
+
+<!-- FOOTER -->
+<footer style="position:relative;z-index:1;border-top:1px solid var(--border);padding:24px;text-align:center;margin-top:auto;">
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px;font-size:12px;color:var(--text3);">
+    <a href="hakkimizda.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Hakkımızda</a>
+    <span>·</span>
+    <a href="gizlilik.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Gizlilik Politikası</a>
+    <span>·</span>
+    <a href="kullanim-sartlari.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Kullanım Şartları</a>
+    <span>·</span>
+    <a href="iletisim.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">İletişim</a>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--text3);opacity:.5;">© 2025 GEN-Z · Tüm hakları saklıdır.</div>
+</footer>
 </body>
 </html>

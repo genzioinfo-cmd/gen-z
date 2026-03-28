@@ -83,14 +83,22 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
+/* ── Giriş sonrası yenile ── */
+function girisYaptiktan(user, mesaj) {
+  if (typeof showToast === 'function') {
+    showToast(mesaj);
+    setTimeout(() => window.location.reload(), 900);
+  } else {
+    window.location.reload();
+  }
+}
+
 /* ── Google Giriş ── */
 window.googleSignIn = async function() {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     await kullaniciyiKaydet(result.user);
-    uiGuncelle(result.user);
-    if (typeof closeAuth === 'function') closeAuth();
-    if (typeof showToast === 'function') showToast('Hoş geldin, ' + (result.user.displayName || result.user.email) + ' 👋');
+    girisYaptiktan(result.user, 'Hoş geldin, ' + (result.user.displayName || result.user.email) + ' 👋');
   } catch(e) {
     if (e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') return;
     console.error('Google giriş hatası:', e);
@@ -106,8 +114,7 @@ window.doSignIn = async function() {
   try {
     const result = await signInWithEmailAndPassword(auth, email, pass);
     await kullaniciyiKaydet(result.user);
-    if (typeof closeAuth === 'function') closeAuth();
-    if (typeof showToast === 'function') showToast('Hoş geldin 👋');
+    girisYaptiktan(result.user, 'Hoş geldin 👋');
   } catch(e) {
     const msg = e.code === 'auth/invalid-credential' ? 'E-posta veya şifre hatalı ⚠️'
               : e.code === 'auth/too-many-requests'   ? 'Çok fazla deneme. Biraz bekle ⚠️'
@@ -129,8 +136,7 @@ window.doSignUp = async function() {
     const result = await createUserWithEmailAndPassword(auth, email, pass);
     await updateProfile(result.user, { displayName: username });
     await kullaniciyiKaydet(result.user, { username, rol: seciliRol || 'gencz' });
-    if (typeof closeAuth === 'function') closeAuth();
-    if (typeof showToast === 'function') showToast('Hesabın oluşturuldu, hoş geldin 🎉');
+    girisYaptiktan(result.user, 'Hesabın oluşturuldu, hoş geldin 🎉');
   } catch(e) {
     const msg = e.code === 'auth/email-already-in-use' ? 'Bu e-posta zaten kayıtlı ⚠️'
               : e.code === 'auth/weak-password'         ? 'Şifre çok zayıf ⚠️'

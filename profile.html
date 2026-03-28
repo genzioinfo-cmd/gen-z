@@ -845,6 +845,19 @@ async function loadTab(tab) {
     const html = await res.text();
     content.innerHTML = html;
 
+    /* İnjected script'leri çalıştır — innerHTML script'leri execute etmez */
+    content.querySelectorAll('script').forEach(oldScript => {
+      const newScript = document.createElement('script');
+      // type="module" ise koru, değilse normal
+      if (oldScript.type) newScript.type = oldScript.type;
+      if (oldScript.src) {
+        newScript.src = oldScript.src;
+      } else {
+        newScript.textContent = oldScript.textContent;
+      }
+      oldScript.parentNode.replaceChild(newScript, oldScript);
+    });
+
     /* info sekmesinde kullanıcı bilgilerini doldur */
     if (tab === 'info' && currentUser) {
       const el = document.getElementById('info-username');

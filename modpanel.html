@@ -863,6 +863,16 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
           </div>
           <div style="padding:1.4rem;display:flex;flex-direction:column;gap:1rem;" id="stokModalBody">
 
+            <!-- Kilit Uyarısı (ücretsiz kullanıcılar için) -->
+            <div id="stokModalKilitUyari" style="display:none;align-items:center;gap:.8rem;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:.9rem 1.1rem;margin-bottom:.5rem;">
+              <span style="font-size:20px;">🔒</span>
+              <div>
+                <div style="font-size:.65rem;font-weight:700;color:var(--gold);">Gelişmiş Stok Yönetimi gerekiyor</div>
+                <div style="font-size:.6rem;color:var(--t2);margin-top:.2rem;">Raf konumu, barkod ve QR kod için ₺600 paketini satın al.</div>
+              </div>
+              <button onclick="stokSatinAl()" style="margin-left:auto;padding:.4rem 1rem;background:linear-gradient(135deg,#c9a84c,#d4a83e);color:#000;border:none;border-radius:4px;font-size:.6rem;font-weight:700;cursor:pointer;white-space:nowrap;">Satın Al ✦</button>
+            </div>
+
             <!-- Raf & Konum -->
             <div class="sm-blok">
               <div class="sm-blok-baslik">📍 Depo Konumu</div>
@@ -916,8 +926,10 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
                 </div>
               </div>
               <div style="display:flex;gap:.4rem;margin-top:.7rem;flex-wrap:wrap;">
-                <button onclick="qrGoster()" style="padding:.5rem 1.2rem;background:rgba(123,92,240,.1);border:1px solid rgba(123,92,240,.25);border-radius:4px;color:#a78bfa;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">📱 QR Kod Oluştur</button>
-                <button onclick="barkodGoster()" style="padding:.5rem 1.2rem;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;color:var(--t2);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">🖨️ Barkod Yazdır</button>
+                <div class="qr-btn-grup" style="display:flex;gap:.4rem;flex-wrap:wrap;">
+                  <button onclick="qrGoster()" style="padding:.5rem 1.2rem;background:rgba(123,92,240,.1);border:1px solid rgba(123,92,240,.25);border-radius:4px;color:#a78bfa;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">📱 QR Kod Oluştur</button>
+                  <button onclick="barkodGoster()" style="padding:.5rem 1.2rem;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;color:var(--t2);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">🖨️ Barkod Yazdır</button>
+                </div>
               </div>
               <div id="qrBarkodAlani" style="display:none;margin-top:.8rem;padding:1rem;background:#fff;border-radius:8px;text-align:center;">
                 <canvas id="qrCanvas" style="max-width:160px;"></canvas>

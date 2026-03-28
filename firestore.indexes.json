@@ -1,0 +1,14 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "magaza_urunler",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "durum", "order": "ASCENDING" },
+        { "fieldPath": "platform", "order": "ASCENDING" },
+        { "fieldPath": "ts", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

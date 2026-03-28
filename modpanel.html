@@ -777,7 +777,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
               <th>Stok</th><th>Eşik</th><th>KDV Hariç</th><th>Stok Değeri</th>
               <th>Durum</th><th>İşlem</th>
             </tr></thead>
-            <tbody id="stokGovde"><tr><td colspan="10" style="text-align:center;padding:2rem;color:var(--t2);font-style:italic;">Yükleniyor…</td></tr></tbody>
+            <tbody id="stokGovde"></tbody>
           </table>
         </div>
       </div>
@@ -984,9 +984,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
               <button class="f-btn" onclick="iadeFiltreSec('reddedildi',this)" style="color:#ff6b6b;">❌ Reddedildi</button>
             </div>
           </div>
-          <div style="overflow-x:auto;" id="iadeTablo">
-            <div style="text-align:center;padding:2rem;color:var(--t2);font-style:italic;">Yükleniyor…</div>
-          </div>
+          <div style="overflow-x:auto;" id="iadeTablo"></div>
         </div>
       </div>
 
@@ -1046,7 +1044,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
               <button class="f-btn" onclick="gzFiltre('reddedildi',this)">❌ Reddedildi</button>
             </div>
           </div>
-          <div id="gzIcerikListesi" style="margin-top:1rem;"><div style="text-align:center;padding:2rem;color:var(--t2);font-style:italic;">Yükleniyor…</div></div>
+          <div id="gzIcerikListesi" style="margin-top:1rem;"></div>
         </div>
       </div>
 
@@ -1083,7 +1081,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
           <div class="oz-k"><div class="oz-n" style="color:var(--orange)" id="ustaAbonelikBitisTarih">—</div><div class="oz-l">Bitiş Tarihi</div></div>
         </div>
         <div style="display:flex;gap:1rem;flex-wrap:wrap;padding:1rem 0;">
-          <a href="modpanel.html" style="padding:.75rem 2rem;background:linear-gradient(135deg,#5a3eb0,#7B5CF0);color:#fff;font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.26em;text-transform:uppercase;border-radius:3px;text-decoration:none;font-weight:700;">+ Yeni İlan Ver</a>
+          <button onclick="ilanModalAc()" style="padding:.75rem 2rem;background:linear-gradient(135deg,#5a3eb0,#7B5CF0);color:#fff;font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.26em;text-transform:uppercase;border-radius:3px;font-weight:700;border:none;cursor:pointer;">+ Yeni İlan Ver</button>
           <a href="ustam-profil.html" style="padding:.72rem 2rem;background:transparent;border:1px solid rgba(123,92,240,.3);color:#a78bfa;font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.26em;text-transform:uppercase;border-radius:3px;text-decoration:none;">Profilimi Gör</a>
         </div>
       </div>
@@ -1111,7 +1109,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
         <div class="twrap">
           <div class="tbaslik" style="display:flex;justify-content:space-between;align-items:center;">
             <h3>Tüm İlanlar</h3>
-            <a href="modpanel.html" style="padding:.5rem 1.2rem;background:linear-gradient(135deg,#5a3eb0,#7B5CF0);color:#fff;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;border-radius:3px;text-decoration:none;font-weight:700;">+ Yeni İlan</a>
+            <button onclick="ilanModalAc()" style="padding:.5rem 1.2rem;background:linear-gradient(135deg,#5a3eb0,#7B5CF0);color:#fff;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;border-radius:3px;font-weight:700;border:none;cursor:pointer;">+ Yeni İlan</button>
           </div>
           <div id="ustaIlanListesi" style="margin-top:1rem;"></div>
         </div>
@@ -1453,10 +1451,18 @@ async function ustaYukle(){
     // İlanları çek
     const ilanSnap = await getDocs(query(
       collection(db,'ustam_ilanlar'),
-      where('saticiUid','==',_aktifUid),
-      where('durum','==','onaylandi')
+      where('ustaUid','==',_aktifUid),
+      orderBy('ts','desc')
     )).catch(()=>null);
-    const ilanlar = ilanSnap ? ilanSnap.docs.map(d=>({id:d.id,...d.data()})) : [];
+    // saticiUid ile de dene (eski kayıtlar için)
+    let ilanlar = ilanSnap ? ilanSnap.docs.map(d=>({id:d.id,...d.data()})) : [];
+    if(!ilanlar.length){
+      const ilanSnap2 = await getDocs(query(
+        collection(db,'ustam_ilanlar'),
+        where('saticiUid','==',_aktifUid)
+      )).catch(()=>null);
+      ilanlar = ilanSnap2 ? ilanSnap2.docs.map(d=>({id:d.id,...d.data()})) : [];
+    }
 
     // Özet güncelle
     document.getElementById('ustaIlanSay').textContent = ilanlar.length;
@@ -1499,17 +1505,17 @@ async function ustaYukle(){
     const liste = document.getElementById('ustaIlanListesi');
     if(liste){
       if(!ilanlar.length){
-        liste.innerHTML='<div style="text-align:center;padding:3rem;color:rgba(240,235,224,.3);font-family:Cormorant Garamond,serif;font-style:italic;">Henüz ilan yok</div>';
+        liste.innerHTML='<div style="text-align:center;padding:3rem;color:rgba(240,235,224,.3);font-family:Cormorant Garamond,serif;font-style:italic;">Henüz ilan yok ✦<br><small style="font-size:.6rem;margin-top:.4rem;display:block;">Yeni İlan butonu ile ilan ekleyin, admin onayından sonra yayınlanır.</small></div>';
       } else {
+        const durumRenk = (d) => d==='onaylandi'?'var(--green)':d==='reddedildi'?'var(--red)':'var(--gold)';
+        const durumTxt  = (d) => d==='onaylandi'?'✅ Onaylı':d==='reddedildi'?'❌ Reddedildi':'⏳ Onay Bekliyor';
         liste.innerHTML = ilanlar.map(il=>`
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem;background:rgba(255,255,255,.022);border:1px solid rgba(201,168,76,.12);border-radius:6px;margin-bottom:.7rem;gap:1rem;">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem;background:rgba(255,255,255,.022);border:1px solid rgba(201,168,76,.12);border-radius:6px;margin-bottom:.7rem;gap:1rem;flex-wrap:wrap;">
             <div style="flex:1;min-width:0;">
-              <div style="font-family:'Syne',sans-serif;font-size:1rem;color:#f0ebe0;margin-bottom:.2rem;">${il.ad||'—'}</div>
-              <div style="font-size:.58rem;color:rgba(201,168,76,.6);letter-spacing:.1em;">${il.kategori||'—'} · ₺${(il.fiyat||0).toLocaleString('tr-TR')} / ${il.fiyatTip||'iş'}</div>
+              <div style="font-family:'Syne',sans-serif;font-size:.95rem;color:#f0ebe0;margin-bottom:.2rem;">${il.ad||il.hizmet||'—'}</div>
+              <div style="font-size:.58rem;color:rgba(201,168,76,.6);letter-spacing:.1em;">${il.hizmet||il.kategori||'—'} · ${il.fiyat?'₺'+(il.fiyat).toLocaleString('tr-TR')+' / '+(il.fiyatTip||'iş'):''} · ${il.sehir||''}</div>
             </div>
-            <div style="display:flex;gap:.5rem;">
-              <a href="magaza-urun.html?id=${il.id}" style="padding:.4rem .9rem;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.22);color:#a78bfa;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;border-radius:3px;text-decoration:none;white-space:nowrap;">Görüntüle</a>
-            </div>
+            <span style="font-size:.58rem;font-weight:700;color:${durumRenk(il.durum||'bekliyor')};">${durumTxt(il.durum||'bekliyor')}</span>
           </div>
         `).join('');
       }
@@ -3402,6 +3408,7 @@ window.git=function(id,btn){
   document.getElementById('sayfa-'+id).classList.add('on');
   btn.classList.add('on');
   if(id==='usta-randevular') randevulariYukle();
+  if(id==='usta-ilanlar'||id==='usta-ozet') ustaYukle();
   if(id==='stok') window.stokModulYukle && window.stokModulYukle();
   if(id==='iadeler') window._iadeTalepleriYukle && window._iadeTalepleriYukle();
   if(id==='gencz-icerik' || id==='gencz-ozet') genczYukle && genczYukle();
@@ -3568,17 +3575,16 @@ window.katSec = function(el){
 };
 
 </script>
+<script type="module" src="firebase-config.js"></script>
 <script type="module">
 import { iadeTalepleriYukle } from './iade.js';
 window._iadeTalepleriYukle = async function() {
   if (window._magaza?.id) await iadeTalepleriYukle(window._magaza.id);
 };
-// magazaYukle tamamlandığında iade badge güncelle
-const _origPanelAc = window.panelAc;
 </script>
-<script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
 <script type="module" src="modpanel-stok.js"></script>
+<script type="module" src="modpanel-ilan-gencz.js"></script>
 <script src="cookie-consent.js"></script>
 
 <!-- CHAT MODAL -->
@@ -3673,7 +3679,6 @@ window.chatGonder = async function() {
   finally { document.getElementById('chatSendBtn').disabled = false; }
 };
 </script>
-<script type="module" src="modpanel-ilan-gencz.js"></script>
 <div class="chat-overlay" id="ilanModal" onclick="ilanModalKapat(event)">
   <div class="chat-box" style="max-width:600px;max-height:92vh;overflow-y:auto;">
     <div class="chat-head">
@@ -3684,8 +3689,7 @@ window.chatGonder = async function() {
       <button class="chat-close" onclick="ilanModalKapat()">✕</button>
     </div>
     <div style="padding:1.4rem;" id="ilanModalIcerik">
-      <div style="text-align:center;color:var(--t2);padding:2rem;font-style:italic;">Yükleniyor…</div>
-    </div>
+      </div>
   </div>
 </div>
 

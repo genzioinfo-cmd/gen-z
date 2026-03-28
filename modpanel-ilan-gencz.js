@@ -7,7 +7,19 @@ import { getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.
 import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const db = getFirestore(getApp());
+let db;
+try {
+  db = getFirestore(getApp());
+} catch(e) {
+  // App henüz init edilmemişse bekle
+  const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+  const app = initializeApp({
+    apiKey:"AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ",
+    authDomain:"gen-z-io.firebaseapp.com",
+    projectId:"gen-z-io"
+  });
+  db = getFirestore(app);
+}
 
 // CSS: gz-kat-kart (modülden inject et)
 (function() {

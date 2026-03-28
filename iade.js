@@ -9,12 +9,18 @@
  *         Son değişiklik: Mayıs 2025
  */
 
+import { getApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import {
   getFirestore, collection, doc, addDoc, updateDoc, getDocs,
   getDoc, query, where, orderBy, serverTimestamp, Timestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-const db = getFirestore();
+let db;
+try {
+  db = getFirestore(getApp());
+} catch(e) {
+  db = getFirestore();
+}
 
 // ══════════════════════════════════════════════════════════════════════════
 //  İADE SÜRESİ & KURAL VERİTABANI — Türk Tüketici Hukuku 2025

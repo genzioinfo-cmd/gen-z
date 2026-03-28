@@ -182,7 +182,7 @@ window.stokHizliDeg = async function(id, delta) {
     if (window._urunler) { const i = window._urunler.findIndex(x=>x.id===id); if(i>-1) window._urunler[i].stok = yeniStok; }
     stokOzetGuncelle();
     stokRenderTablo();
-  } catch(e) { if(typeof toast==='function') toast('Güncelleme hatası ⚠️','err'); }
+  } catch(e) { if(typeof toast==='function') (typeof toast==='function'?toast:window.toast||console.log)('Güncelleme hatası ⚠️','err'); }
 };
 
 window.stokFiltreFn = function (tip, btn) {
@@ -197,7 +197,7 @@ window.stokYenile = async function () { _stokListesi = []; await window.stokModu
 
 // ── CSV (sadece premium) ─────────────────────────────────────────────────
 window.stokCSV = function () {
-  if (!_stokSatinAldi) { toast('Bu özellik Gelişmiş Stok paketi gerektirir (₺600).','err'); return; }
+  if (!_stokSatinAldi) { (typeof toast==='function'?toast:window.toast||console.log)('Bu özellik Gelişmiş Stok paketi gerektirir (₺600).','err'); return; }
   const baslik = ['Ürün Adı','SKU','Barkod','Raf Bölge','Raf No','Raf Göz','Stok','Eşik','Fiyat (₺)','Stok Değeri (₺)','Durum','Depo Notu'];
   const satirlar = _stokListesi.map(u => {
     const stok = u.stok??0; const esik = u.stokEsik??5;
@@ -284,13 +284,13 @@ window.rafOnizle = function () {
 
 // ── SKU & Barkod ─────────────────────────────────────────────────────────
 window.skuUret = function () {
-  if (!_stokSatinAldi) { toast('Bu özellik Gelişmiş Stok paketi gerektirir.','err'); return; }
+  if (!_stokSatinAldi) { (typeof toast==='function'?toast:window.toast||console.log)('Bu özellik Gelişmiş Stok paketi gerektirir.','err'); return; }
   const mag = (window._magaza?.ad||'GNZ').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,3);
   document.getElementById('smSku').value = `${mag}-${Math.floor(Math.random()*9000)+1000}`;
 };
 
 window.barkodUret = function () {
-  if (!_stokSatinAldi) { toast('Bu özellik Gelişmiş Stok paketi gerektirir.','err'); return; }
+  if (!_stokSatinAldi) { (typeof toast==='function'?toast:window.toast||console.log)('Bu özellik Gelişmiş Stok paketi gerektirir.','err'); return; }
   let d = '20';
   for (let i=0;i<10;i++) d += Math.floor(Math.random()*10);
   let sum = 0;
@@ -302,7 +302,7 @@ window.barkodUret = function () {
 window.stokQRAc = function (id) { stokDuzenleAc(id); setTimeout(()=>qrGoster(),300); };
 
 window.qrGoster = async function () {
-  if (!_stokSatinAldi) { toast('Bu özellik Gelişmiş Stok paketi gerektirir.','err'); return; }
+  if (!_stokSatinAldi) { (typeof toast==='function'?toast:window.toast||console.log)('Bu özellik Gelişmiş Stok paketi gerektirir.','err'); return; }
   await loadQRLib();
   const sku    = document.getElementById('smSku').value.trim();
   const barkod = document.getElementById('smBarkod').value.trim();
@@ -335,9 +335,9 @@ window.qrGoster = async function () {
 };
 
 window.barkodGoster = function () {
-  if (!_stokSatinAldi) { toast('Bu özellik Gelişmiş Stok paketi gerektirir.','err'); return; }
+  if (!_stokSatinAldi) { (typeof toast==='function'?toast:window.toast||console.log)('Bu özellik Gelişmiş Stok paketi gerektirir.','err'); return; }
   const barkod = document.getElementById('smBarkod').value.trim();
-  if (!barkod) { toast('Önce barkod numarası girin.','err'); return; }
+  if (!barkod) { (typeof toast==='function'?toast:window.toast||console.log)('Önce barkod numarası girin.','err'); return; }
   const div = document.getElementById('qrBarkodAlani');
   div.style.display='block';
   document.getElementById('qrCanvas').style.display='none';
@@ -405,7 +405,7 @@ window.stokKaydet = async function () {
     stokOzetGuncelle();
     stokRenderTablo();
     document.getElementById('stokModal').classList.remove('open');
-    if(typeof toast==='function') toast('✦ Stok bilgisi kaydedildi!');
+    if(typeof toast==='function') (typeof toast==='function'?toast:window.toast||console.log)('✦ Stok bilgisi kaydedildi!');
   } catch(e) {
     if (errEl) { errEl.textContent='Kayıt hatası: '+e.message; errEl.style.display='block'; }
   }
@@ -413,13 +413,13 @@ window.stokKaydet = async function () {
 
 // ── 600₺ Satın Al ────────────────────────────────────────────────────────
 window.stokSatinAl = function () {
-  toast('Ödeme altyapısı yakında aktif olacak. Demo için açılıyor…','gold');
+  (typeof toast==='function'?toast:window.toast||console.log)('Ödeme altyapısı yakında aktif olacak. Demo için açılıyor…','gold');
   setTimeout(() => {
     _stokSatinAldi = true;
     const banner = document.getElementById('stokKilitDiv');
     if (banner) banner.style.display = 'none';
     stokRenderTablo();
-    toast('✦ Gelişmiş Stok Yönetimi aktif edildi!');
+    (typeof toast==='function'?toast:window.toast||console.log)('✦ Gelişmiş Stok Yönetimi aktif edildi!');
   }, 1000);
 };
 

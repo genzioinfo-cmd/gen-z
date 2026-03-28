@@ -582,10 +582,10 @@ window.iadeOnayla = async function(id) {
     if (idx > -1) _iadeTalepleri[idx].durum = 'onaylandi';
     iadeTabloCiz();
     iadeBadgeGuncelle();
-    if (typeof toast === 'function') toast('✅ İade onaylandı! Müşteriye bildirim gönderildi.');
+    if (typeof toast === 'function') (typeof toast==='function'?toast:window.toast||console.log)('✅ İade onaylandı! Müşteriye bildirim gönderildi.');
 
   } catch(e) {
-    if (typeof toast === 'function') toast('Hata: ' + e.message, 'err');
+    if (typeof toast === 'function') (typeof toast==='function'?toast:window.toast||console.log)('Hata: ' + e.message, 'err');
   }
 };
 
@@ -616,10 +616,10 @@ window.iadeReddet = async function(id) {
     if (idx > -1) { _iadeTalepleri[idx].durum = 'reddedildi'; _iadeTalepleri[idx].redSebep = sebep; }
     iadeTabloCiz();
     iadeBadgeGuncelle();
-    if (typeof toast === 'function') toast('İade reddedildi. Müşteriye bildirim gönderildi.');
+    if (typeof toast === 'function') (typeof toast==='function'?toast:window.toast||console.log)('İade reddedildi. Müşteriye bildirim gönderildi.');
 
   } catch(e) {
-    if (typeof toast === 'function') toast('Hata: ' + e.message, 'err');
+    if (typeof toast === 'function') (typeof toast==='function'?toast:window.toast||console.log)('Hata: ' + e.message, 'err');
   }
 };
 

@@ -3577,10 +3577,13 @@ window.katSec = function(el){
 </script>
 <script type="module" src="firebase-config.js"></script>
 <script type="module">
-import { iadeTalepleriYukle } from './iade.js';
+import { iadeTalepleriYukle, iadeModalAc as _iadeModalAcFn } from './iade.js';
 window._iadeTalepleriYukle = async function() {
   if (window._magaza?.id) await iadeTalepleriYukle(window._magaza.id);
 };
+// iade.js'deki window.* fonksiyonları zaten o dosyada tanımlı
+// Sadece export edilenleri burada bağlıyoruz
+window.iadeAc = function(s) { _iadeModalAcFn(typeof s==='string'?JSON.parse(s):s); };
 </script>
 <script type="module" src="firebase-sync.js"></script>
 <script type="module" src="modpanel-stok.js"></script>

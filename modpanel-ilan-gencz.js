@@ -215,7 +215,7 @@ window.ilanGonder = async function() {
       ts         : serverTimestamp()
     });
     document.getElementById('ilanModal').classList.remove('open');
-    toast('✦ İlanınız admin onayına gönderildi!');
+    (typeof toast==='function'?toast:window.toast||console.log)('✦ İlanınız admin onayına gönderildi!');
     ustaYukle();
   } catch(e) {
     errEl.textContent='Hata: '+e.message; errEl.style.display='block';
@@ -312,7 +312,7 @@ window.gzKatSec = function(ad, el) {
 };
 
 window.gzIcerikGonder = async function() {
-  if (!_gzSeciliKat) { toast('Lütfen bir kategori seçin.','err'); return; }
+  if (!_gzSeciliKat) { (typeof toast==='function'?toast:window.toast||console.log)('Lütfen bir kategori seçin.','err'); return; }
   const errEl = document.getElementById('gzErr');
   const okEl  = document.getElementById('gzOk');
   errEl.style.display = 'none';
@@ -354,7 +354,7 @@ window.gzIcerikGonder = async function() {
 };
 
 async function genczYukle() {
-  if (!_aktifUid) return;
+  if (!window._aktifUid) return;
   try {
     const snap = await getDocs(query(
       collection(db,'gencz_icerikler'),

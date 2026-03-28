@@ -287,9 +287,6 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
 }
 
 
-/* ── TEMA PANELİ ── */
-.tema-panel { animation: fadeIn .2s ease; }
-@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
 .f-alan { display:flex; flex-direction:column; gap:6px; }
 .f-alan label { font-size:11px; font-weight:700; color:var(--text2); letter-spacing:.3px; text-transform:uppercase; }
 .f-input {
@@ -298,6 +295,136 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
   width:100%; transition:border-color .2s; outline:none;
 }
 .f-input:focus { border-color:var(--gold); }
+
+
+/* ══════════════════════════════════════════════
+   SAYFA EDİTÖRÜ
+════════════════════════════════════════════════ */
+#sayfa-tema { padding: 0 !important; height: calc(100vh - 56px); overflow: hidden; }
+.editor-wrap {
+  display: grid;
+  grid-template-columns: 180px 1fr 300px;
+  height: 100%;
+  overflow: hidden;
+}
+/* Sol - Sayfa Listesi */
+.editor-sol {
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+}
+.editor-sol-baslik {
+  padding: 12px 14px 8px;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text2); border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sayfa-listesi { padding: 6px; display: flex; flex-direction: column; gap: 2px; }
+.sayfa-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border-radius: 8px;
+  background: none; border: none; color: var(--text2);
+  font-size: 12px; font-weight: 500; cursor: pointer;
+  text-align: left; width: 100%; transition: all .15s;
+}
+.sayfa-btn:hover { background: var(--bg2); color: var(--text); }
+.sayfa-btn.aktif { background: rgba(201,168,76,.12); color: var(--gold); border-left: 2px solid var(--gold); }
+.sayfa-btn-icon { font-size: 14px; flex-shrink: 0; }
+
+/* Orta - iframe */
+.editor-orta {
+  display: flex; flex-direction: column;
+  background: #000; overflow: hidden;
+}
+.editor-orta-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 12px; background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  font-size: 12px; color: var(--text2);
+  flex-shrink: 0;
+}
+.iframe-kap {
+  flex: 1; overflow: hidden; position: relative;
+}
+#sayfaIframe {
+  width: 100%; height: 100%;
+  border: none; display: block;
+  transform-origin: top left;
+}
+
+/* Sağ - Ayar Paneli */
+.editor-sag {
+  background: var(--panel);
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.editor-sag-baslik {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px; border-bottom: 1px solid var(--border);
+  font-size: 12px; font-weight: 700; flex-shrink: 0;
+}
+.editor-sekmeler {
+  display: flex; gap: 2px; padding: 6px 8px;
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.editor-sekme {
+  padding: 5px 10px; border-radius: 6px;
+  background: none; border: 1px solid transparent;
+  color: var(--text2); font-size: 14px; cursor: pointer;
+  transition: all .15s;
+}
+.editor-sekme:hover { background: var(--bg2); color: var(--text); }
+.editor-sekme.aktif { background: rgba(201,168,76,.12); border-color: rgba(201,168,76,.3); color: var(--gold); }
+.editor-panel {
+  flex: 1; overflow-y: auto; padding: 12px;
+}
+.ep-baslik {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .8px; color: var(--text2); margin-bottom: 12px;
+}
+.ep-alan { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+.ep-alan label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--text2); }
+.ep-input {
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--text); border-radius: 6px;
+  padding: 7px 10px; font-size: 12px; font-family: inherit;
+  width: 100%; transition: border-color .2s; outline: none;
+}
+.ep-input:focus { border-color: var(--gold); }
+.ep-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.renk-row { display: flex; gap: 6px; align-items: center; }
+.renk-row input[type="color"] {
+  width: 36px; height: 32px; border-radius: 6px;
+  border: 1px solid var(--border); cursor: pointer;
+  background: none; flex-shrink: 0; padding: 2px;
+}
+.ep-toggle {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: var(--text2); cursor: pointer;
+}
+.ep-toggle input[type="checkbox"] { accent-color: var(--gold); width: 14px; height: 14px; }
+.ep-ayrac { border-top: 1px solid var(--border); margin: 12px 0; }
+.ep-reset { font-size: 11px; color: var(--text2); background: none; border: none; cursor: pointer; padding: 0; }
+.ep-reset:hover { color: var(--text); }
+.mini-tab {
+  padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--text2); cursor: pointer; transition: all .15s;
+}
+.mini-tab.aktif { background: rgba(201,168,76,.12); border-color: rgba(201,168,76,.3); color: var(--gold); }
+.editor-rek-kart {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px; margin-bottom: 8px;
+}
+@media (max-width: 900px) {
+  .editor-wrap { grid-template-columns: 1fr; }
+  .editor-sol { display: none; }
+  .editor-orta { height: 300px; }
+}
 
 </style>
 </head>
@@ -355,7 +482,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
       <div class="sb-ayrac">Platform</div>
       <button class="sb-item" onclick="sayfaGit('urunler',this)">🎨 <span>Paylaşılan Ürünler</span> <span class="sb-badge" id="badgeUrun" style="background:var(--gold);color:var(--ink)">—</span></button>
       <div class="sb-ayrac">Görünüm</div>
-      <button class="sb-item" onclick="sayfaGit('tema',this)">🎨 <span>Tema & Reklam</span></button>
+      <button class="sb-item" onclick="sayfaGit('tema',this)">🎨 <span>Sayfa Editörü</span></button>
     </nav>
     <div class="sb-alt">
       <div class="sb-user">Giriş: <strong id="sbUserName">—</strong></div>
@@ -525,34 +652,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
       </div>
     </div>
 
-    <!-- TEMA & REKLAM SAYFASI -->
-  <div class="sayfa" id="sayfa-tema">
-    <div style="max-width:900px;margin:0 auto;padding:0 0 60px 0;">
-
-      <!-- TABS -->
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
-        <button class="f-tab on" onclick="temaSekme('renkler',this)">🎨 Renkler</button>
-        <button class="f-tab" onclick="temaSekme('arkaplan',this)">🖼 Arka Plan</button>
-        <button class="f-tab" onclick="temaSekme('navbar',this)">🔝 Navbar</button>
-        <button class="f-tab" onclick="temaSekme('duyuru',this)">📢 Duyuru Bandı</button>
-        <button class="f-tab" onclick="temaSekme('reklamlar',this)">📣 Reklam Alanları</button>
-        <button class="f-tab" onclick="temaSekme('css',this)">💻 Özel CSS</button>
-      </div>
-
-      <!-- RENKLER -->
-      <div id="tema-renkler" class="tema-panel">
-        <div class="tablo-baslik"><h3>🎨 Renk Paleti</h3></div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:20px;">
-          <div class="f-alan"><label>Ana Renk (--accent)</label><div style="display:flex;gap:8px;align-items:center;"><input type="color" id="t-accent" value="#7B5CF0" style="width:44px;height:36px;border-radius:8px;border:1px solid var(--border);cursor:pointer;background:none;"/><input type="text" id="t-accent-hex" placeholder="#7B5CF0" style="flex:1;" class="f-input"/></div></div>
-          <div class="f-alan"><label>Vurgu 2 (--accent2)</label><div style="display:flex;gap:8px;align-items:center;"><input type="color" id="t-accent2" value="#F0C55C" style="width:44px;height:36px;border-radius:8px;border:1px solid var(--border);cursor:pointer;background:none;"/><input type="text" id="t-accent2-hex" placeholder="#F0C55C" class="f-input" style="flex:1;"/></div></div>
-          <div class="f-alan"><label>Vurgu 3 (--accent3)</label><div style="display:flex;gap:8px;align-items:center;"><input type="color" id="t-accent3" value="#5CF0B4" style="width:44px;height:36px;border-radius:8px;border:1px solid var(--border);cursor:pointer;background:none;"/><input type="text" id="t-accent3-hex" placeholder="#5CF0B4" class="f-input" style="flex:1;"/></div></div>
-          <div class="f-alan"><label>Ana Arka Plan (--bg)</label><div style="display:flex;gap:8px;align-items:center;"><input type="color" id="t-bg" value="#0a0a0f" style="width:44px;height:36px;border-radius:8px;border:1px solid var(--border);cursor:pointer;background:none;"/><input type="text" id="t-bg-hex" placeholder="#0a0a0f" class="f-input" style="flex:1;"/></div></div>
-          <div class="f-alan"><label>Yüzey (--bg2)</label><div style="display:flex;gap:8px;align-items:center;"><input type="color" id="t-bg2" value="#13131a" style="width:44px;height:36px;border-radius:8px;border:1px solid var(--border);cursor:pointer;background:none;"/><input type="text" id="t-bg2-hex" placeholder="#13131a" class="f-input" style="flex:1;"/></div></div>
-          <div class="f-alan"><label>Kenarlık (--border)</label><div style="display:flex;gap:8px;align-items:center;"><input type="color" id="t-border" value="#2e2e3f" style="width:44px;height:36px;border-radius:8px;border:1px solid var(--border);cursor:pointer;background:none;"/><input type="text" id="t-border-hex" placeholder="#2e2e3f" class="f-input" style="flex:1;"/></div></div>
-          <div class="f-alan"><label>Ana Metin (--text)</label><div style="display:flex;gap:8px;align-items:center;"><input type="color" id="t-text" value="#f0eeff" style="width:44px;height:36px;border-radius:8px;border:1px solid var(--border);cursor:pointer;background:none;"/><input type="text" id="t-text-hex" placeholder="#f0eeff" class="f-input" style="flex:1;"/></div></div>
-          <div class="f-alan"><label>İkincil Metin (--text2)</label><div style="display:flex;gap:8px;align-items:center;"><input type="color" id="t-text2" value="#9b97b8" style="width:44px;height:36px;border-radius:8px;border:1px solid var(--border);cursor:pointer;background:none;"/><input type="text" id="t-text2-hex" placeholder="#9b97b8" class="f-input" style="flex:1;"/></div></div>
-        </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
           <button class="eylem-btn onay" onclick="temaKaydet('renkler')">💾 Renkleri Kaydet</button>
           <button class="eylem-btn" onclick="temaVarsayilanlar()">↺ Varsayılana Dön</button>
           <button class="eylem-btn detay" onclick="temaCanliBak()">👁 Canlı Önizle</button>
@@ -640,6 +740,191 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
     </div>
   </div>
 
+  <!-- SAYFA EDITÖRÜ -->
+  <div class="sayfa" id="sayfa-tema">
+    <div class="editor-wrap">
+
+      <!-- SOL: Sayfa Listesi -->
+      <div class="editor-sol">
+        <div class="editor-sol-baslik">📄 Sayfalar</div>
+        <div class="sayfa-listesi" id="sayfaListesi">
+          <button class="sayfa-btn aktif" onclick="sayfaSec('gen-z',this)" data-sayfa="gen-z">
+            <span class="sayfa-btn-icon">⚡</span><span>Keşfet (Gen-Z)</span>
+          </button>
+          <button class="sayfa-btn" onclick="sayfaSec('magaza',this)" data-sayfa="magaza">
+            <span class="sayfa-btn-icon">🏪</span><span>Mağaza</span>
+          </button>
+          <button class="sayfa-btn" onclick="sayfaSec('ustam',this)" data-sayfa="ustam">
+            <span class="sayfa-btn-icon">🔨</span><span>Ustam</span>
+          </button>
+          <button class="sayfa-btn" onclick="sayfaSec('topluluk',this)" data-sayfa="topluluk">
+            <span class="sayfa-btn-icon">👥</span><span>Topluluk</span>
+          </button>
+          <button class="sayfa-btn" onclick="sayfaSec('elden-ele',this)" data-sayfa="elden-ele">
+            <span class="sayfa-btn-icon">🫶</span><span>Elden-Ele</span>
+          </button>
+          <button class="sayfa-btn" onclick="sayfaSec('birlikte-buyuyelim',this)" data-sayfa="birlikte-buyuyelim">
+            <span class="sayfa-btn-icon">🤝</span><span>Birlikte Büyüyelim</span>
+          </button>
+          <button class="sayfa-btn" onclick="sayfaSec('gen-z.urun',this)" data-sayfa="gen-z.urun">
+            <span class="sayfa-btn-icon">🛍</span><span>Ürün Detay (GZ)</span>
+          </button>
+          <button class="sayfa-btn" onclick="sayfaSec('magaza-urun',this)" data-sayfa="magaza-urun">
+            <span class="sayfa-btn-icon">📦</span><span>Ürün Detay (Mağaza)</span>
+          </button>
+          <button class="sayfa-btn" onclick="sayfaSec('siparis',this)" data-sayfa="siparis">
+            <span class="sayfa-btn-icon">🛒</span><span>Sipariş</span>
+          </button>
+          <button class="sayfa-btn" onclick="sayfaSec('profile',this)" data-sayfa="profile">
+            <span class="sayfa-btn-icon">👤</span><span>Profil</span>
+          </button>
+          <button class="sayfa-btn" onclick="sayfaSec('hakkimizda',this)" data-sayfa="hakkimizda">
+            <span class="sayfa-btn-icon">ℹ️</span><span>Hakkımızda</span>
+          </button>
+          <button class="sayfa-btn" onclick="sayfaSec('iletisim',this)" data-sayfa="iletisim">
+            <span class="sayfa-btn-icon">📩</span><span>İletişim</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ORTA: iframe Önizleme -->
+      <div class="editor-orta">
+        <div class="editor-orta-bar">
+          <span id="editor-sayfa-adi" style="font-weight:700;font-size:13px;">gen-z.html</span>
+          <div style="display:flex;gap:6px;margin-left:auto;">
+            <button class="eylem-btn" onclick="iframeYenile()" title="Yenile">↻</button>
+            <button class="eylem-btn detay" onclick="window.open(document.getElementById('sayfaIframe').src,'_blank')" title="Yeni sekmede aç">↗</button>
+          </div>
+        </div>
+        <div class="iframe-kap">
+          <iframe id="sayfaIframe" src="gen-z.html" frameborder="0" allowtransparency="true"></iframe>
+        </div>
+      </div>
+
+      <!-- SAĞ: Ayar Paneli -->
+      <div class="editor-sag">
+        <div class="editor-sag-baslik">
+          <span id="editor-panel-baslik">⚡ Gen-Z Ayarları</span>
+          <div style="display:flex;gap:6px;">
+            <button class="eylem-btn onay" onclick="editörKaydet()" style="padding:4px 12px;font-size:11px;">💾 Kaydet</button>
+          </div>
+        </div>
+
+        <!-- Panel Sekmeler -->
+        <div class="editor-sekmeler">
+          <button class="editor-sekme aktif" onclick="editorSekme('renkler',this)">🎨</button>
+          <button class="editor-sekme" onclick="editorSekme('arkaplan',this)">🖼</button>
+          <button class="editor-sekme" onclick="editorSekme('navbar',this)">🔝</button>
+          <button class="editor-sekme" onclick="editorSekme('hero',this)">✨</button>
+          <button class="editor-sekme" onclick="editorSekme('duyuru',this)">📢</button>
+          <button class="editor-sekme" onclick="editorSekme('reklamlar',this)">📣</button>
+          <button class="editor-sekme" onclick="editorSekme('css',this)">💻</button>
+        </div>
+
+        <!-- RENKLER -->
+        <div class="editor-panel" id="ep-renkler">
+          <div class="ep-baslik">🎨 Renkler</div>
+          <div class="ep-grid">
+            <div class="ep-alan"><label>Ana Renk</label><div class="renk-row"><input type="color" id="er-accent" value="#7B5CF0" oninput="renkHex('er-accent')"/><input type="text" id="er-accent-h" class="ep-input" placeholder="#7B5CF0"/></div></div>
+            <div class="ep-alan"><label>Vurgu 2</label><div class="renk-row"><input type="color" id="er-accent2" value="#F0C55C" oninput="renkHex('er-accent2')"/><input type="text" id="er-accent2-h" class="ep-input" placeholder="#F0C55C"/></div></div>
+            <div class="ep-alan"><label>Vurgu 3</label><div class="renk-row"><input type="color" id="er-accent3" value="#5CF0B4" oninput="renkHex('er-accent3')"/><input type="text" id="er-accent3-h" class="ep-input" placeholder="#5CF0B4"/></div></div>
+            <div class="ep-alan"><label>Arka Plan</label><div class="renk-row"><input type="color" id="er-bg" value="#0a0a0f" oninput="renkHex('er-bg')"/><input type="text" id="er-bg-h" class="ep-input" placeholder="#0a0a0f"/></div></div>
+            <div class="ep-alan"><label>Yüzey</label><div class="renk-row"><input type="color" id="er-bg2" value="#13131a" oninput="renkHex('er-bg2')"/><input type="text" id="er-bg2-h" class="ep-input" placeholder="#13131a"/></div></div>
+            <div class="ep-alan"><label>Kenarlık</label><div class="renk-row"><input type="color" id="er-border" value="#2e2e3f" oninput="renkHex('er-border')"/><input type="text" id="er-border-h" class="ep-input" placeholder="#2e2e3f"/></div></div>
+            <div class="ep-alan"><label>Ana Metin</label><div class="renk-row"><input type="color" id="er-text" value="#f0eeff" oninput="renkHex('er-text')"/><input type="text" id="er-text-h" class="ep-input" placeholder="#f0eeff"/></div></div>
+            <div class="ep-alan"><label>İkincil Metin</label><div class="renk-row"><input type="color" id="er-text2" value="#9b97b8" oninput="renkHex('er-text2')"/><input type="text" id="er-text2-h" class="ep-input" placeholder="#9b97b8"/></div></div>
+          </div>
+          <button class="ep-reset" onclick="renkVarsayilan()">↺ Varsayılana dön</button>
+        </div>
+
+        <!-- ARKA PLAN -->
+        <div class="editor-panel" id="ep-arkaplan" style="display:none;">
+          <div class="ep-baslik">🖼 Arka Plan</div>
+          <label class="ep-toggle"><input type="checkbox" id="ab-aktif" onchange="editörAnlik()"/><span>Aktif</span></label>
+          <div class="ep-alan" style="margin-top:12px;"><label>Tip</label>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+              <button class="mini-tab aktif" onclick="abTip('renk',this)">Renk</button>
+              <button class="mini-tab" onclick="abTip('gradient',this)">Gradient</button>
+              <button class="mini-tab" onclick="abTip('gorsel',this)">Fotoğraf</button>
+            </div>
+          </div>
+          <div id="ab-renk-s" class="ep-alan" style="margin-top:10px;"><label>Renk</label><div class="renk-row"><input type="color" id="ab-renk" value="#0a0a0f" oninput="renkHex('ab-renk')"/><input type="text" id="ab-renk-h" class="ep-input"/></div></div>
+          <div id="ab-grad-s" style="display:none;" class="ep-alan"><label>Gradient CSS</label><input type="text" id="ab-gradient" class="ep-input" placeholder="linear-gradient(135deg,#0a0a0f,#1a0a2e)"/></div>
+          <div id="ab-foto-s" style="display:none;">
+            <div class="ep-alan"><label>Fotoğraf URL</label><input type="text" id="ab-foto-url" class="ep-input" placeholder="https://..." oninput="fotoPrev()"/></div>
+            <div id="ab-foto-prev" style="width:100%;height:80px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);margin:6px 0;background-size:cover;background-position:center;"></div>
+            <div class="ep-alan"><label>Karartma — <span id="ab-op-val">0.5</span></label><input type="range" id="ab-opasite" min="0" max="1" step="0.05" value="0.5" style="width:100%;" oninput="document.getElementById('ab-op-val').textContent=this.value;editörAnlik()"/></div>
+          </div>
+        </div>
+
+        <!-- NAVBAR -->
+        <div class="editor-panel" id="ep-navbar" style="display:none;">
+          <div class="ep-baslik">🔝 Navbar</div>
+          <label class="ep-toggle"><input type="checkbox" id="nb-aktif"/><span>Özel navbar aktif</span></label>
+          <div class="ep-alan" style="margin-top:10px;"><label>Logo Metni</label><input type="text" id="nb-logo" class="ep-input" placeholder="GEN-Z"/></div>
+          <div class="ep-alan"><label>Arka Plan Rengi</label><div class="renk-row"><input type="color" id="nb-bg" value="#0a0a0f" oninput="renkHex('nb-bg')"/><input type="text" id="nb-bg-h" class="ep-input"/></div></div>
+          <div class="ep-alan"><label>Blur (px) — <span id="nb-blur-val">20</span></label><input type="range" id="nb-blur" min="0" max="40" value="20" style="width:100%;" oninput="document.getElementById('nb-blur-val').textContent=this.value"/></div>
+        </div>
+
+        <!-- HERO -->
+        <div class="editor-panel" id="ep-hero" style="display:none;">
+          <div class="ep-baslik">✨ Hero / Banner Alanı</div>
+          <label class="ep-toggle"><input type="checkbox" id="hero-aktif"/><span>Aktif</span></label>
+          <div class="ep-alan" style="margin-top:10px;"><label>Arka Plan Tipi</label>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+              <button class="mini-tab aktif" onclick="heroTip('gorsel',this)">Fotoğraf</button>
+              <button class="mini-tab" onclick="heroTip('gradient',this)">Gradient</button>
+              <button class="mini-tab" onclick="heroTip('renk',this)">Renk</button>
+            </div>
+          </div>
+          <div id="hero-foto-s" class="ep-alan"><label>Fotoğraf URL</label><input type="text" id="hero-foto-url" class="ep-input" placeholder="https://..."/></div>
+          <div id="hero-grad-s" style="display:none;" class="ep-alan"><label>Gradient CSS</label><input type="text" id="hero-gradient" class="ep-input" placeholder="linear-gradient(...)"/></div>
+          <div id="hero-renk-s" style="display:none;" class="ep-alan"><label>Renk</label><div class="renk-row"><input type="color" id="hero-renk" value="#7B5CF0" oninput="renkHex('hero-renk')"/><input type="text" id="hero-renk-h" class="ep-input"/></div></div>
+          <div class="ep-alan"><label>Min. Yükseklik</label><input type="text" id="hero-minh" class="ep-input" placeholder="400px"/></div>
+          <div class="ep-ayrac"></div>
+          <div class="ep-alan"><label>Başlık Metni (opsiyonel)</label><input type="text" id="hero-baslik" class="ep-input" placeholder="Sayfanın başlığını değiştir..."/></div>
+          <div class="ep-alan"><label>Alt Yazı (opsiyonel)</label><input type="text" id="hero-altyazi" class="ep-input" placeholder="Alt başlık metni..."/></div>
+          <div class="ep-alan"><label>Buton Metni</label><input type="text" id="hero-btn-metin" class="ep-input" placeholder="Keşfet →"/></div>
+          <div class="ep-alan"><label>Buton Linki</label><input type="text" id="hero-btn-link" class="ep-input" placeholder="magaza.html"/></div>
+        </div>
+
+        <!-- DUYURU -->
+        <div class="editor-panel" id="ep-duyuru" style="display:none;">
+          <div class="ep-baslik">📢 Duyuru Bandı</div>
+          <label class="ep-toggle"><input type="checkbox" id="du-aktif"/><span>Aktif (sayfanın üstünde)</span></label>
+          <div class="ep-alan" style="margin-top:10px;"><label>Duyuru Metni</label><input type="text" id="du-metin" class="ep-input" placeholder="🔥 Kampanya başladı! Tıkla →"/></div>
+          <div class="ep-alan"><label>Link (opsiyonel)</label><input type="text" id="du-link" class="ep-input" placeholder="https://..."/></div>
+          <div class="ep-alan"><label>Arka Plan</label><div class="renk-row"><input type="color" id="du-bg" value="#7B5CF0" oninput="renkHex('du-bg')"/><input type="text" id="du-bg-h" class="ep-input"/></div></div>
+          <div class="ep-alan"><label>Metin Rengi</label><div class="renk-row"><input type="color" id="du-text" value="#ffffff" oninput="renkHex('du-text')"/><input type="text" id="du-text-h" class="ep-input"/></div></div>
+          <label class="ep-toggle" style="margin-top:8px;"><input type="checkbox" id="du-kapat"/><span>Kapatılabilir (✕ butonu)</span></label>
+        </div>
+
+        <!-- REKLAM ALANLARI -->
+        <div class="editor-panel" id="ep-reklamlar" style="display:none;">
+          <div class="ep-baslik" style="display:flex;justify-content:space-between;align-items:center;">
+            <span>📣 Reklam Alanları</span>
+            <button class="eylem-btn onay" onclick="reklamEkle()" style="padding:3px 10px;font-size:11px;">+ Ekle</button>
+          </div>
+          <div style="font-size:11px;color:var(--text2);margin-bottom:10px;line-height:1.5;">
+            Bu sayfadaki reklam alanları:<br/>
+            <code style="background:var(--bg3);padding:1px 5px;border-radius:3px;font-size:10px;">genz-rek-1</code> Sayfa altı &nbsp;
+            <code style="background:var(--bg3);padding:1px 5px;border-radius:3px;font-size:10px;">genz-rek-2</code> Navbar altı
+          </div>
+          <div id="editor-reklam-listesi"></div>
+        </div>
+
+        <!-- ÖZEL CSS -->
+        <div class="editor-panel" id="ep-css" style="display:none;">
+          <div class="ep-baslik">💻 Özel CSS</div>
+          <div style="font-size:11px;color:var(--text2);margin-bottom:8px;">Sadece bu sayfaya uygulanır.</div>
+          <textarea id="ep-ozel-css" rows="14" style="width:100%;font-family:monospace;font-size:11px;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:10px;resize:vertical;" placeholder="/* Bu sayfaya özel CSS */
+.hero { min-height: 600px; }"></textarea>
+          <button class="eylem-btn red" onclick="document.getElementById('ep-ozel-css').value=''" style="margin-top:8px;width:100%;">🗑 Temizle</button>
+        </div>
+
+      </div><!-- /editor-sag -->
+    </div><!-- /editor-wrap -->
+  </div>
 </main>
 </div>
 
@@ -1486,7 +1771,7 @@ window.sayfaGit=function(id,el){
   document.querySelectorAll('.sb-item').forEach(s=>s.classList.remove('aktif'));
   document.getElementById('sayfa-'+id)?.classList.add('aktif');
   if(el)el.classList.add('aktif');
-  const basliklar={ozet:'📊 Özet',basvurular:'📋 Ortak Başvuruları',siparisler:'🛒 Tüm Siparişler',ustaSiparisler:'✂ Usta Siparişlerii',kullanicilar:'👥 Kullanıcılar',gencimBasvurular:'🎓 Gencim — Sanatçı Başvuruları',finans:'💰 Finans Özeti',urunler:'🎨 Paylaşılan Ürünler',cekim:'💸 Çekim Talepleri',cekmeTalepleri:'💸 Çekme Talepleri',tema:'🎨 Tema & Reklam Yönetimi'};
+  const basliklar={ozet:'📊 Özet',basvurular:'📋 Ortak Başvuruları',siparisler:'🛒 Tüm Siparişler',ustaSiparisler:'✂ Usta Siparişlerii',kullanicilar:'👥 Kullanıcılar',gencimBasvurular:'🎓 Gencim — Sanatçı Başvuruları',finans:'💰 Finans Özeti',urunler:'🎨 Paylaşılan Ürünler',cekim:'💸 Çekim Talepleri',cekmeTalepleri:'💸 Çekme Talepleri',tema:'🎨 Sayfa Editörü'};
   document.getElementById('topbarBaslik').textContent=basliklar[id]||id;
   if(id==='finans')renderFinans();
   if(id==='urunler')renderUrunler();
@@ -1501,259 +1786,6 @@ window.aramaYap=function(tip){if(tip==='basvuru')renderBasvurular();else if(tip=
 window.sayfaYenile=function(){tumVerileriYukle();bildir('Veriler yenilendi.');};
 window.toggleSidebar=function(){document.getElementById('sidebar').classList.toggle('acik');};
 
-/* ══════════════════════════════════════════════
-   TEMA & REKLAM ADMIN SCRIPTS
-════════════════════════════════════════════════ */
-let _temaData = {};
-
-// Renk input senkronizasyonu
-function syncColorInputs() {
-  const pairs = [
-    ['t-accent','t-accent-hex'],['t-accent2','t-accent2-hex'],['t-accent3','t-accent3-hex'],
-    ['t-bg','t-bg-hex'],['t-bg2','t-bg2-hex'],['t-border','t-border-hex'],
-    ['t-text','t-text-hex'],['t-text2','t-text2-hex'],
-    ['ab-renk','ab-renk-hex'],['nb-bg','nb-bg-hex'],
-    ['du-bg','du-bg-hex'],['du-text','du-text-hex']
-  ];
-  pairs.forEach(([col, hex]) => {
-    const ci = document.getElementById(col);
-    const hi = document.getElementById(hex);
-    if (!ci || !hi) return;
-    ci.addEventListener('input', () => { hi.value = ci.value; });
-    hi.addEventListener('input', () => { if (/^#[0-9a-fA-F]{6}$/.test(hi.value)) ci.value = hi.value; });
-  });
-  // Range inputs
-  const abOp = document.getElementById('ab-opasite');
-  const abOpV = document.getElementById('ab-opasite-val');
-  if (abOp && abOpV) abOp.addEventListener('input', () => abOpV.textContent = abOp.value);
-  const nbOp = document.getElementById('nb-opasite');
-  const nbOpV = document.getElementById('nb-opasite-val');
-  if (nbOp && nbOpV) nbOp.addEventListener('input', () => nbOpV.textContent = nbOp.value);
-  // Görsel URL önizleme
-  const abUrl = document.getElementById('ab-gorsel-url');
-  const abPrv = document.getElementById('ab-gorsel-onizleme');
-  if (abUrl && abPrv) abUrl.addEventListener('input', () => {
-    if (abUrl.value.startsWith('http')) {
-      abPrv.style.backgroundImage = `url('${abUrl.value}')`;
-      abPrv.style.backgroundSize = 'cover';
-      abPrv.style.backgroundPosition = 'center';
-      abPrv.textContent = '';
-    }
-  });
-}
-
-window.renderTema = async function() {
-  syncColorInputs();
-  try {
-    const snap = await getDoc(doc(db, 'platform_ayarlari', 'tema'));
-    if (snap.exists()) {
-      _temaData = snap.data();
-      temaFormlariDoldur(_temaData);
-    }
-  } catch(e) { bildir('Tema yüklenemedi: ' + e.message, 'hata'); }
-};
-
-function temaFormlariDoldur(t) {
-  // Renkler
-  if (t.renkler) {
-    const r = t.renkler;
-    const set = (id, val) => {
-      const ci = document.getElementById(id);
-      const hi = document.getElementById(id + '-hex');
-      if (ci && val) ci.value = val;
-      if (hi && val) hi.value = val;
-    };
-    set('t-accent', r.accent); set('t-accent2', r.accent2); set('t-accent3', r.accent3);
-    set('t-bg', r.bg); set('t-bg2', r.bg2); set('t-border', r.border);
-    set('t-text', r.text); set('t-text2', r.text2);
-  }
-  // Arka plan
-  if (t.arkaplan) {
-    const a = t.arkaplan;
-    arkaplanTip(a.aktif ? (a.tip || 'renk') : 'kapat', null);
-    if (a.renk) { const e = document.getElementById('ab-renk'); if(e) e.value = a.renk; const h = document.getElementById('ab-renk-hex'); if(h) h.value = a.renk; }
-    if (a.gradient) { const e = document.getElementById('ab-gradient'); if(e) e.value = a.gradient; }
-    if (a.gorselUrl) { const e = document.getElementById('ab-gorsel-url'); if(e) e.value = a.gorselUrl; }
-    if (a.opasite !== undefined) { const e = document.getElementById('ab-opasite'); if(e) { e.value = a.opasite; document.getElementById('ab-opasite-val').textContent = a.opasite; } }
-  }
-  // Navbar
-  if (t.navbar) {
-    const e1 = document.getElementById('nb-logo'); if(e1) e1.value = t.navbar.logoMetin || '';
-    const e2 = document.getElementById('nb-bg-hex'); if(e2) e2.value = t.navbar.bgRenk || '';
-    const e3 = document.getElementById('nb-opasite'); if(e3) { e3.value = t.navbar.opasite || 1; document.getElementById('nb-opasite-val').textContent = t.navbar.opasite || 1; }
-  }
-  // Duyuru
-  if (t.duyuruBanner) {
-    const d = t.duyuruBanner;
-    const aktif = document.getElementById('du-aktif'); if(aktif) aktif.checked = !!d.aktif;
-    const metin = document.getElementById('du-metin'); if(metin) metin.value = d.metin || '';
-    const link = document.getElementById('du-link'); if(link) link.value = d.link || '';
-    const kapat = document.getElementById('du-kapat'); if(kapat) kapat.checked = !!d.kapatilabilir;
-    if (d.bgRenk) { const e = document.getElementById('du-bg'); if(e) e.value = d.bgRenk; const h = document.getElementById('du-bg-hex'); if(h) h.value = d.bgRenk; }
-    if (d.textRenk) { const e = document.getElementById('du-text'); if(e) e.value = d.textRenk; const h = document.getElementById('du-text-hex'); if(h) h.value = d.textRenk; }
-  }
-  // Reklamlar
-  renderReklamListesi(t.reklamAlanlari || []);
-  // CSS
-  const css = document.getElementById('ozel-css'); if(css) css.value = t.ozelCss || '';
-}
-
-window.temaSekme = function(id, btn) {
-  document.querySelectorAll('.tema-panel').forEach(p => p.style.display = 'none');
-  document.getElementById('tema-' + id).style.display = 'block';
-  document.querySelectorAll('#sayfa-tema .f-tab').forEach(b => b.classList.remove('on'));
-  if (btn) btn.classList.add('on');
-};
-
-window.arkaplanTip = function(tip, btn) {
-  ['ab-renk-panel','ab-gradient-panel','ab-gorsel-panel'].forEach(id => {
-    const el = document.getElementById(id); if(el) el.style.display = 'none';
-  });
-  if (tip === 'renk') { const e = document.getElementById('ab-renk-panel'); if(e) e.style.display = 'block'; }
-  if (tip === 'gradient') { const e = document.getElementById('ab-gradient-panel'); if(e) e.style.display = 'block'; }
-  if (tip === 'gorsel') { const e = document.getElementById('ab-gorsel-panel'); if(e) e.style.display = 'block'; }
-  document.querySelectorAll('[id^="ab-tip-"]').forEach(b => b.classList.remove('on'));
-  const sel = document.getElementById('ab-tip-' + tip); if(sel) sel.classList.add('on');
-  _temaData._arkaplanTip = tip;
-};
-
-window.temaKaydet = async function(bolum) {
-  try {
-    let payload = { guncellendi: serverTimestamp() };
-    if (bolum === 'renkler') {
-      payload.renkler = {
-        accent:  document.getElementById('t-accent-hex')?.value || document.getElementById('t-accent')?.value,
-        accent2: document.getElementById('t-accent2-hex')?.value || document.getElementById('t-accent2')?.value,
-        accent3: document.getElementById('t-accent3-hex')?.value || document.getElementById('t-accent3')?.value,
-        bg:      document.getElementById('t-bg-hex')?.value || document.getElementById('t-bg')?.value,
-        bg2:     document.getElementById('t-bg2-hex')?.value || document.getElementById('t-bg2')?.value,
-        border:  document.getElementById('t-border-hex')?.value || document.getElementById('t-border')?.value,
-        text:    document.getElementById('t-text-hex')?.value || document.getElementById('t-text')?.value,
-        text2:   document.getElementById('t-text2-hex')?.value || document.getElementById('t-text2')?.value,
-      };
-    }
-    if (bolum === 'arkaplan') {
-      const tip = _temaData._arkaplanTip || 'kapat';
-      payload.arkaplan = { aktif: tip !== 'kapat', tip };
-      if (tip === 'renk') payload.arkaplan.renk = document.getElementById('ab-renk-hex')?.value || document.getElementById('ab-renk')?.value;
-      if (tip === 'gradient') payload.arkaplan.gradient = document.getElementById('ab-gradient')?.value;
-      if (tip === 'gorsel') {
-        payload.arkaplan.gorselUrl = document.getElementById('ab-gorsel-url')?.value;
-        payload.arkaplan.opasite = parseFloat(document.getElementById('ab-opasite')?.value || '0.5');
-      }
-    }
-    if (bolum === 'navbar') {
-      payload.navbar = {
-        logoMetin: document.getElementById('nb-logo')?.value,
-        bgRenk: document.getElementById('nb-bg-hex')?.value || document.getElementById('nb-bg')?.value,
-        opasite: parseFloat(document.getElementById('nb-opasite')?.value || '1'),
-      };
-    }
-    if (bolum === 'duyuru') {
-      payload.duyuruBanner = {
-        aktif: document.getElementById('du-aktif')?.checked || false,
-        metin: document.getElementById('du-metin')?.value || '',
-        link: document.getElementById('du-link')?.value || '',
-        bgRenk: document.getElementById('du-bg-hex')?.value || document.getElementById('du-bg')?.value,
-        textRenk: document.getElementById('du-text-hex')?.value || document.getElementById('du-text')?.value,
-        kapatilabilir: document.getElementById('du-kapat')?.checked || false,
-      };
-    }
-    if (bolum === 'css') {
-      payload.ozelCss = document.getElementById('ozel-css')?.value || '';
-    }
-    if (bolum === 'reklamlar') {
-      payload.reklamAlanlari = _temaData.reklamAlanlari || [];
-    }
-    await setDoc(doc(db, 'platform_ayarlari', 'tema'), payload, { merge: true });
-    bildir('✅ ' + bolum + ' kaydedildi! Değişiklikler tüm sayfalara uygulanacak.');
-  } catch(e) { bildir('Kayıt hatası: ' + e.message, 'hata'); }
-};
-
-window.temaVarsayilanlar = async function() {
-  if (!confirm('Renkleri varsayılana sıfırlamak istediğinize emin misiniz?')) return;
-  const varsayilan = {
-    accent: '#7B5CF0', accent2: '#F0C55C', accent3: '#5CF0B4',
-    bg: '#0a0a0f', bg2: '#13131a', border: '#2e2e3f',
-    text: '#f0eeff', text2: '#9b97b8'
-  };
-  try {
-    await setDoc(doc(db, 'platform_ayarlari', 'tema'), { renkler: varsayilan, guncellendi: serverTimestamp() }, { merge: true });
-    temaFormlariDoldur({ renkler: varsayilan });
-    bildir('Varsayılan renkler geri yüklendi.');
-  } catch(e) { bildir('Hata: ' + e.message, 'hata'); }
-};
-
-window.temaCanliBak = function() {
-  window.open('gen-z.html', '_blank');
-};
-
-// ── Reklam alanları yönetimi
-function renderReklamListesi(reklamlar) {
-  _temaData.reklamAlanlari = reklamlar;
-  const el = document.getElementById('reklam-listesi');
-  if (!el) return;
-  if (!reklamlar.length) {
-    el.innerHTML = '<div style="color:var(--text3);font-size:13px;padding:16px 0;">Henüz reklam alanı tanımlanmamış.</div>';
-    return;
-  }
-  el.innerHTML = reklamlar.map((r, i) => `
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative;">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-        <span style="font-size:13px;font-weight:700;color:var(--text);">Reklam #${i+1}</span>
-        <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;margin-left:auto;">
-          <input type="checkbox" ${r.aktif?'checked':''} onchange="reklamGuncelle(${i},'aktif',this.checked)" style="accent-color:var(--gold);"/>
-          <span>Aktif</span>
-        </label>
-        <button class="eylem-btn red" onclick="reklamSil(${i})" style="padding:4px 10px;font-size:11px;">Sil</button>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div class="f-alan"><label>Alan ID (HTML id=)</label><input type="text" value="${r.alan||''}" oninput="reklamGuncelle(${i},'alan',this.value)" placeholder="genz-rek-1" class="f-input"/></div>
-        <div class="f-alan"><label>Tip</label>
-          <select onchange="reklamGuncelle(${i},'tip',this.value)" class="f-input">
-            <option value="gorsel" ${r.tip==='gorsel'?'selected':''}>📸 Görsel</option>
-            <option value="html" ${r.tip==='html'?'selected':''}>💻 HTML Kodu</option>
-            <option value="metin" ${r.tip==='metin'?'selected':''}>📝 Düz Metin</option>
-          </select>
-        </div>
-        ${r.tip==='gorsel' ? `
-        <div class="f-alan" style="grid-column:1/-1;"><label>Görsel URL</label><input type="text" value="${r.gorselUrl||''}" oninput="reklamGuncelle(${i},'gorselUrl',this.value)" placeholder="https://..." class="f-input"/></div>
-        <div class="f-alan"><label>Link URL (opsiyonel)</label><input type="text" value="${r.link||''}" oninput="reklamGuncelle(${i},'link',this.value)" placeholder="https://..." class="f-input"/></div>
-        <div class="f-alan"><label>Alt Metin</label><input type="text" value="${r.altText||''}" oninput="reklamGuncelle(${i},'altText',this.value)" placeholder="Reklam" class="f-input"/></div>
-        <div class="f-alan"><label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" ${r.yeniSekme?'checked':''} onchange="reklamGuncelle(${i},'yeniSekme',this.checked)" style="accent-color:var(--gold);"/> Yeni sekmede aç</label></div>
-        ` : ''}
-        ${r.tip==='html' ? `
-        <div class="f-alan" style="grid-column:1/-1;"><label>HTML İçeriği</label><textarea oninput="reklamGuncelle(${i},'html',this.value)" class="f-input" rows="4" style="font-family:monospace;resize:vertical;">${r.html||''}</textarea></div>
-        ` : ''}
-        ${r.tip==='metin' ? `
-        <div class="f-alan" style="grid-column:1/-1;"><label>Metin İçeriği</label><input type="text" value="${r.metin||''}" oninput="reklamGuncelle(${i},'metin',this.value)" class="f-input"/></div>
-        ` : ''}
-        <div class="f-alan"><label>Arka Plan Rengi</label><input type="text" value="${r.bgRenk||''}" oninput="reklamGuncelle(${i},'bgRenk',this.value)" placeholder="rgba(123,92,240,.1)" class="f-input"/></div>
-        <div class="f-alan"><label>Border Radius</label><input type="text" value="${r.borderRadius||'12px'}" oninput="reklamGuncelle(${i},'borderRadius',this.value)" placeholder="12px" class="f-input"/></div>
-        <div class="f-alan"><label>Margin</label><input type="text" value="${r.margin||''}" oninput="reklamGuncelle(${i},'margin',this.value)" placeholder="0 0 16px 0" class="f-input"/></div>
-      </div>
-      <button class="eylem-btn onay" onclick="temaKaydet('reklamlar')" style="margin-top:12px;width:100%;">💾 Bu Reklamı Kaydet</button>
-    </div>
-  `).join('');
-}
-
-window.reklamGuncelle = function(idx, alan, deger) {
-  if (!_temaData.reklamAlanlari) _temaData.reklamAlanlari = [];
-  _temaData.reklamAlanlari[idx][alan] = deger;
-};
-
-window.reklamEkle = function() {
-  if (!_temaData.reklamAlanlari) _temaData.reklamAlanlari = [];
-  _temaData.reklamAlanlari.push({ alan: 'genz-rek-' + (_temaData.reklamAlanlari.length + 1), tip: 'gorsel', aktif: true, gorselUrl: '', link: '', altText: '', yeniSekme: true, bgRenk: '', borderRadius: '12px', margin: '0 0 16px 0' });
-  renderReklamListesi(_temaData.reklamAlanlari);
-};
-
-window.reklamSil = function(idx) {
-  if (!confirm('Bu reklam alanını silmek istediğinize emin misiniz?')) return;
-  _temaData.reklamAlanlari.splice(idx, 1);
-  renderReklamListesi(_temaData.reklamAlanlari);
-  temaKaydet('reklamlar');
-};
 
 </script>
 <script type="module" src="firebase-config.js"></script>

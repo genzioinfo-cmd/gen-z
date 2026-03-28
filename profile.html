@@ -844,8 +844,19 @@ async function loadTab(tab) {
     if (tab === 'info' && currentUser) {
       const el = document.getElementById('info-username');
       const el2 = document.getElementById('info-email');
-      if (el) el.textContent = currentUser.username;
-      if (el2) el2.textContent = currentUser.email;
+      const el3 = document.getElementById('info-phone');
+      const el4 = document.getElementById('info-city');
+      const el5 = document.getElementById('info-role');
+      if (el) el.textContent = currentUser.username || '';
+      if (el2) el2.textContent = currentUser.email || '';
+      if (el3 && currentUser.phone) el3.textContent = currentUser.phone;
+      if (el4 && currentUser.city) el4.textContent = currentUser.city;
+      if (el5 && currentUser.rol) el5.textContent = currentUser.rol;
+    }
+
+    /* notifications sekmesinde kayıtlı tercihleri uygula */
+    if (tab === 'notifications') {
+      restoreNotifPrefs();
     }
 
     /* Animasyon — double rAF: tarayıcıya önce opacity:0'ı paint ettir, sonra transition başlat */
@@ -928,9 +939,11 @@ function saveEditModal() {
     showToast('Rol güncellendi ✓');
   } else if (field === 'phone') {
     document.getElementById('info-phone').textContent = val;
+    if (currentUser) { currentUser.phone = val; _ls.set('genz-user', JSON.stringify(currentUser)); }
     showToast('Telefon güncellendi ✓');
   } else if (field === 'city') {
     document.getElementById('info-city').textContent = val;
+    if (currentUser) { currentUser.city = val; _ls.set('genz-user', JSON.stringify(currentUser)); }
     showToast('Şehir güncellendi ✓');
   }
   closeEditModal();
@@ -1038,7 +1051,25 @@ document.getElementById('reviewModal').addEventListener('click', e => { if (e.ta
 
 /* ── NOTIFICATIONS ── */
 function saveNotif(el) {
+  // Bildirim tercihlerini localStorage'a kaydet
+  try {
+    const KEY = 'genz-bildirimler';
+    let prefs = JSON.parse(localStorage.getItem(KEY) || '{}');
+    prefs[el.id] = el.checked;
+    localStorage.setItem(KEY, JSON.stringify(prefs));
+  } catch(e) {}
   showToast(el.checked ? 'Bildirim açıldı 🔔' : 'Bildirim kapatıldı 🔕');
+}
+
+function restoreNotifPrefs() {
+  try {
+    const KEY = 'genz-bildirimler';
+    const prefs = JSON.parse(localStorage.getItem(KEY) || '{}');
+    Object.entries(prefs).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el) el.checked = val;
+    });
+  } catch(e) {}
 }
 
 /* ── SIGN OUT ── */

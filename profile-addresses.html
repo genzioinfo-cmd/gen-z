@@ -1,29 +1,82 @@
 <div class="profile-section-title">📍 Adres Defteri</div>
-<div class="address-grid" id="addressGrid">
-  <div class="address-card default-addr" id="addr1">
-    <div class="address-icon">🏠</div>
-    <div class="address-body">
-      <div class="address-title">Ev <span class="address-default-tag">Varsayılan</span></div>
-      <div class="address-text">Kızılay Mah. Atatürk Bulvarı No:45 D:3<br>Çankaya / Ankara, 06430</div>
-    </div>
-    <div class="address-actions">
-      <button class="addr-btn addr-btn-edit" onclick="openAddrModal('addr1')">Düzenle</button>
-      <button class="addr-btn addr-btn-del" onclick="deleteAddr('addr1')">Sil</button>
-    </div>
-  </div>
-  <div class="address-card" id="addr2">
-    <div class="address-icon">🏢</div>
-    <div class="address-body">
-      <div class="address-title">İş Yeri</div>
-      <div class="address-text">Söğütözü Mah. Söğütözü Cad. No:12 K:5<br>Çankaya / Ankara, 06520</div>
-    </div>
-    <div class="address-actions">
-      <button class="addr-btn addr-btn-edit" onclick="openAddrModal('addr2')">Düzenle</button>
-      <button class="addr-btn addr-btn-del" onclick="deleteAddr('addr2')">Sil</button>
-    </div>
-  </div>
-</div>
+<div class="address-grid" id="addressGrid"></div>
 <button class="btn-add-addr" onclick="openAddrModal(null)">+ Yeni Adres Ekle</button>
+
+<script>
+(function() {
+  const KEY = 'genz-adresler';
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { return []; }
+  }
+  function save(a) {
+    try { localStorage.setItem(KEY, JSON.stringify(a)); } catch {}
+  }
+
+  function render() {
+    const grid = document.getElementById('addressGrid');
+    if (!grid) return;
+    const adresler = load();
+
+    if (adresler.length === 0) {
+      grid.innerHTML = '<div style="color:var(--text3);font-size:13px;padding:20px 0;">Henüz adresin yok. Yeni adres ekleyebilirsin.</div>';
+      return;
+    }
+
+    grid.innerHTML = adresler.map((a, i) => `
+      <div class="address-card ${a.varsayilan ? 'default-addr' : ''}" id="addr-ls-${i}">
+        <div class="address-icon">${a.ikon || '📍'}</div>
+        <div class="address-body">
+          <div class="address-title">${a.baslik || 'Adres'}${a.varsayilan ? ' <span class="address-default-tag">Varsayılan</span>' : ''}</div>
+          <div class="address-text">${a.satir1 || ''}<br>${a.sehir || ''}</div>
+        </div>
+        <div class="address-actions">
+          <button class="addr-btn addr-btn-edit" onclick="openAddrModal(${i})">Düzenle</button>
+          <button class="addr-btn addr-btn-del" onclick="deleteAddrLS(${i})">Sil</button>
+        </div>
+      </div>`).join('');
+  }
+
+  window.deleteAddrLS = function(idx) {
+    const adresler = load();
+    adresler.splice(idx, 1);
+    save(adresler);
+    render();
+  };
+
+  // openAddrModal profile.html'de tanımlı - index parametresi ile çağrılır
+  // Ama burada da tanımlamamız gerekiyor çünkü subpage olarak yükleniyor
+  window.openAddrModal = function(idx) {
+    const adresler = load();
+    const mevcut = idx !== null ? adresler[idx] : null;
+
+    const baslik  = prompt('Adres başlığı (örn: Ev, İş):', mevcut?.baslik || '') ?? '';
+    if (!baslik.trim()) return;
+    const satir1  = prompt('Adres satırı:', mevcut?.satir1 || '') ?? '';
+    const sehir   = prompt('Şehir / İlçe / Posta kodu:', mevcut?.sehir || '') ?? '';
+
+    if (!satir1.trim()) return;
+
+    const yeni = { baslik: baslik.trim(), satir1: satir1.trim(), sehir: sehir.trim(), ikon: mevcut?.ikon || '📍', varsayilan: mevcut?.varsayilan || false };
+
+    if (idx !== null) {
+      adresler[idx] = yeni;
+    } else {
+      if (adresler.length === 0) yeni.varsayilan = true;
+      adresler.push(yeni);
+    }
+    save(adresler);
+    render();
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', render);
+  } else {
+    render();
+  }
+  window.addEventListener('genzSyncYuklendi', render);
+})();
+</script>
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
 <script src="cookie-consent.js"></script>

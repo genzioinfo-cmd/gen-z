@@ -27,6 +27,8 @@ const SYNC_KEYS = {
   'genz-adresler' : 'adresler',
   'genz-siparisler': 'siparisler',
   'genz-bildirimler': 'bildirimler',
+  'genz-favoriler'  : 'favoriler',
+  'genz-yorumlar'   : 'yorumlar',
 };
 
 // ── Firestore'dan kullanıcı verisini yükle → localStorage'a yaz ──

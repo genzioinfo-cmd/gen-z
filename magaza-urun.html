@@ -491,7 +491,8 @@ nav, .modal-overlay-auth, .modal-box, .toast {
         <div class="urun-desc" id="urunDesc"></div>
         <div class="urun-tags" id="urunTags"></div>
         <div class="urun-actions">
-          <button class="btn-buy-lg" onclick="if(!currentUser){openAuth('signin');showToast('Satın almak için giriş yap ⚠️');}else{showToast('Ödeme sistemi yakında aktif olacak 🔜');}">🛒 Satın Al</button>
+          <button class="btn-buy-lg" id="buyBtn" onclick="sepeteEkleDetay()">🛒 Sepete Ekle</button>
+          <button class="btn-share-lg" id="favBtn" onclick="favoriToggleDetay()" style="min-width:44px">🤍</button>
           <button class="btn-share-lg" onclick="if(navigator.clipboard)navigator.clipboard.writeText(window.location.href);showToast('Bağlantı kopyalandı ↗')" title="Paylaş">↗</button>
         </div>
         <div class="seller-section">
@@ -706,40 +707,7 @@ function switchTab(tab) {
   const authTabs = document.getElementById('authTabs');
   if (authTabs) authTabs.style.display = (tab === 'forgot' || tab === 'profile') ? 'none' : 'flex';
 }
-function doSignIn() {
-  const email = document.getElementById('signin-email').value.trim();
-  const pass  = document.getElementById('signin-pass').value;
-  if (!email || !pass) { showToast('Lütfen tüm alanları doldurun ⚠️'); return; }
-  fakeLogin(email, 'Kullanıcı');
-}
-function doSignUp() {
-  const username = document.getElementById('signup-username').value.trim();
-  const email    = document.getElementById('signup-email').value.trim();
-  const pass     = document.getElementById('signup-pass').value;
-  if (!username || !email || !pass) { showToast('Lütfen tüm alanları doldurun ⚠️'); return; }
-  if (pass.length < 8) { showToast('Şifre en az 8 karakter olmalı ⚠️'); return; }
-  fakeLogin(email, username);
-}
-function doForgot() {
-  const email = document.getElementById('forgot-email').value.trim();
-  if (!email) { showToast('E-posta adresinizi girin ⚠️'); return; }
-  showToast('Sıfırlama bağlantısı gönderildi ✉️');
-  setTimeout(() => switchTab('signin'), 1500);
-}
-// googleSignIn -> firebase-auth.js
-function fakeLogin(email, username) {
-  const clean = '@' + username.replace('@', '');
-  currentUser = { email, username: clean };
-  _ls.set('genz-user', JSON.stringify(currentUser));
-  const pe = document.getElementById('profile-email');
-  const pu = document.getElementById('profile-username');
-  const ab = document.getElementById('authBtn');
-  if (pe) pe.textContent = email;
-  if (pu) pu.textContent = clean;
-  if (ab) ab.textContent = clean;
-  closeAuth();
-  showToast('Hoş geldin, ' + clean + ' 👋');
-}
+/* auth delegated to firebase-config.js — doSignIn/doSignUp/doForgot/googleSignIn set as window globals */
 function doSignOut() {
   currentUser = null;
   _ls.remove('genz-user');
@@ -770,6 +738,40 @@ function renderStars(rating) {
 }
 
 
+/* ── SEPET & FAVORİ YARDIMCILARI ── */
+let _detayUrun = null; // renderUrun sonrası set edilecek
+
+function sepeteEkleDetay() {
+  if (!_detayUrun) return;
+  const KEY = 'genz-sepet';
+  let sepet = _ls.getJSON(KEY, []);
+  const mevcut = sepet.find(i => i.id === _detayUrun.id);
+  if (mevcut) { mevcut.qty = (mevcut.qty || 1) + 1; }
+  else { sepet.push({ id: _detayUrun.id, name: _detayUrun.name, price: _detayUrun.price, emoji: _detayUrun.emoji, src: _detayUrun.seller?.name || '', qty: 1 }); }
+  _ls.set(KEY, JSON.stringify(sepet));
+  showToast('Sepete eklendi 🛒');
+  const btn = document.getElementById('buyBtn');
+  if (btn) { btn.textContent = '✓ Sepette'; btn.style.background = 'var(--accent3)'; btn.style.color = '#000'; }
+}
+
+function favoriToggleDetay() {
+  if (!_detayUrun) return;
+  const KEY = 'genz-favoriler';
+  let favs = _ls.getJSON(KEY, []);
+  const idx = favs.findIndex(f => f.id === _detayUrun.id);
+  const btn = document.getElementById('favBtn');
+  if (idx >= 0) {
+    favs.splice(idx, 1);
+    if (btn) btn.textContent = '🤍';
+    showToast('Favorilerden çıkarıldı');
+  } else {
+    favs.push({ id: _detayUrun.id, ad: _detayUrun.name, fiyat: _detayUrun.price, emoji: _detayUrun.emoji });
+    if (btn) btn.textContent = '❤️';
+    showToast('Favorilere eklendi ❤️');
+  }
+  _ls.set(KEY, JSON.stringify(favs));
+}
+
 /* ── PAGE SCRIPT ── */
 initThemeLang();
 document.addEventListener('DOMContentLoaded', () => {
@@ -789,7 +791,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const p = getProductById(id);
   if (!p) { document.querySelector('.urun-inner').innerHTML = '<div class="empty-state"><div class="empty-icon">😕</div><div class="empty-text">Ürün bulunamadı</div><div class="empty-sub"><a href="magaza.html" style="color:var(--accent)">← Mağazaya dön</a></div></div>'; return; }
 
+  _detayUrun = p; // sepet ve favori fonksiyonları için
   document.title = 'GEN-Z · ' + p.name;
+  // Favori buton durumunu güncelle
+  const favs = _ls.getJSON('genz-favoriler', []);
+  const favBtn = document.getElementById('favBtn');
+  if (favBtn) favBtn.textContent = favs.some(f => f.id === p.id) ? '❤️' : '🤍';
+  // Sepet buton durumunu güncelle
+  const sepet = _ls.getJSON('genz-sepet', []);
+  const buyBtn = document.getElementById('buyBtn');
+  if (buyBtn && sepet.some(i => i.id === p.id)) {
+    buyBtn.textContent = '✓ Sepette'; buyBtn.style.background = 'var(--accent3)'; buyBtn.style.color = '#000';
+  }
   document.getElementById('breadcrumb').innerHTML = '<a href="magaza.html">Mağaza</a><span class="sep">›</span><span class="current">' + p.name + '</span>';
   document.getElementById('urunEmoji').textContent = p.emoji;
   document.getElementById('urunGrad').style.background = 'linear-gradient(135deg, ' + p.gradA + ', ' + p.gradB + ')';

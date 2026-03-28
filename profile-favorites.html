@@ -1,24 +1,53 @@
 <div class="profile-section-title">❤️ Favorilerim</div>
-<div class="fav-grid" id="favGrid">
-  <div class="fav-card">
-    <button class="fav-remove" onclick="removeFav(this)" title="Favoriden çıkar">✕</button>
-    <div class="fav-card-icon">👟</div>
-    <div class="fav-card-name">Retro Sneakers</div>
-    <div class="fav-card-price">₺1.200</div>
-  </div>
-  <div class="fav-card">
-    <button class="fav-remove" onclick="removeFav(this)" title="Favoriden çıkar">✕</button>
-    <div class="fav-card-icon">🧢</div>
-    <div class="fav-card-name">Snapback Cap</div>
-    <div class="fav-card-price">₺350</div>
-  </div>
-  <div class="fav-card">
-    <button class="fav-remove" onclick="removeFav(this)" title="Favoriden çıkar">✕</button>
-    <div class="fav-card-icon">🎒</div>
-    <div class="fav-card-name">Urban Backpack</div>
-    <div class="fav-card-price">₺890</div>
-  </div>
-</div>
+<div class="fav-grid" id="favGrid"></div>
+
+<script>
+(function() {
+  const KEY = 'genz-favoriler';
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { return []; }
+  }
+
+  function save(favs) {
+    try { localStorage.setItem(KEY, JSON.stringify(favs)); } catch {}
+  }
+
+  function removeFav(id) {
+    const favs = load().filter(f => f.id !== id);
+    save(favs);
+    render();
+  }
+  // global olarak da erişilebilsin (profile.html'deki onclick için)
+  window.removeFavItem = removeFav;
+
+  function render() {
+    const grid = document.getElementById('favGrid');
+    if (!grid) return;
+    const favs = load();
+
+    if (favs.length === 0) {
+      grid.innerHTML = '<div style="text-align:center;padding:40px 0;color:var(--text3);font-size:14px;grid-column:1/-1;">Henüz favori ürünün yok.<br><small style="font-size:12px;margin-top:6px;display:block;">Ürünleri favorilere ekleyerek buradan takip edebilirsin.</small></div>';
+      return;
+    }
+
+    grid.innerHTML = favs.map(f => `
+      <div class="fav-card">
+        <button class="fav-remove" onclick="window.removeFavItem('${f.id}')" title="Favoriden çıkar">✕</button>
+        ${f.resim ? `<img src="${f.resim}" alt="${f.ad}" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;margin-bottom:8px"/>` : `<div class="fav-card-icon">${f.emoji || '🛍️'}</div>`}
+        <div class="fav-card-name">${f.ad || f.name || ''}</div>
+        <div class="fav-card-price">₺${(f.fiyat || f.price || 0).toLocaleString('tr-TR')}</div>
+      </div>`).join('');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', render);
+  } else {
+    render();
+  }
+  window.addEventListener('genzSyncYuklendi', render);
+})();
+</script>
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
 <script src="cookie-consent.js"></script>

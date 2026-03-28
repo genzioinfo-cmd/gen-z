@@ -1,25 +1,52 @@
 <div class="profile-section-title">📦 Siparişlerim</div>
-<div class="order-card">
-  <div class="order-icon">🏪</div>
-  <div class="order-info">
-    <div class="order-name">Vintage Denim Ceket</div>
-    <div class="order-date">15 Mart 2025 · GEN-Z Mağaza</div>
-  </div>
-  <span class="order-status delivered">Teslim Edildi</span>
-  <span class="order-price">₺480</span>
-</div>
-<div class="order-card">
-  <div class="order-icon">🔧</div>
-  <div class="order-info">
-    <div class="order-name">Ustam Premium Üyelik — 1 Ay</div>
-    <div class="order-date">22 Mart 2025 · Ustam</div>
-  </div>
-  <span class="order-status pending">İşlemde</span>
-  <span class="order-price">₺149</span>
-</div>
-<div style="text-align:center; margin-top:28px; color:var(--text3); font-size:13px;">
-  Geçmiş siparişlerin burada görünür.
-</div>
+<div id="ordersList"></div>
+
+<script>
+(function() {
+  const DURUM_MAP = {
+    hazirlaniyor: { label: 'Hazırlanıyor', cls: 'pending' },
+    kargoda:      { label: 'Kargoda',      cls: 'pending' },
+    teslim:       { label: 'Teslim Edildi', cls: 'delivered' },
+    iptal:        { label: 'İptal',         cls: 'cancelled' },
+  };
+
+  function render() {
+    const container = document.getElementById('ordersList');
+    if (!container) return;
+    let siparisler = [];
+    try { siparisler = JSON.parse(localStorage.getItem('genz-siparisler') || '[]'); } catch {}
+
+    if (siparisler.length === 0) {
+      container.innerHTML = '<div style="text-align:center;padding:40px 0;color:var(--text3);font-size:14px;">Henüz siparişin yok.<br><small style="font-size:12px;margin-top:6px;display:block;">Verdiğin siparişler burada görünecek.</small></div>';
+      return;
+    }
+
+    container.innerHTML = siparisler.map(s => {
+      const d = DURUM_MAP[s.durum] || { label: s.durum || 'İşlemde', cls: 'pending' };
+      const ilkUrun = (s.urunler || [])[0];
+      const urunAdi = ilkUrun ? ilkUrun.name : 'Sipariş';
+      const emoji = ilkUrun?.emoji || '📦';
+      const extra = s.urunler && s.urunler.length > 1 ? ` +${s.urunler.length - 1} ürün` : '';
+      return `<div class="order-card">
+        <div class="order-icon">${emoji}</div>
+        <div class="order-info">
+          <div class="order-name">${urunAdi}${extra}</div>
+          <div class="order-date">${s.tarih || ''} · ${s.kod || ''}</div>
+        </div>
+        <span class="order-status ${d.cls}">${d.label}</span>
+        <span class="order-price">₺${(s.toplam || 0).toLocaleString('tr-TR')}</span>
+      </div>`;
+    }).join('');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', render);
+  } else {
+    render();
+  }
+  window.addEventListener('genzSyncYuklendi', render);
+})();
+</script>
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
 <script src="cookie-consent.js"></script>

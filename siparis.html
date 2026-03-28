@@ -615,11 +615,33 @@ function placeOrder(){
     if(kc.length<3){ showToast('CVV eksik ⚠️'); return; }
   }
 
+  // Sipariş kodu
+  const kod = 'GZ-' + Math.random().toString(36).substring(2,8).toUpperCase();
+
+  // Siparişi localStorage'a kaydet
+  const subtotal = items.reduce((t,i)=>t+i.price*(i.qty||1),0);
+  const kapidaEk = odemeYontemi==='kapida' ? 15 : 0;
+  const toplam = subtotal + kargoUcret + kapidaEk;
+  const yeniSiparis = {
+    kod,
+    tarih: new Date().toLocaleDateString('tr-TR', { day:'numeric', month:'long', year:'numeric' }),
+    tarihTs: Date.now(),
+    urunler: items,
+    adres: { ad, soyad, tel, adres, il },
+    kargo: { ad: kargoAdi, sure: kargoSure, ucret: kargoUcret },
+    odeme: odemeYontemi,
+    toplam,
+    durum: 'hazirlaniyor'
+  };
+  try {
+    const mevcutlar = JSON.parse(localStorage.getItem('genz-siparisler') || '[]');
+    mevcutlar.unshift(yeniSiparis);
+    localStorage.setItem('genz-siparisler', JSON.stringify(mevcutlar));
+  } catch(e) { console.warn('Sipariş kaydedilemedi:', e); }
+
   // Sepeti temizle
   saveCart([]);
 
-  // Sipariş kodu
-  const kod = 'GZ-' + Math.random().toString(36).substring(2,8).toUpperCase();
   document.getElementById('successCode').textContent = kod;
   document.getElementById('successScreen').classList.add('show');
 }

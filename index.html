@@ -986,32 +986,9 @@ function switchTab(tab) {
     (tab === 'forgot' || tab === 'profile') ? 'none' : 'flex';
 }
 
-/* ── SIGN IN / UP ── */
-function doSignIn() {
-  const email = document.getElementById('signin-email').value.trim();
-  const pass  = document.getElementById('signin-pass').value;
-  if (!email || !pass) { showToast('Lütfen tüm alanları doldurun ⚠️'); return; }
-  fakeLogin(email, 'Kullanıcı');
-}
-function doSignUp() {
-  const username = document.getElementById('signup-username').value.trim();
-  const email    = document.getElementById('signup-email').value.trim();
-  const pass     = document.getElementById('signup-pass').value;
-  if (!username || !email || !pass) { showToast('Lütfen tüm alanları doldurun ⚠️'); return; }
-  if (pass.length < 8) { showToast('Şifre en az 8 karakter olmalı ⚠️'); return; }
-  fakeLogin(email, username);
-}
-function doForgot() {
-  const email = document.getElementById('forgot-email').value.trim();
-  if (!email) { showToast('E-posta adresinizi girin ⚠️'); return; }
-  showToast('Sıfırlama bağlantısı gönderildi ✉️');
-  setTimeout(() => switchTab('signin'), 1500);
-}
-// googleSignIn -> firebase-auth.js
-
-function fakeLogin(email, username) {
-  const clean = '@' + username.replace('@', '');
-  currentUser = { email, username: clean };
+/* ── SIGN IN / UP — delegates to firebase-config.js window globals ── */
+// doSignIn, doSignUp, doForgot, googleSignIn are set by firebase-config.js module
+;
   _ls.set('genz-user', JSON.stringify(currentUser));
   document.getElementById('profile-email').textContent    = email;
   document.getElementById('profile-username').textContent = clean;

@@ -1,32 +1,75 @@
 <div class="profile-section-title">⭐ Değerlendirmelerim</div>
-<div id="reviewsList">
-  <div class="review-card" id="review1">
-    <div class="review-header">
-      <span class="review-product-icon">🧴</span>
-      <span class="review-product-name">Doğal Argan Yağı Şampuanı</span>
-      <span class="review-stars" id="reviewStars1">★★★★★</span>
-      <span class="review-date">15 Mart 2025</span>
-    </div>
-    <div class="review-text" id="reviewText1">Harika ürün, saçlarım çok daha sağlıklı görünüyor. Kesinlikle tavsiye ederim!</div>
-    <div class="review-actions">
-      <button class="review-btn review-btn-edit" onclick="openReviewModal('review1', 5, document.getElementById('reviewText1').textContent)">✏️ Düzenle</button>
-      <button class="review-btn review-btn-del" onclick="deleteReview('review1')">🗑 Sil</button>
-    </div>
-  </div>
-  <div class="review-card" id="review2">
-    <div class="review-header">
-      <span class="review-product-icon">🕯️</span>
-      <span class="review-product-name">El Yapımı Soya Mum Seti</span>
-      <span class="review-stars" id="reviewStars2">★★★★☆</span>
-      <span class="review-date">22 Mart 2025</span>
-    </div>
-    <div class="review-text" id="reviewText2">Kokusu muhteşem, ambalaj çok şıktı. Teslimat biraz gecikti ama ürün mükemmel.</div>
-    <div class="review-actions">
-      <button class="review-btn review-btn-edit" onclick="openReviewModal('review2', 4, document.getElementById('reviewText2').textContent)">✏️ Düzenle</button>
-      <button class="review-btn review-btn-del" onclick="deleteReview('review2')">🗑 Sil</button>
-    </div>
-  </div>
-</div>
+<div id="reviewsList"></div>
+
+<script>
+(function() {
+  const KEY = 'genz-yorumlar';
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { return []; }
+  }
+  function save(r) {
+    try { localStorage.setItem(KEY, JSON.stringify(r)); } catch {}
+  }
+
+  function yildizlar(n) {
+    return '★'.repeat(n) + '☆'.repeat(5 - n);
+  }
+
+  function render() {
+    const container = document.getElementById('reviewsList');
+    if (!container) return;
+    const yorumlar = load();
+
+    if (yorumlar.length === 0) {
+      container.innerHTML = '<div style="text-align:center;padding:40px 0;color:var(--text3);font-size:14px;">Henüz değerlendirmen yok.<br><small style="font-size:12px;margin-top:6px;display:block;">Satın aldığın ürünlere yorum yapabilirsin.</small></div>';
+      return;
+    }
+
+    container.innerHTML = yorumlar.map((y, i) => `
+      <div class="review-card" id="review-ls-${i}">
+        <div class="review-header">
+          <span class="review-product-icon">${y.emoji || '🛍️'}</span>
+          <span class="review-product-name">${y.urun || ''}</span>
+          <span class="review-stars" id="reviewStars-ls-${i}">${yildizlar(y.puan || 5)}</span>
+          <span class="review-date">${y.tarih || ''}</span>
+        </div>
+        <div class="review-text" id="reviewText-ls-${i}">${y.metin || ''}</div>
+        <div class="review-actions">
+          <button class="review-btn review-btn-edit" onclick="editReviewLS(${i})">✏️ Düzenle</button>
+          <button class="review-btn review-btn-del" onclick="deleteReviewLS(${i})">🗑 Sil</button>
+        </div>
+      </div>`).join('');
+  }
+
+  window.deleteReviewLS = function(idx) {
+    const yorumlar = load();
+    yorumlar.splice(idx, 1);
+    save(yorumlar);
+    render();
+  };
+
+  window.editReviewLS = function(idx) {
+    const yorumlar = load();
+    const y = yorumlar[idx];
+    const yeniMetin = prompt('Yorumunu düzenle:', y.metin || '') ?? y.metin;
+    const yeniPuan = parseInt(prompt('Puan (1-5):', y.puan || 5) ?? y.puan, 10);
+    if (yeniMetin !== null) {
+      y.metin = yeniMetin.trim();
+      if (!isNaN(yeniPuan) && yeniPuan >= 1 && yeniPuan <= 5) y.puan = yeniPuan;
+      save(yorumlar);
+      render();
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', render);
+  } else {
+    render();
+  }
+  window.addEventListener('genzSyncYuklendi', render);
+})();
+</script>
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
 <script src="cookie-consent.js"></script>

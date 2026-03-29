@@ -510,6 +510,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
           <button class="f-tab" onclick="filtreUrun('aktif',this)">✅ Aktif</button>
           <button class="f-tab" onclick="filtreUrun('reddedildi',this)">❌ Reddedildi</button>
           <button class="f-tab" onclick="filtreUrun('gencz',this)">⚡ Genç-Z</button>
+          <button onclick="blobUrlTemizle()" style="margin-left:auto;padding:.3rem .9rem;background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.3);color:var(--red);border-radius:4px;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">🧹 Bozuk Resimleri Temizle</button>
         </div>
         <div id="urunTablo"><div class="yukleniyor">✦ Yükleniyor…</div></div>
       </div>
@@ -1820,6 +1821,29 @@ async function renderUrunler() {
     console.error(e);
   }
 }
+
+// ── BLOB URL TEMİZLE ──
+window.blobUrlTemizle = async function() {
+  if (!confirm('Firestore\'daki blob URL\'li ürün resimleri temizlenecek. Emin misiniz?')) return;
+  try {
+    const snap = await getDocs(collection(db, 'magaza_urunler'));
+    let sayi = 0;
+    for (const d of snap.docs) {
+      const u = d.data();
+      if (u.resimler && u.resimler.length > 0) {
+        const temizler = u.resimler.filter(r => r && r.startsWith('https://') && !r.startsWith('blob:'));
+        if (temizler.length !== u.resimler.length) {
+          await updateDoc(doc(db, 'magaza_urunler', d.id), { resimler: temizler });
+          sayi++;
+        }
+      }
+    }
+    bildir('✅ ' + sayi + ' üründeki blob URL temizlendi.');
+    renderUrunler();
+  } catch(e) {
+    bildir('Hata: ' + e.message, 'hata');
+  }
+};
 
 window.urunDurum = async function(id, durum) {
   if (durum === 'reddedildi') {

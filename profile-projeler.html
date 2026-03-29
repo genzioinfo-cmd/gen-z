@@ -1,0 +1,256 @@
+<!-- profile-projeler.html
+     Müşteri profilinde "📋 Projelerim" sekmesi olarak yüklenir.
+     profile.html'de sekme listesine ekle:
+       { id:'projeler', label:'📋 Projelerim', src:'profile-projeler.html' }
+-->
+
+<div class="profile-section-title">📋 Projelerim</div>
+<div id="musteriProjeListesi">
+  <div style="text-align:center;padding:2rem 0;color:var(--text3);font-size:13px;">Yükleniyor…</div>
+</div>
+
+<style>
+/* ── MÜŞTERİ PROJE KARTI ── */
+.mprj-kart {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  transition: border-color .2s;
+}
+.mprj-kart:hover { border-color: var(--accent2); }
+.mprj-kart.onay-bk {
+  border-color: rgba(240,197,92,.5);
+  animation: mprjPulse 2s infinite;
+}
+@keyframes mprjPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(240,197,92,0); }
+  50%      { box-shadow: 0 0 0 5px rgba(240,197,92,.1); }
+}
+
+.mprj-bas  { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.mprj-isad { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+.mprj-meta { font-size: 12px; color: var(--text3); }
+
+/* Bar */
+.mprj-bar-wrap  { margin: 10px 0 14px; }
+.mprj-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text3); margin-bottom: 5px; }
+.mprj-bar-track { height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
+.mprj-bar-fill  { height: 100%; border-radius: 3px; transition: width .6s ease; background: linear-gradient(90deg, var(--accent), var(--accent3)); }
+.mprj-bar-fill.iptal { background: #ff6b6b; }
+.mprj-bar-fill.tamam { background: var(--accent3); }
+
+/* Durum badge */
+.mprj-durum {
+  font-size: 11px; font-weight: 700;
+  padding: 4px 12px; border-radius: 20px; white-space: nowrap;
+}
+.mprj-durum.devam      { color: var(--accent2); background: rgba(240,197,92,.1);  border: 1px solid rgba(240,197,92,.25); }
+.mprj-durum.tamamlandi { color: var(--accent3); background: rgba(92,240,180,.1);  border: 1px solid rgba(92,240,180,.25); }
+.mprj-durum.iptal      { color: #ff6b6b;        background: rgba(255,80,80,.08);  border: 1px solid rgba(255,80,80,.2); }
+.mprj-durum.onay-bk    { color: var(--accent2); background: rgba(240,197,92,.15); border: 1px solid rgba(240,197,92,.5); }
+
+/* Onay Kartı */
+.mprj-onay-kutu {
+  background: rgba(240,197,92,.06);
+  border: 1px solid rgba(240,197,92,.3);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+.mprj-onay-baslik { font-size: 13px; font-weight: 700; color: var(--accent2); margin-bottom: 6px; }
+.mprj-onay-acikl  { font-size: 12px; color: var(--text2); margin-bottom: 12px; line-height: 1.6; }
+.mprj-onay-btnler { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.mprj-btn-onayla {
+  padding: 9px 20px;
+  background: rgba(92,240,180,.1);
+  border: 1px solid rgba(92,240,180,.35);
+  border-radius: var(--radius-sm);
+  color: var(--accent3);
+  font-size: 12px; font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+}
+.mprj-btn-onayla:hover { background: rgba(92,240,180,.2); }
+
+.mprj-btn-reddet {
+  padding: 9px 20px;
+  background: rgba(255,80,80,.08);
+  border: 1px solid rgba(255,80,80,.25);
+  border-radius: var(--radius-sm);
+  color: #ff6b6b;
+  font-size: 12px; font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+}
+.mprj-btn-reddet:hover { background: rgba(255,80,80,.15); }
+
+/* Tamamlanan Kart (profil yayın kartı) */
+.mprj-tamam-kart {
+  display: flex; align-items: center; gap: 14px;
+  background: rgba(92,240,180,.05);
+  border: 1px solid rgba(92,240,180,.2);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin-top: 10px;
+}
+.mprj-tamam-ikon { font-size: 28px; flex-shrink: 0; }
+.mprj-tamam-is   { font-size: 14px; font-weight: 700; color: var(--text); }
+.mprj-tamam-nrd  { font-size: 12px; color: var(--text3); margin-top: 2px; }
+.mprj-tamam-tick { margin-left: auto; color: var(--accent3); font-size: 20px; }
+</style>
+
+<script type="module">
+import { musteriProjeleriDinle, musteriOnayVer } from './proje-takip.js';
+
+let _unsub = null;
+
+async function uidBekle() {
+  return new Promise(resolve => {
+    const iv = setInterval(() => {
+      const uid = window._genzAuth?.auth?.currentUser?.uid
+        || JSON.parse(localStorage.getItem('genz-user') || 'null')?.uid;
+      if (uid) { clearInterval(iv); resolve(uid); }
+    }, 200);
+    setTimeout(() => { clearInterval(iv); resolve(null); }, 6000);
+  });
+}
+
+async function baslat() {
+  const uid = await uidBekle();
+  const el  = document.getElementById('musteriProjeListesi');
+
+  if (!uid) {
+    el.innerHTML = `<div style="text-align:center;padding:40px 0;color:var(--text3);font-size:14px;">
+      Projelerini görmek için giriş yapmalısın.
+    </div>`;
+    return;
+  }
+
+  _unsub = musteriProjeleriDinle(uid, (projeler) => {
+    render(projeler);
+  });
+}
+
+function render(projeler) {
+  const el = document.getElementById('musteriProjeListesi');
+  if (!el) return;
+
+  if (!projeler.length) {
+    el.innerHTML = `<div style="text-align:center;padding:40px 0;color:var(--text3);font-size:14px;">
+      Henüz projen yok.<br>
+      <small style="font-size:12px;margin-top:6px;display:block;">
+        Randevu aldığın bir usta işe başladığında buradan takip edebilirsin.
+      </small>
+    </div>`;
+    return;
+  }
+
+  el.innerHTML = projeler.map(p => projeKartHTML(p)).join('');
+}
+
+function projeKartHTML(p) {
+  const tarih = p.ts?.toDate
+    ? p.ts.toDate().toLocaleDateString('tr-TR')
+    : '—';
+
+  const durumMap = {
+    devam       : { label: '⚙️ Devam Ediyor', cls: 'devam' },
+    tamamlandi  : { label: '✅ Tamamlandı',   cls: 'tamamlandi' },
+    iptal       : { label: '🚫 İptal',        cls: 'iptal' },
+  };
+  const d = durumMap[p.durum] || durumMap.devam;
+
+  let barCls = '';
+  if (p.durum === 'iptal') barCls = 'iptal';
+  if (p.durum === 'tamamlandi') barCls = 'tamam';
+
+  // Onay bekleyen son adım
+  const sonBekleyen = (p.adimlar || []).filter(a => a.musteriOnay === null).slice(-1)[0];
+  let onayKutuHTML = '';
+  if (p.onayBekliyor && sonBekleyen && p.durum === 'devam') {
+    const yuzde = sonBekleyen.yuzde;
+    const mesaj = yuzde === 100
+      ? 'Usta işin tamamlandığını bildirdi. Onaylarsanız proje kapanacak.'
+      : `Usta işin %${yuzde}'inin tamamlandığını bildirdi. Onaylamanızı bekliyor.`;
+    onayKutuHTML = `
+      <div class="mprj-onay-kutu">
+        <div class="mprj-onay-baslik">⏳ Onayın Bekleniyor — %${yuzde}</div>
+        <div class="mprj-onay-acikl">${mesaj}</div>
+        <div class="mprj-onay-btnler">
+          <button class="mprj-btn-onayla" onclick="mprjOnayla('${p.id}', true)">✅ Onaylıyorum</button>
+          <button class="mprj-btn-reddet" onclick="mprjOnayla('${p.id}', false)">❌ Reddediyorum</button>
+        </div>
+      </div>`;
+  }
+
+  // Tamamlanan proje yayın kartı
+  let tamamKartHTML = '';
+  if (p.durum === 'tamamlandi') {
+    const tTarih = p.tamamlanmaTarihi?.toDate
+      ? p.tamamlanmaTarihi.toDate().toLocaleDateString('tr-TR')
+      : tarih;
+    tamamKartHTML = `
+      <div class="mprj-tamam-kart">
+        <div class="mprj-tamam-ikon">🏆</div>
+        <div>
+          <div class="mprj-tamam-is">${p.isAdi}</div>
+          <div class="mprj-tamam-nrd">📍 ${p.sehir || '—'} &nbsp;·&nbsp; ${tTarih}</div>
+        </div>
+        <div class="mprj-tamam-tick">✓</div>
+      </div>`;
+  }
+
+  return `<div class="mprj-kart ${p.onayBekliyor && p.durum === 'devam' ? 'onay-bk' : ''}">
+    <div class="mprj-bas">
+      <div>
+        <div class="mprj-isad">${p.isAdi}</div>
+        <div class="mprj-meta">
+          🔧 ${p.ustaAdi} &nbsp;·&nbsp; 📍 ${p.sehir || '—'} &nbsp;·&nbsp; 📅 ${tarih}
+        </div>
+      </div>
+      <span class="mprj-durum ${p.onayBekliyor && p.durum === 'devam' ? 'onay-bk' : d.cls}">
+        ${p.onayBekliyor && p.durum === 'devam' ? '⏳ Onayın Bekleniyor' : d.label}
+      </span>
+    </div>
+
+    <div class="mprj-bar-wrap">
+      <div class="mprj-bar-label">
+        <span>İlerleme</span>
+        <span>%${p.ilerleme || 0}</span>
+      </div>
+      <div class="mprj-bar-track">
+        <div class="mprj-bar-fill ${barCls}" style="width:${p.ilerleme || 0}%"></div>
+      </div>
+    </div>
+
+    ${onayKutuHTML}
+    ${tamamKartHTML}
+  </div>`;
+}
+
+window.mprjOnayla = async function(projeId, onay) {
+  const mesaj = onay
+    ? 'Bu ilerleme adımını onaylıyor musun?'
+    : 'Reddedersen proje iptal olacak. Emin misin?';
+  if (!confirm(mesaj)) return;
+
+  try {
+    await musteriOnayVer(projeId, onay);
+    if (typeof showToast === 'function') {
+      showToast(onay ? '✅ Onaylandı' : '🚫 Reddedildi, proje iptal edildi');
+    }
+  } catch(e) {
+    console.error(e);
+    if (typeof showToast === 'function') showToast('Hata oluştu ⚠️');
+  }
+};
+
+baslat();
+</script>
+
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="firebase-sync.js"></script>
+<script src="cookie-consent.js"></script>

@@ -70,6 +70,7 @@ window.resimSec = async function(files) {
     }
     const sikis = await gorselSikistir(f);
     _resimler.push(sikis);
+    window._resimler = _resimler; // modpanel.html ile senkronize et
     magazaResimPreview();
     window.formKontrol?.();
   }

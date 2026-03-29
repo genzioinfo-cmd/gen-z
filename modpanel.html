@@ -3078,7 +3078,7 @@ window.urunFiltre=function(tip,btn){
 window.formKontrol = function formKontrol(){
   const ad=(document.getElementById('uAd')?.value||'').trim();
   const fiyat=parseFloat(document.getElementById('uFiyat')?.value||0);
-  const foto=_resimler.length>0;
+  const foto=(window._resimler||_resimler).length>0;
   const kat=!!_secKat;
   const tamam= kat && ad && fiyat>0 && foto;
   // Yayınla butonu — foto + kat + ad + fiyat zorunlu

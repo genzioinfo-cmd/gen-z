@@ -1353,7 +1353,7 @@ function giRender() {
         .filter(k=>i[k]).map(k=>`<span style="font-size:.5rem;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;padding:.1rem .35rem;margin:.1rem;">${k}: ${i[k]}</span>`).join('');
       return `<tr>
         <td><span style="font-size:.58rem;background:rgba(123,92,240,.12);color:#a78bfa;border:1px solid rgba(123,92,240,.25);padding:.15rem .5rem;border-radius:10px;">${i.kategori||'—'}</span></td>
-        <td><strong style="font-size:.72rem;">${i.baslik||'—'}</strong><div style="font-size:.6rem;color:var(--t2);margin-top:.2rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${i.aciklama||''}</div></td>
+        <td><strong style="font-size:.72rem;">${i.baslik||'—'}</strong><div style="font-size:.6rem;color:var(--t2);margin-top:.2rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${i.aciklama||''}</div>${i.duzeltmeNotu?`<div style="font-size:.58rem;color:#5CF0B4;margin-top:.2rem;">📝 ${i.duzeltmeNotu}</div>`:''}</td>
         <td style="font-size:.62rem;color:var(--t2);">${i.email||i.uid?.substring(0,8)||'—'}</td>
         <td style="max-width:180px;">${detaylar||'<span style="color:var(--t3);font-size:.6rem;">—</span>'}</td>
         <td style="font-size:.62rem;color:var(--t2);">${tarih}</td>

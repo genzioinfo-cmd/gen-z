@@ -408,7 +408,9 @@ window.gzListeRender = function gzListeRender() {
           <div style="font-size:.65rem;color:rgba(240,238,255,.75);line-height:1.6;">${i.redSebep}</div>
         </div>` : '';
     const tekrarBtn = durum==='reddedildi'
-      ? `<button onclick="gzTekrarGonder('${i.id}')" style="margin-top:.5rem;padding:.4rem .9rem;background:rgba(92,240,180,.08);border:1px solid rgba(92,240,180,.3);color:#5CF0B4;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">🔄 Tekrar Gönder</button>` : '';
+      ? `<button onclick="gzTekrarGonderModal('${i.id}')" style="margin-top:.5rem;padding:.4rem .9rem;background:rgba(92,240,180,.08);border:1px solid rgba(92,240,180,.3);color:#5CF0B4;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">🔄 Düzelt & Tekrar Gönder</button>` : '';
+    const silBtn = `<button onclick="gzSil('${i.id}')" style="margin-top:.5rem;margin-left:.4rem;padding:.4rem .9rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.25);color:var(--red);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">🗑 Sil</button>`;
+    const silBtn = `<button onclick="gzSil('${i.id}')" style="margin-top:.5rem;margin-left:.4rem;padding:.4rem .9rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.25);color:var(--red);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">🗑 Sil</button>`;
     return `<div style="background:rgba(255,255,255,.022);border:1px solid var(--border);border-radius:6px;padding:1rem 1.2rem;margin-bottom:.7rem;${durum==='reddedildi'?'border-color:rgba(224,85,85,.25);':''}">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
         <div>
@@ -422,7 +424,7 @@ window.gzListeRender = function gzListeRender() {
         </div>
       </div>
       ${redSebebiHTML}
-      ${tekrarBtn}
+      <div>${tekrarBtn}${silBtn}</div>
     </div>`;
   }).join('');
 };
@@ -434,19 +436,66 @@ window.gzFiltre=function(tip,btn){
   gzListeRender();
 };
 
-window.gzTekrarGonder = async function(id) {
-  if(!confirm('İçeriği tekrar admin onayına göndermek istiyor musun?')) return;
+window.gzTekrarGonderModal = function(id) {
+  const i = _gzIcerikler.find(x=>x.id===id);
+  if(!i) return;
+  // Modal yoksa oluştur
+  let modal = document.getElementById('gzTekrarModal');
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id = 'gzTekrarModal';
+    modal.style.cssText = 'position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1rem;';
+    modal.innerHTML = `
+      <div style="background:#0d0d14;border:1px solid rgba(123,92,240,.25);border-radius:8px;padding:1.6rem;width:min(460px,94vw);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+          <h3 style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:300;">🔄 Tekrar Gönder</h3>
+          <button onclick="document.getElementById('gzTekrarModal').remove()" style="background:none;border:none;color:var(--t2);font-size:1.2rem;cursor:pointer;">✕</button>
+        </div>
+        <p style="font-size:.68rem;color:var(--t2);margin-bottom:1rem;line-height:1.7;">Admin'e bir not bırakabilirsin. Örn: "Görsel güncellendi", "Açıklama düzeltildi"</p>
+        <label style="display:block;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--t2);margin-bottom:.4rem;">Notun (isteğe bağlı)</label>
+        <textarea id="gzTekrarNot" placeholder="Örn: Görseli değiştirdim, fiyatı güncelledim…"
+          style="width:100%;min-height:90px;background:rgba(255,255,255,.03);border:1px solid rgba(123,92,240,.2);border-radius:4px;padding:.7rem 1rem;font-family:'DM Sans',sans-serif;font-size:.72rem;color:var(--cream);outline:none;resize:vertical;line-height:1.6;"></textarea>
+        <div style="display:flex;gap:.6rem;margin-top:1rem;justify-content:flex-end;">
+          <button onclick="document.getElementById('gzTekrarModal').remove()" style="padding:.6rem 1.2rem;background:none;border:1px solid var(--border);color:var(--t2);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.62rem;cursor:pointer;">İptal</button>
+          <button id="gzTekrarOnayla" style="padding:.6rem 1.4rem;background:rgba(92,240,180,.1);border:1px solid rgba(92,240,180,.3);color:#5CF0B4;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:700;cursor:pointer;">🔄 Onaya Gönder</button>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+  }
+  document.getElementById('gzTekrarNot').value = '';
+  document.getElementById('gzTekrarOnayla').onclick = () => gzTekrarGonderOnayla(id);
+};
+
+window.gzTekrarGonderOnayla = async function(id) {
+  const not = document.getElementById('gzTekrarNot')?.value.trim();
   try {
-    const fs = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    await fs.updateDoc(fs.doc(db,'gencz_icerikler',id),{
-      durum: 'bekliyor',
-      redSebep: null,
-      guncellendi: fs.serverTimestamp()
-    });
+    const { updateDoc, doc: fsDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const guncelleme = { durum:'bekliyor', redSebep:null, guncellendi:serverTimestamp() };
+    if(not) guncelleme.duzeltmeNotu = not;
+    await updateDoc(fsDoc(db,'gencz_icerikler',id), guncelleme);
     const i = _gzIcerikler.find(x=>x.id===id);
     if(i){ i.durum='bekliyor'; i.redSebep=null; }
+    document.getElementById('gzTekrarModal')?.remove();
     if(typeof toast==='function') toast('✅ İçerik tekrar onaya gönderildi!');
     gzListeRender();
+  } catch(e) {
+    if(typeof toast==='function') toast('Hata: '+e.message,'err');
+  }
+};
+
+window.gzSil = async function(id) {
+  if(!confirm('Bu içeriği silmek istediğine emin misin?')) return;
+  try {
+    const { deleteDoc, doc: fsDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    await deleteDoc(fsDoc(db,'gencz_icerikler',id));
+    _gzIcerikler = _gzIcerikler.filter(x=>x.id!==id);
+    if(typeof toast==='function') toast('🗑 İçerik silindi.');
+    gzListeRender();
+    // özet say güncelle
+    const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+    s('gzIcerikSay', _gzIcerikler.length);
+    s('gzOnayliSay', _gzIcerikler.filter(i=>i.durum==='onaylandi').length);
+    s('gzBekliyor',  _gzIcerikler.filter(i=>i.durum==='bekliyor').length);
   } catch(e) {
     if(typeof toast==='function') toast('Hata: '+e.message,'err');
   }

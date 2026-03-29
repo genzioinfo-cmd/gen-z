@@ -4653,7 +4653,8 @@ window.git=function(id,btn){
   btn.classList.add('on');
   if(id==='usta-randevular') randevulariYukle();
   if(id==='usta-projeler') window.projeModulYukle && window.projeModulYukle();
-  if(id==='usta-ilanlar'||id==='usta-ozet') ustaYukle();
+  if(id==='usta-ilanlar') { ustaYukle(); window.ilanSayfasiAc && window.ilanSayfasiAc(); }
+  if(id==='usta-ozet') ustaYukle();
   if(id==='stok') window.stokModulYukle && window.stokModulYukle();
   if(id==='iadeler') window._iadeTalepleriYukle && window._iadeTalepleriYukle();
   if(id==='gencz-icerik' || id==='gencz-ozet') window.genczYukle && window.genczYukle();

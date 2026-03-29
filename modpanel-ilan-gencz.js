@@ -156,9 +156,13 @@ window.ilanFormSifirla = function() {
 window.ilanSayfasiAc = function() {
   const el = document.getElementById('ilanFormIcerik');
   if(!el) return;
-  // Her zaman yeniden oluştur
   el.innerHTML = ilanFormIcerikOlustur();
   if(typeof ustaYukle === 'function') ustaYukle();
+};
+
+window.ilanHizmetSec = function(el) {
+  document.querySelectorAll('#ilanHizmetGrid .gz-kat-kart').forEach(k=>k.classList.remove('secili'));
+  el.classList.add('secili');
 };
 
 window.ilanGonder = async function() {
@@ -482,15 +486,4 @@ window.gzSil = async function(id) {
   }
 };
 
-// Genç-z sayfasına geçince grid oluştur — window.git hazır olana kadar bekle
-function patchGit() {
-  if (!window.git) { setTimeout(patchGit, 200); return; }
-  const _orig = window.git;
-  window.git = function(id, btn) {
-    _orig(id, btn);
-    if (id==='gencz-yeni') genczKatGridOlustur();
-    if (id==='gencz-icerik'||id==='gencz-ozet') genczYukle();
-    if (id==='usta-ilanlar') ilanSayfasiAc();
-  };
-}
-patchGit();
+// patchGit kaldırıldı — window.git artık modpanel.html'de direkt tanımlı

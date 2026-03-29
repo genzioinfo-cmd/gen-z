@@ -2,13 +2,6 @@
 <html lang="tr" data-theme="dark">
 <head>
 <meta charset="UTF-8"/>
-<link rel="manifest" href="manifest.json"/>
-<meta name="theme-color" content="#7B5CF0"/>
-<meta name="mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="apple-mobile-web-app-title" content="GEN-Z"/>
-<link rel="apple-touch-icon" href="favicon-192x192.png"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="description" content="GEN-Z — Kullanım Şartları ve Koşulları."/>
 <title>GEN-Z · Kullanım Şartları</title>
@@ -279,12 +272,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <!-- GEN-Z Reklam Alanı: Sayfa altı (Admin'den yönet) -->
 <div id="genz-rek-1" style="display:none;max-width:960px;margin:0 auto 20px auto;padding:0 24px;"></div>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js").catch(() => {});
-  });
-}
-</script>
 </body>
 </html>

@@ -3158,12 +3158,19 @@ window.urunEkle=async function(){
 
   let resimUrls=[];
   try{
-    for(const r of _resimler){
-      const storageRef=ref(storage,`magaza_urunler/${_magaza.id}/${Date.now()}_${r.file.name}`);
-      await uploadBytes(storageRef,r.file);
-      const url=await getDownloadURL(storageRef);
-      resimUrls.push(url);
-    }
+    resimUrls = await Promise.all(_resimler.map(async (r)=>{
+      const fileName = `magaza_urunler/${_magaza.id}/${Date.now()}_${r.file.name}`;
+      const formData = new FormData();
+      formData.append('file', r.file);
+      formData.append('key', fileName);
+      const res = await fetch('https://gen-z.io/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      if(!res.ok) throw new Error('Yükleme hatası');
+      const data = await res.json();
+      return data.url;
+    }));
   }catch(e){
     resimUrls=_resimler.map(r=>r.url);
   }

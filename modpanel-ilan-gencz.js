@@ -3,12 +3,18 @@
  * modpanel-ilan-gencz.js
  * getApp() kullanır — Firebase çakışması yok
  */
-import { getApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, serverTimestamp, updateDoc, deleteDoc, doc }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 
-// db lazy — her zaman hazır olan app'i kullan
-const _db = () => getFirestore(getApps().length ? getApps()[0] : getApp());
+// firebase-config.js window._genzAuth.db'yi set ediyor
+// modpanel.html de kendi db'sini init ediyor
+// Her ikisi de aynı Firebase app — getApps()[0] güvenli
+const _db = () => {
+  if(window._genzAuth?.db) return window._genzAuth.db;
+  const apps = getApps();
+  return apps.length ? getFirestore(apps[0]) : getFirestore(getApp());
+};
 
 // CSS: gz-kat-kart (modülden inject et)
 (function() {

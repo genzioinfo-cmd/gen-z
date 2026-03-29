@@ -2407,6 +2407,7 @@ let _ustaVeri = null;
 onAuthStateChanged(auth, async user=>{
   if(user){
     _aktifUid = user.uid;
+    window._aktifUid = user.uid;
     await magazaYukle(user.uid);
   } else {
     document.getElementById('loginScreen').style.display='flex';

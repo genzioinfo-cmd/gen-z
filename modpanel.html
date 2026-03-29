@@ -2417,7 +2417,7 @@ onAuthStateChanged(auth, async user=>{
 
 async function magazaYukle(uid){
   try{
-    // Hem mağaza hem usta kontrol et
+    // Hem mağaza hem usta hem genç kontrol et
     const [magSnap, userSnap] = await Promise.all([
       getDocs(query(collection(db,'magazalar'),where('uid','==',uid))),
       getDoc(doc(db,'kullanicilar',uid)).catch(()=>null)
@@ -2426,10 +2426,16 @@ async function magazaYukle(uid){
     const ustaOnay = ud.ustaOnay === true;
     const magazaVar = !magSnap.empty;
 
-    if(!magazaVar && !ustaOnay){
+    // Genç-Z kontrolü (mağaza/usta yoksa bile girebilir)
+    const isGencz = (ud.roller||[]).includes('gencz')
+                 || ud.gencimDurum === 'onaylandi'
+                 || ud.rol === 'gencz';
+
+    // Hiçbir yetkisi yoksa çıkış yaptır
+    if(!magazaVar && !ustaOnay && !isGencz){
       await signOut(auth);
       const err=document.getElementById('lErr');
-      err.textContent='Bu hesabın mağaza veya usta yetkisi yok.';
+      err.textContent='Bu hesabın mağaza, usta veya Genç-Z yetkisi yok.';
       err.classList.add('v');
       return;
     }
@@ -2448,12 +2454,24 @@ async function magazaYukle(uid){
       document.getElementById('ustaMenuBlok').style.display='block';
     }
 
-    // Genç-Z kontrolü
-    const isGencz = (ud.roller||[]).includes('gencz') || ud.gencimDurum === 'onaylandi';
     if(isGencz){
+      // Genç için _magaza set et — urunEkle() bu olmadan çöküyor
+      if(!_magaza){
+        _magaza = {
+          id  : uid,
+          ad  : ud.displayName || ud.username || ud.ad || 'Genç Mağaza',
+          uid : uid,
+          tip : 'gencz'
+        };
+        window._magaza = _magaza;
+      }
+      // Genç'e ait kullanıcı verisini _ustaVeri'ye de koy (ilan modülü kullanır)
+      if(!_ustaVeri) _ustaVeri = ud;
+      window._ustaVeri = _ustaVeri;
       document.getElementById('genczMenuBlok').style.display='block';
     }
 
+    // Varsayılan başlangıç sayfası
     if(!magazaVar && ustaOnay && !isGencz){
       document.querySelector('.sayfa.on')?.classList.remove('on');
       document.getElementById('sayfa-usta-ozet')?.classList.add('on');
@@ -2509,15 +2527,36 @@ window.sifremiUnuttum=async function(){
 function panelAc(){
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('panel').style.display='block';
-  const panelAd = (_magaza&&_magaza.ad) ? _magaza.ad+(_ustaVeri?' / Usta':'') : (_ustaVeri?(_ustaVeri.ad||'Usta'):'—');
+
+  // Görünen isim: mağaza > usta > genç adı sırasıyla
+  let panelAd = '—';
+  if(_magaza && _magaza.tip !== 'gencz') {
+    panelAd = _magaza.ad + (_ustaVeri ? ' / Usta' : '');
+  } else if(_ustaVeri && _ustaVeri.ustaOnay) {
+    panelAd = _ustaVeri.ad || 'Usta';
+  } else if(_magaza && _magaza.tip === 'gencz') {
+    panelAd = _magaza.ad || 'Genç-Z';
+  }
   document.getElementById('sbAd').textContent = panelAd;
-  if(_magaza){ renderKatGrid(); doldurModalKat(); yukle(); }
-  if(_ustaVeri){ ustaYukle(); }
+
+  // Mağaza (gerçek mağaza) için ürün/sipariş yükle
+  if(_magaza && _magaza.tip !== 'gencz'){ renderKatGrid(); doldurModalKat(); yukle(); }
+  // Usta için usta yükle
+  if(_ustaVeri && _ustaVeri.ustaOnay){ ustaYukle(); }
+  // Genç için de kat grid'ini hazırla (ürün ekleyebilmesi için) + genczYukle
+  if(_magaza && _magaza.tip === 'gencz'){
+    renderKatGrid();
+    doldurModalKat();
+    if(typeof window.genczYukle === 'function') window.genczYukle();
+  }
 }
 
 window.cikisYap=async function(){
   await signOut(auth);
-  _magaza=null;_urunler=[];_siparisler=[];
+  _magaza=null;_urunler=[];_siparisler=[];_ustaVeri=null;
+  document.getElementById('magazaMenuBlok').style.display='none';
+  document.getElementById('ustaMenuBlok').style.display='none';
+  document.getElementById('genczMenuBlok').style.display='none';
   document.getElementById('lEmail').value='';
   document.getElementById('lPass').value='';
 };
@@ -2932,6 +2971,18 @@ window.urunEkle=async function(){
   const err=document.getElementById('ekleErr');
   const ok=document.getElementById('ekleOk');
   err.classList.remove('v');ok.classList.remove('v');
+
+  // _magaza yoksa (Genç yeniden yüklenmişse) yeniden oluştur
+  if(!_magaza && _aktifUid){
+    _magaza = { id:_aktifUid, ad:'Genç Mağaza', uid:_aktifUid, tip:'gencz' };
+    window._magaza = _magaza;
+  }
+  if(!_magaza){
+    err.textContent='Mağaza bilgisi bulunamadı. Lütfen tekrar giriş yapın.';
+    err.classList.add('v');
+    return;
+  }
+
   if(!ad){err.textContent='Ürün adı zorunludur.';err.classList.add('v');return;}
   if(!fiyat||fiyat<=0){err.textContent='Geçerli bir fiyat girin.';err.classList.add('v');return;}
   if(!desc){err.textContent='Açıklama zorunludur.';err.classList.add('v');return;}
@@ -2957,6 +3008,8 @@ window.urunEkle=async function(){
     await addDoc(collection(db,'magaza_urunler'),{
       magazaId:_magaza.id,
       magazaAd:_magaza.ad,
+      uid:_aktifUid||null,
+      platform:_magaza.tip==='gencz'?'gencz':'magaza',
       ad,fiyat,stok,
       aciklama:desc,
       kategori:_secKat,

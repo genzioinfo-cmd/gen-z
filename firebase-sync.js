@@ -71,7 +71,7 @@ function _rolBadgeGuncelle(ud) {
   if(isPro)                rozetler.push({txt:'⚡ Büyük Mağaza',  bg:'rgba(201,168,76,.12)',renk:'#d4a83e', border:'rgba(201,168,76,.35)'});
   if(roller.includes('usta')||ud.ustaOnay)
                            rozetler.push({txt:'🔨 Usta',          bg:'rgba(123,92,240,.15)',renk:'#a78bfa', border:'rgba(123,92,240,.3)'});
-  if(roller.includes('gencz')||ud.gencimDurum==='onaylandi')
+  if(roller.includes('gencz')||ud.gencimDurum==='onaylandi'||ud.rol==='gencz')
                            rozetler.push({txt:'⚡ Genç-Z',        bg:'rgba(92,240,180,.1)', renk:'#5CF0B4', border:'rgba(92,240,180,.25)'});
   if(ud.magazaOnay||roller.includes('satici'))
                            rozetler.push({txt:'🏪 Satıcı',        bg:'rgba(255,153,102,.1)',renk:'#ff9966', border:'rgba(255,153,102,.25)'});

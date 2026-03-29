@@ -46,7 +46,7 @@ async function kullaniciyiKaydet(user, extraData = {}) {
     };
     if (!snap.exists()) {
       data.olusturuldu = serverTimestamp();
-      data.rol = 'gencz';
+      data.rol = 'uye';
     }
     await setDoc(ref, data, { merge: true });
   } catch(e) { console.warn('Firestore yazma hatası:', e); }
@@ -133,9 +133,9 @@ window.doSignUp = async function() {
   try {
     const result = await createUserWithEmailAndPassword(auth, email, pass);
     await updateProfile(result.user, { displayName: username });
-    // Kayıt olan herkes normal kullanıcı (gencz) olarak başlar.
-    // Satıcı / Usta rolü ancak başvuru doldurup admin onayından sonra verilir.
-    await kullaniciyiKaydet(result.user, { username, rol: 'gencz' });
+    // Kayıt olan herkes 'uye' olarak başlar.
+    // Genç-Z, Satıcı, Usta rolleri ancak başvuru doldurup admin onayından sonra verilir.
+    await kullaniciyiKaydet(result.user, { username, rol: 'uye' });
     girisYaptiktan(result.user, 'Hesabın oluşturuldu, hoş geldin 🎉');
   } catch(e) {
     const msg = e.code === 'auth/email-already-in-use' ? 'Bu e-posta zaten kayıtlı ⚠️'

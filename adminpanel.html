@@ -507,6 +507,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
           <button class="f-tab aktif" onclick="filtreUrun('bekliyor',this)">⏳ Bekliyor</button>
           <button class="f-tab" onclick="filtreUrun('aktif',this)">✅ Aktif</button>
           <button class="f-tab" onclick="filtreUrun('reddedildi',this)">❌ Reddedildi</button>
+          <button class="f-tab" onclick="filtreUrun('gencz',this)">⚡ Genç-Z</button>
         </div>
         <div id="urunTablo"><div class="yukleniyor">✦ Yükleniyor…</div></div>
       </div>
@@ -1306,9 +1307,19 @@ window.gencimDurum=async function(id,durum){
   try{
     await updateDoc(doc(db,'gencim_basvurular',id),{durum,guncellendi:serverTimestamp()});
     const b=_veri.gencimBasvurular.find(x=>x.id===id);
-    if(b){b.durum=durum;if(b.uid)await setDoc(doc(db,'kullanicilar',b.uid),{gencimDurum:durum},{merge:true}).catch(()=>{});}
+    if(b){
+      b.durum=durum;
+      if(b.uid){
+        // Onaylandığında rol + roller + gencimDurum birlikte yaz
+        // modpanel.html 3 koşuldan birini arar: roller.includes('gencz') || gencimDurum === 'onaylandi' || rol === 'gencz'
+        const userData = durum === 'onaylandi'
+          ? { gencimDurum: durum, rol: 'gencz', roller: ['gencz'] }
+          : { gencimDurum: durum };
+        await setDoc(doc(db,'kullanicilar',b.uid), userData, {merge:true}).catch(()=>{});
+      }
+    }
     renderGencimBasvurular();
-    bildir(durum==='onaylandi'?'✦ Sanatçı başvurusu onaylandı!':'Başvuru reddedildi.');
+    bildir(durum==='onaylandi'?'✦ Sanatçı başvurusu onaylandı! Genç-Z paneline erişim verildi.':'Başvuru reddedildi.');
   }catch(e){bildir('Güncelleme hatası: '+e.message,'hata');}
 };
 
@@ -1389,6 +1400,7 @@ async function renderUrunler() {
     const bekleyen = tumUrunler.filter(u => !u.durum || u.durum === 'bekliyor');
     const aktif    = tumUrunler.filter(u => u.durum === 'aktif');
     const red      = tumUrunler.filter(u => u.durum === 'reddedildi');
+    const gencz    = tumUrunler.filter(u => u.platform === 'gencz');
 
     // Özet kartlar
     if (f('urunToplamSayi')) f('urunToplamSayi').textContent = tumUrunler.length || '—';
@@ -1404,7 +1416,10 @@ async function renderUrunler() {
     if (f('urunEnPahaliFiyat')) f('urunEnPahaliFiyat').textContent = max ? paraStr(max) : '—';
     if (f('urunEnPahaliAd')) f('urunEnPahaliAd').textContent = enP?.ad || '—';
 
-    const liste = _urunFiltre === 'aktif' ? aktif : _urunFiltre === 'reddedildi' ? red : bekleyen;
+    const liste = _urunFiltre === 'aktif'       ? aktif
+                : _urunFiltre === 'reddedildi'  ? red
+                : _urunFiltre === 'gencz'        ? gencz
+                : bekleyen;
     if (f('urunSayiEtiket')) f('urunSayiEtiket').textContent = liste.length + ' ürün';
 
     if (!liste.length) {
@@ -1414,13 +1429,16 @@ async function renderUrunler() {
 
     el.innerHTML = `<table>
       <thead><tr>
-        <th>Ürün</th><th>Mağaza</th><th>Kategori</th><th>Fiyat</th><th>Durum</th><th>Tarih</th><th>İşlem</th>
+        <th>Ürün</th><th>Mağaza / Kullanıcı</th><th>Platform</th><th>Kategori</th><th>Fiyat</th><th>Durum</th><th>Tarih</th><th>İşlem</th>
       </tr></thead>
       <tbody>${liste.map(u => {
         const fiyat = Number(u.kdvDahilFiyat || u.fiyat) || 0;
         const resim = u.resimler?.[0] ? `<img src="${u.resimler[0]}" style="width:36px;height:36px;object-fit:cover;border-radius:6px;margin-right:.5rem;vertical-align:middle">` : '<span style="margin-right:.5rem">📦</span>';
         const durumRenk = u.durum === 'aktif' ? 'var(--green)' : u.durum === 'reddedildi' ? 'var(--red)' : 'var(--gold)';
         const durumLabel = u.durum === 'aktif' ? '✅ Aktif' : u.durum === 'reddedildi' ? '❌ Reddedildi' : '⏳ Bekliyor';
+        const platformBadge = u.platform === 'gencz'
+          ? '<span style="font-size:.48rem;background:rgba(123,92,240,.15);color:#a78bfa;border:1px solid rgba(123,92,240,.3);padding:.1rem .4rem;border-radius:10px;">⚡ Genç-Z</span>'
+          : '<span style="font-size:.48rem;background:rgba(255,153,102,.1);color:#ff9966;border:1px solid rgba(255,153,102,.25);padding:.1rem .4rem;border-radius:10px;">🏪 Mağaza</span>';
         const islemler = u.durum !== 'aktif'
           ? `<button class="eylem-btn onayla" onclick="urunDurum('${u.id}','aktif')">✓ Onayla</button>`
           : `<button class="eylem-btn reddet" onclick="urunDurum('${u.id}','reddedildi')">✕ Yayından Kaldır</button>`;
@@ -1430,6 +1448,7 @@ async function renderUrunler() {
         return `<tr>
           <td>${resim}<strong>${u.ad || '—'}</strong>${u.aciklama ? `<div style="font-size:.62rem;color:var(--t2);margin-top:.2rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.aciklama}</div>` : ''}</td>
           <td style="font-size:.68rem;color:var(--t2)">${u.magazaAd || '—'}</td>
+          <td>${platformBadge}</td>
           <td style="font-size:.68rem;color:var(--t2)">${u.kategori || '—'}</td>
           <td style="color:var(--gold);font-weight:600">${paraStr(fiyat)}</td>
           <td><span style="color:${durumRenk};font-size:.68rem;font-weight:600">${durumLabel}</span></td>

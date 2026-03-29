@@ -149,9 +149,9 @@ window.ilanFormSifirla = function() {
 // Sayfa açılınca formu doldur
 window.ilanSayfasiAc = function() {
   const el = document.getElementById('ilanFormIcerik');
-  if(el && el.children.length <= 1) {
-    el.innerHTML = ilanFormIcerikOlustur();
-  }
+  if(!el) return;
+  // Her zaman yeniden oluştur
+  el.innerHTML = ilanFormIcerikOlustur();
   if(typeof ustaYukle === 'function') ustaYukle();
 };
 

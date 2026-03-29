@@ -3,23 +3,12 @@
  * modpanel-ilan-gencz.js
  * getApp() kullanır — Firebase çakışması yok
  */
-import { getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, serverTimestamp }
+import { getApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, serverTimestamp, updateDoc, deleteDoc, doc }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-let db;
-try {
-  db = getFirestore(getApp());
-} catch(e) {
-  // App henüz init edilmemişse bekle
-  const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-  const app = initializeApp({
-    apiKey:"AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ",
-    authDomain:"gen-z-io.firebaseapp.com",
-    projectId:"gen-z-io"
-  });
-  db = getFirestore(app);
-}
+// db lazy — her zaman hazır olan app'i kullan
+const _db = () => getFirestore(getApps().length ? getApps()[0] : getApp());
 
 // CSS: gz-kat-kart (modülden inject et)
 (function() {
@@ -198,7 +187,7 @@ window.ilanGonder = async function() {
   if (!hizmet) { errEl.textContent='Hizmet türü seçin.'; errEl.style.display='block'; return; }
 
   try {
-    await addDoc(collection(db,'ustam_ilanlar'),{
+    await addDoc(collection(_db(),'ustam_ilanlar'),{
       ustaUid    : window._aktifUid,
       ustaAdi    : window._ustaVeri?.displayName || window._ustaVeri?.ad || '',
       ustaEmail  : window._ustaVeri?.email || '',
@@ -271,9 +260,8 @@ let _gzIcerikler = [];
 window.genczKatGridOlustur = function() {
   const grid = document.getElementById('gzKatGrid');
   if (!grid) return;
-  // Sadece ilk kez oluştur
-  if (grid.dataset.hazir === '1') return;
-  grid.dataset.hazir = '1';
+  // Her seferinde yeniden oluştur
+  grid.innerHTML = '';
   Object.entries(GENCZ_KATEGORILER).forEach(([ad, meta]) => {
     const el = document.createElement('div');
     el.className = 'gz-kat-kart';
@@ -348,7 +336,7 @@ window.gzIcerikGonder = async function() {
   if (eksik) { errEl.textContent='Başlık ve açıklama zorunludur.'; errEl.style.display='block'; return; }
 
   try {
-    await addDoc(collection(db,'gencz_icerikler'),{
+    await addDoc(collection(_db(),'gencz_icerikler'),{
       uid      : window._aktifUid,
       email    : window._ustaVeri?.email||'',
       kategori : _gzSeciliKat,
@@ -373,7 +361,7 @@ window.genczYukle = async function genczYukle() {
   if (!window._aktifUid) return;
   try {
     const snap = await getDocs(query(
-      collection(db,'gencz_icerikler'),
+      collection(_db(),'gencz_icerikler'),
       where('uid','==',window._aktifUid)
     )).catch(()=>null);
     _gzIcerikler = snap ? snap.docs.map(d=>({id:d.id,...d.data()})) : [];
@@ -469,10 +457,9 @@ window.gzTekrarGonderModal = function(id) {
 window.gzTekrarGonderOnayla = async function(id) {
   const not = document.getElementById('gzTekrarNot')?.value.trim();
   try {
-    const { updateDoc, doc: fsDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
     const guncelleme = { durum:'bekliyor', redSebep:null, guncellendi:serverTimestamp() };
     if(not) guncelleme.duzeltmeNotu = not;
-    await updateDoc(fsDoc(db,'gencz_icerikler',id), guncelleme);
+    await updateDoc(doc(_db(),'gencz_icerikler',id), guncelleme);
     const i = _gzIcerikler.find(x=>x.id===id);
     if(i){ i.durum='bekliyor'; i.redSebep=null; }
     document.getElementById('gzTekrarModal')?.remove();
@@ -486,13 +473,11 @@ window.gzTekrarGonderOnayla = async function(id) {
 window.gzSil = async function(id) {
   if(!confirm('Bu içeriği silmek istediğine emin misin?')) return;
   try {
-    const { deleteDoc, doc: fsDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    await deleteDoc(fsDoc(db,'gencz_icerikler',id));
+    await deleteDoc(doc(_db(),'gencz_icerikler',id));
     _gzIcerikler = _gzIcerikler.filter(x=>x.id!==id);
     if(typeof toast==='function') toast('🗑 İçerik silindi.');
     gzListeRender();
-    // özet say güncelle
-    const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+    const s=(elId,v)=>{const el=document.getElementById(elId);if(el)el.textContent=v;};
     s('gzIcerikSay', _gzIcerikler.length);
     s('gzOnayliSay', _gzIcerikler.filter(i=>i.durum==='onaylandi').length);
     s('gzBekliyor',  _gzIcerikler.filter(i=>i.durum==='bekliyor').length);

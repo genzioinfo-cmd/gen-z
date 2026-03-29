@@ -1900,7 +1900,7 @@ window.urunDetayGoster = function(id) {
         <div style="font-size:.72rem;color:${color};line-height:1.6;word-break:break-word;">${isLink?`<a href="${val}" target="_blank" style="color:var(--gold);">🔗 ${val}</a>`:val}</div>
        </div>` : '';
   const resimlerHTML = u.resimler?.length
-    ? `<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.2rem;">${u.resimler.map(r=>`<img src="${r}" style="width:120px;height:120px;object-fit:cover;border-radius:8px;border:1px solid rgba(255,255,255,.1);cursor:pointer;" onclick="window.open('${r}','_blank')">`).join('')}</div>` : '';
+    ? `<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.2rem;">${u.resimler.map(r=>`<div onclick="window.open('${r}','_blank')" style="width:120px;height:120px;border-radius:8px;border:1px solid rgba(255,255,255,.1);cursor:pointer;background:url('${r}') center/cover no-repeat,rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;" title="Büyük görmek için tıkla"><span style="font-size:.5rem;color:rgba(255,255,255,.3);display:none">📷</span></div>`).join('')}</div>` : '';
   document.getElementById('detayModalBaslik').textContent = '🛍 ' + (u.ad||'Ürün Detayı');
   document.getElementById('detayModalIcerik').innerHTML = `
     ${resimlerHTML}

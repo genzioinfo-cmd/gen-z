@@ -9,13 +9,7 @@
     "cleanUrls": false,
     "trailingSlash": false,
     "rewrites": [],
-    "redirects": [
-      {
-        "source": "/**",
-        "destination": "/bakim.html",
-        "type": 302
-      }
-    ],
+    "redirects": [],
     "headers": [
       {
         "source": "**/*.html",

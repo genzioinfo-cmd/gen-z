@@ -2442,7 +2442,8 @@ async function magazaYukle(uid){
 
     if(magazaVar){
       const mag=magSnap.docs[0];
-      _magaza={id:mag.id,...mag.data()};
+      _magaza={id:mag.id, ...mag.data(), tip:'magaza'};
+      window._magaza = _magaza;
       document.getElementById('magazaMenuBlok').style.display='block';
     }
 

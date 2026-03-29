@@ -542,7 +542,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
       <label class="onay-satir"><input type="checkbox" id="magaza-kvkk"/><span><a href="gizlilik.html" target="_blank">Gizlilik Politikası</a> ve KVKK kapsamında kişisel verilerimin işlenmesini okudum, kabul ediyorum.</span></label>
       <label class="onay-satir"><input type="checkbox" id="magaza-sartlar"/><span><a href="kullanim-sartlari.html" target="_blank">Kullanım Koşulları</a>'nı okudum, kabul ediyorum.</span></label>
       <label class="onay-satir"><input type="checkbox" id="magaza-vergi"/><span><a href="yasal-vergilendirme.html" target="_blank">Yasal vergilendirme hususlarını</a> okudum; GEN-Z ile iş ortaklığında Türkiye vergi mevzuatına uygun hareket edeceğimi kabul ediyorum.</span></label>
-      <label class="onay-satir"><input type="checkbox" id="magaza-komisyon"/><span>GEN-Z Ortaklık Sözleşmesi kapsamında platform komisyon oranlarını ve ödeme takvimini kabul ediyorum. Detaylar için <a href="mailto:[email protected]">iletişime geçebilirsiniz</a>.</span></label>
+      <label class="onay-satir"><input type="checkbox" id="magaza-komisyon"/><span>GEN-Z Ortaklık Sözleşmesi kapsamında platform komisyon oranlarını ve ödeme takvimini kabul ediyorum. Detaylar için <a href="iletisim.html" target="_blank">iletişime geçebilirsiniz</a>.</span></label>
     </div>
     <button class="btn-apply" onclick="submitForm('magaza')">🏪 Mağaza Başvurusu Gönder</button>
   </div>
@@ -610,7 +610,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
       <label class="onay-satir"><input type="checkbox" id="usta-kvkk"/><span><a href="gizlilik.html" target="_blank">Gizlilik Politikası</a> ve KVKK kapsamında kişisel verilerimin işlenmesini okudum, kabul ediyorum.</span></label>
       <label class="onay-satir"><input type="checkbox" id="usta-sartlar"/><span><a href="kullanim-sartlari.html" target="_blank">Kullanım Koşulları</a>'nı okudum, kabul ediyorum.</span></label>
       <label class="onay-satir"><input type="checkbox" id="usta-vergi"/><span><a href="yasal-vergilendirme.html" target="_blank">Yasal vergilendirme hususlarını</a> okudum; GEN-Z ile iş ortaklığında Türkiye vergi mevzuatına uygun hareket edeceğimi kabul ediyorum.</span></label>
-      <label class="onay-satir"><input type="checkbox" id="usta-komisyon"/><span>USTA Ortaklık Sözleşmesi kapsamında platform komisyon oranlarını ve ödeme takvimini kabul ediyorum. Detaylar için <a href="mailto:[email protected]">iletişime geçebilirsiniz</a>.</span></label>
+      <label class="onay-satir"><input type="checkbox" id="usta-komisyon"/><span>USTA Ortaklık Sözleşmesi kapsamında platform komisyon oranlarını ve ödeme takvimini kabul ediyorum. Detaylar için <a href="iletisim.html" target="_blank">iletişime geçebilirsiniz</a>.</span></label>
     </div>
     <button class="btn-apply" onclick="submitForm('usta')">🔧 Usta Başvurusu Gönder</button>
   </div>
@@ -697,7 +697,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
 
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ── SAFE STORAGE ── */
 const _ls = {
   get(k, fb = null) { try { const v = localStorage.getItem(k); return v !== null ? v : fb; } catch(e) { return fb; } },
@@ -872,7 +872,33 @@ function safeObserve(elements, callback, options) {
   return observer;
 }
 
+/* ── ONAY CHECKBOX → BUTON DISABLE ── */
+function setupOnayValidation() {
+  const configs = [
+    { ids: ['magaza-kvkk','magaza-sartlar','magaza-vergi','magaza-komisyon'], btn: document.querySelector('#form-magaza .btn-apply') },
+    { ids: ['usta-kvkk','usta-sartlar','usta-vergi','usta-komisyon'],         btn: document.querySelector('#form-usta .btn-apply')   },
+    { ids: ['gencz-kvkk','gencz-sartlar','gencz-telif'],                      btn: document.querySelector('#form-gencz .btn-apply')  },
+  ];
+  configs.forEach(({ ids, btn }) => {
+    if (!btn) return;
+    btn.disabled = true;
+    btn.style.opacity = '0.45';
+    btn.style.cursor  = 'not-allowed';
+    const update = () => {
+      const allChecked = ids.every(id => document.getElementById(id)?.checked);
+      btn.disabled     = !allChecked;
+      btn.style.opacity = allChecked ? '1'   : '0.45';
+      btn.style.cursor  = allChecked ? 'pointer' : 'not-allowed';
+    };
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('change', update);
+    });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  setupOnayValidation();
   document.querySelectorAll('.mobile-menu a').forEach(a => {
     a.addEventListener('click', () => {
       document.getElementById('mobileMenu').classList.remove('open');
@@ -894,12 +920,11 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         document.body.style.transition = 'opacity 0.25s';
         document.body.style.opacity = '0';
-        setTimeout(() => { window.location.href = href; }, 270);
+        setTimeout(() => { window.location.href = href; }, 250);
       });
     }
   });
 });
 </script>
-<script type="module" src="firebase-config.js"></script>
 </body>
 </html>

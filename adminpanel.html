@@ -1790,7 +1790,7 @@ async function renderUrunler() {
       </tr></thead>
       <tbody>${liste.map(u => {
         const fiyat = Number(u.kdvDahilFiyat || u.fiyat) || 0;
-        const resim = u.resimler?.[0] ? `<img src="${u.resimler[0]}" style="width:36px;height:36px;object-fit:cover;border-radius:6px;margin-right:.5rem;vertical-align:middle">` : '<span style="margin-right:.5rem">📦</span>';
+        const resim = u.resimler?.[0] ? `<img src="${u.resimler[0]}" style="width:64px;height:64px;object-fit:cover;border-radius:8px;margin-right:.7rem;vertical-align:middle;border:1px solid rgba(255,255,255,.08);">` : '<span style="font-size:2rem;margin-right:.7rem">📦</span>';
         const durumRenk = u.durum === 'aktif' ? 'var(--green)' : u.durum === 'reddedildi' ? 'var(--red)' : 'var(--gold)';
         const durumLabel = u.durum === 'aktif' ? '✅ Aktif' : u.durum === 'reddedildi' ? '❌ Reddedildi' : '⏳ Bekliyor';
         const platformBadge = u.platform === 'gencz'
@@ -1900,7 +1900,7 @@ window.urunDetayGoster = function(id) {
         <div style="font-size:.72rem;color:${color};line-height:1.6;word-break:break-word;">${isLink?`<a href="${val}" target="_blank" style="color:var(--gold);">🔗 ${val}</a>`:val}</div>
        </div>` : '';
   const resimlerHTML = u.resimler?.length
-    ? `<div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem;">${u.resimler.map(r=>`<img src="${r}" style="width:72px;height:72px;object-fit:cover;border-radius:6px;border:1px solid rgba(255,255,255,.08);">`).join('')}</div>` : '';
+    ? `<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.2rem;">${u.resimler.map(r=>`<img src="${r}" style="width:120px;height:120px;object-fit:cover;border-radius:8px;border:1px solid rgba(255,255,255,.1);cursor:pointer;" onclick="window.open('${r}','_blank')">`).join('')}</div>` : '';
   document.getElementById('detayModalBaslik').textContent = '🛍 ' + (u.ad||'Ürün Detayı');
   document.getElementById('detayModalIcerik').innerHTML = `
     ${resimlerHTML}

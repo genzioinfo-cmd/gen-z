@@ -396,26 +396,59 @@ window.gzListeRender = function gzListeRender() {
   let liste = _gzIcerikler;
   if (_gzFiltreSec!=='hepsi') liste=liste.filter(i=>i.durum===_gzFiltreSec);
   if (!liste.length) { el.innerHTML='<div style="text-align:center;padding:2rem;color:var(--t2);font-style:italic;">İçerik bulunamadı</div>'; return; }
-  el.innerHTML=`<table><thead><tr><th>Kategori</th><th>Başlık</th><th>Açıklama</th><th>Tarih</th><th>Durum</th></tr></thead><tbody>
-    ${liste.map(i=>{
-      const durum=i.durum||'bekliyor';
-      const durumT=durum==='onaylandi'?'✅ Onaylı':durum==='reddedildi'?'❌ Reddedildi':'⏳ Bekliyor';
-      const tarih=i.ts?.toDate?i.ts.toDate().toLocaleDateString('tr-TR'):'—';
-      return `<tr>
-        <td style="font-size:.65rem;">${GENCZ_KATEGORILER[i.kategori]?.ikon||''} ${i.kategori||'—'}</td>
-        <td style="font-weight:600;font-size:.72rem;">${i.baslik||'—'}</td>
-        <td style="font-size:.65rem;color:var(--t2);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${i.aciklama||'—'}</td>
-        <td style="font-size:.65rem;color:var(--t2);">${tarih}</td>
-        <td><span style="font-size:.6rem;font-weight:700;">${durumT}</span></td>
-      </tr>`;
-    }).join('')}</tbody></table>`;
-}
+  el.innerHTML=liste.map(i=>{
+    const durum=i.durum||'bekliyor';
+    const durumRenk=durum==='onaylandi'?'var(--green)':durum==='reddedildi'?'var(--red)':'var(--orange)';
+    const durumT=durum==='onaylandi'?'✅ Onaylı':durum==='reddedildi'?'❌ Reddedildi':'⏳ Bekliyor';
+    const tarih=i.ts?.toDate?i.ts.toDate().toLocaleDateString('tr-TR'):'—';
+    const redSebebiHTML = durum==='reddedildi' && i.redSebep
+      ? `<div style="margin-top:.5rem;padding:.5rem .7rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.2);border-radius:4px;">
+          <div style="font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:.2rem;">⚠️ Red Sebebi</div>
+          <div style="font-size:.65rem;color:rgba(240,238,255,.75);line-height:1.6;">${i.redSebep}</div>
+        </div>` : '';
+    const tekrarBtn = durum==='reddedildi'
+      ? `<button onclick="gzTekrarGonder('${i.id}')" style="margin-top:.5rem;padding:.4rem .9rem;background:rgba(92,240,180,.08);border:1px solid rgba(92,240,180,.3);color:#5CF0B4;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">🔄 Tekrar Gönder</button>` : '';
+    return `<div style="background:rgba(255,255,255,.022);border:1px solid var(--border);border-radius:6px;padding:1rem 1.2rem;margin-bottom:.7rem;${durum==='reddedildi'?'border-color:rgba(224,85,85,.25);':''}">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+        <div>
+          <span style="font-size:.5rem;background:rgba(123,92,240,.12);color:#a78bfa;border:1px solid rgba(123,92,240,.25);padding:.1rem .45rem;border-radius:10px;margin-right:.4rem;">${GENCZ_KATEGORILER[i.kategori]?.ikon||''} ${i.kategori||'—'}</span>
+          <strong style="font-size:.75rem;">${i.baslik||'—'}</strong>
+          <div style="font-size:.62rem;color:var(--t2);margin-top:.2rem;">${i.aciklama||'—'}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <span style="font-size:.6rem;font-weight:700;color:${durumRenk};">${durumT}</span>
+          <div style="font-size:.55rem;color:var(--t2);margin-top:.15rem;">${tarih}</div>
+        </div>
+      </div>
+      ${redSebebiHTML}
+      ${tekrarBtn}
+    </div>`;
+  }).join('');
+};
 
 window.gzFiltre=function(tip,btn){
   _gzFiltreSec=tip;
   document.querySelectorAll('#sayfa-gencz-icerik .f-btn').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   gzListeRender();
+};
+
+window.gzTekrarGonder = async function(id) {
+  if(!confirm('İçeriği tekrar admin onayına göndermek istiyor musun?')) return;
+  try {
+    const fs = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    await fs.updateDoc(fs.doc(db,'gencz_icerikler',id),{
+      durum: 'bekliyor',
+      redSebep: null,
+      guncellendi: fs.serverTimestamp()
+    });
+    const i = _gzIcerikler.find(x=>x.id===id);
+    if(i){ i.durum='bekliyor'; i.redSebep=null; }
+    if(typeof toast==='function') toast('✅ İçerik tekrar onaya gönderildi!');
+    gzListeRender();
+  } catch(e) {
+    if(typeof toast==='function') toast('Hata: '+e.message,'err');
+  }
 };
 
 // Genç-z sayfasına geçince grid oluştur — window.git hazır olana kadar bekle

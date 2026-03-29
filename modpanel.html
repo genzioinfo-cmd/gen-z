@@ -2451,6 +2451,7 @@ async function magazaYukle(uid){
       const bitis = ud.ustaAbonelikBitis;
       const aktif = !bitis || new Date(bitis) > new Date();
       _ustaVeri._abonelikAktif = aktif;
+      window._ustaVeri = _ustaVeri;
       document.getElementById('ustaMenuBlok').style.display='block';
     }
 
@@ -2528,25 +2529,25 @@ function panelAc(){
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('panel').style.display='block';
 
-  // Görünen isim: mağaza > usta > genç adı sırasıyla
+  // Görünen isim
   let panelAd = '—';
-  if(_magaza && _magaza.tip !== 'gencz') {
-    panelAd = _magaza.ad + (_ustaVeri ? ' / Usta' : '');
-  } else if(_ustaVeri && _ustaVeri.ustaOnay) {
-    panelAd = _ustaVeri.ad || 'Usta';
+  if(_magaza && _magaza.tip === 'magaza') {
+    panelAd = _magaza.ad + (_ustaVeri?.ustaOnay ? ' / Usta' : '');
+  } else if(_ustaVeri?.ustaOnay && !_magaza) {
+    panelAd = _ustaVeri.ad || _ustaVeri.displayName || 'Usta';
   } else if(_magaza && _magaza.tip === 'gencz') {
     panelAd = _magaza.ad || 'Genç-Z';
   }
   document.getElementById('sbAd').textContent = panelAd;
 
-  // Mağaza (gerçek mağaza) için ürün/sipariş yükle
-  if(_magaza && _magaza.tip !== 'gencz'){ renderKatGrid(); doldurModalKat(); yukle(); }
-  // Usta için usta yükle
-  if(_ustaVeri && _ustaVeri.ustaOnay){ ustaYukle(); }
-  // Genç için de kat grid'ini hazırla (ürün ekleyebilmesi için) + genczYukle
-  if(_magaza && _magaza.tip === 'gencz'){
-    renderKatGrid();
-    doldurModalKat();
+  // Mağaza ve Genç için ürün/sipariş yükle
+  if(_magaza){ renderKatGrid(); doldurModalKat(); yukle(); }
+
+  // Usta modülünü yükle (ürün değil, ilan/randevu)
+  if(_ustaVeri?.ustaOnay){ ustaYukle(); }
+
+  // Genç modülünü yükle
+  if(_magaza?.tip === 'gencz'){
     if(typeof window.genczYukle === 'function') window.genczYukle();
   }
 }
@@ -2829,6 +2830,19 @@ function renderUrunler(){
     const durum=u.durum||'bekliyor';
     const durumT=durum==='onaylandi'?'✅ Onaylı':durum==='reddedildi'?'❌ Reddedildi':durum==='stok'?'📦 Stokta':durum==='bekliyor'?'⏳ Bekliyor':'⏳ Bekliyor';
     const olcuStr=u.miktar&&u.olcuBirim?`${u.miktar} ${u.olcuBirim}`:'';
+
+    // Red sebebi bloğu
+    const redSebebiHTML = durum==='reddedildi' && u.redSebep
+      ? `<div style="margin:.6rem 0 0;padding:.6rem .8rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.22);border-radius:4px;">
+          <div style="font-size:.5rem;letter-spacing:.15em;text-transform:uppercase;color:var(--red);opacity:.8;margin-bottom:.3rem;">⚠️ Red Sebebi</div>
+          <div style="font-size:.68rem;color:rgba(240,238,255,.75);line-height:1.6;">${u.redSebep}</div>
+        </div>`
+      : durum==='reddedildi'
+      ? `<div style="margin:.6rem 0 0;padding:.5rem .8rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.18);border-radius:4px;font-size:.65rem;color:var(--red);opacity:.7;">
+          ❌ Reddedildi — sebep belirtilmedi
+        </div>`
+      : '';
+
     return`<div class="u-kart">
       <div class="u-img">
         ${resim?`<img src="${resim}" alt="${u.ad}" loading="lazy">`:`<span style="font-size:3rem;opacity:.3">📷</span>`}
@@ -2838,6 +2852,7 @@ function renderUrunler(){
         <span class="u-kat">${u.kategori||'—'}</span>
         <div class="u-ad">${u.ad||'—'}</div>
         <div class="u-desc">${u.aciklama||''}</div>
+        ${redSebebiHTML}
         <div class="u-alt">
           <div>
             <span class="u-fiyat">${para(u.kdvDahilFiyat||u.fiyat||0)} ₺</span>
@@ -2849,6 +2864,7 @@ function renderUrunler(){
       </div>
       <div class="u-eylem">
         <button class="aksiyon duz" onclick="mAc('${u.id}')">✏️ Düzenle</button>
+        ${durum==='reddedildi'?`<button class="aksiyon duz" onclick="tekrarGonder('${u.id}')" style="color:rgba(92,240,180,.9);border-color:rgba(92,240,180,.3);">🔄 Düzelt & Tekrar Gönder</button>`:''}
         ${durum==='stok'?`<button class="aksiyon duz" onclick="urunYayinla('${u.id}')" style="color:rgba(92,240,180,.9);border-color:rgba(92,240,180,.3);">🚀 Yayınla</button>`:''}
         ${durum==='onaylandi'||durum==='bekliyor'?`<button class="aksiyon duz" onclick="oneCikarAc('${u.id}','${(u.ad||u.name||'').replace(/'/g,"\\'")}')" style="color:rgba(201,168,76,.8);border-color:rgba(201,168,76,.3);">⭐ Öne Çıkar</button>`:''}
         <button class="aksiyon sil" onclick="urunSil('${u.id}')">🗑 Sil</button>
@@ -3009,7 +3025,7 @@ window.urunEkle=async function(){
       magazaId:_magaza.id,
       magazaAd:_magaza.ad,
       uid:_aktifUid||null,
-      platform:_magaza.tip==='gencz'?'gencz':'magaza',
+      platform: _magaza.tip || 'magaza',
       ad,fiyat,stok,
       aciklama:desc,
       kategori:_secKat,
@@ -3054,6 +3070,29 @@ window.urunEkle=async function(){
     ozetGuncelle();
   }catch(e){err.textContent='Hata: '+e.message;err.classList.add('v');}
   btn.textContent='✦ Ürünü Gönder — Admin Onayına Gider';btn.disabled=false;
+};
+
+// ── REDDEDİLEN ÜRÜNÜ TEKRAR GÖNDER ─────────────────────────────────────
+window.tekrarGonder = async function(id) {
+  const u = _urunler.find(x => x.id === id);
+  if (!u) return;
+  if (!confirm(`"${u.ad}" ürününü düzenleyip tekrar admin onayına göndermek istiyor musun?`)) return;
+  if (!u.resimler || !u.resimler.length) {
+    toast('Ürünün fotoğrafı yok. Önce düzenle ve fotoğraf ekle.', 'err');
+    return;
+  }
+  try {
+    await updateDoc(doc(db, 'magaza_urunler', id), {
+      durum       : 'bekliyor',
+      redSebep    : null,
+      guncellendi : serverTimestamp()
+    });
+    toast('✅ Ürün tekrar onaya gönderildi!');
+    await urunleriYukle();
+    ozetGuncelle();
+  } catch(e) {
+    toast('Hata: ' + e.message, 'err');
+  }
 };
 
 // ── STOKTAN YAYINLA ─────────────────────────────────────────────────────

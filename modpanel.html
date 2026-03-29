@@ -2349,12 +2349,13 @@ window.mpGSil = function(id){
 
 <script src="categories.js"></script>
 <script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{initializeApp,getApps,getApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import{getFirestore,doc,getDoc,collection,addDoc,getDocs,updateDoc,deleteDoc,query,where,orderBy,serverTimestamp,onSnapshot,limit}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import{getStorage,ref,uploadBytes,getDownloadURL}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged,sendPasswordResetEmail}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-const app=initializeApp({apiKey:"AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ",authDomain:"gen-z-io.firebaseapp.com",projectId:"gen-z-io",storageBucket:"gen-z-io.firebasestorage.app",messagingSenderId:"97338868944",appId:"1:97338868944:web:d7b429e416d8c505b14ad5"});
+const _fc={apiKey:"AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ",authDomain:"gen-z-io.firebaseapp.com",projectId:"gen-z-io",storageBucket:"gen-z-io.firebasestorage.app",messagingSenderId:"97338868944",appId:"1:97338868944:web:d7b429e416d8c505b14ad5"};
+const app=getApps().length?getApp():initializeApp(_fc);
 const db=getFirestore(app);
 const storage=getStorage(app);
 const auth=getAuth(app);
@@ -3071,7 +3072,7 @@ window.urunFiltre=function(tip,btn){
 };
 
 // ── FORM KONTROL ──
-function formKontrol(){
+window.formKontrol = function formKontrol(){
   const ad=(document.getElementById('uAd')?.value||'').trim();
   const fiyat=parseFloat(document.getElementById('uFiyat')?.value||0);
   const foto=_resimler.length>0;

@@ -341,7 +341,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
       <button class="sb-item" onclick="sayfaGit('kullanicilar',this)">👥 <span>Kullanıcılar</span></button>
       <button class="sb-item" onclick="sayfaGit('gelirGider',this)">📒 <span>Gelir & Gider</span></button>
       <div class="sb-ayrac">Platform</div>
-      <button class="sb-item" onclick="sayfaGit('urunler',this)">🎨 <span>Paylaşılan Ürünler</span> <span class="sb-badge" id="badgeUrun" style="background:var(--gold);color:var(--ink)">—</span></button>
+      <button class="sb-item" onclick="sayfaGit('urunler',this)">🏪 <span>Mağaza Ürünleri</span> <span class="sb-badge" id="badgeUrun" style="background:var(--orange);color:#fff;display:none"></span></button>
       <button class="sb-item" onclick="sayfaGit('ustaIlanlar',this)">🔨 <span>Usta İlanları</span> <span class="sb-badge" id="badgeUstaIlan" style="display:none;background:var(--orange);"></span></button>
       <button class="sb-item" onclick="sayfaGit('genczIcerikler',this)">⚡ <span>Genç-Z İçerikleri</span> <span class="sb-badge" id="badgeGenczIcerik" style="display:none;background:var(--orange);"></span></button>
       <button class="sb-item" onclick="window.open('tema-yonetici.html','_blank')">🖌️ <span>Tema Yöneticisi</span></button>
@@ -781,7 +781,7 @@ onAuthStateChanged(auth,async function(user){
 });
 
 async function tumVerileriYukle(){
-  await Promise.all([basvurulariYukle(),siparisleriYukle(),kullanicilariYukle(),gencimBasvurulariYukle(),cekmeTalepleriYukle(),genczIcerikleriYukle(),ustaIlanlariYukle()]);
+  await Promise.all([basvurulariYukle(),siparisleriYukle(),kullanicilariYukle(),gencimBasvurulariYukle(),cekmeTalepleriYukle(),genczIcerikleriYukle(),ustaIlanlariYukle(),renderUrunler()]);
   ozetGuncelle();
 }
 
@@ -1749,19 +1749,23 @@ async function renderUrunler() {
   try {
     const snap = await getDocs(collection(db, 'magaza_urunler'));
     const tumUrunler = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    const bekleyen = tumUrunler.filter(u => !u.durum || u.durum === 'bekliyor');
-    const aktif    = tumUrunler.filter(u => u.durum === 'aktif');
-    const red      = tumUrunler.filter(u => u.durum === 'reddedildi');
+    _tumUrunlerCache = tumUrunler; // urunDetayGoster için
+
+    // Sadece mağaza rolü ürünleri (gencz platform hariç)
+    const magazaUrunler = tumUrunler.filter(u => u.platform !== 'gencz');
+    const bekleyen = magazaUrunler.filter(u => !u.durum || u.durum === 'bekliyor');
+    const aktif    = magazaUrunler.filter(u => u.durum === 'aktif');
+    const red      = magazaUrunler.filter(u => u.durum === 'reddedildi');
     const gencz    = tumUrunler.filter(u => u.platform === 'gencz');
 
     // Özet kartlar
-    if (f('urunToplamSayi')) f('urunToplamSayi').textContent = tumUrunler.length || '—';
+    if (f('urunToplamSayi')) f('urunToplamSayi').textContent = magazaUrunler.length || '—';
     if (f('badgeUrun')) { f('badgeUrun').textContent = bekleyen.length || '0'; f('badgeUrun').style.display = bekleyen.length ? '' : 'none'; }
     const fiyatlar = aktif.map(u => Number(u.kdvDahilFiyat || u.fiyat) || 0).filter(Boolean);
     const ort = fiyatlar.length ? fiyatlar.reduce((a, b) => a + b, 0) / fiyatlar.length : 0;
     const max = fiyatlar.length ? Math.max(...fiyatlar) : 0;
     const enP = aktif.find(u => (Number(u.kdvDahilFiyat || u.fiyat)) === max);
-    const katlar = [...new Set(tumUrunler.map(u => u.kategori).filter(Boolean))];
+    const katlar = [...new Set(magazaUrunler.map(u => u.kategori).filter(Boolean))];
     if (f('urunKatSayi')) f('urunKatSayi').textContent = katlar.length || '—';
     if (f('urunKatListesi')) f('urunKatListesi').textContent = katlar.slice(0, 3).join(', ') + (katlar.length > 3 ? '…' : '');
     if (f('urunOrtFiyat')) f('urunOrtFiyat').textContent = ort ? paraStr(Math.round(ort)) : '—';
@@ -1805,7 +1809,9 @@ async function renderUrunler() {
           <td style="color:var(--gold);font-weight:600">${paraStr(fiyat)}</td>
           <td><span style="color:${durumRenk};font-size:.68rem;font-weight:600">${durumLabel}</span></td>
           <td style="font-size:.65rem;color:var(--t2)">${u.ts ? tarihStr(u.ts) : '—'}</td>
-          <td style="white-space:nowrap">${islemler}${redBtn}</td>
+          <td style="white-space:nowrap">${islemler}${redBtn}
+            <button class="eylem-btn" style="margin-left:.3rem;background:rgba(123,92,240,.1);border-color:rgba(123,92,240,.35);color:#a78bfa;" onclick="urunDetayGoster('${u.id}')">👁 Detay</button>
+          </td>
         </tr>`;
       }).join('')}</tbody>
     </table>`;
@@ -1855,6 +1861,42 @@ window.redOnayla = async function() {
   } catch(e) {
     bildir('Hata: ' + e.message, 'hata');
   }
+};
+
+// ── ÜRÜN DETAY MODAL ────────────────────────────────────────────────────
+let _tumUrunlerCache = [];
+window.urunDetayGoster = function(id) {
+  const u = _tumUrunlerCache.find(x=>x.id===id);
+  if(!u){ bildir('Ürün bulunamadı.','hata'); return; }
+  const durum = u.durum||'bekliyor';
+  const durumRenk = durum==='aktif'?'var(--green)':durum==='reddedildi'?'var(--red)':'var(--orange)';
+  const satir = (lbl, val, color='var(--cream)', isLink=false) => val
+    ? `<div style="display:flex;gap:.8rem;padding:.55rem 0;border-bottom:1px solid rgba(255,255,255,.04);">
+        <div style="flex:0 0 130px;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t3);padding-top:.1rem;">${lbl}</div>
+        <div style="font-size:.72rem;color:${color};line-height:1.6;word-break:break-word;">${isLink?`<a href="${val}" target="_blank" style="color:var(--gold);">🔗 ${val}</a>`:val}</div>
+       </div>` : '';
+  const resimlerHTML = u.resimler?.length
+    ? `<div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem;">${u.resimler.map(r=>`<img src="${r}" style="width:72px;height:72px;object-fit:cover;border-radius:6px;border:1px solid rgba(255,255,255,.08);">`).join('')}</div>` : '';
+  document.getElementById('detayModalBaslik').textContent = '🛍 ' + (u.ad||'Ürün Detayı');
+  document.getElementById('detayModalIcerik').innerHTML = `
+    ${resimlerHTML}
+    ${satir('Durum', durum==='aktif'?'✅ Aktif':durum==='reddedildi'?'❌ Reddedildi':'⏳ Bekliyor', durumRenk)}
+    ${satir('Ürün Adı', u.ad)}
+    ${satir('Kategori', u.kategori)}
+    ${satir('Platform', u.platform==='gencz'?'⚡ Genç-Z':'🏪 Mağaza')}
+    ${satir('Mağaza', u.magazaAd)}
+    ${satir('Satıcı UID', u.saticiUid||u.uid)}
+    ${satir('Fiyat (KDV hariç)', u.fiyat ? '₺'+Number(u.fiyat).toLocaleString('tr-TR') : null)}
+    ${satir('KDV Dahil Fiyat', u.kdvDahilFiyat ? '₺'+Number(u.kdvDahilFiyat).toLocaleString('tr-TR') : null, 'var(--gold)')}
+    ${satir('KDV Oranı', u.kdvOran ? '%'+u.kdvOran : null)}
+    ${satir('Stok', u.stok!=null ? String(u.stok) : null)}
+    ${satir('Miktar / Birim', u.miktar && u.olcuBirim ? `${u.miktar} ${u.olcuBirim}` : null)}
+    ${satir('Açıklama', u.aciklama ? `<span style="white-space:pre-wrap;">${u.aciklama}</span>` : null)}
+    ${satir('Fiyat Notu', u.fiyatNotu)}
+    ${satir('Red Sebebi', u.redSebep, 'var(--red)')}
+    ${satir('Tarih', u.ts ? tarihStr(u.ts) : null)}
+  `;
+  document.getElementById('detayModalOverlay').classList.add('v');
 };
 
 window.finansFiltre=function(tip,el){_finansFiltre=tip;document.querySelectorAll('#sayfa-finans .f-tab').forEach(t=>t.classList.remove('aktif'));el.classList.add('aktif');renderFinans();};

@@ -3163,7 +3163,7 @@ window.urunEkle=async function(){
       const formData = new FormData();
       formData.append('file', r.file);
       formData.append('key', fileName);
-      const res = await fetch('https://gen-z.io/api/upload', {
+      const res = await fetch('https://genz-upload.genzio-info.workers.dev', {
         method: 'POST',
         body: formData
       });
@@ -3172,7 +3172,12 @@ window.urunEkle=async function(){
       return data.url;
     }));
   }catch(e){
-    resimUrls=_resimler.map(r=>r.url);
+    urunOverlayKapat();
+    err.textContent='⚠ Fotoğraf yüklenemedi: ' + e.message + ' — Lütfen tekrar deneyin.';
+    err.classList.add('v');
+    btn.textContent='✦ Yayınla — Admin Onayına Gider';
+    btn.disabled=false;
+    return;
   }
 
   try{

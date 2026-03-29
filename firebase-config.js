@@ -1,5 +1,5 @@
 // GEN-Z Firebase Config + Auth Modülü
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
   getAuth, GoogleAuthProvider,
   signInWithPopup, signOut,
@@ -24,7 +24,8 @@ const firebaseConfig = {
   measurementId: "G-1CHTYFV70Y"
 };
 
-const app = initializeApp(firebaseConfig);
+// Çift initialize önlemi — modpanel.html de aynı config ile başlatıyor
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);

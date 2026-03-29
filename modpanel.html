@@ -2585,8 +2585,7 @@ async function ustaYukle(){
     // İlanları çek
     const ilanSnap = await getDocs(query(
       collection(db,'ustam_ilanlar'),
-      where('ustaUid','==',_aktifUid),
-      orderBy('ts','desc')
+      where('ustaUid','==',_aktifUid)
     )).catch(()=>null);
     // saticiUid ile de dene (eski kayıtlar için)
     let ilanlar = ilanSnap ? ilanSnap.docs.map(d=>({id:d.id,...d.data()})) : [];
@@ -2597,6 +2596,8 @@ async function ustaYukle(){
       )).catch(()=>null);
       ilanlar = ilanSnap2 ? ilanSnap2.docs.map(d=>({id:d.id,...d.data()})) : [];
     }
+    // Client-side sırala (Firestore index gerektirmez)
+    ilanlar.sort((a,b)=>(b.ts?.seconds||0)-(a.ts?.seconds||0));
     window._aktifIlanlar = ilanlar; // ilanDuzenle için global erişim
 
     // Özet güncelle

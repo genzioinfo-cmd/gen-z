@@ -685,6 +685,11 @@ nav, .toast, .edit-modal-overlay, .edit-modal,
         <button class="profile-nav-item" onclick="loadTab('info')" id="pnav-info">
           <span class="nav-icon">👤</span> Kişisel Bilgiler
         </button>
+
+        <!-- Rol Kısayolları — JS tarafından doldurulur -->
+        <div id="rol-kisayollar" style="display:none; margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.08);">
+          <div style="font-size:10px; color:var(--text3); text-transform:uppercase; letter-spacing:0.6px; padding:4px 8px 6px; font-weight:600;">Profillerim</div>
+        </div>
       </nav>
 
       <!-- Content: dinamik yüklenir -->
@@ -793,6 +798,9 @@ if (currentUser) {
   if (infoUser) infoUser.textContent = currentUser.username;
   if (infoEmail) infoEmail.textContent = currentUser.email;
   document.getElementById('avatarInitial').textContent      = currentUser.username.replace('@','').charAt(0).toUpperCase();
+
+  /* ── ROL KISAYOLLARI ── */
+  renderRolKisayollar(currentUser);
 } else {
   /* Giriş yapılmamışsa ana sayfaya yönlendir */
   window.location.href = 'index.html?auth=signin';
@@ -815,6 +823,67 @@ function toggleTheme() {
   document.getElementById('themeBtn').textContent = currentTheme === 'dark' ? '🌙' : '☀️';
   showToast(currentTheme === 'dark' ? 'Koyu tema 🌙' : 'Açık tema ☀️');
   setTimeout(() => document.body.classList.remove('theme-transitioning'), 350);
+}
+
+/* ── ROL KISAYOLLARI ── */
+function renderRolKisayollar(user) {
+  const container = document.getElementById('rol-kisayollar');
+  if (!container) return;
+
+  // Kullanıcının sahip olduğu rolleri çıkar
+  const roller = [];
+
+  // Rol alanı: tek string veya dizi olabilir
+  const rol = (user.rol || '').toLowerCase();
+  const roller_arr = Array.isArray(user.roller) ? user.roller.map(r => r.toLowerCase()) : [];
+  const tumRoller = new Set([...roller_arr, ...(rol ? [rol] : [])]);
+
+  // Admin ise tüm profilleri göster
+  const isAdmin = tumRoller.has('admin') || user.admin === true;
+
+  const ROL_MAP = [
+    {
+      key: 'magaza',
+      label: '🏪 Mağazam',
+      href: 'gen-z_satici.html',
+      paramKey: 'uid',
+    },
+    {
+      key: 'ustam',
+      label: '🔧 Usta Profilim',
+      href: 'ustam-profil.html',
+      paramKey: 'uid',
+    },
+    {
+      key: 'gencz',
+      label: '⚡ Genç-Z Profilim',
+      href: 'gen-z.html',
+      paramKey: 'uid',
+    },
+  ];
+
+  // Kullanıcının uid'ini bul (firebase uid veya username bazlı)
+  const uid = user.uid || user.id || '';
+
+  let added = 0;
+  ROL_MAP.forEach(({ key, label, href, paramKey }) => {
+    if (!isAdmin && !tumRoller.has(key)) return;
+    const btn = document.createElement('a');
+    btn.className = 'profile-nav-item';
+    btn.href = uid ? `${href}?${paramKey}=${encodeURIComponent(uid)}` : href;
+    btn.style.textDecoration = 'none';
+    btn.style.display = 'flex';
+    btn.style.alignItems = 'center';
+    btn.style.gap = '8px';
+    btn.innerHTML = `<span>${label}</span>`;
+    btn.title = label + ' sayfasına git';
+    container.appendChild(btn);
+    added++;
+  });
+
+  if (added > 0) {
+    container.style.display = 'block';
+  }
 }
 
 /* ── TAB SWITCHING — dinamik yükleme ── */

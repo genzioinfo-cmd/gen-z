@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>GEN-Z · Bakım Modu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--gold:#c9a84c;--ink:#0a0a0f;--cream:#f0eeff;}
+body{background:var(--ink);color:var(--cream);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem;}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(rgba(201,168,76,.04) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;}
+.wrap{position:relative;z-index:1;max-width:480px;}
+.logo{font-family:'Syne',sans-serif;font-size:2rem;font-weight:300;letter-spacing:.4em;margin-bottom:2rem;color:var(--cream);}
+.logo span{color:var(--gold);}
+.ikon{font-size:3.5rem;margin-bottom:1.5rem;animation:spin 3s linear infinite;}
+@keyframes spin{0%,100%{transform:rotate(0deg);}50%{transform:rotate(15deg);}0%{transform:rotate(-15deg);}}
+h1{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:300;margin-bottom:1rem;line-height:1.3;}
+h1 em{color:var(--gold);font-style:italic;}
+p{font-size:.85rem;color:rgba(240,235,224,.5);line-height:1.9;margin-bottom:2rem;}
+.badge{display:inline-block;font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;border:1px solid rgba(201,168,76,.3);color:var(--gold);padding:.4rem 1.2rem;border-radius:20px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">GEN<span>-Z</span></div>
+  <div class="ikon">⚙️</div>
+  <h1>Kısa süreliğine <em>bakımdayız</em></h1>
+  <p>Sizi daha iyi hizmet verebilmek için sistemimizi güncelliyoruz.<br>En kısa sürede geri döneceğiz.</p>
+  <div class="badge">✦ Yakında geri döneceğiz</div>
+</div>
+</body>
+</html>

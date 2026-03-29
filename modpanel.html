@@ -2368,7 +2368,9 @@ let _uFiltre='hepsi';
 let _sFiltre='hepsi';
 let _secKat='Kumaş / Tekstil';
 let _secOlcu={birim:'adet',ad:'Adet'};
-let _resimler=[];
+// _resimler upload.js'den window._resimler olarak geliyor
+let _resimler = window._resimler || [];
+window._resimler = _resimler;
 let _bedenler=[];
 let _renkler=[];
 
@@ -3207,7 +3209,7 @@ window.urunEkle=async function(){
     ok.classList.add('v');
     urunOverlayBasarili();
     ['uAd','uFiyat','uStok','uDesc','uSku'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-    window.magazaResimleriTemizle();_bedenler=[];_renkler=[];
+    window.magazaResimleriTemizle?.();_resimler=window._resimler||[];_bedenler=[];_renkler=[];
     Object.keys(_ekAlanlar).forEach(k=>delete _ekAlanlar[k]);
     document.getElementById('resimPreview').innerHTML='';
     _secKat='';

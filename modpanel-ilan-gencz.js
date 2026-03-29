@@ -149,26 +149,6 @@ function ilanFormIcerikOlustur() {
           <input type="file" id="ilanResimInput" accept="image/*" style="display:none" onchange="ilanResimSec(this.files)">
           <div id="ilanResimOnizleme" style="display:none;">
             <img id="ilanResimImg" style="max-width:100%;max-height:160px;border-radius:6px;object-fit:cover;">
-            <button type="button" onclick="event.stopPropagation();ilanResimTemizle()" style="display:block;margin:.5rem auto 0;padding:.3rem .8rem;background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.3);color:var(--red);border-radius:4px;font-size:.58rem;cursor:pointer;">✕ Kaldır</button>
-          </div>
-          <div id="ilanResimPlaceholder">
-            <div style="font-size:1.8rem;margin-bottom:.4rem;opacity:.4;">📷</div>
-            <div style="font-size:.62rem;color:var(--t2);">Fotoğraf seç veya sürükle bırak</div>
-            <div style="font-size:.55rem;color:var(--t3);margin-top:.2rem;">JPG, PNG, WebP — max 1.5MB</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="fa">
-        <label>📷 Kapak Fotoğrafı (opsiyonel)</label>
-        <div style="border:1.5px dashed rgba(201,168,76,.2);border-radius:6px;padding:1.5rem;text-align:center;cursor:pointer;transition:all .25s;position:relative;"
-          onclick="document.getElementById('ilanResimInput').click()"
-          ondragover="event.preventDefault();this.style.borderColor='var(--gold)'"
-          ondragleave="this.style.borderColor='rgba(201,168,76,.2)'"
-          ondrop="ilanResimDrop(event)">
-          <input type="file" id="ilanResimInput" accept="image/*" style="display:none" onchange="ilanResimSec(this.files)">
-          <div id="ilanResimOnizleme" style="display:none;">
-            <img id="ilanResimImg" style="max-width:100%;max-height:160px;border-radius:6px;object-fit:cover;">
             <button type="button" onclick="event.stopPropagation();ilanResimTemizle()" style="display:block;margin:.5rem auto 0;padding:.3rem .8rem;background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.3);color:#e05555;border-radius:4px;font-size:.58rem;cursor:pointer;">✕ Kaldır</button>
           </div>
           <div id="ilanResimPlaceholder">

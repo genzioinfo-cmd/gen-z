@@ -512,9 +512,8 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
         <div id="genczMenuBlok" style="display:none;border-top:1px solid rgba(123,92,240,.15);margin:.5rem 0;padding-top:.5rem;">
           <div style="font-size:.45rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(123,92,240,.5);padding:.3rem .8rem .2rem;">⚡ Genç-Z</div>
           <button class="sb-btn" onclick="git('gencz-ozet',this)"><span class="ikon">📊</span> Özet</button>
-          <button class="sb-btn" onclick="git('urunler',this)"><span class="ikon">🛍</span> Ürünlerim</button>
+          <button class="sb-btn" onclick="git('gencz-yeni',this)"><span class="ikon">🛍</span> Ürün / İçerik Ekle</button>
           <button class="sb-btn" onclick="git('gencz-icerik',this)"><span class="ikon">🎨</span> İçeriklerim</button>
-          <button class="sb-btn" onclick="git('gencz-yeni',this)"><span class="ikon">✏️</span> Yeni İçerik</button>
           <button class="sb-btn" onclick="git('gencz-ozel-istekler',this)"><span class="ikon">✨</span> Özel İstekler <span class="sb-badge" id="ozelIstekBadge" style="display:none;background:linear-gradient(135deg,#7B5CF0,#9b6ef0);"></span></button>
           <button class="sb-btn" onclick="git('gelir-gider',this)"><span class="ikon">📒</span> Gelir & Gider</button>
         </div>
@@ -2546,10 +2545,13 @@ function panelAc(){
   }
   document.getElementById('sbAd').textContent = panelAd;
 
-  // Mağaza ve Genç için ürün/sipariş yükle
-  if(_magaza){ renderKatGrid(); doldurModalKat(); yukle(); }
+  // Mağaza için ürün/sipariş yükle
+  if(_magaza && _magaza.tip === 'magaza'){ renderKatGrid(); doldurModalKat(); yukle(); }
 
-  // Usta modülünü yükle (ürün değil, ilan/randevu)
+  // Genç için ürünleri yükle (mağaza kategorileri DEĞİL, kendi kategorileri var)
+  if(_magaza && _magaza.tip === 'gencz'){ yukle(); }
+
+  // Usta modülünü yükle
   if(_ustaVeri?.ustaOnay){ ustaYukle(); }
 
   // Genç modülünü yükle

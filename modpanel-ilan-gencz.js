@@ -389,7 +389,6 @@ window.gzListeRender = function gzListeRender() {
     const tekrarBtn = durum==='reddedildi'
       ? `<button onclick="gzTekrarGonderModal('${i.id}')" style="margin-top:.5rem;padding:.4rem .9rem;background:rgba(92,240,180,.08);border:1px solid rgba(92,240,180,.3);color:#5CF0B4;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">🔄 Düzelt & Tekrar Gönder</button>` : '';
     const silBtn = `<button onclick="gzSil('${i.id}')" style="margin-top:.5rem;margin-left:.4rem;padding:.4rem .9rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.25);color:var(--red);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">🗑 Sil</button>`;
-    const silBtn = `<button onclick="gzSil('${i.id}')" style="margin-top:.5rem;margin-left:.4rem;padding:.4rem .9rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.25);color:var(--red);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">🗑 Sil</button>`;
     return `<div style="background:rgba(255,255,255,.022);border:1px solid var(--border);border-radius:6px;padding:1rem 1.2rem;margin-bottom:.7rem;${durum==='reddedildi'?'border-color:rgba(224,85,85,.25);':''}">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
         <div>

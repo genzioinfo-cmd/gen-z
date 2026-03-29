@@ -474,6 +474,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
           <button class="sb-btn" onclick="git('finans',this)"><span class="ikon">💰</span> Finans</button>
           <button class="sb-btn" onclick="git('finans-danisman',this)"><span class="ikon">🧠</span> Finansal Danışman</button>
           <button class="sb-btn" onclick="git('vergi-takvim',this)"><span class="ikon">🗓️</span> Vergi Takvimi <span class="sb-badge" id="vergiAlertBadge" style="display:none;background:#ff6b6b;">!</span></button>
+          <button class="sb-btn" onclick="git('gelir-gider',this)"><span class="ikon">📒</span> Gelir & Gider</button>
           <button class="sb-btn" onclick="git('one-cikar',this)"><span class="ikon">⭐</span> Öne Çıkar</button>
         </div>
         <!-- GENÇ-Z BÖLÜMÜ -->
@@ -486,6 +487,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
           <button class="sb-btn" onclick="git('gencz-kazanc',this)"><span class="ikon">💰</span> Kazancım</button>
           <button class="sb-btn" onclick="git('gencz-portfolyo',this)"><span class="ikon">🖼</span> Portföyüm</button>
           <button class="sb-btn" onclick="git('gencz-analitik',this)"><span class="ikon">📈</span> İçerik Analitik</button>
+          <button class="sb-btn" onclick="git('gelir-gider',this)"><span class="ikon">📒</span> Gelir & Gider</button>
         </div>
 
         <!-- USTA BÖLÜMÜ -->
@@ -495,6 +497,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
           <button class="sb-btn" onclick="git('usta-ilanlar',this)"><span class="ikon">📋</span> İlanlarım <span class="sb-badge" id="ustaIlanBadge" style="display:none">!</span></button>
           <button class="sb-btn" onclick="git('usta-randevular',this)"><span class="ikon">📅</span> Randevular <span class="sb-badge" id="rdvBadge" style="display:none;background:var(--red);">!</span></button>
           <button class="sb-btn" onclick="git('usta-abonelik',this)"><span class="ikon">⏱</span> Aboneliğim</button>
+          <button class="sb-btn" onclick="git('gelir-gider',this)"><span class="ikon">📒</span> Gelir & Gider</button>
           <button class="sb-btn" onclick="git('usta-one-cikar',this)"><span class="ikon">⭐</span> Öne Çıkar</button>
         </div>
       </div>
@@ -1436,11 +1439,377 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
         </div>
       </div>
 
+      <!-- ████ GELİR & GİDER ████ -->
+      <div class="sayfa" id="sayfa-gelir-gider">
+        <div class="sh"><span class="eyebrow">Finansal Takip</span><h1>Gelir & <em>Gider</em></h1></div>
+
+        <!-- ÖZET KARTLAR -->
+        <div class="stk-ozet-grid" style="margin-bottom:1.5rem;">
+          <div class="stk-k" style="border-color:rgba(76,175,130,.25);">
+            <div class="stk-n" style="color:var(--green)" id="mpGGelir">0₺</div>
+            <div class="stk-l">Toplam Gelir</div>
+            <div style="font-size:.55rem;color:var(--t2);margin-top:.2rem;" id="mpGGelirAdet">0 kayıt</div>
+          </div>
+          <div class="stk-k" style="border-color:rgba(224,85,85,.25);">
+            <div class="stk-n" style="color:var(--red)" id="mpGGider">0₺</div>
+            <div class="stk-l">Toplam Gider</div>
+            <div style="font-size:.55rem;color:var(--t2);margin-top:.2rem;" id="mpGGiderAdet">0 kayıt</div>
+          </div>
+          <div class="stk-k" id="mpGNetKart">
+            <div class="stk-n" id="mpGNet">0₺</div>
+            <div class="stk-l">Net Kar / Zarar</div>
+            <div style="font-size:.55rem;color:var(--t2);margin-top:.2rem;" id="mpGNetAlt">—</div>
+          </div>
+          <div class="stk-k">
+            <div class="stk-n" style="color:var(--gold)" id="mpGBuAy">0₺</div>
+            <div class="stk-l">Bu Ay Net</div>
+            <div style="font-size:.55rem;color:var(--t2);margin-top:.2rem;" id="mpGBuAyAlt">—</div>
+          </div>
+        </div>
+
+        <!-- FİLTRE + EKLE -->
+        <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin-bottom:1rem;">
+          <div class="filtre-row" style="margin:0;flex:1;flex-wrap:wrap;">
+            <button class="f-btn on" id="mpGTipHepsi" onclick="mpGTipSec('hepsi',this)">Hepsi</button>
+            <button class="f-btn" onclick="mpGTipSec('gelir',this)">💚 Gelir</button>
+            <button class="f-btn" onclick="mpGTipSec('gider',this)">🔴 Gider</button>
+          </div>
+          <select id="mpGAyFiltre" onchange="ggRenderMod()" style="padding:.4rem .7rem;background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.15);color:var(--cream);border-radius:3px;font-family:'DM Sans',sans-serif;font-size:.65rem;">
+            <option value="">Tüm Aylar</option>
+          </select>
+          <input placeholder="Kategori / not ara…" id="mpGArama" oninput="ggRenderMod()" style="padding:.4rem .8rem;background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.13);border-radius:3px;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:.68rem;outline:none;width:170px;">
+          <button onclick="mpGModalAc()" style="padding:.46rem 1.1rem;background:linear-gradient(135deg,#4caf82,#3a9a6e);color:#fff;border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-weight:700;white-space:nowrap;">+ Kayıt Ekle</button>
+          <button id="mpGExcelBtn" onclick="mpGExcelIndir()" disabled style="padding:.46rem 1.1rem;background:rgba(76,175,130,.08);border:1px solid rgba(76,175,130,.25);color:var(--green);border-radius:3px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-weight:700;white-space:nowrap;transition:all .2s;">📊 Excel'e Aktar</button>
+        </div>
+
+        <!-- TABLO -->
+        <div class="twrap">
+          <div class="tbaslik"><h3 id="mpGTabloBaslik">📒 Tüm Kayıtlar</h3></div>
+          <div id="mpGTablo"><div style="text-align:center;padding:3rem;font-style:italic;color:var(--t2)">✦ Henüz kayıt yok. "+ Kayıt Ekle" ile başlayın.</div></div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
 
-<!-- DÜZENLE MODALİ -->
+<!-- GELİR & GİDER MODAL -->
+<div class="chat-overlay" id="mpGModalOverlay" onclick="if(event.target===this)mpGModalKapat()">
+  <div class="chat-box" style="max-width:500px;max-height:92vh;overflow-y:auto;">
+    <div class="chat-head">
+      <div class="chat-head-info">
+        <div class="chat-head-name" id="mpGModalBaslik">📒 Yeni Kayıt</div>
+        <div class="chat-head-sub">Gelir veya gider kaydı ekle</div>
+      </div>
+      <button class="chat-close" onclick="mpGModalKapat()">✕</button>
+    </div>
+    <div style="padding:1.4rem;display:flex;flex-direction:column;gap:1rem;">
+
+      <!-- TİP -->
+      <div>
+        <div style="font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--t2);margin-bottom:.5rem;">Kayıt Tipi</div>
+        <div style="display:flex;gap:.5rem;">
+          <button id="mpGBtnGelir" onclick="mpGTipToggle('gelir')" style="flex:1;padding:.65rem;border-radius:5px;font-family:'DM Sans',sans-serif;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-weight:700;border:2px solid var(--green);background:rgba(76,175,130,.15);color:var(--green);">💚 Gelir</button>
+          <button id="mpGBtnGider" onclick="mpGTipToggle('gider')" style="flex:1;padding:.65rem;border-radius:5px;font-family:'DM Sans',sans-serif;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-weight:700;border:2px solid rgba(224,85,85,.2);background:none;color:var(--t2);">🔴 Gider</button>
+        </div>
+      </div>
+
+      <!-- KATEGORİ -->
+      <div>
+        <label class="dan-lbl">Kategori</label>
+        <select id="mpGKatInput" class="fi" style="font-size:.75rem;"></select>
+      </div>
+
+      <!-- TUTAR + TARİH -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;">
+        <div>
+          <label class="dan-lbl">Tutar (₺)</label>
+          <input type="number" id="mpGTutarInput" min="0" step="0.01" placeholder="0.00" class="fi" style="font-size:.8rem;">
+        </div>
+        <div>
+          <label class="dan-lbl">Tarih</label>
+          <input type="date" id="mpGTarihInput" class="fi" style="font-size:.75rem;">
+        </div>
+      </div>
+
+      <!-- NOT -->
+      <div>
+        <label class="dan-lbl">Not (opsiyonel)</label>
+        <input type="text" id="mpGNotInput" placeholder="Kısa açıklama…" class="fi" style="font-size:.75rem;">
+      </div>
+
+    </div>
+    <div style="padding:1rem 1.4rem;border-top:1px solid var(--border);display:flex;gap:.6rem;justify-content:flex-end;">
+      <button onclick="mpGModalKapat()" style="padding:.42rem .9rem;background:none;border:1px solid rgba(201,168,76,.2);color:var(--t2);border-radius:3px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;">İptal</button>
+      <button onclick="mpGKaydet()" style="padding:.42rem 1.2rem;background:linear-gradient(135deg,#4caf82,#3a9a6e);color:#fff;border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-weight:700;">💾 Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════ GELİR & GİDER — MOD PANELİ (in-memory + Excel export) ════════════
+(function(){
+
+const GG_KAT2 = {
+  magaza:{
+    gelir:['Ürün Satışı','Online Satış','Toptan Satış','İndirimli Satış','Kargo Geliri','Diğer Gelir'],
+    gider:['Stok / Mal Alımı','Dükkan Kirası','Elektrik Faturası','Su Faturası','Doğalgaz Faturası','İnternet / Telefon','Personel Maaşı','Kargo / Lojistik','Reklam & Tanıtım','Paketleme Malzemesi','POS / Komisyon','Muhasebe / Mali Müşavir','Tamir & Bakım','Temizlik','Vergi / SGK','Diğer Gider']
+  },
+  usta:{
+    gelir:['Hizmet Bedeli','Proje Ödemesi','Malzeme Dahil İş','Saat Ücreti','Tamir Geliri','Diğer Gelir'],
+    gider:['Alet & Ekipman','Malzeme / Sarf','Araç Yakıtı','Araç Bakımı','Dükkan / Depo Kirası','Elektrik Faturası','Telefon','Sigorta','Reklam','Personel','Vergi / SGK','Diğer Gider']
+  },
+  genc:{
+    gelir:['Eser Satışı','Komisyon / Royalti','Sergi Geliri','Atölye / Workshop','Sponsorluk','Burs / Destek','Freelance İş','Diğer Gelir'],
+    gider:['Malzeme (Boya/Tuval/vb.)','Atölye Kirası','Sergi Gideri','Ulaşım','Dijital Araçlar / Abonelik','Kurs / Eğitim','Kargo','Diğer Gider']
+  },
+  genel:{
+    gelir:['Platform Komisyonu','Abonelik Geliri','Diğer Gelir'],
+    gider:['Genel Gider','Diğer Gider']
+  }
+};
+
+// ── IN-MEMORY VERİ ──
+let _ggVeri = [];
+let _mpGTip = 'hepsi';
+let _mpGSecilenTip = 'gelir';
+let _mpGDuzenleId = null;
+
+function ggPara2(n){ return (Number(n)||0).toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2})+'₺'; }
+function ggAyStr2(iso){ if(!iso)return'—'; const [y,m]=iso.split('-'); const ay=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara']; return (ay[parseInt(m)-1]||m)+' '+y; }
+
+function aktifRol(){
+  if(document.getElementById('magazaMenuBlok')?.style.display!=='none') return 'magaza';
+  if(document.getElementById('ustaMenuBlok')?.style.display!=='none') return 'usta';
+  if(document.getElementById('genczMenuBlok')?.style.display!=='none') return 'genc';
+  return 'genel';
+}
+
+function aylarDoldur(){
+  const sel = document.getElementById('mpGAyFiltre');
+  if(!sel) return;
+  const mevcut = sel.value;
+  const rol = aktifRol();
+  const aylar = [...new Set(_ggVeri.filter(v=>v.rol===rol).map(v=>v.tarih?v.tarih.substring(0,7):'').filter(Boolean))].sort().reverse();
+  sel.innerHTML = '<option value="">Tüm Aylar</option>' + aylar.map(a=>`<option value="${a}" ${mevcut===a?'selected':''}>${ggAyStr2(a+'-01')}</option>`).join('');
+}
+
+function ozetGuncelle(){
+  const rol = aktifRol();
+  const rolListe = _ggVeri.filter(v=>v.rol===rol);
+  const gelirler = rolListe.filter(v=>v.tip==='gelir');
+  const giderler = rolListe.filter(v=>v.tip==='gider');
+  const topG  = gelirler.reduce((s,v)=>s+(Number(v.tutar)||0),0);
+  const topGd = giderler.reduce((s,v)=>s+(Number(v.tutar)||0),0);
+  const net = topG - topGd;
+  const f = id=>document.getElementById(id);
+  if(f('mpGGelir'))    { f('mpGGelir').textContent = ggPara2(topG); }
+  if(f('mpGGelirAdet')){ f('mpGGelirAdet').textContent = gelirler.length+' kayıt'; }
+  if(f('mpGGider'))    { f('mpGGider').textContent = ggPara2(topGd); }
+  if(f('mpGGiderAdet')){ f('mpGGiderAdet').textContent = giderler.length+' kayıt'; }
+  if(f('mpGNet'))      { f('mpGNet').textContent = ggPara2(net); f('mpGNet').style.color = net>=0?'var(--green)':'var(--red)'; }
+  if(f('mpGNetAlt'))   { f('mpGNetAlt').textContent = net>=0?'Kârlı ✦':'Zararda ⚠'; }
+  if(f('mpGNetKart'))  { f('mpGNetKart').style.borderColor = net>=0?'rgba(76,175,130,.3)':'rgba(224,85,85,.25)'; }
+  const simdi = new Date();
+  const buAy = simdi.getFullYear()+'-'+String(simdi.getMonth()+1).padStart(2,'0');
+  const buAyListe = rolListe.filter(v=>v.tarih&&v.tarih.startsWith(buAy));
+  const buAyNet = buAyListe.filter(v=>v.tip==='gelir').reduce((s,v)=>s+(Number(v.tutar)||0),0)
+                - buAyListe.filter(v=>v.tip==='gider').reduce((s,v)=>s+(Number(v.tutar)||0),0);
+  if(f('mpGBuAy'))    { f('mpGBuAy').textContent = ggPara2(buAyNet); f('mpGBuAy').style.color = buAyNet>=0?'var(--gold)':'var(--red)'; }
+  if(f('mpGBuAyAlt')) { f('mpGBuAyAlt').textContent = ggAyStr2(buAy+'-01'); }
+}
+
+window.ggRenderMod = function(){
+  aylarDoldur();
+  ozetGuncelle();
+  const rol = aktifRol();
+  const ara = (document.getElementById('mpGArama')?.value||'').toLowerCase();
+  const ay  = document.getElementById('mpGAyFiltre')?.value||'';
+  let liste = _ggVeri.filter(v=>v.rol===rol).sort((a,b)=>(b.tarih||'').localeCompare(a.tarih||''));
+  if(_mpGTip!=='hepsi') liste = liste.filter(v=>v.tip===_mpGTip);
+  if(ay)  liste = liste.filter(v=>v.tarih&&v.tarih.startsWith(ay));
+  if(ara) liste = liste.filter(v=>(v.kategori||'').toLowerCase().includes(ara)||(v.not||'').toLowerCase().includes(ara));
+
+  // Excel butonu aktifliği
+  const exBtn = document.getElementById('mpGExcelBtn');
+  if(exBtn) exBtn.disabled = _ggVeri.filter(v=>v.rol===rol).length === 0;
+
+  const el = document.getElementById('mpGTablo');
+  if(!el) return;
+  if(!liste.length){
+    el.innerHTML='<div style="text-align:center;padding:3rem;font-style:italic;color:var(--t2)">✦ Kayıt yok. "+ Kayıt Ekle" ile başlayın.</div>';
+    return;
+  }
+  el.innerHTML=`<div style="overflow-x:auto"><table style="min-width:650px;width:100%;border-collapse:collapse;">
+    <thead><tr>
+      <th style="padding:.6rem 1rem;text-align:left;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,168,76,.6);border-bottom:1px solid var(--border);">Tarih</th>
+      <th style="padding:.6rem 1rem;text-align:left;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,168,76,.6);border-bottom:1px solid var(--border);">Tip</th>
+      <th style="padding:.6rem 1rem;text-align:left;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,168,76,.6);border-bottom:1px solid var(--border);">Kategori</th>
+      <th style="padding:.6rem 1rem;text-align:left;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,168,76,.6);border-bottom:1px solid var(--border);">Tutar (₺)</th>
+      <th style="padding:.6rem 1rem;text-align:left;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,168,76,.6);border-bottom:1px solid var(--border);">Not</th>
+      <th style="padding:.6rem 1rem;text-align:left;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,168,76,.6);border-bottom:1px solid var(--border);">İşlem</th>
+    </tr></thead>
+    <tbody>${liste.map(v=>{
+      const renk = v.tip==='gelir'?'var(--green)':'var(--red)';
+      return`<tr style="border-bottom:1px solid rgba(255,255,255,.03);">
+        <td style="padding:.6rem 1rem;font-size:.65rem;color:var(--t2)">${v.tarih||'—'}</td>
+        <td style="padding:.6rem 1rem"><span style="font-size:.55rem;font-weight:700;color:${renk}">${v.tip==='gelir'?'💚 Gelir':'🔴 Gider'}</span></td>
+        <td style="padding:.6rem 1rem;font-size:.73rem;font-weight:600">${v.kategori||'—'}</td>
+        <td style="padding:.6rem 1rem;font-size:1rem;font-family:'Syne',sans-serif;font-weight:300;color:${renk}">${v.tip==='gelir'?'+':'−'}${ggPara2(v.tutar)}</td>
+        <td style="padding:.6rem 1rem;font-size:.63rem;color:var(--t2);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${v.not||'—'}</td>
+        <td style="padding:.6rem 1rem"><div style="display:flex;gap:.3rem;">
+          <button onclick="mpGDuzenle('${v.id}')" style="padding:.25rem .6rem;background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);color:var(--gold);border-radius:2px;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">✎</button>
+          <button onclick="mpGSil('${v.id}')" style="padding:.25rem .6rem;background:rgba(224,85,85,.08);border:1px solid rgba(224,85,85,.2);color:var(--red);border-radius:2px;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">✕</button>
+        </div></td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table></div>`;
+};
+
+// ── EXCEL EXPORT ──
+window.mpGExcelIndir = function(){
+  const rol = aktifRol();
+  const liste = _ggVeri.filter(v=>v.rol===rol).sort((a,b)=>(a.tarih||'').localeCompare(b.tarih||''));
+  if(!liste.length){ toast('Dışa aktarılacak kayıt yok','err'); return; }
+
+  const ROL_ADI = {magaza:'Mağaza',usta:'Usta',genc:'Genç-Sanatçı',genel:'Genel'};
+  const gelirler = liste.filter(v=>v.tip==='gelir');
+  const giderler = liste.filter(v=>v.tip==='gider');
+  const topG  = gelirler.reduce((s,v)=>s+(Number(v.tutar)||0),0);
+  const topGd = giderler.reduce((s,v)=>s+(Number(v.tutar)||0),0);
+  const net   = topG - topGd;
+
+  // CSV oluştur (Excel UTF-8 BOM ile açar)
+  const BOM = '\uFEFF';
+  const satirlar = [
+    ['GEN-Z — Gelir & Gider Raporu'],
+    ['Hesap:', ROL_ADI[rol]||rol],
+    ['Oluşturulma:', new Date().toLocaleDateString('tr-TR')],
+    [],
+    ['Tarih','Tip','Kategori','Tutar (₺)','Not'],
+    ...liste.map(v=>[
+      v.tarih||'',
+      v.tip==='gelir'?'Gelir':'Gider',
+      v.kategori||'',
+      Number(v.tutar)||0,
+      v.not||''
+    ]),
+    [],
+    ['ÖZET','','','',''],
+    ['Toplam Gelir','','', topG,''],
+    ['Toplam Gider','','', topGd,''],
+    ['Net Kar / Zarar','','', net, net>=0?'Kârlı':'Zararda'],
+  ];
+
+  const csv = BOM + satirlar.map(r=>r.map(h=>{
+    const s = String(h);
+    return s.includes(',')||s.includes('"')||s.includes('\n') ? '"'+s.replace(/"/g,'""')+'"' : s;
+  }).join(',')).join('\r\n');
+
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  const tarih = new Date().toLocaleDateString('tr-TR').replace(/\./g,'-');
+  a.href = url;
+  a.download = `GEN-Z_GelirGider_${ROL_ADI[rol]||rol}_${tarih}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Excel dosyası indiriliyor… 📊');
+};
+
+// ── NAVİGASYON ──
+window.mpGTipSec = function(tip, el){
+  _mpGTip = tip;
+  document.querySelectorAll('#sayfa-gelir-gider .f-btn').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  ggRenderMod();
+};
+
+window.mpGTipToggle = function(tip){
+  _mpGSecilenTip = tip;
+  const bG  = document.getElementById('mpGBtnGelir');
+  const bGd = document.getElementById('mpGBtnGider');
+  const S_ON_G  = 'flex:1;padding:.65rem;border-radius:5px;font-family:\'DM Sans\',sans-serif;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-weight:700;border:2px solid var(--green);background:rgba(76,175,130,.15);color:var(--green);';
+  const S_OFF   = 'flex:1;padding:.65rem;border-radius:5px;font-family:\'DM Sans\',sans-serif;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-weight:700;border:2px solid rgba(224,85,85,.2);background:none;color:var(--t2);';
+  const S_ON_GD = 'flex:1;padding:.65rem;border-radius:5px;font-family:\'DM Sans\',sans-serif;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-weight:700;border:2px solid var(--red);background:rgba(224,85,85,.15);color:var(--red);';
+  const S_OFF_G = 'flex:1;padding:.65rem;border-radius:5px;font-family:\'DM Sans\',sans-serif;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-weight:700;border:2px solid rgba(76,175,130,.2);background:none;color:var(--t2);';
+  if(bG&&bGd){ bG.style.cssText=tip==='gelir'?S_ON_G:S_OFF_G; bGd.style.cssText=tip==='gelir'?S_OFF:S_ON_GD; }
+  mpGKatDoldur();
+};
+
+window.mpGKatDoldur = function(){
+  const rol = aktifRol();
+  const katlar = (GG_KAT2[rol]||GG_KAT2.genel)[_mpGSecilenTip]||['Diğer'];
+  const sel = document.getElementById('mpGKatInput');
+  if(!sel) return;
+  const mevcut = sel.value;
+  sel.innerHTML = katlar.map(k=>`<option value="${k}" ${mevcut===k?'selected':''}>${k}</option>`).join('');
+};
+
+window.mpGModalAc = function(){
+  _mpGDuzenleId = null;
+  _mpGSecilenTip = 'gelir';
+  document.getElementById('mpGModalBaslik').textContent = '📒 Yeni Kayıt';
+  document.getElementById('mpGTutarInput').value = '';
+  document.getElementById('mpGNotInput').value   = '';
+  document.getElementById('mpGTarihInput').value = new Date().toISOString().substring(0,10);
+  mpGTipToggle('gelir');
+  mpGKatDoldur();
+  document.getElementById('mpGModalOverlay').classList.add('open');
+};
+
+window.mpGModalKapat = function(){
+  document.getElementById('mpGModalOverlay').classList.remove('open');
+};
+
+window.mpGKaydet = function(){
+  const tutar = parseFloat(document.getElementById('mpGTutarInput').value);
+  if(!tutar||tutar<=0){ toast('Geçerli bir tutar girin','err'); return; }
+  const kayit = {
+    id       : _mpGDuzenleId || Date.now().toString(36)+Math.random().toString(36).substr(2,5),
+    tip      : _mpGSecilenTip,
+    rol      : aktifRol(),
+    kategori : document.getElementById('mpGKatInput').value,
+    tutar    : tutar,
+    tarih    : document.getElementById('mpGTarihInput').value,
+    not      : document.getElementById('mpGNotInput').value.trim()
+  };
+  if(_mpGDuzenleId){
+    const idx = _ggVeri.findIndex(v=>v.id===_mpGDuzenleId);
+    if(idx>-1) _ggVeri[idx]=kayit; else _ggVeri.push(kayit);
+    toast('Kayıt güncellendi ✦');
+  } else {
+    _ggVeri.push(kayit);
+    toast('Kayıt eklendi 💰');
+  }
+  mpGModalKapat();
+  ggRenderMod();
+};
+
+window.mpGDuzenle = function(id){
+  const v = _ggVeri.find(x=>x.id===id);
+  if(!v) return;
+  _mpGDuzenleId   = id;
+  _mpGSecilenTip  = v.tip||'gelir';
+  document.getElementById('mpGModalBaslik').textContent = '✎ Kaydı Düzenle';
+  document.getElementById('mpGTutarInput').value = v.tutar||'';
+  document.getElementById('mpGTarihInput').value = v.tarih||'';
+  document.getElementById('mpGNotInput').value   = v.not||'';
+  mpGTipToggle(v.tip||'gelir');
+  mpGKatDoldur();
+  setTimeout(()=>{ document.getElementById('mpGKatInput').value = v.kategori||''; }, 50);
+  document.getElementById('mpGModalOverlay').classList.add('open');
+};
+
+window.mpGSil = function(id){
+  if(!confirm('Bu kaydı silmek istiyor musunuz?')) return;
+  _ggVeri = _ggVeri.filter(v=>v.id!==id);
+  toast('Kayıt silindi');
+  ggRenderMod();
+};
+
+})();
+</script>
 <div id="mOv" onclick="mKapat()">
   <div class="m-ic" onclick="event.stopPropagation()">
     <div class="m-top">
@@ -3637,6 +4006,7 @@ window.git=function(id,btn){
   if(id==='gencz-yeni') window.genczKatGridOlustur && window.genczKatGridOlustur();
   if(id==='finans-danisman') window.danismanYukle && window.danismanYukle();
   if(id==='vergi-takvim') window.vergiYukle && window.vergiYukle();
+  if(id==='gelir-gider') window.ggRenderMod && window.ggRenderMod();
 };
 window.toggle=function(bodyId,arrId){
   const b=document.getElementById(bodyId);

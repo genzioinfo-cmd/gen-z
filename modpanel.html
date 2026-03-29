@@ -518,6 +518,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
           <button class="sb-btn" onclick="git('gencz-kazanc',this)"><span class="ikon">💰</span> Kazancım</button>
           <button class="sb-btn" onclick="git('gencz-portfolyo',this)"><span class="ikon">🖼</span> Portföyüm</button>
           <button class="sb-btn" onclick="git('gencz-analitik',this)"><span class="ikon">📈</span> İçerik Analitik</button>
+          <button class="sb-btn" onclick="git('gencz-ozel-istekler',this)"><span class="ikon">✨</span> Özel İstekler <span class="sb-badge" id="ozelIstekBadge" style="display:none;background:linear-gradient(135deg,#7B5CF0,#9b6ef0);"></span></button>
           <button class="sb-btn" onclick="git('gelir-gider',this)"><span class="ikon">📒</span> Gelir & Gider</button>
         </div>
 
@@ -1394,6 +1395,443 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
         <div class="sh"><span class="eyebrow">İçerik Performansı</span><h1>İçerik <em>Analitik</em></h1></div>
         <div id="gencz-analitik-icerik"></div>
       </div>
+
+      <!-- ████ GENÇ-Z ÖZEL İSTEKLER ████ -->
+      <div class="sayfa" id="sayfa-gencz-ozel-istekler">
+        <div class="sh">
+          <span class="eyebrow">Ücretli Danışmanlık</span>
+          <h1>Özel <em>İstekler</em></h1>
+        </div>
+
+        <!-- ÖZET KARTLAR -->
+        <div class="oz-grid" id="ozelIstekOzetGrid">
+          <div class="oz-k">
+            <div class="oz-n" id="oi-toplam">—</div>
+            <div class="oz-l">Toplam İstek</div>
+          </div>
+          <div class="oz-k">
+            <div class="oz-n" style="color:var(--orange)" id="oi-bekleyen">—</div>
+            <div class="oz-l">Bekleyen</div>
+          </div>
+          <div class="oz-k">
+            <div class="oz-n" style="color:var(--green)" id="oi-cevaplanan">—</div>
+            <div class="oz-l">Yanıtlanan</div>
+          </div>
+          <div class="oz-k">
+            <div class="oz-n" style="color:var(--gold)" id="oi-kazanc">—</div>
+            <div class="oz-l">Toplam Kazanç</div>
+          </div>
+        </div>
+
+        <!-- BİLGİ KUTUSU -->
+        <div id="oiGelirBilgi" style="background:linear-gradient(135deg,rgba(123,92,240,.08),rgba(240,197,92,.05));border:1px solid rgba(123,92,240,.2);border-radius:8px;padding:1rem 1.4rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+          <span style="font-size:1.4rem;">💰</span>
+          <div>
+            <div style="font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:.2rem;">Gelir Modeli</div>
+            <div style="font-size:.72rem;color:var(--t2);line-height:1.7;">Her özel istekten <strong style="color:var(--cream);">₺50</strong> tahsil edilir. Bunun <strong style="color:var(--green);">₺25'i sana</strong> anında, <strong style="color:var(--gold);">₺25'i platforma</strong> aktarılır.</div>
+          </div>
+        </div>
+
+        <!-- FİLTRE -->
+        <div class="filtre-row" style="margin-bottom:1.2rem;">
+          <button class="f-btn on" onclick="oiFiltre('hepsi',this)">Tümü</button>
+          <button class="f-btn" onclick="oiFiltre('yeni',this)">🔔 Yeni</button>
+          <button class="f-btn" onclick="oiFiltre('aktif',this)">💬 Aktif</button>
+          <button class="f-btn" onclick="oiFiltre('tamamlandi',this)">✅ Tamamlanan</button>
+        </div>
+
+        <!-- İSTEK LİSTESİ -->
+        <div id="ozelIstekListesi">
+          <div style="color:var(--t2);font-size:.75rem;font-style:italic;padding:3rem 0;text-align:center;">
+            <div style="font-size:2.5rem;margin-bottom:.8rem;opacity:.3;">✨</div>
+            Henüz özel istek yok.<br>
+            <span style="font-size:.65rem;opacity:.6;">Birisi sana özel istek gönderdiğinde burada görünecek.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ÖZEL İSTEK SOHBET MODALI (Mod Panel içi) -->
+      <div id="oiSohbetModal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px;">
+        <div style="background:var(--panel);border:1px solid rgba(123,92,240,.25);border-radius:16px;width:100%;max-width:520px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 32px 80px rgba(0,0,0,.6);">
+          <!-- Modal Başlık -->
+          <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
+            <div style="flex:1;">
+              <div style="font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;color:var(--cream);" id="oiSohbetAd">Müşteri</div>
+              <div style="font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);opacity:.65;" id="oiSohbetTarih">—</div>
+            </div>
+            <div id="oiSohbetKazanc" style="text-align:right;">
+              <div style="font-size:.65rem;color:var(--green);font-weight:700;">₺25 Kazanıldı</div>
+              <div style="font-size:.5rem;color:var(--t2);">Ödeme onaylı</div>
+            </div>
+            <button onclick="oiSohbetKapat()" style="width:30px;height:30px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;color:var(--t2);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">&#x2715;</button>
+          </div>
+          <!-- Kabul / Reddet Butonları -->
+          <div id="oiAksiyonRow" style="display:none;padding:10px 16px;background:rgba(255,255,255,.015);border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap;">
+            <button onclick="oiKabul()" style="flex:1;min-width:120px;padding:.55rem 1rem;background:rgba(76,175,130,.12);border:1px solid rgba(76,175,130,.35);border-radius:6px;color:var(--green);font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='rgba(76,175,130,.22)'" onmouseout="this.style.background='rgba(76,175,130,.12)'">✅ İsteği Tamamla</button>
+            <button onclick="oiReddet()" style="flex:1;min-width:120px;padding:.55rem 1rem;background:rgba(224,85,85,.08);border:1px solid rgba(224,85,85,.3);border-radius:6px;color:var(--red);font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='rgba(224,85,85,.18)'" onmouseout="this.style.background='rgba(224,85,85,.08)'">❌ Reddet</button>
+          </div>
+          <!-- Özel İstek (varsa) -->
+          <div id="oiSohbetIstek" style="display:none;margin:12px 16px 0;background:rgba(240,197,92,.06);border:1px solid rgba(240,197,92,.2);border-radius:8px;padding:10px 14px;">
+            <div style="font-size:.5rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;">📋 Özel İstek</div>
+            <div style="font-size:.72rem;color:var(--t2);line-height:1.7;" id="oiSohbetIstekMetin"></div>
+          </div>
+          <!-- Mesajlar -->
+          <div id="oiSohbetMesajlar" style="flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-height:200px;max-height:300px;"></div>
+          <!-- Input -->
+          <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end;">
+            <textarea id="oiSohbetInput" placeholder="Müşteriye yanıt yaz…" rows="1" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'" onkeydown="oiEnterGonder(event)" style="flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:.8rem;color:var(--cream);outline:none;resize:none;min-height:40px;max-height:100px;transition:border-color .2s;"></textarea>
+            <button onclick="oiMesajGonder()" style="width:40px;height:40px;background:var(--gold);border:none;border-radius:8px;color:#0a0a0f;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700;transition:all .2s;">&#x2191;</button>
+          </div>
+        </div>
+      </div>
+
+      <style>
+      /* ── ÖZEL İSTEK KARTLARI ── */
+      .oi-kart {
+        background: rgba(255,255,255,.022);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1.2rem 1.5rem;
+        margin-bottom: .8rem;
+        display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+        transition: border-color .25s;
+        cursor: pointer;
+      }
+      .oi-kart:hover { border-color: rgba(123,92,240,.4); }
+      .oi-kart.yeni { border-color: rgba(230,126,34,.4); animation: oiPulse 2s infinite; }
+      @keyframes oiPulse {
+        0%,100% { box-shadow: 0 0 0 0 rgba(230,126,34,0); }
+        50%      { box-shadow: 0 0 0 4px rgba(230,126,34,.12); }
+      }
+      .oi-avatar {
+        width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
+        background: linear-gradient(135deg, rgba(123,92,240,.3), rgba(240,197,92,.2));
+        border: 1px solid rgba(123,92,240,.25);
+        display: flex; align-items: center; justify-content: center;
+        font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
+        color: var(--gold);
+      }
+      .oi-bilgi { flex: 1; min-width: 0; }
+      .oi-musteri { font-size: .75rem; font-weight: 600; color: var(--cream); margin-bottom: .15rem; }
+      .oi-on-izlenim { font-size: .65rem; color: var(--t2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .oi-meta { display: flex; flex-direction: column; align-items: flex-end; gap: .3rem; flex-shrink: 0; }
+      .oi-tarih { font-size: .52rem; color: var(--t2); letter-spacing: .05em; }
+      .oi-durum {
+        font-size: .48rem; letter-spacing: .12em; text-transform: uppercase;
+        padding: .18rem .6rem; border-radius: 20px;
+      }
+      .oi-durum.yeni    { background: rgba(230,126,34,.15); border: 1px solid rgba(230,126,34,.3); color: var(--orange); }
+      .oi-durum.aktif   { background: rgba(123,92,240,.12); border: 1px solid rgba(123,92,240,.3); color: #a48af0; }
+      .oi-durum.tamamlandi { background: rgba(76,175,130,.1); border: 1px solid rgba(76,175,130,.3); color: var(--green); }
+      .oi-kazanc { font-size: .65rem; font-weight: 700; color: var(--green); }
+
+      /* sohbet modal mesaj baloncukları */
+      .oi-mesaj { max-width: 80%; padding: 9px 13px; border-radius: 10px; font-size: .72rem; line-height: 1.6; word-break: break-word; }
+      .oi-mesaj.gelen { background: rgba(255,255,255,.06); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 3px; }
+      .oi-mesaj.giden { background: var(--gold); color: #0a0a0f; align-self: flex-end; border-bottom-right-radius: 3px; font-weight: 500; }
+      .oi-mesaj.sistem { background: rgba(240,197,92,.07); border: 1px solid rgba(240,197,92,.15); color: var(--gold); align-self: center; text-align: center; font-size: .6rem; max-width: 90%; border-radius: 6px; }
+      .oi-mesaj-zaman { font-size: .48rem; color: rgba(240,235,224,.28); margin-top: .25rem; }
+      .oi-mesaj.giden .oi-mesaj-zaman { color: rgba(10,10,15,.35); }
+      </style>
+
+      <script type="module">
+      /* ═══════════════════════════════════════════════════════════════
+         ÖZEL İSTEKLER — MOD PANEL (Genç-Z)
+         Firestore tabanlı — Koleksiyonlar:
+           ozelIstekler/{istekId}           → istek belgesi
+           ozelIstekler/{istekId}/mesajlar  → alt-koleksiyon (mesajlar)
+      ═══════════════════════════════════════════════════════════════ */
+      import {
+        getFirestore,
+        collection, query, where, orderBy,
+        onSnapshot, doc, addDoc, updateDoc,
+        serverTimestamp, getDocs
+      } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+      const db = getFirestore();
+
+      let _oiFiltre   = 'hepsi';
+      let _oiAktif    = null;   // açık sohbetin Firestore belge ID'si
+      let _oiAktifUid = null;   // açık sohbetin buyerUid'si
+      let _oiListe    = [];
+      let _oiMsgUnsub = null;   // mesaj real-time dinleyici
+      let _oiListeUnsub = null;
+
+      /* ── Giriş yapmış üreticinin UID'si ── */
+      function _uid() {
+        return window._aktifUid
+          || window._genzAuth?.auth?.currentUser?.uid
+          || JSON.parse(localStorage.getItem('genz-user')||'null')?.uid
+          || 'demo';
+      }
+
+      /* ─── ÖZET KARTLARI GÜNCELLE ─── */
+      function _ozet() {
+        const bek = _oiListe.filter(x => x.durum === 'yeni').length;
+        const el  = id => document.getElementById(id);
+        if (!el('oi-toplam')) return;
+        el('oi-toplam').textContent     = _oiListe.length;
+        el('oi-bekleyen').textContent   = bek;
+        el('oi-cevaplanan').textContent = _oiListe.filter(x => x.durum !== 'yeni').length;
+        el('oi-kazanc').textContent     = '₺' + _oiListe.reduce((s,x) => s+(x.kazanc||0), 0).toLocaleString('tr-TR');
+        const badge = document.getElementById('ozelIstekBadge');
+        if (badge) { badge.textContent = bek||''; badge.style.display = bek ? 'inline' : 'none'; }
+      }
+
+      /* ─── FİLTRE ─── */
+      window.oiFiltre = function(f, btn) {
+        _oiFiltre = f;
+        document.querySelectorAll('#sayfa-gencz-ozel-istekler .f-btn').forEach(b => b.classList.remove('on'));
+        if (btn) btn.classList.add('on');
+        _render();
+      };
+
+      /* ─── LİSTE RENDER ─── */
+      function _render() {
+        const el = document.getElementById('ozelIstekListesi');
+        if (!el) return;
+        const l = _oiListe.filter(x => _oiFiltre === 'hepsi' || x.durum === _oiFiltre);
+        if (!l.length) {
+          el.innerHTML = `<div style="text-align:center;padding:3rem 0;color:var(--t2);font-style:italic;font-size:.72rem;">
+            ${_oiFiltre==='hepsi' ? '<div style="font-size:2.5rem;margin-bottom:.8rem;opacity:.3;">✨</div>Henüz özel istek yok.<br><span style="font-size:.65rem;opacity:.6;">Birisi sana istek gönderdiğinde burada görünecek.</span>' : 'Bu filtrede istek yok.'}
+          </div>`;
+          return;
+        }
+        el.innerHTML = l.map(x => {
+          const durumLabel = x.durum==='yeni' ? '🔔 Yeni' : x.durum==='aktif' ? '💬 Aktif' : x.durum==='reddedildi' ? '❌ Reddedildi' : '✅ Bitti';
+          const durumCls   = x.durum==='reddedildi' ? 'reddedildi' : x.durum;
+          return `
+            <div class="oi-kart ${x.durum==='yeni'?'yeni':''}" onclick="oiSohbetAc('${x._id}','${x.buyerUid}')">
+              <div class="oi-avatar">${(x.musteri||'?').charAt(0).toUpperCase()}</div>
+              <div class="oi-bilgi">
+                <div class="oi-musteri">${x.musteri||'Müşteri'}</div>
+                <div class="oi-on-izlenim">${x.onIzlenim||'—'}</div>
+              </div>
+              <div class="oi-meta">
+                <span class="oi-tarih">${x.tarih||'—'}</span>
+                <span class="oi-durum ${durumCls}">${durumLabel}</span>
+                ${x.durum!=='reddedildi' ? `<span class="oi-kazanc">+₺${x.kazanc||25}</span>` : ''}
+              </div>
+            </div>`;
+        }).join('');
+      }
+
+      /* ─── LİSTEYİ FIRESTORE'DAN DİNLE ─── */
+      function _listeBaslat() {
+        const uid = _uid();
+        if (!uid || uid === 'demo') { _demoBaşlat(); return; }
+        if (_oiListeUnsub) return;
+
+        const q = query(
+          collection(db, 'ozelIstekler'),
+          where('saticiUid', '==', uid),
+          orderBy('ts', 'desc')
+        );
+        _oiListeUnsub = onSnapshot(q, snap => {
+          _oiListe = snap.docs.map(d => ({ _id: d.id, ...d.data(),
+            tarih: d.data().ts?.toDate
+              ? d.data().ts.toDate().toLocaleString('tr-TR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})
+              : (d.data().tarih || '—')
+          }));
+          _ozet();
+          _render();
+        });
+      }
+
+      /* Demo verisi (Firestore bağlı değilken) */
+      function _demoBaşlat() {
+        _oiListe = [
+          { _id:'demo_001', buyerUid:'demo_001', musteri:'Elif K.',  tarih:'28.03.2026 14:22', durum:'yeni',       kazanc:25, onIzlenim:'Anneme özel tablo yaptırmak istiyorum...', istekMetni:'50x70 cm yağlı boya, bahar bahçesi teması.' },
+          { _id:'demo_002', buyerUid:'demo_002', musteri:'Mert A.',  tarih:'27.03.2026 09:45', durum:'aktif',      kazanc:25, onIzlenim:'Dijital illüstrasyon hakkında...', istekMetni:'' },
+          { _id:'demo_003', buyerUid:'demo_003', musteri:'Selin T.', tarih:'25.03.2026 18:30', durum:'tamamlandi', kazanc:25, onIzlenim:'Logo tasarımı için teşekkürler!', istekMetni:'Küçük cafem için logo.' },
+        ];
+        _ozet(); _render();
+      }
+
+      /* ─── SOHBET AÇ ─── */
+      window.oiSohbetAc = async function(istekId, buyerUid) {
+        const x = _oiListe.find(i => i._id === istekId);
+        if (!x) return;
+        _oiAktif    = istekId;
+        _oiAktifUid = buyerUid;
+
+        document.getElementById('oiSohbetAd').textContent   = x.musteri || 'Müşteri';
+        document.getElementById('oiSohbetTarih').textContent = x.tarih || '—';
+
+        /* Kabul/Reddet butonlarını duruma göre göster */
+        const aksiyonDiv = document.getElementById('oiAksiyonRow');
+        if (aksiyonDiv) {
+          if (x.durum === 'yeni' || x.durum === 'aktif') {
+            aksiyonDiv.style.display = 'flex';
+          } else {
+            aksiyonDiv.style.display = 'none';
+          }
+        }
+
+        /* Kazanç bilgisi */
+        const kazancDiv = document.getElementById('oiSohbetKazanc');
+        if (kazancDiv) {
+          if (x.durum === 'reddedildi') {
+            kazancDiv.innerHTML = '<div style="font-size:.65rem;color:var(--red);font-weight:700;">❌ Reddedildi</div><div style="font-size:.5rem;color:var(--t2);">İstek iptal edildi</div>';
+          } else {
+            kazancDiv.innerHTML = '<div style="font-size:.65rem;color:var(--green);font-weight:700;">₺25 Kazanıldı</div><div style="font-size:.5rem;color:var(--t2);">Ödeme onaylı</div>';
+          }
+        }
+
+        /* Özel istek metni */
+        const istekDiv = document.getElementById('oiSohbetIstek');
+        if (x.istekMetni) {
+          document.getElementById('oiSohbetIstekMetin').textContent = x.istekMetni;
+          istekDiv.style.display = 'block';
+        } else { istekDiv.style.display = 'none'; }
+
+        /* Yeni → aktif yap (Firestore) */
+        if (x.durum === 'yeni') {
+          if (!istekId.startsWith('demo')) {
+            await updateDoc(doc(db, 'ozelIstekler', istekId), { durum: 'aktif' });
+          } else {
+            const d = _oiListe.find(i => i._id === istekId);
+            if (d) { d.durum = 'aktif'; _ozet(); _render(); }
+          }
+        }
+
+        /* Mesajları real-time dinle */
+        _oiMesajBaslat(istekId, x);
+        document.getElementById('oiSohbetModal').style.display = 'flex';
+      };
+
+      /* ─── MESAJLARI DİNLE (real-time) ─── */
+      function _oiMesajBaslat(istekId, x) {
+        if (_oiMsgUnsub) { _oiMsgUnsub(); _oiMsgUnsub = null; }
+        const el = document.getElementById('oiSohbetMesajlar');
+        el.innerHTML = '<div style="text-align:center;padding:1rem;color:var(--t2);font-size:.65rem;">Yükleniyor…</div>';
+
+        if (istekId.startsWith('demo')) {
+          /* Demo mesajlar */
+          el.innerHTML = '';
+          const demo = [
+            { tip:'sistem', metin:'💰 Ödeme onaylandı — ₺25 kazancın eklendi.' },
+            { tip:'gelen',  metin: x.onIzlenim||'Merhaba!', zaman: (x.tarih||'').split(' ')[1]||'' },
+          ];
+          if (x.istekMetni) demo.push({ tip:'gelen', metin:'📋 Özel İstek: ' + x.istekMetni, zaman: '' });
+          demo.forEach(m => _balonEkle(m, el));
+          el.scrollTop = el.scrollHeight;
+          return;
+        }
+
+        const msgRef = collection(db, 'ozelIstekler', istekId, 'mesajlar');
+        const q = query(msgRef, orderBy('ts', 'asc'));
+        _oiMsgUnsub = onSnapshot(q, snap => {
+          el.innerHTML = '';
+          if (!snap.docs.length) {
+            /* İlk kez açılıyor — başlangıç mesajlarını yaz */
+            const baslangic = [
+              { tip:'sistem', metin:'💰 Ödeme onaylandı — ₺25 kazancın eklendi.', ts: serverTimestamp() },
+              { tip:'gelen',  metin: x.onIzlenim||'Merhaba!', zaman: (x.tarih||'').split(' ')[1]||'', ts: serverTimestamp() },
+            ];
+            if (x.istekMetni) baslangic.push({ tip:'gelen', metin:'📋 Özel İstek: ' + x.istekMetni, ts: serverTimestamp() });
+            baslangic.forEach(m => addDoc(msgRef, m));
+          } else {
+            snap.docs.forEach(d => {
+              const m = d.data();
+              const zaman = m.ts?.toDate ? m.ts.toDate().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}) : (m.zaman||'');
+              _balonEkle({ ...m, zaman }, el);
+            });
+            el.scrollTop = el.scrollHeight;
+          }
+        });
+      }
+
+      function _balonEkle(m, el) {
+        const d = document.createElement('div');
+        d.style.cssText = 'display:flex;flex-direction:column;';
+        d.innerHTML = `<div class="oi-mesaj ${m.tip}">${m.metin}${m.zaman?`<div class="oi-mesaj-zaman">${m.zaman}</div>`:''}</div>`;
+        el.appendChild(d);
+      }
+
+      /* ─── KAPAT ─── */
+      window.oiSohbetKapat = function() {
+        if (_oiMsgUnsub) { _oiMsgUnsub(); _oiMsgUnsub = null; }
+        document.getElementById('oiSohbetModal').style.display = 'none';
+        _oiAktif = null; _oiAktifUid = null;
+      };
+
+      /* ─── MESAJ GÖNDER (üretici → müşteri) ─── */
+      window.oiMesajGonder = async function() {
+        if (!_oiAktif) return;
+        const inp   = document.getElementById('oiSohbetInput');
+        const metin = inp.value.trim();
+        if (!metin) return;
+        inp.value = ''; inp.style.height = 'auto';
+
+        const zaman = new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+
+        if (_oiAktif.startsWith('demo')) {
+          /* Demo mod — sadece ekrana ekle */
+          _balonEkle({ tip:'giden', metin, zaman }, document.getElementById('oiSohbetMesajlar'));
+          document.getElementById('oiSohbetMesajlar').scrollTop = 999999;
+          return;
+        }
+
+        /* Firestore'a yaz — tip:'gelen' çünkü müşteri ekranında üreticinin mesajı "gelen" olarak görünür */
+        await addDoc(collection(db, 'ozelIstekler', _oiAktif, 'mesajlar'), {
+          tip   : 'gelen',
+          gonderen: 'satici',
+          metin,
+          ts    : serverTimestamp(),
+        });
+
+        /* onIzlenim güncelle */
+        await updateDoc(doc(db, 'ozelIstekler', _oiAktif), {
+          onIzlenim: metin.substring(0, 60) + (metin.length > 60 ? '…' : ''),
+        });
+      };
+
+      window.oiEnterGonder = function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); oiMesajGonder(); }
+      };
+
+      /* ─── KABUL / REDDET ─── */
+      window.oiKabul = async function() {
+        if (!_oiAktif) return;
+        if (!confirm('Bu isteği kabul edip tamamlandı olarak işaretleyeyim mi?')) return;
+        if (_oiAktif.startsWith('demo')) {
+          const d = _oiListe.find(i => i._id === _oiAktif);
+          if (d) d.durum = 'tamamlandi';
+          _ozet(); _render(); oiSohbetKapat(); toast('İstek tamamlandı olarak işaretlendi ✦'); return;
+        }
+        await updateDoc(doc(db, 'ozelIstekler', _oiAktif), { durum: 'tamamlandi' });
+        oiSohbetKapat();
+        toast('İstek tamamlandı olarak işaretlendi ✦');
+      };
+
+      window.oiReddet = async function() {
+        if (!_oiAktif) return;
+        if (!confirm('Bu isteği reddetmek istediğinden emin misin?')) return;
+        if (_oiAktif.startsWith('demo')) {
+          const d = _oiListe.find(i => i._id === _oiAktif);
+          if (d) { d.durum = 'reddedildi'; d.kazanc = 0; }
+          _ozet(); _render(); oiSohbetKapat(); toast('İstek reddedildi', 'err'); return;
+        }
+        await updateDoc(doc(db, 'ozelIstekler', _oiAktif), { durum: 'reddedildi', kazanc: 0 });
+        oiSohbetKapat();
+        toast('İstek reddedildi', 'err');
+      };
+
+      /* ─── SAYFA AÇILIŞI ─── */
+      const _origGit = window.git;
+      window.git = function(id, btn) {
+        if (typeof _origGit === 'function') _origGit(id, btn);
+        if (id === 'gencz-ozel-istekler') { _listeBaslat(); }
+      };
+
+      /* İlk yüklemede badge için */
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          _listeBaslat();
+        }, 900);
+      });
+      </script>
 
       <!-- USTA ABONELİK -->
       <div class="sayfa" id="sayfa-usta-abonelik">

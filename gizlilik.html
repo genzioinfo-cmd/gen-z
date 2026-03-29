@@ -253,12 +253,55 @@ nav {
     </div>
 
     <div class="doc-section">
+      <h2>🛡️ Verilerinizi Yönetin</h2>
+      <p style="margin-bottom:16px;color:var(--text2);font-size:14px;">KVKK kapsamındaki haklarınızı aşağıdaki butonları kullanarak doğrudan kullanabilirsiniz.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px;">
+        <button onclick="veriIndir()" style="padding:12px 20px;background:rgba(92,240,180,0.12);border:1px solid rgba(92,240,180,0.3);color:#5CF0B4;border-radius:10px;cursor:pointer;font-weight:600;font-size:14px;">📥 Verilerimi İndir</button>
+        <button onclick="hesabiSilOnay()" style="padding:12px 20px;background:rgba(240,92,92,0.1);border:1px solid rgba(240,92,92,0.3);color:#f06060;border-radius:10px;cursor:pointer;font-weight:600;font-size:14px;">🗑️ Hesabımı Sil</button>
+      </div>
+      <div id="kvkk-mesaj" style="display:none;padding:12px 16px;border-radius:8px;font-size:13px;margin-bottom:16px;"></div>
       <div class="contact-box">
         <p>Haklarınızı kullanmak veya veri talepleriniz için:</p>
         <a href="iletisim.html">📩 İletişim Formu</a>
         <p style="margin-top:10px;font-size:12px;color:var(--text3);">Başvurular KVKK Madde 13 uyarınca 30 gün içinde yanıtlanır.</p>
       </div>
     </div>
+
+    <script type="module">
+      import { kvkkRizaKaydet, kisiselVeriDısaAktar, hesabiSil } from './firebase-sync.js';
+
+      function mesajGoster(txt, renk) {
+        const el = document.getElementById('kvkk-mesaj');
+        el.textContent = txt;
+        el.style.background = renk === 'yesil' ? 'rgba(92,240,180,0.1)' : 'rgba(240,92,92,0.1)';
+        el.style.color = renk === 'yesil' ? '#5CF0B4' : '#f06060';
+        el.style.border = '1px solid ' + (renk === 'yesil' ? 'rgba(92,240,180,0.3)' : 'rgba(240,92,92,0.3)');
+        el.style.display = 'block';
+      }
+
+      window.veriIndir = async function() {
+        const user = JSON.parse(localStorage.getItem('genz-user') || 'null');
+        if (!user?.uid) { mesajGoster('⚠️ Bu işlem için giriş yapmalısınız.', 'kirmizi'); return; }
+        mesajGoster('⏳ Verileriniz hazırlanıyor...', 'yesil');
+        const ok = await kisiselVeriDısaAktar(user.uid);
+        if (ok) mesajGoster('✅ Verileriniz indirildi.', 'yesil');
+        else mesajGoster('❌ Hata oluştu, tekrar deneyin.', 'kirmizi');
+      };
+
+      window.hesabiSilOnay = function() {
+        const user = JSON.parse(localStorage.getItem('genz-user') || 'null');
+        if (!user?.uid) { mesajGoster('⚠️ Bu işlem için giriş yapmalısınız.', 'kirmizi'); return; }
+        if (!confirm('Hesabınız ve tüm kişisel verileriniz silinecek. Bu işlem geri alınamaz. Devam etmek istiyor musunuz?')) return;
+        hesabiSil(user.uid).then(ok => {
+          if (ok) {
+            mesajGoster('✅ Hesabınız silindi. Yönlendiriliyorsunuz...', 'yesil');
+            setTimeout(() => { localStorage.clear(); window.location.href = 'index.html'; }, 2000);
+          } else {
+            mesajGoster('❌ Hata oluştu. Destek için iletişime geçin.', 'kirmizi');
+          }
+        });
+      };
+    </script>
 
   </div>
 </div>

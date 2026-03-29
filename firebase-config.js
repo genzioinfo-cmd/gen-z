@@ -47,30 +47,66 @@ async function kullaniciyiKaydet(user, extraData = {}) {
     if (!snap.exists()) {
       data.olusturuldu = serverTimestamp();
       data.rol = 'uye';
+      // KVKK — zorunlu kayıt alanları (ilk kayıtta)
+      data.kvkk = {
+        kvkkOkundu:          true,
+        kullanımSartlari:    true,
+        pazarlamaIzni:       false,
+        cerezIzni:           false,
+        ucuncuTarafPaylaşım: false,
+        rizaTarihi:          new Date().toISOString(),
+        rizaVersiyon:        '1.0',
+      };
+      data.hesapDurumu = 'aktif';
+      data.kayitKanali = extraData.kayitKanali || 'email';
     }
     await setDoc(ref, data, { merge: true });
   } catch(e) { console.warn('Firestore yazma hatası:', e); }
 }
 
 /* ── UI Güncelle ── */
-function uiGuncelle(user) {
+async function uiGuncelle(user) {
   const authBtn = document.getElementById('authBtn');
-  if (!authBtn) return;
   if (user) {
     const displayName = user.displayName || user.email.split('@')[0];
-    authBtn.textContent = '@' + displayName.replace('@','');
-    localStorage.setItem('genz-user', JSON.stringify({
-      uid: user.uid,
-      email: user.email,
+    if (authBtn) authBtn.textContent = '@' + displayName.replace('@','');
+
+    // Firestore'dan güncel kullanıcı verisini çek (rol, roller, vs.)
+    let firestoreData = {};
+    try {
+      const kulRef = doc(db, 'kullanicilar', user.uid);
+      const kulSnap = await getDoc(kulRef);
+      if (kulSnap.exists()) firestoreData = kulSnap.data();
+    } catch(e) { console.warn('Kullanıcı verisi çekilemedi:', e); }
+
+    // localStorage'a rol dahil tam veriyi yaz
+    const userData = {
+      uid:      user.uid,
+      email:    user.email,
       username: '@' + displayName.replace('@',''),
-      photoURL: user.photoURL
-    }));
+      photoURL: user.photoURL,
+      rol:      firestoreData.rol      || 'uye',
+      roller:   firestoreData.roller   || [],
+      admin:    firestoreData.admin    || false,
+      proModul: firestoreData.proModul || false,
+      ustaOnay:         firestoreData.ustaOnay         || false,
+      magazaOnay:       firestoreData.magazaOnay       || false,
+      gencimDurum:      firestoreData.gencimDurum      || '',
+    };
+    localStorage.setItem('genz-user', JSON.stringify(userData));
+    window._genzKullanici = { ...user, ...firestoreData };
+
     const pu = document.getElementById('profile-username');
     const pe = document.getElementById('profile-email');
-    if (pu) pu.textContent = '@' + displayName.replace('@','');
+    if (pu) pu.textContent = userData.username;
     if (pe) pe.textContent = user.email;
+
+    // Profil sayfasındaki rol kısayollarını güncelle
+    if (typeof window.renderRolKisayollar === 'function') {
+      window.renderRolKisayollar(userData);
+    }
   } else {
-    authBtn.textContent = 'Giriş Yap';
+    if (authBtn) authBtn.textContent = 'Giriş Yap';
     localStorage.removeItem('genz-user');
   }
 }

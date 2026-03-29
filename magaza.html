@@ -959,7 +959,7 @@ document.addEventListener('click', function(e) {
   const pid = btn.getAttribute('data-pid');
   // DEMO_PRODUCTS'tan urunu bul
   if (typeof DEMO_PRODUCTS !== 'undefined') {
-    const p = DEMO_PRODUCTS.find(x => String(x.id) === String(pid));
+    const p = ALL_PRODUCTS.find(x => String(x.id) === String(pid));
     if (p) {
       sepeteEkle({ id: p.id, name: p.name, price: p.price, emoji: p.emoji, src: p.seller?.name || '' });
       btn.textContent = '✓ Sepette';
@@ -1080,22 +1080,68 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.style.transition = 'opacity 0.3s';
   requestAnimationFrame(() => { document.body.style.opacity = '1'; });
 
+  fetchMagazaProducts();
+
   /* ── MAGAZA PAGE LOGIC ── */
-  let filteredProducts = [...DEMO_PRODUCTS];
+  let ALL_PRODUCTS = [];
+  let filteredProducts = [];
   let currentView = 'grid';
 
+  /* Firestore'dan ürünleri çek */
+  async function fetchMagazaProducts() {
+    try {
+      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+      const { getFirestore, collection, getDocs, query, where, orderBy } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      const cfg = { apiKey:"AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ", authDomain:"gen-z-io.firebaseapp.com", projectId:"gen-z-io", storageBucket:"gen-z-io.firebasestorage.app", messagingSenderId:"97338868944", appId:"1:97338868944:web:d7b429e416d8c505b14ad5" };
+      const app = getApps().length ? getApps()[0] : initializeApp(cfg);
+      const db = getFirestore(app);
+      const q = query(collection(db, 'magaza_urunler'), where('durum', '==', 'onaylandi'), orderBy('ts', 'desc'));
+      const snap = await getDocs(q);
+      ALL_PRODUCTS = snap.docs.map(d => {
+        const u = d.data();
+        const initials = (u.magazaAd || 'M').split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+        return {
+          id: d.id,
+          name: u.ad || '',
+          price: u.kdvDahilFiyat || u.fiyat || 0,
+          oldPrice: u.eskiFiyat || null,
+          rating: u.rating || 0,
+          reviews: u.reviewCount || 0,
+          badge: u.badge || null,
+          tags: u.etiketler || [],
+          category: u.kategori || 'diger',
+          desc: u.aciklama || '',
+          emoji: (u.resimler && u.resimler[0]) ? null : '🛍️',
+          resim: (u.resimler && u.resimler[0]) ? u.resimler[0] : null,
+          gradA: 'rgba(123,92,240,0.15)', gradB: 'rgba(240,197,92,0.08)',
+          seller: { id: u.magazaId || d.id, name: u.magazaAd || 'Mağaza', initials, sales: u.satisAdedi || 0, joined: u.ts ? new Date(u.ts.seconds*1000).getFullYear() : '2025', rating: u.magazaRating || 0, ratingCount: u.magazaRatingCount || 0, desc: '', comments: [] }
+        };
+      });
+    } catch(e) {
+      console.warn('Mağaza ürünleri yüklenemedi:', e);
+      ALL_PRODUCTS = [];
+    }
+    filteredProducts = [...ALL_PRODUCTS];
+    renderProducts();
+    buildCategoryList();
+  }
+
+  function buildCategoryList() {
   /* Kategori sidebar'ı doldur */
   const catList = document.getElementById('categoryList');
+  if (!catList) return;
+  catList.innerHTML = '';
   CATEGORIES.forEach(cat => {
     const div = document.createElement('div');
     div.className = 'cat-item' + (cat.id === 'all' ? ' active' : '');
     if (cat.coming) div.style.cssText = 'opacity:0.5;pointer-events:none;';
-    div.innerHTML = `<span class="cat-icon">${cat.icon}</span><span>${cat.name}</span>${cat.coming ? '<span class="coming-badge">Yakında</span>' : '<span class="cat-badge">' + DEMO_PRODUCTS.length + '</span>'}`;
+    const count = cat.id === 'all' ? ALL_PRODUCTS.length : ALL_PRODUCTS.filter(p => p.category === cat.id).length;
+    div.innerHTML = `<span class="cat-icon">${cat.icon}</span><span>${cat.name}</span>${cat.coming ? '<span class="coming-badge">Yakında</span>' : '<span class="cat-badge">' + count + '</span>'}`;
     if (!cat.coming) {
       div.onclick = () => {
         document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('active'));
         div.classList.add('active');
-        filteredProducts = getProductsByCategory(cat.id);
+        filteredProducts = cat.id === 'all' ? [...ALL_PRODUCTS] : ALL_PRODUCTS.filter(p => p.category === cat.id);
         renderProducts();
       };
     }
@@ -1108,8 +1154,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function handleSearch(val) {
     const q = val.toLowerCase().trim();
-    if (!q) { filteredProducts = [...DEMO_PRODUCTS]; renderProducts(); return; }
-    filteredProducts = DEMO_PRODUCTS.filter(p => {
+    if (!q) { filteredProducts = [...ALL_PRODUCTS]; renderProducts(); return; }
+    filteredProducts = ALL_PRODUCTS.filter(p => {
       const haystack = [p.name, p.desc, ...p.tags, p.seller.name].join(' ').toLowerCase();
       return haystack.includes(q);
     });

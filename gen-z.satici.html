@@ -572,6 +572,43 @@ nav, .modal-overlay-auth, .modal-box, .toast {
 <div class="toast" id="toast"></div>
 
 <script>
+
+/* ── Firestore Ürün Yükleme ── */
+let _CACHED_PRODUCTS = [];
+
+async function fetchAllProducts() {
+  if (_CACHED_PRODUCTS.length > 0) return _CACHED_PRODUCTS;
+  try {
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, collection, getDocs, query, where, orderBy } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const cfg = { apiKey:"AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ", authDomain:"gen-z-io.firebaseapp.com", projectId:"gen-z-io", storageBucket:"gen-z-io.firebasestorage.app", messagingSenderId:"97338868994", appId:"1:97338868944:web:d7b429e416d8c505b14ad5" };
+    const app = getApps().length ? getApps()[0] : initializeApp(cfg);
+    const db = getFirestore(app);
+    const q = query(collection(db, 'magaza_urunler'), where('durum', '==', 'onaylandi'), orderBy('ts', 'desc'));
+    const snap = await getDocs(q);
+    _CACHED_PRODUCTS = snap.docs.map(d => {
+      const u = d.data();
+      const initials = (u.magazaAd || 'M').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+      return {
+        id: d.id, name: u.ad || '', price: u.kdvDahilFiyat || u.fiyat || 0,
+        oldPrice: u.eskiFiyat || null, rating: u.rating || 0, reviews: u.reviewCount || 0,
+        badge: u.badge || null, tags: u.etiketler || [], category: u.kategori || 'diger',
+        desc: u.aciklama || '', emoji: '📦', resim: (u.resimler && u.resimler[0]) ? u.resimler[0] : null,
+        gradA: 'rgba(123,92,240,0.15)', gradB: 'rgba(240,197,92,0.08)',
+        seller: { id: u.magazaId || d.id, name: u.magazaAd || 'Mağaza', initials,
+          sales: u.satisAdedi || 0, joined: u.ts ? new Date(u.ts.seconds*1000).getFullYear() : '2025',
+          rating: u.magazaRating || 0, ratingCount: u.magazaRatingCount || 0, desc: '', comments: u.yorumlar || [] }
+      };
+    });
+    return _CACHED_PRODUCTS;
+  } catch(e) { console.warn('Ürünler yüklenemedi:', e); return []; }
+}
+
+function getProductById(id) { return _CACHED_PRODUCTS.find(p => String(p.id) === String(id)); }
+function getProductsBySeller(sid) { return _CACHED_PRODUCTS.filter(p => p.seller.id === sid); }
+function getSellerById(sid) { const p = _CACHED_PRODUCTS.find(p => p.seller.id === sid); return p ? p.seller : null; }
+function getAllSellers() { const m = {}; _CACHED_PRODUCTS.forEach(p => { if(!m[p.seller.id]) m[p.seller.id]={...p.seller,products:[]}; m[p.seller.id].products.push(p); }); return Object.values(m); }
+function getProductsByCategory(cat) { if(cat==='all') return _CACHED_PRODUCTS; return _CACHED_PRODUCTS.filter(p=>p.category===cat); }
 /* ── MAGAZA-DATA (inline) ── */
 /* ══════════════════════════════════════════════════════════
    GEN-Z MAĞAZA — Paylaşılan Veri & Yardımcılar
@@ -602,119 +639,8 @@ const CATEGORIES = [
   { id: 'bahce', name: 'Bahçe & Doğa', icon: '🌱', count: null, coming: true },
 ];
 
-const DEMO_PRODUCTS = [
-  {
-    id: 1, emoji: '🎵', name: 'Lo-fi Beat Pack — Midnight Study Vol.1',
-    price: 149, oldPrice: 220, rating: 4.9, reviews: 112,
-    badge: 'hot', tags: ['müzik', 'lo-fi', 'beat'],
-    category: 'muzik',
-    desc: '20 adet üretim kalitesinde lo-fi beat.',
-    gradA: 'rgba(240,197,92,0.18)', gradB: 'rgba(123,92,240,0.1)',
-    seller: { id: 'beatztr', name: 'BeatzTR', initials: 'BT', sales: 340, joined: '2024', rating: 4.9, ratingCount: 98, desc: "Türkiye'nin genç beat üreticisi.", comments: [{user:'se**',stars:5,date:'Mart 2025',text:'Kalite inanılmaz!'},{user:'be**',stars:5,date:'Şubat 2025',text:'Fiyatına değer.'}] }
-  },
-  {
-    id: 2, emoji: '🎨', name: 'UI Kit — Gen-Z Dark Mode Components',
-    price: 299, oldPrice: null, rating: 4.8, reviews: 67,
-    badge: 'new', tags: ['ui kit', 'figma'],
-    category: 'tasarim',
-    desc: '120+ Figma bileşeni.',
-    gradA: 'rgba(123,92,240,0.18)', gradB: 'rgba(92,240,180,0.08)',
-    seller: { id: 'uidesignz', name: 'UI Design Z', initials: 'UD', sales: 89, joined: '2024', rating: 4.8, ratingCount: 44, desc: 'Gen-Z odaklı UI/UX tasarım kitleri.', comments: [{user:'er**',stars:5,date:'Ocak 2025',text:'Çok temiz!'}] }
-  },
-  {
-    id: 3, emoji: '💻', name: 'Next.js Başlangıç Şablonu + Auth',
-    price: 199, oldPrice: 350, rating: 4.7, reviews: 43,
-    badge: 'viral', tags: ['nextjs', 'typescript'],
-    category: 'yazilim',
-    desc: 'Next.js 14, TypeScript, TailwindCSS şablonu.',
-    gradA: 'rgba(92,240,180,0.15)', gradB: 'rgba(92,160,240,0.1)',
-    seller: { id: 'codeztr', name: 'Code-Z', initials: 'CZ', sales: 156, joined: '2023', rating: 4.8, ratingCount: 72, desc: 'Açık kaynak sevdalısı.', comments: [{user:'mu**',stars:5,date:'Mart 2025',text:'Setup çok hızlı!'},{user:'do**',stars:4,date:'Şubat 2025',text:'Dökümantasyon iyi.'}] }
-  },
-  {
-    id: 4, emoji: '📹', name: 'Vlog Preset Paketi — Cinematic TR',
-    price: 89, oldPrice: 140, rating: 4.6, reviews: 88,
-    badge: 'hot', tags: ['preset', 'lightroom'],
-    category: 'video',
-    desc: '15 adet Lightroom & Lr Mobile preset.',
-    gradA: 'rgba(240,140,60,0.18)', gradB: 'rgba(240,197,92,0.08)',
-    seller: { id: 'visualz', name: 'Visual-Z', initials: 'VZ', sales: 620, joined: '2023', rating: 4.7, ratingCount: 201, desc: 'Fotoğraf ve video presetleri.', comments: [{user:'ca**',stars:5,date:'Mart 2025',text:'İstanbul fotoğraflarına çok yakıştı!'}] }
-  },
-  {
-    id: 5, emoji: '📷', name: 'Portre Kompozisyon Kılavuzu PDF',
-    price: 59, oldPrice: null, rating: 4.9, reviews: 31,
-    badge: 'new', tags: ['portre', 'pdf'],
-    category: 'fotograf',
-    desc: '45 sayfalık portre rehberi.',
-    gradA: 'rgba(240,92,160,0.15)', gradB: 'rgba(123,92,240,0.08)',
-    seller: { id: 'lenslenz', name: 'Lens & Z', initials: 'LZ', sales: 22, joined: '2025', rating: 4.9, ratingCount: 18, desc: 'Fotoğrafçılık eğitim materyalleri.', comments: [{user:'ay**',stars:5,date:'Ocak 2025',text:'Bakış açım değişti!'}] }
-  },
-  {
-    id: 6, emoji: '📝', name: "Freelance Sözleşme Şablonları (5'li)",
-    price: 79, oldPrice: 120, rating: 4.8, reviews: 55,
-    badge: null, tags: ['freelance', 'sözleşme'],
-    category: 'yazi',
-    desc: '5 farklı freelance proje için Türkçe sözleşme.',
-    gradA: 'rgba(92,240,120,0.15)', gradB: 'rgba(240,197,92,0.08)',
-    seller: { id: 'legalzgen', name: 'Legal-Z', initials: 'LG', sales: 2100, joined: '2022', rating: 4.8, ratingCount: 430, desc: "Freelancer'lar için hukuki şablonlar.", comments: [{user:'ni**',stars:5,date:'Mart 2025',text:'Müşterilere güven verdi.'},{user:'em**',stars:5,date:'Şubat 2025',text:'Dil çok sade!'}] }
-  },
-  {
-    id: 7, emoji: '👗', name: 'Vintage Grafik Tişört — Limited Drop',
-    price: 380, oldPrice: null, rating: 4.7, reviews: 19,
-    badge: 'collab', tags: ['tişört', 'limited'],
-    category: 'moda',
-    desc: '%100 organik pamuk. El yapımı baskı. Sadece 50 adet.',
-    gradA: 'rgba(92,160,240,0.15)', gradB: 'rgba(123,92,240,0.1)',
-    seller: { id: 'threadz', name: 'Thread-Z', initials: 'TZ', sales: 12, joined: '2025', rating: 4.7, ratingCount: 8, desc: 'Sınırlı sayıda el yapımı giyim.', comments: [{user:'ze**',stars:5,date:'Mart 2025',text:'Kumaş kalitesi çok iyi.'}] }
-  },
-  {
-    id: 8, emoji: '🎮', name: 'İndie Oyun Müzik Paketi — 8-bit',
-    price: 125, oldPrice: 180, rating: 4.5, reviews: 38,
-    badge: 'viral', tags: ['oyun müziği', '8-bit'],
-    category: 'oyun',
-    desc: '30 adet 8-bit ve chiptune loop. Unity ve Godot uyumlu.',
-    gradA: 'rgba(240,197,92,0.15)', gradB: 'rgba(92,240,120,0.08)',
-    seller: { id: 'chiptunez', name: 'Chiptune-Z', initials: 'CZ', sales: 77, joined: '2024', rating: 4.6, ratingCount: 35, desc: 'Oyun geliştiriciler için 8-bit müzik.', comments: [{user:'ya**',stars:4,date:'Şubat 2025',text:'Tam aradığım şeydi!'}] }
-  },
-  {
-    id: 9, emoji: '🎨', name: 'Procreate Fırça Seti — Suluboya',
-    price: 69, oldPrice: null, rating: 4.9, reviews: 74,
-    badge: 'new', tags: ['procreate', 'fırça'],
-    category: 'tasarim',
-    desc: '25 adet Procreate suluboya fırçası.',
-    gradA: 'rgba(240,92,160,0.18)', gradB: 'rgba(240,197,92,0.1)',
-    seller: { id: 'brushztr', name: 'Brush-Z', initials: 'BZ', sales: 510, joined: '2023', rating: 4.9, ratingCount: 198, desc: 'Dijital sanatçılar için Procreate araçları.', comments: [{user:'mi**',stars:5,date:'Mart 2025',text:'Bu fırçalar olmasaydı!'},{user:'bu**',stars:5,date:'Ocak 2025',text:'Suluboya gerçekçi!'}] }
-  },
-];
-
+const DEMO_PRODUCTS = []; // Temizlendi — production
 /* ── YARDIMCI FONKSİYONLAR ── */
-function getProductById(id) {
-  return DEMO_PRODUCTS.find(p => p.id === parseInt(id));
-}
-
-function getProductsBySeller(sellerId) {
-  return DEMO_PRODUCTS.filter(p => p.seller.id === sellerId);
-}
-
-function getSellerById(sellerId) {
-  const product = DEMO_PRODUCTS.find(p => p.seller.id === sellerId);
-  return product ? product.seller : null;
-}
-
-function getAllSellers() {
-  const map = {};
-  DEMO_PRODUCTS.forEach(p => {
-    if (!map[p.seller.id]) {
-      map[p.seller.id] = { ...p.seller, products: [] };
-    }
-    map[p.seller.id].products.push(p);
-  });
-  return Object.values(map);
-}
-
-function getProductsByCategory(catId) {
-  if (catId === 'all') return DEMO_PRODUCTS;
-  return DEMO_PRODUCTS.filter(p => p.category === catId);
-}
 
 /* ── URL YARDIMCILARI ── */
 function getParam(key) {
@@ -848,7 +774,7 @@ function renderStars(rating) {
 
 /* ── PAGE SCRIPT ── */
 initThemeLang();
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => { await fetchAllProducts();
   document.querySelectorAll('.mobile-menu a').forEach(a => {
     a.addEventListener('click', () => {
       const mm = document.getElementById('mobileMenu');

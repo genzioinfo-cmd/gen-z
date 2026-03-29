@@ -1378,6 +1378,7 @@ function uiRender() {
         <td style="font-size:.62rem;color:var(--t2);">${tarih}</td>
         <td><span style="font-size:.6rem;font-weight:700;color:${durumRenk};">${durumLabel}</span>${redSebepHTML}</td>
         <td style="white-space:nowrap;">
+          <button class="eylem-btn" onclick="uiDetayGoster('${i.id}')" style="margin-bottom:.3rem;background:rgba(123,92,240,.1);border-color:rgba(123,92,240,.35);color:#a78bfa;">👁 Detay</button><br>
           ${durum==='bekliyor'||durum==='reddedildi'?`<button class="eylem-btn onayla" onclick="uiDurum('${i.id}','onaylandi')">✓ Onayla</button>`:''}
           ${durum==='bekliyor'?`<button class="eylem-btn reddet" style="margin-left:.3rem" onclick="uiRedAc('${i.id}')">✕ Reddet</button>`:''}
           ${durum==='onaylandi'?`<button class="eylem-btn reddet" onclick="uiDurum('${i.id}','reddedildi')">✕ Kaldır</button>`:''}
@@ -1434,8 +1435,82 @@ window.uiRedOnayla = async function() {
 };
 
 // ══════════════════════════════════════════════════
-// GENÇ-Z İÇERİKLERİ
+// DETAY MODAL — Usta İlanı & Genç-Z İçeriği
 // ══════════════════════════════════════════════════
+window.detayModalKapat = function() {
+  document.getElementById('detayModalOverlay').classList.remove('v');
+};
+
+window.uiDetayGoster = function(id) {
+  const i = _uiIlanlar.find(x=>x.id===id);
+  if(!i) return;
+  const tarih = i.ts?.toDate ? i.ts.toDate().toLocaleString('tr-TR') : '—';
+  const durum = i.durum||'bekliyor';
+  const durumRenk = durum==='onaylandi'?'var(--green)':durum==='reddedildi'?'var(--red)':'var(--orange)';
+  const satir = (label, val, color='var(--cream)') => val
+    ? `<div style="display:flex;gap:.8rem;padding:.6rem 0;border-bottom:1px solid rgba(255,255,255,.04);">
+        <div style="flex:0 0 130px;font-size:.55rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t3);padding-top:.1rem;">${label}</div>
+        <div style="font-size:.72rem;color:${color};line-height:1.6;">${val}</div>
+       </div>` : '';
+  document.getElementById('detayModalBaslik').textContent = '🔨 ' + (i.ad||i.hizmet||'İlan Detayı');
+  document.getElementById('detayModalIcerik').innerHTML = `
+    ${satir('Durum', durum==='onaylandi'?'✅ Onaylı':durum==='reddedildi'?'❌ Reddedildi':'⏳ Bekliyor', durumRenk)}
+    ${satir('Başlık', i.ad)}
+    ${satir('Hizmet Türü', i.hizmet)}
+    ${satir('Kategori', i.kategori)}
+    ${satir('Usta Adı', i.ustaAdi||i.ustaAd)}
+    ${satir('E-posta', i.ustaEmail||i.email)}
+    ${satir('UID', i.ustaUid)}
+    ${satir('Şehir', i.sehir)}
+    ${satir('İlçe', i.ilce)}
+    ${satir('Fiyat', i.fiyat ? '₺'+Number(i.fiyat).toLocaleString('tr-TR')+'/'+(i.fiyatTip||'iş') : null)}
+    ${satir('Müsaitlik', i.musaitlik)}
+    ${satir('Açıklama', i.aciklama ? `<span style="white-space:pre-wrap;">${i.aciklama}</span>` : null)}
+    ${satir('Düzeltme Notu', i.duzeltmeNotu, '#5CF0B4')}
+    ${satir('Red Sebebi', i.redSebep, 'var(--red)')}
+    ${satir('Tarih', tarih)}
+  `;
+  document.getElementById('detayModalOverlay').classList.add('v');
+};
+
+window.giDetayGoster = function(id) {
+  const i = _giIcerikler.find(x=>x.id===id);
+  if(!i) return;
+  const tarih = i.ts?.toDate ? i.ts.toDate().toLocaleString('tr-TR') : '—';
+  const durum = i.durum||'bekliyor';
+  const durumRenk = durum==='onaylandi'?'var(--green)':durum==='reddedildi'?'var(--red)':'var(--orange)';
+  const satir = (label, val, color='var(--cream)', isLink=false) => val
+    ? `<div style="display:flex;gap:.8rem;padding:.6rem 0;border-bottom:1px solid rgba(255,255,255,.04);">
+        <div style="flex:0 0 130px;font-size:.55rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t3);padding-top:.1rem;">${label}</div>
+        <div style="font-size:.72rem;color:${color};line-height:1.6;word-break:break-all;">${isLink ? `<a href="${val}" target="_blank" style="color:var(--gold);text-decoration:none;">🔗 ${val}</a>` : val}</div>
+       </div>` : '';
+  const ALAN_LABELS = {
+    baslik:'Başlık',aciklama:'Açıklama',tarz:'Tarz / Tür',sure:'Sayfa / Süre',sayfa:'Sayfa Sayısı',
+    tur:'Tür',format:'Format / Boyut',program:'Kullanılan Program',teknik:'Teknik',ekipman:'Ekipman',
+    enstruman:'Enstrüman / Tür',platform:'Platform',malzeme:'Malzeme',boyut:'Boyut',fiyat:'Fiyat (₺)',
+    icerikMetin:'İçerik Metni',publuu:'Publuu Linki',portfolyoLink:'Portföy / Galeri',dosyaLink:'Dosya / Drive Linki',linkUrl:'İçerik Linki'
+  };
+  const LINK_ALANLARI = ['publuu','portfolyoLink','dosyaLink','linkUrl'];
+  const dinamikSatirlar = Object.entries(ALAN_LABELS).map(([k, lbl]) => {
+    if(!i[k]) return '';
+    const isLink = LINK_ALANLARI.includes(k);
+    const val = k==='aciklama'||k==='icerikMetin' ? `<span style="white-space:pre-wrap;">${i[k]}</span>` : i[k];
+    return satir(lbl, val, 'var(--cream)', isLink);
+  }).join('');
+  document.getElementById('detayModalBaslik').textContent = '⚡ ' + (i.baslik||'İçerik Detayı');
+  document.getElementById('detayModalIcerik').innerHTML = `
+    ${satir('Durum', durum==='onaylandi'?'✅ Onaylı':durum==='reddedildi'?'❌ Reddedildi':'⏳ Bekliyor', durumRenk)}
+    ${satir('Kategori', i.kategori, '#a78bfa')}
+    ${satir('Kullanıcı', i.email||i.uid)}
+    ${dinamikSatirlar}
+    ${satir('Düzeltme Notu', i.duzeltmeNotu, '#5CF0B4')}
+    ${satir('Red Sebebi', i.redSebep, 'var(--red)')}
+    ${satir('Tarih', tarih)}
+  `;
+  document.getElementById('detayModalOverlay').classList.add('v');
+};
+
+
 let _giIcerikler = [];
 let _giFiltre = 'bekliyor';
 let _giRedId = null;
@@ -1496,6 +1571,7 @@ function giRender() {
         <td style="font-size:.62rem;color:var(--t2);">${tarih}</td>
         <td><span style="font-size:.6rem;font-weight:700;color:${durumRenk};">${durumLabel}</span>${redSebepHTML}</td>
         <td style="white-space:nowrap;">
+          <button class="eylem-btn" onclick="giDetayGoster('${i.id}')" style="margin-bottom:.3rem;background:rgba(123,92,240,.1);border-color:rgba(123,92,240,.35);color:#a78bfa;">👁 Detay</button><br>
           ${durum==='bekliyor'||durum==='reddedildi'?`<button class="eylem-btn onayla" onclick="giDurum('${i.id}','onaylandi')">✓ Onayla</button>`:''}
           ${durum==='bekliyor'?`<button class="eylem-btn reddet" style="margin-left:.3rem" onclick="giRedAc('${i.id}')">✕ Reddet</button>`:''}
           ${durum==='onaylandi'?`<button class="eylem-btn reddet" onclick="giDurum('${i.id}','reddedildi')">✕ Kaldır</button>`:''}
@@ -2133,6 +2209,17 @@ window.toggleSidebar=function(){document.getElementById('sidebar').classList.tog
         <button onclick="giRedOnayla()" style="padding:.6rem 1.4rem;background:rgba(224,85,85,.15);border:1px solid rgba(224,85,85,.4);color:var(--red);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:700;cursor:pointer;">❌ Reddet & Bildir</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- DETAY MODAL -->
+<div class="modal-overlay" id="detayModalOverlay" onclick="if(event.target===this)detayModalKapat()">
+  <div class="modal-kart" style="max-width:600px;width:100%;max-height:85vh;overflow-y:auto;">
+    <div class="modal-ust" style="position:sticky;top:0;background:var(--bg2,#111);z-index:1;padding:1.2rem 1.4rem;border-bottom:1px solid var(--border);">
+      <h3 id="detayModalBaslik" style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:400;color:var(--cream);">Detay</h3>
+      <button onclick="detayModalKapat()" style="background:none;border:none;color:var(--t2);font-size:1.2rem;cursor:pointer;">✕</button>
+    </div>
+    <div id="detayModalIcerik" style="padding:1.4rem;"></div>
   </div>
 </div>
 

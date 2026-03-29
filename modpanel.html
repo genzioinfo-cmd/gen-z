@@ -3135,8 +3135,13 @@ window.urunEkle=async function(){
     setTimeout(()=>ok.classList.remove('v'),5000);
     await urunleriYukle();
     ozetGuncelle();
-  }catch(e){err.textContent='Hata: '+e.message;err.classList.add('v');}
-  btn.textContent='✦ Ürünü Gönder — Admin Onayına Gider';btn.disabled=false;
+  }catch(e){
+    err.textContent='Hata: '+e.message;
+    err.classList.add('v');
+  } finally {
+    btn.textContent='✦ Yayınla — Admin Onayına Gider';
+    btn.disabled=false;
+  }
 };
 
 // ── REDDEDİLEN ÜRÜNÜ TEKRAR GÖNDER ─────────────────────────────────────

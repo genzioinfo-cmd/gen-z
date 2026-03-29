@@ -398,6 +398,8 @@ window.gzListeRender = function gzListeRender() {
         </div>` : '';
     const tekrarBtn = durum==='reddedildi'
       ? `<button onclick="gzTekrarGonderModal('${i.id}')" style="margin-top:.5rem;padding:.4rem .9rem;background:rgba(92,240,180,.08);border:1px solid rgba(92,240,180,.3);color:#5CF0B4;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">🔄 Düzelt & Tekrar Gönder</button>` : '';
+    const duzenleBtn = durum==='bekliyor'
+      ? `<button onclick="gzDuzenle('${i.id}')" style="margin-top:.5rem;padding:.4rem .9rem;background:rgba(123,92,240,.1);border:1px solid rgba(123,92,240,.35);color:#a78bfa;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">✏️ Düzenle</button>` : '';
     const silBtn = `<button onclick="gzSil('${i.id}')" style="margin-top:.5rem;margin-left:.4rem;padding:.4rem .9rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.25);color:var(--red);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">🗑 Sil</button>`;
     return `<div style="background:rgba(255,255,255,.022);border:1px solid var(--border);border-radius:6px;padding:1rem 1.2rem;margin-bottom:.7rem;${durum==='reddedildi'?'border-color:rgba(224,85,85,.25);':''}">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
@@ -412,7 +414,7 @@ window.gzListeRender = function gzListeRender() {
         </div>
       </div>
       ${redSebebiHTML}
-      <div>${tekrarBtn}${silBtn}</div>
+      <div>${duzenleBtn}${tekrarBtn}${silBtn}</div>
     </div>`;
   }).join('');
 };
@@ -483,6 +485,77 @@ window.gzSil = async function(id) {
     s('gzBekliyor',  _gzIcerikler.filter(i=>i.durum==='bekliyor').length);
   } catch(e) {
     if(typeof toast==='function') toast('Hata: '+e.message,'err');
+  }
+};
+
+// ── GENÇ-Z DÜZENLE (bekliyor) ────────────────────────────────────────────
+window.gzDuzenle = function(id) {
+  const i = _gzIcerikler.find(x=>x.id===id);
+  if(!i){ if(typeof toast==='function') toast('İçerik bulunamadı.','err'); return; }
+  const meta = GENCZ_KATEGORILER[i.kategori];
+  if(!meta){ if(typeof toast==='function') toast('Kategori tanımlı değil.','err'); return; }
+
+  let modal = document.getElementById('gzDuzenleModal');
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id = 'gzDuzenleModal';
+    modal.style.cssText = 'position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1rem;overflow-y:auto;';
+    modal.onclick = e => { if(e.target===modal) modal.remove(); };
+    document.body.appendChild(modal);
+  }
+
+  const alanHTML = meta.alanlar.map(alan => {
+    const cfg = GENCZ_ALAN_LABELS[alan];
+    if(!cfg) return '';
+    const val = (i[alan]||'').toString().replace(/"/g,'&quot;').replace(/</g,'&lt;');
+    if(cfg.type==='textarea'){
+      return `<div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.35rem;">${cfg.label}</label>
+        <textarea class="fi" id="gzd_${alan}" placeholder="${cfg.placeholder}" style="width:100%;min-height:70px;resize:vertical;font-size:.72rem;box-sizing:border-box;">${i[alan]||''}</textarea></div>`;
+    }
+    return `<div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.35rem;">${cfg.label}</label>
+      <input class="fi" id="gzd_${alan}" type="${cfg.type||'text'}" placeholder="${cfg.placeholder}" value="${val}" style="width:100%;font-size:.72rem;box-sizing:border-box;"></div>`;
+  }).join('');
+
+  modal.innerHTML = `
+    <div style="background:#0d0d14;border:1px solid rgba(123,92,240,.25);border-radius:10px;padding:1.8rem;width:min(500px,95vw);max-height:90vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;">
+        <h3 style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:300;color:var(--cream);">✏️ İçeriği Düzenle <span style="font-size:.6rem;color:#a78bfa;margin-left:.4rem;">${meta.ikon} ${i.kategori}</span></h3>
+        <button onclick="document.getElementById('gzDuzenleModal').remove()" style="background:none;border:none;color:var(--t2);font-size:1.2rem;cursor:pointer;">✕</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.85rem;">
+        ${alanHTML}
+        <div id="gzdErr" style="display:none;padding:.6rem .8rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.25);border-radius:4px;font-size:.68rem;color:#e05555;"></div>
+        <div style="display:flex;gap:.6rem;justify-content:flex-end;margin-top:.4rem;">
+          <button onclick="document.getElementById('gzDuzenleModal').remove()" style="padding:.65rem 1.2rem;background:none;border:1px solid rgba(255,255,255,.08);color:rgba(240,238,255,.5);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.62rem;cursor:pointer;">İptal</button>
+          <button onclick="gzDuzenleKaydet('${id}')" style="padding:.65rem 1.4rem;background:rgba(123,92,240,.15);border:1px solid rgba(123,92,240,.4);color:#a78bfa;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:700;cursor:pointer;">✦ Kaydet — Onay Bekliyor</button>
+        </div>
+      </div>
+    </div>`;
+};
+
+window.gzDuzenleKaydet = async function(id) {
+  const i = _gzIcerikler.find(x=>x.id===id);
+  if(!i) return;
+  const meta = GENCZ_KATEGORILER[i.kategori];
+  if(!meta) return;
+  const err = document.getElementById('gzdErr');
+  const veri = {};
+  let eksik = false;
+  meta.alanlar.forEach(alan => {
+    const el = document.getElementById('gzd_'+alan);
+    if(el){ veri[alan] = el.value.trim(); if((alan==='baslik'||alan==='aciklama')&&!veri[alan]) eksik=true; }
+  });
+  if(eksik){ err.textContent='Başlık ve açıklama zorunludur.'; err.style.display='block'; return; }
+  try {
+    await updateDoc(doc(_db(),'gencz_icerikler',id),{
+      ...veri, durum:'bekliyor', guncellendi:serverTimestamp()
+    });
+    Object.assign(i, veri, {durum:'bekliyor'});
+    document.getElementById('gzDuzenleModal')?.remove();
+    if(typeof toast==='function') toast('✦ İçerik güncellendi, onay bekliyor.');
+    gzListeRender();
+  } catch(e){
+    err.textContent='Hata: '+e.message; err.style.display='block';
   }
 };
 

@@ -2596,6 +2596,7 @@ async function ustaYukle(){
       )).catch(()=>null);
       ilanlar = ilanSnap2 ? ilanSnap2.docs.map(d=>({id:d.id,...d.data()})) : [];
     }
+    window._aktifIlanlar = ilanlar; // ilanDuzenle için global erişim
 
     // Özet güncelle
     document.getElementById('ustaIlanSay').textContent = ilanlar.length;
@@ -2651,6 +2652,8 @@ async function ustaYukle(){
               </div>` : '';
           const tekrarBtn = durum==='reddedildi'
             ? `<button onclick="ilanTekrarGonder('${il.id}')" style="margin-top:.5rem;padding:.4rem .9rem;background:rgba(92,240,180,.08);border:1px solid rgba(92,240,180,.3);color:#5CF0B4;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">🔄 Düzelt & Tekrar Gönder</button>` : '';
+          const duzenleBtn = durum==='bekliyor'
+            ? `<button onclick="ilanDuzenle('${il.id}')" style="margin-top:.5rem;padding:.4rem .9rem;background:rgba(123,92,240,.1);border:1px solid rgba(123,92,240,.35);color:#a78bfa;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">✏️ Düzenle</button>` : '';
           const silBtn = `<button onclick="ilanSil('${il.id}')" style="margin-top:.5rem;margin-left:.4rem;padding:.4rem .9rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.25);color:var(--red);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">🗑 Sil</button>`;
           return `<div style="padding:1rem;background:rgba(255,255,255,.022);border:1px solid ${durum==='reddedildi'?'rgba(224,85,85,.25)':'rgba(201,168,76,.12)'};border-radius:6px;margin-bottom:.7rem;">
             <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
@@ -2661,7 +2664,7 @@ async function ustaYukle(){
               <span style="font-size:.58rem;font-weight:700;color:${durumRenk(durum)};flex-shrink:0;">${durumTxt(durum)}</span>
             </div>
             ${redSebebiHTML}
-            <div>${tekrarBtn}${silBtn}</div>
+            <div>${duzenleBtn}${tekrarBtn}${silBtn}</div>
           </div>`;
         }).join('');
       }
@@ -2716,6 +2719,85 @@ window.ilanSil = async function(id) {
     toast('🗑 İlan silindi.');
     ustaYukle();
   } catch(e) { toast('Hata: '+e.message,'err'); }
+};
+
+// ── İLAN DÜZENLE (bekliyor) ──────────────────────────────────────────────
+window.ilanDuzenle = function(id) {
+  // ilanlar ustaYukle'den local scope'ta — window'a açık tut
+  const ilanlar = window._aktifIlanlar || [];
+  const il = ilanlar.find(x=>x.id===id);
+  if(!il){ toast('İlan bulunamadı.','err'); return; }
+
+  let modal = document.getElementById('ilanDuzenleModal');
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id = 'ilanDuzenleModal';
+    modal.style.cssText = 'position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1rem;overflow-y:auto;';
+    modal.onclick = e => { if(e.target===modal) modal.remove(); };
+    document.body.appendChild(modal);
+  }
+
+  const FIYAT_TIPLER = [
+    ['saat','Saatlik'],['is','İş Başı'],['m2','m² Başına'],['gorusme','Görüşmeye Göre']
+  ];
+  modal.innerHTML = `
+    <div style="background:#0d0d14;border:1px solid rgba(201,168,76,.25);border-radius:10px;padding:1.8rem;width:min(520px,95vw);max-height:90vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;">
+        <h3 style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:300;color:var(--cream);">✏️ İlanı Düzenle</h3>
+        <button onclick="document.getElementById('ilanDuzenleModal').remove()" style="background:none;border:none;color:var(--t2);font-size:1.2rem;cursor:pointer;">✕</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.85rem;">
+        <div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.4rem;">Hizmet Türü</label>
+          <input class="fi" id="idHizmet" value="${il.hizmet||''}" style="width:100%;font-size:.72rem;box-sizing:border-box;"></div>
+        <div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.4rem;">İlan Başlığı *</label>
+          <input class="fi" id="idBaslik" value="${(il.ad||'').replace(/"/g,'&quot;')}" style="width:100%;font-size:.72rem;box-sizing:border-box;"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;">
+          <div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.4rem;">Fiyat (₺)</label>
+            <input class="fi" id="idFiyat" type="number" min="0" value="${il.fiyat||''}" style="width:100%;font-size:.72rem;box-sizing:border-box;"></div>
+          <div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.4rem;">Fiyat Tipi</label>
+            <select class="fi" id="idFiyatTip" style="width:100%;font-size:.72rem;box-sizing:border-box;">
+              ${FIYAT_TIPLER.map(([v,t])=>`<option value="${v}"${il.fiyatTip===v?' selected':''}>${t}</option>`).join('')}
+            </select></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;">
+          <div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.4rem;">Şehir</label>
+            <input class="fi" id="idSehir" value="${il.sehir||''}" style="width:100%;font-size:.72rem;box-sizing:border-box;"></div>
+          <div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.4rem;">İlçe</label>
+            <input class="fi" id="idIlce" value="${il.ilce||''}" style="width:100%;font-size:.72rem;box-sizing:border-box;"></div>
+        </div>
+        <div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.4rem;">Açıklama</label>
+          <textarea class="fi" id="idAciklama" style="width:100%;min-height:80px;resize:vertical;font-size:.72rem;box-sizing:border-box;">${il.aciklama||''}</textarea></div>
+        <div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.4rem;">Müsait Günler / Saatler</label>
+          <input class="fi" id="idMusait" value="${il.musaitlik||''}" style="width:100%;font-size:.72rem;box-sizing:border-box;"></div>
+        <div id="idErr" style="display:none;padding:.6rem .8rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.25);border-radius:4px;font-size:.68rem;color:var(--red);"></div>
+        <div style="display:flex;gap:.6rem;justify-content:flex-end;margin-top:.4rem;">
+          <button onclick="document.getElementById('ilanDuzenleModal').remove()" style="padding:.65rem 1.2rem;background:none;border:1px solid var(--border);color:var(--t2);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.62rem;cursor:pointer;">İptal</button>
+          <button onclick="ilanDuzenleKaydet('${id}')" style="padding:.65rem 1.4rem;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.35);color:var(--gold);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:700;cursor:pointer;">✦ Kaydet — Onay Bekliyor</button>
+        </div>
+      </div>
+    </div>`;
+};
+
+window.ilanDuzenleKaydet = async function(id) {
+  const baslik  = document.getElementById('idBaslik')?.value.trim();
+  const hizmet  = document.getElementById('idHizmet')?.value.trim();
+  const fiyat   = parseFloat(document.getElementById('idFiyat')?.value)||0;
+  const fiyatTip= document.getElementById('idFiyatTip')?.value||'is';
+  const sehir   = document.getElementById('idSehir')?.value.trim();
+  const ilce    = document.getElementById('idIlce')?.value.trim();
+  const aciklama= document.getElementById('idAciklama')?.value.trim();
+  const musait  = document.getElementById('idMusait')?.value.trim();
+  const err     = document.getElementById('idErr');
+  if(!baslik){ err.textContent='Başlık zorunludur.'; err.style.display='block'; return; }
+  try {
+    await updateDoc(doc(db,'ustam_ilanlar',id),{
+      ad:baslik, hizmet, fiyat, fiyatTip, sehir, ilce, aciklama,
+      musaitlik:musait, durum:'bekliyor', guncellendi:serverTimestamp()
+    });
+    document.getElementById('ilanDuzenleModal')?.remove();
+    toast('✦ İlan güncellendi, onay bekliyor.');
+    ustaYukle();
+  } catch(e){ err.textContent='Hata: '+e.message; err.style.display='block'; }
 };
 let _rdvListesi = [];
 let _rdvFiltreSec = 'hepsi';

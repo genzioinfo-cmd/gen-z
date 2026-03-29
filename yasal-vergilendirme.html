@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GEN-Z · Yasal Vergilendirme Bilgilendirmesi</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --accent:#7B5CF0;--accent2:#a78bfa;--accent3:#F0C55C;--accent4:#5CF0B4;
+  --ink:#0a0a0f;--ink2:#13131a;--ink3:#1c1c28;
+  --text:#f0eeff;--text2:rgba(240,238,255,.6);--text3:rgba(240,238,255,.25);
+  --border:rgba(123,92,240,.15);--radius:12px;
+}
+html,body{min-height:100%;background:var(--ink);}
+body{font-family:'DM Sans',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.7;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:.85rem 2rem;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:.08em;color:var(--text);}
+.nav-logo span{color:var(--accent);}
+.nav-back{padding:.4rem 1rem;background:rgba(123,92,240,.1);border:1px solid rgba(123,92,240,.25);border-radius:6px;color:var(--accent2);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:all .22s;}
+.nav-back:hover{background:rgba(123,92,240,.2);}
+
+/* HERO */
+.hero{padding:4rem 2rem 2rem;max-width:860px;margin:0 auto;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(240,197,92,.1);border:1px solid rgba(240,197,92,.25);border-radius:999px;padding:5px 14px;font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent3);margin-bottom:1.2rem;}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;line-height:1.15;margin-bottom:.8rem;}
+.hero p{font-size:.95rem;color:var(--text2);max-width:600px;margin-bottom:1.5rem;}
+.hero-tarih{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);}
+
+/* İÇERİK */
+.wrap{max-width:860px;margin:0 auto;padding:0 2rem 5rem;}
+
+/* UYARI KUTUSU */
+.uyari{background:rgba(240,197,92,.06);border:1px solid rgba(240,197,92,.2);border-radius:var(--radius);padding:1.2rem 1.4rem;margin-bottom:2rem;display:flex;gap:.8rem;align-items:flex-start;}
+.uyari-ikon{font-size:1.2rem;flex-shrink:0;margin-top:.1rem;}
+.uyari-txt{font-size:.82rem;color:rgba(240,238,255,.75);line-height:1.65;}
+.uyari-txt strong{color:var(--accent3);}
+
+/* BÖLÜM */
+.bolum{margin-bottom:2.5rem;}
+.bolum-baslik{display:flex;align-items:center;gap:.7rem;margin-bottom:1.1rem;padding-bottom:.7rem;border-bottom:1px solid var(--border);}
+.bolum-no{width:28px;height:28px;border-radius:8px;background:rgba(123,92,240,.15);border:1px solid rgba(123,92,240,.25);color:var(--accent2);font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Syne',sans-serif;}
+.bolum-baslik h2{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;}
+.bolum p{font-size:.85rem;color:var(--text2);margin-bottom:.8rem;}
+.bolum p:last-child{margin-bottom:0;}
+
+/* KART GRİD */
+.kart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.8rem;margin:.8rem 0;}
+.kart{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.2rem;}
+.kart-ikon{font-size:1.3rem;margin-bottom:.5rem;}
+.kart-baslik{font-family:'Syne',sans-serif;font-size:.82rem;font-weight:700;margin-bottom:.3rem;color:var(--text);}
+.kart-acik{font-size:.78rem;color:var(--text2);line-height:1.6;}
+.kart.vurgulu{border-color:rgba(123,92,240,.3);background:rgba(123,92,240,.06);}
+.kart.yesil{border-color:rgba(92,240,180,.2);background:rgba(92,240,180,.04);}
+.kart.sari{border-color:rgba(240,197,92,.2);background:rgba(240,197,92,.04);}
+.kart.kirmizi{border-color:rgba(224,85,85,.2);background:rgba(224,85,85,.04);}
+
+/* TABLO */
+.tablo-wrap{overflow-x:auto;margin:.8rem 0;}
+table{width:100%;border-collapse:collapse;font-size:.8rem;}
+thead tr{background:rgba(123,92,240,.08);}
+th{padding:.65rem 1rem;text-align:left;font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent2);font-weight:700;border-bottom:1px solid var(--border);}
+td{padding:.65rem 1rem;border-bottom:1px solid rgba(255,255,255,.04);color:var(--text2);vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,.015);}
+.rozet{display:inline-block;padding:.1rem .45rem;border-radius:20px;font-size:.52rem;font-weight:700;letter-spacing:.06em;}
+.rozet.zorunlu{background:rgba(224,85,85,.1);color:#e05555;border:1px solid rgba(224,85,85,.2);}
+.rozet.muaf{background:rgba(92,240,180,.1);color:#5CF0B4;border:1px solid rgba(92,240,180,.2);}
+.rozet.kosullu{background:rgba(240,197,92,.1);color:#F0C55C;border:1px solid rgba(240,197,92,.2);}
+
+/* ADIM LİSTESİ */
+.adim-liste{display:flex;flex-direction:column;gap:.7rem;margin:.8rem 0;}
+.adim{display:flex;gap:.8rem;align-items:flex-start;}
+.adim-no{width:24px;height:24px;border-radius:50%;background:rgba(123,92,240,.2);border:1px solid rgba(123,92,240,.35);color:var(--accent2);font-size:.6rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.15rem;}
+.adim-txt{font-size:.83rem;color:var(--text2);line-height:1.6;}
+.adim-txt strong{color:var(--text);}
+
+/* ALT BILGI */
+.alt-bilgi{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem 1.4rem;margin-top:2rem;text-align:center;}
+.alt-bilgi p{font-size:.78rem;color:var(--text3);margin-bottom:.4rem;}
+.alt-bilgi a{color:var(--accent2);text-decoration:none;}
+.alt-bilgi a:hover{text-decoration:underline;}
+
+@media(max-width:600px){.wrap,.hero{padding-left:1.2rem;padding-right:1.2rem;}.kart-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">GEN<span>-Z</span></div>
+  <a class="nav-back" href="birlikte-buyuyelim.html">← Geri Dön</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">⚖️ Yasal Bilgilendirme</div>
+  <h1>Yasal Vergilendirme<br>Hususları</h1>
+  <p>GEN-Z platformunda satıcı, usta veya içerik üreticisi olarak yer almadan önce bilmeniz gereken vergi yükümlülükleri ve yasal gereklilikler.</p>
+  <div class="hero-tarih">Son güncelleme: Mart 2026 · Türkiye Vergi Mevzuatına göre hazırlanmıştır</div>
+</div>
+
+<div class="wrap">
+
+  <div class="uyari">
+    <div class="uyari-ikon">⚠️</div>
+    <div class="uyari-txt"><strong>Önemli Uyarı:</strong> Bu sayfa genel bilgilendirme amacıyla hazırlanmıştır. Kişisel vergi durumunuz için lütfen bir mali müşavir veya vergi uzmanıyla görüşün. GEN-Z, vergi danışmanlığı hizmeti sunmamaktadır.</div>
+  </div>
+
+  <!-- BÖLÜM 1 -->
+  <div class="bolum">
+    <div class="bolum-baslik"><div class="bolum-no">1</div><h2>Kimler Vergi Mükellefi Olmak Zorunda?</h2></div>
+    <p>GEN-Z üzerinden ticari faaliyet yürütmek isteyenlerin vergi durumu, faaliyet türüne ve gelir miktarına göre değişmektedir.</p>
+    <div class="kart-grid">
+      <div class="kart vurgulu">
+        <div class="kart-ikon">🏪</div>
+        <div class="kart-baslik">Mağaza Sahipleri</div>
+        <div class="kart-acik">Düzenli ürün satışı yapanlar ticari kazanç kapsamında değerlendirilir. Şahıs şirketi veya limited/anonim şirket kurulması gerekebilir.</div>
+      </div>
+      <div class="kart vurgulu">
+        <div class="kart-ikon">🔧</div>
+        <div class="kart-baslik">Ustalar</div>
+        <div class="kart-acik">Hizmet bedeli alan ustalar, serbest meslek kazancı veya esnaf muaflığı kapsamında değerlendirilebilir. Faaliyet türüne göre vergi dairesi kaydı gerekebilir.</div>
+      </div>
+      <div class="kart vurgulu">
+        <div class="kart-ikon">⚡</div>
+        <div class="kart-baslik">Genç-Z İçerik Üreticileri</div>
+        <div class="kart-acik">Platform üzerinden gelir elde eden içerik üreticileri, serbest meslek faaliyeti kapsamında değerlendirilebilir.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 2 -->
+  <div class="bolum">
+    <div class="bolum-baslik"><div class="bolum-no">2</div><h2>Esnaf Muaflığı ve Vergi Muafiyeti</h2></div>
+    <p>Küçük ölçekli faaliyetlerde bulunanlar belirli koşulları sağlamaları halinde vergi muafiyetinden yararlanabilir.</p>
+    <div class="kart-grid">
+      <div class="kart yesil">
+        <div class="kart-ikon">✅</div>
+        <div class="kart-baslik">Muafiyet Şartları</div>
+        <div class="kart-acik">Yıllık gelirin yasal sınırı aşmaması, satışların yalnızca online platformda yapılması, ödemelerin banka hesabıyla alınması ve Esnaf E-Ticaret Vergi Muafiyet Belgesi'nin alınmış olması gerekmektedir.</div>
+      </div>
+      <div class="kart sari">
+        <div class="kart-ikon">📋</div>
+        <div class="kart-baslik">Muafiyet Belgesi</div>
+        <div class="kart-acik">Muafiyetten yararlanmak için ikamet adresinizdeki Vergi Dairesi'ne başvurarak "Esnaf E-Ticaret Vergi Muafiyet Belgesi" almanız zorunludur.</div>
+      </div>
+      <div class="kart kirmizi">
+        <div class="kart-ikon">⚠️</div>
+        <div class="kart-baslik">Muafiyet Sınırı Aşılırsa</div>
+        <div class="kart-acik">Yasal gelir sınırının aşılması durumunda muafiyet tamamen kaybedilir ve gerçek usulde vergilendirmeye geçilir. Sınır her yıl Maliye Bakanlığı tarafından güncellenir.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 3 -->
+  <div class="bolum">
+    <div class="bolum-baslik"><div class="bolum-no">3</div><h2>Ödenmesi Gereken Vergi Türleri</h2></div>
+    <p>Muafiyet kapsamı dışındaki satıcı ve hizmet sağlayıcılar aşağıdaki vergilere tabi olabilir:</p>
+    <div class="tablo-wrap">
+      <table>
+        <thead>
+          <tr><th>Vergi Türü</th><th>Kapsam</th><th>Oran / Dönem</th><th>Durum</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>KDV</strong> (Katma Değer Vergisi)</td><td>Mal ve hizmet satışları</td><td>%1, %10 veya %20 — aylık beyan</td><td><span class="rozet zorunlu">Zorunlu</span></td></tr>
+          <tr><td><strong>Gelir Vergisi</strong></td><td>Şahıs şirketleri, bireysel satıcılar</td><td>Yıllık kazanç üzerinden — yıllık beyan</td><td><span class="rozet zorunlu">Zorunlu</span></td></tr>
+          <tr><td><strong>Kurumlar Vergisi</strong></td><td>Limited / Anonim şirketler</td><td>%25 — yıllık beyan</td><td><span class="rozet zorunlu">Zorunlu</span></td></tr>
+          <tr><td><strong>Geçici Vergi</strong></td><td>Tüm mükellefler</td><td>3'er aylık dönemlerde peşin ödeme</td><td><span class="rozet zorunlu">Zorunlu</span></td></tr>
+          <tr><td><strong>Stopaj Vergisi</strong></td><td>Platform üzerinden yapılan ödemeler</td><td>%1 — 1 Ocak 2025 itibarıyla</td><td><span class="rozet kosullu">Koşullu</span></td></tr>
+          <tr><td><strong>Damga Vergisi</strong></td><td>Sözleşmeler ve belgeler</td><td>Belge türüne göre değişir</td><td><span class="rozet kosullu">Koşullu</span></td></tr>
+          <tr><td><strong>Esnaf Muafiyeti</strong></td><td>Küçük ölçekli faaliyet</td><td>Yasal sınıra kadar muaf</td><td><span class="rozet muaf">Muaf olabilir</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 4 -->
+  <div class="bolum">
+    <div class="bolum-baslik"><div class="bolum-no">4</div><h2>2025 Stopaj Düzenlemesi</h2></div>
+    <p>1 Ocak 2025 itibarıyla yürürlüğe giren yeni düzenlemeyle e-ticaret platformları, satıcılara yapacakları ödemeler üzerinden <strong>%1 stopaj kesintisi</strong> yapmakla yükümlüdür.</p>
+    <div class="kart-grid">
+      <div class="kart">
+        <div class="kart-ikon">📌</div>
+        <div class="kart-baslik">Kimleri Kapsıyor?</div>
+        <div class="kart-acik">Gelir veya kurumlar vergisi mükellefi olan tüm e-ticaret satıcılarını kapsar. Vergiden muaf esnaf, basit usule tabi mükellefler ve ikinci el ürün satışı yapanlar kapsam dışındadır.</div>
+      </div>
+      <div class="kart">
+        <div class="kart-ikon">💡</div>
+        <div class="kart-baslik">GEN-Z'nin Rolü</div>
+        <div class="kart-acik">GEN-Z, aracı hizmet sağlayıcı olarak yasal yükümlülükler çerçevesinde hareket eder. Gerekli durumlarda stopaj kesintisi yaparak Maliye Bakanlığı'na iletir.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 5 -->
+  <div class="bolum">
+    <div class="bolum-baslik"><div class="bolum-no">5</div><h2>Fatura ve Belge Yükümlülükleri</h2></div>
+    <p>Vergi mükellefi olan satıcı ve ustalar aşağıdaki belge düzenleme yükümlülüklerine tabidir:</p>
+    <div class="adim-liste">
+      <div class="adim"><div class="adim-no">1</div><div class="adim-txt"><strong>e-Fatura / e-Arşiv Fatura:</strong> Yıllık cirosu belirli sınırı aşan mükellefler e-fatura, diğerleri e-arşiv fatura kullanmak zorundadır. Gelir İdaresi Başkanlığı (GİB) üzerinden başvuru yapılabilir.</div></div>
+      <div class="adim"><div class="adim-no">2</div><div class="adim-txt"><strong>Her Satış İçin Belge:</strong> Her satış veya hizmet karşılığında fatura ya da fatura yerine geçen belge düzenlenmesi zorunludur.</div></div>
+      <div class="adim"><div class="adim-no">3</div><div class="adim-txt"><strong>Banka Üzerinden Tahsilat:</strong> Esnaf muafiyetinden yararlanmak isteyenler dahil tüm satıcılar, ödemeleri banka hesabı üzerinden almalıdır.</div></div>
+      <div class="adim"><div class="adim-no">4</div><div class="adim-txt"><strong>Defter Tutma:</strong> 1 Ocak 2026'dan itibaren kurulan şirketlerde elektronik ticari defter sistemi zorunlu hale gelmiştir.</div></div>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 6 -->
+  <div class="bolum">
+    <div class="bolum-baslik"><div class="bolum-no">6</div><h2>Başlamadan Önce Yapmanız Gerekenler</h2></div>
+    <p>Platforma başvurmadan önce aşağıdaki adımları tamamlamanızı tavsiye ederiz:</p>
+    <div class="adim-liste">
+      <div class="adim"><div class="adim-no">1</div><div class="adim-txt"><strong>Durumunuzu Belirleyin:</strong> Esnaf muafiyetine girip girmediğinizi öğrenmek için bağlı bulunduğunuz Vergi Dairesi veya bir mali müşavirle görüşün.</div></div>
+      <div class="adim"><div class="adim-no">2</div><div class="adim-txt"><strong>Gerekiyorsa Kayıt Yaptırın:</strong> Vergi mükellefi olmanız gerekiyorsa Gelir İdaresi Başkanlığı'nın (gib.gov.tr) internet vergi dairesi üzerinden kayıt yaptırın.</div></div>
+      <div class="adim"><div class="adim-no">3</div><div class="adim-txt"><strong>Muafiyet Belgesi Alın:</strong> Esnaf muafiyetinden yararlanacaksanız vergi dairesinden "Esnaf E-Ticaret Vergi Muafiyet Belgesi" alın.</div></div>
+      <div class="adim"><div class="adim-no">4</div><div class="adim-txt"><strong>Mali Müşavir Desteği:</strong> Düzenli satış yapacaksanız bir mali müşavir ile çalışmanız vergi yükümlülüklerinizi zamanında ve doğru şekilde yerine getirmenizi sağlar.</div></div>
+      <div class="adim"><div class="adim-no">5</div><div class="adim-txt"><strong>Banka Hesabı Açın:</strong> Tüm tahsilatlarınızı banka hesabınız üzerinden yapın, nakit işlemlerden kaçının.</div></div>
+    </div>
+  </div>
+
+  <div class="alt-bilgi">
+    <p>Bu sayfa yalnızca bilgilendirme amaçlıdır. Güncel vergi oranları ve yasal düzenlemeler için</p>
+    <p><a href="https://www.gib.gov.tr" target="_blank">Gelir İdaresi Başkanlığı (gib.gov.tr)</a> · <a href="mailto:[email protected]">Bizimle İletişime Geçin</a></p>
+  </div>
+
+</div>
+
+</body>
+</html>

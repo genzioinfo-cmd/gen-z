@@ -682,6 +682,71 @@ const CATEGORIES = [
 
 const DEMO_PRODUCTS = [
   {
+    id: 'demo-1', emoji: '🎵', name: 'Lo-fi Beat Pack — Midnight Study Vol.1',
+    price: 149, oldPrice: 220, rating: 4.9, reviews: 112,
+    badge: 'hot', tags: ['müzik', 'lo-fi', 'beat', 'stüdyo kalitesi'], category: 'muzik',
+    desc: '20 adet üretim kalitesinde lo-fi beat. WAV ve MP3 formatları dahil. Ticari kullanım lisansı ile birlikte.',
+    gradA: 'rgba(240,197,92,0.18)', gradB: 'rgba(123,92,240,0.1)', resim: null,
+    seller: { id: 'beatztr', name: 'BeatzTR', initials: 'BT', sales: 340, joined: '2024', rating: 4.9, ratingCount: 98, desc: "Türkiye'nin genç beat üreticisi. Lo-fi, trap, R&B.", comments: [{user:'se**',stars:5,date:'Mart 2025',text:'Kalite inanılmaz, hepsini projelerimde kullandım.'},{user:'be**',stars:5,date:'Şubat 2025',text:'Fiyatına göre çok değerli, tekrar alacağım.'}] }
+  },
+  {
+    id: 'demo-2', emoji: '🎨', name: 'UI Kit — Gen-Z Dark Mode Components',
+    price: 299, oldPrice: null, rating: 4.8, reviews: 67,
+    badge: 'new', tags: ['ui kit', 'figma', 'dark mode', 'component'], category: 'tasarim',
+    desc: '120+ Figma bileşeni. Auto-layout, variables, dark/light tema desteği.',
+    gradA: 'rgba(123,92,240,0.18)', gradB: 'rgba(92,240,180,0.08)', resim: null,
+    seller: { id: 'uidesignz', name: 'UI Design Z', initials: 'UD', sales: 89, joined: '2024', rating: 4.8, ratingCount: 44, desc: 'Gen-Z odaklı UI/UX tasarım kitleri.', comments: [{user:'er**',stars:5,date:'Ocak 2025',text:'Çok temiz ve kullanışlı!'}] }
+  },
+  {
+    id: 'demo-3', emoji: '💻', name: 'Next.js Başlangıç Şablonu + Auth',
+    price: 199, oldPrice: 350, rating: 4.7, reviews: 43,
+    badge: 'viral', tags: ['nextjs', 'typescript', 'auth', 'tailwind'], category: 'yazilim',
+    desc: 'Next.js 14, TypeScript, TailwindCSS ve Auth.js ile hazır başlangıç şablonu.',
+    gradA: 'rgba(92,240,180,0.15)', gradB: 'rgba(92,160,240,0.1)', resim: null,
+    seller: { id: 'codeztr', name: 'Code-Z', initials: 'CZ', sales: 156, joined: '2023', rating: 4.8, ratingCount: 72, desc: 'Açık kaynak sevdalısı.', comments: [{user:'mu**',stars:5,date:'Mart 2025',text:'Setup çok hızlı!'},{user:'do**',stars:4,date:'Şubat 2025',text:'Dökümantasyon iyi.'}] }
+  },
+  {
+    id: 'demo-4', emoji: '📹', name: 'Vlog Preset Paketi — Cinematic TR',
+    price: 89, oldPrice: 140, rating: 4.6, reviews: 88,
+    badge: 'hot', tags: ['preset', 'lightroom', 'vlog'], category: 'video',
+    desc: '15 adet Lightroom & Lr Mobile preset. Türkiye sokaklarına özel renk bilimi.',
+    gradA: 'rgba(240,140,60,0.18)', gradB: 'rgba(240,197,92,0.08)', resim: null,
+    seller: { id: 'visualz', name: 'Visual-Z', initials: 'VZ', sales: 620, joined: '2023', rating: 4.7, ratingCount: 201, desc: 'Fotoğraf ve video presetleri.', comments: [{user:'ca**',stars:5,date:'Mart 2025',text:'İstanbul fotoğraflarıma çok yakıştı!'}] }
+  },
+  {
+    id: 'demo-5', emoji: '🖼️', name: 'Procreate Fırça Seti — Suluboya',
+    price: 69, oldPrice: null, rating: 4.9, reviews: 74,
+    badge: 'new', tags: ['procreate', 'fırça', 'suluboya'], category: 'tasarim',
+    desc: '25 adet Procreate suluboya fırçası. Gerçekçi doku ve akış simülasyonu.',
+    gradA: 'rgba(240,92,160,0.18)', gradB: 'rgba(240,197,92,0.1)', resim: null,
+    seller: { id: 'brushztr', name: 'Brush-Z', initials: 'BZ', sales: 510, joined: '2023', rating: 4.9, ratingCount: 198, desc: 'Dijital sanatçılar için Procreate araçları.', comments: [{user:'mi**',stars:5,date:'Mart 2025',text:'Bu fırçalar olmasaydı!'},{user:'bu**',stars:5,date:'Ocak 2025',text:'Suluboya efekti gerçekçi!'}] }
+  },
+  {
+    id: 'demo-6', emoji: '📷', name: 'Portre Kompozisyon Kılavuzu PDF',
+    price: 59, oldPrice: null, rating: 4.9, reviews: 31,
+    badge: null, tags: ['portre', 'pdf', 'fotoğrafçılık'], category: 'fotograf',
+    desc: '45 sayfalık detaylı portre kompozisyon rehberi.',
+    gradA: 'rgba(240,92,160,0.15)', gradB: 'rgba(123,92,240,0.08)', resim: null,
+    seller: { id: 'lenslenz', name: 'Lens & Z', initials: 'LZ', sales: 22, joined: '2025', rating: 4.9, ratingCount: 18, desc: 'Fotoğrafçılık eğitim materyalleri.', comments: [{user:'ay**',stars:5,date:'Ocak 2025',text:'Bakış açım değişti!'}] }
+  },
+  {
+    id: 'demo-7', emoji: '📝', name: "Freelance Sözleşme Şablonları (5'li)",
+    price: 79, oldPrice: 120, rating: 4.8, reviews: 55,
+    badge: null, tags: ['freelance', 'sözleşme'], category: 'yazi',
+    desc: '5 farklı freelance proje için hazır Türkçe sözleşme şablonları.',
+    gradA: 'rgba(92,240,120,0.15)', gradB: 'rgba(240,197,92,0.08)', resim: null,
+    seller: { id: 'legalzgen', name: 'Legal-Z', initials: 'LG', sales: 2100, joined: '2022', rating: 4.8, ratingCount: 430, desc: "Freelancer'lar için Türkçe hukuki şablonlar.", comments: [{user:'ni**',stars:5,date:'Mart 2025',text:'Müşterilere güven verdi.'},{user:'em**',stars:5,date:'Şubat 2025',text:'Dil çok sade!'}] }
+  },
+  {
+    id: 'demo-8', emoji: '🎮', name: 'İndie Oyun Müzik Paketi — 8-bit',
+    price: 125, oldPrice: 180, rating: 4.5, reviews: 38,
+    badge: 'viral', tags: ['oyun müziği', '8-bit', 'indie'], category: 'oyun',
+    desc: '30 adet 8-bit ve chiptune müzik loop. Ticari lisans dahil.',
+    gradA: 'rgba(240,197,92,0.15)', gradB: 'rgba(92,240,120,0.08)', resim: null,
+    seller: { id: 'chiptunez', name: 'Chiptune-Z', initials: 'CZ', sales: 77, joined: '2024', rating: 4.6, ratingCount: 35, desc: 'Oyun geliştiriciler için 8-bit müzik.', comments: [{user:'ya**',stars:4,date:'Şubat 2025',text:'Tam aradığım şeydi!'}] }
+  },
+[
+  {
     id: 1, emoji: '🎵', name: 'Lo-fi Beat Pack — Midnight Study Vol.1',
     price: 149, oldPrice: 220, rating: 4.9, reviews: 112,
     badge: 'hot', tags: ['müzik', 'lo-fi', 'beat', 'stüdyo kalitesi'],
@@ -766,7 +831,7 @@ const DEMO_PRODUCTS = [
 
 /* ── YARDIMCI FONKSİYONLAR ── */
 function getProductById(id) {
-  return DEMO_PRODUCTS.find(p => p.id === parseInt(id));
+  return DEMO_PRODUCTS.find(p => p.id === id || p.id === parseInt(id));
 }
 
 function getProductsBySeller(sellerId) {

@@ -236,3 +236,6 @@ window._genzFirestore = {
   updateDoc: _updateDoc, serverTimestamp: _serverTimestamp,
   onSnapshot: _onSnapshot
 };
+
+// _genzAuth.firestore olarak da eriş — bazı sayfalar bu şekilde arıyor
+window._genzAuth.firestore = window._genzFirestore;

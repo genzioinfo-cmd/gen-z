@@ -989,7 +989,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('urunTags').innerHTML = p.tags.map(t => '<span class="urun-tag">' + t + '</span>').join('');
 
   const badge = getBadgeLevel(p.seller.sales);
-  document.getElementById('sellerCard').href = 'gen-z.satici.html?seller=' + p.seller.id;
+  document.getElementById('sellerCard').href = 'gen-z_satici.html?seller=' + p.seller.id;
   document.getElementById('sellerInitial').textContent = p.seller.initials;
   document.getElementById('sellerName').textContent = p.seller.name;
   document.getElementById('sellerBadge').textContent = badge.label;

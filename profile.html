@@ -668,9 +668,15 @@ nav, .toast, .edit-modal-overlay, .edit-modal,
           <span class="nav-icon">🛒</span> Sepetim
           <span class="nav-badge" id="cart-badge"></span>
         </button>
-        <button class="profile-nav-item" onclick="loadTab('randevular')" id="pnav-randevular">
+        <!-- Randevular: sadece ustam_randevular'da müşterisi olan kullanıcılara gösterilir -->
+        <button class="profile-nav-item" onclick="loadTab('randevular')" id="pnav-randevular" style="display:none;">
           <span class="nav-icon">📅</span> Randevularım
           <span class="nav-badge" id="rdv-badge"></span>
+        </button>
+        <!-- Projeler: usta onayı olan kullanıcılara gösterilir -->
+        <button class="profile-nav-item" onclick="loadTab('projeler')" id="pnav-projeler" style="display:none;">
+          <span class="nav-icon">📋</span> Projelerim
+          <span class="nav-badge" id="proj-badge"></span>
         </button>
         <button class="profile-nav-item" onclick="loadTab('reviews')" id="pnav-reviews">
           <span class="nav-icon">⭐</span> Değerlendirmelerim
@@ -800,6 +806,7 @@ if (currentUser) {
 
   // localStorage'daki rol bilgisiyle hemen göster
   renderRolKisayollar(currentUser);
+  renderRolTablar(currentUser);
 
   // Firestore'dan güncel rol bilgisini çek ve güncelle
   (async () => {
@@ -820,6 +827,8 @@ if (currentUser) {
         const rzCont = document.getElementById('rol-kisayollar');
         if (rzCont) { rzCont.innerHTML = '<div style="font-size:10px; color:var(--text3); text-transform:uppercase; letter-spacing:0.6px; padding:4px 8px 6px; font-weight:600;">Profillerim</div>'; rzCont.style.display = 'none'; }
         renderRolKisayollar(updated);
+        // Rol bazlı tab'ları göster/gizle
+        renderRolTablar(updated);
       }
     } catch(e) { console.warn('Profil güncel veri hatası:', e); }
   })();
@@ -847,6 +856,26 @@ function toggleTheme() {
   setTimeout(() => document.body.classList.remove('theme-transitioning'), 350);
 }
 
+/* ── ROL BAZLI TAB GÖRÜNÜRLÜĞÜ ── */
+function renderRolTablar(user) {
+  const roller_arr = Array.isArray(user.roller) ? user.roller.map(r => r.toLowerCase()) : [];
+  const tumRoller = new Set([...roller_arr, (user.rol || '').toLowerCase()]);
+  const isAdmin = tumRoller.has('admin') || user.admin === true;
+
+  // Randevular: usta müşterisi olan herkes görebilir (Firestore'da randevusu varsa)
+  // Basit kontrol: ustaOnay'ı olan veya daha önce randevu almış kullanıcılar
+  // Tab her zaman görünür olsun, içerik sayfası zaten boş gösterir
+  const rdvBtn = document.getElementById('pnav-randevular');
+  if (rdvBtn) rdvBtn.style.display = '';  // herkese aç (içerik kendi filtreler)
+
+  // Projeler: usta onayı olan kullanıcılar veya admin
+  const projBtn = document.getElementById('pnav-projeler');
+  if (projBtn) {
+    const gorunur = isAdmin || user.ustaOnay === true || tumRoller.has('usta') || tumRoller.has('ustam');
+    projBtn.style.display = gorunur ? '' : 'none';
+  }
+}
+
 /* ── ROL KISAYOLLARI ── */
 function renderRolKisayollar(user) {
   const container = document.getElementById('rol-kisayollar');
@@ -855,15 +884,39 @@ function renderRolKisayollar(user) {
   const roller_arr = Array.isArray(user.roller) ? user.roller.map(r => r.toLowerCase()) : [];
   const tumRoller = new Set([...roller_arr, ...(rol ? [rol] : [])]);
   const isAdmin = tumRoller.has('admin') || user.admin === true;
-  const ROL_MAP = [
-    { key: 'magaza',  label: '🏪 Mağazam',        href: 'gen-z_satici.html' },
-    { key: 'ustam',   label: '🔧 Usta Profilim',   href: 'ustam-profil.html' },
-    { key: 'gencz',   label: '⚡ Genç-Z Profilim', href: 'gen-z.html'        },
-  ];
   const uid = user.uid || user.id || '';
+
+  // Koşul fonksiyonları ile esnek kontrol
+  const ROL_MAP = [
+    {
+      label: '🏪 Mağazam',
+      href:  'magaza-satici.html',
+      goster: () => user.magazaOnay === true || tumRoller.has('magaza'),
+    },
+    {
+      label: '🔧 Usta Profilim',
+      href:  'ustam-profil.html',
+      // Firestore'da 'usta' olarak kaydediliyor, 'ustam' değil
+      goster: () => user.ustaOnay === true || tumRoller.has('usta') || tumRoller.has('ustam'),
+    },
+    {
+      label: '⚡ Genç-Z Profilim',
+      href:  'gen-z_profil.html',
+      // gencimDurum: 'onaylandi' veya roller'da 'gencz'
+      goster: () => user.gencimDurum === 'onaylandi' || tumRoller.has('gencz'),
+    },
+    {
+      label: '⚙️ Kontrol Panelim',
+      href:  'modpanel.html',
+      // Admin veya herhangi bir özel rolü olan herkes
+      goster: () => isAdmin || user.magazaOnay === true || user.ustaOnay === true || user.gencimDurum === 'onaylandi'
+                    || tumRoller.has('magaza') || tumRoller.has('usta') || tumRoller.has('ustam') || tumRoller.has('gencz'),
+    },
+  ];
+
   let added = 0;
-  ROL_MAP.forEach(({ key, label, href }) => {
-    if (!isAdmin && !tumRoller.has(key)) return;
+  ROL_MAP.forEach(({ label, href, goster }) => {
+    if (!isAdmin && !goster()) return;
     const btn = document.createElement('a');
     btn.className = 'profile-nav-item';
     btn.href = uid ? `${href}?uid=${encodeURIComponent(uid)}` : href;
@@ -881,6 +934,7 @@ const TAB_FILES = {
   favorites:     'profile-favorites.html',
   cart:          'profile-cart.html',
   randevular:    'profile-randevular.html',
+  projeler:      'profile-projeler.html',
   reviews:       'profile-reviews.html',
   addresses:     'profile-addresses.html',
   notifications: 'profile-notifications.html',
@@ -1184,7 +1238,7 @@ document.getElementById('editModal').addEventListener('click', e => {
 document.addEventListener('DOMContentLoaded', () => {
   // URL'den tab parametresi oku (sepet ikonu bağlantısı için)
   const _urlTab = new URLSearchParams(window.location.search).get('tab');
-  loadTab(_urlTab && ['orders','favorites','cart','reviews','addresses','notifications','info','randevular'].includes(_urlTab) ? _urlTab : 'orders');
+  loadTab(_urlTab && ['orders','favorites','cart','reviews','addresses','notifications','info','randevular','projeler'].includes(_urlTab) ? _urlTab : 'orders');
 
   /* ── SEPET BADGE INIT ── */
   (function() {

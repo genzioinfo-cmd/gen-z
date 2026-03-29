@@ -3343,21 +3343,69 @@ function renderSiparisler(){
   if(_sFiltre!=='hepsi') liste=liste.filter(s=>s.durum===_sFiltre);
   if(!liste.length){el.innerHTML='<table><tbody><tr class="bos-tr"><td>Sipariş bulunamadı ✦</td></tr></tbody></table>';return;}
   el.innerHTML=`<table>
-    <thead><tr><th>Sipariş No</th><th>Ürün</th><th>Müşteri</th><th>Tutar</th><th>Tarih</th><th>Durum</th></tr></thead>
+    <thead><tr><th>Sipariş No</th><th>Ürün</th><th>Müşteri</th><th>Tutar</th><th>Tarih</th><th>Durum</th><th>İşlem</th></tr></thead>
     <tbody>${liste.map(s=>{
       const tarih=s.ts?.toDate?s.ts.toDate().toLocaleDateString('tr-TR'):'—';
+      const sonDurum=s.durum||'beklemede';
+      const bitiyor=sonDurum==='tamamlandi'||sonDurum==='iptal';
+      const durumSecenekleri=bitiyor?'':`
+        <select onchange="siparisDurumGuncelle('${s.id}',this.value,this)" style="font-size:.65rem;background:var(--bg2);color:var(--t1);border:1px solid var(--border);border-radius:6px;padding:3px 6px;cursor:pointer;">
+          <option value="" disabled selected>Güncelle</option>
+          <option value="kargo">🚚 Kargoya Ver</option>
+          <option value="tamamlandi">✅ Tamamlandı</option>
+          <option value="iptal">❌ İptal Et</option>
+        </select>`;
       return`<tr>
         <td style="font-family:'Syne',sans-serif;font-size:.9rem;color:var(--gold)">#${(s.id||'').slice(-6).toUpperCase()}</td>
         <td>${(s.urunler||[s.urun||'—']).slice(0,2).join(', ')}${(s.urunler||[]).length>2?'…':''}</td>
         <td style="color:var(--t2);font-size:.68rem">${s.musteriAd||s.musteri||'—'}</td>
         <td style="font-family:'Syne',sans-serif;color:var(--gold)">${para(s.toplam||0)} ₺</td>
         <td style="font-size:.65rem;color:var(--t2)">${tarih}</td>
-        <td><span class="badge ${s.durum||'beklemede'}">${durumMetin(s.durum)}</span></td>
+        <td><span class="badge ${sonDurum}">${durumMetin(sonDurum)}</span></td>
+        <td>${durumSecenekleri}</td>
       </tr>`;
     }).join('')}</tbody>
   </table>`;
 }
 function durumMetin(d){return d==='tamamlandi'?'✅ Tamamlandı':d==='kargo'?'🚚 Kargoda':d==='iptal'?'❌ İptal':'⏳ Beklemede';}
+
+/* Sipariş durumu Firestore'da güncelle + tamamlandi olunca satisAdedi artır */
+window.siparisDurumGuncelle = async function(sipId, yeniDurum, selectEl) {
+  if (!sipId || !yeniDurum) return;
+  try {
+    const sipRef = doc(db, 'magaza_siparisler', sipId);
+    await updateDoc(sipRef, { durum: yeniDurum, durumGuncellendi: serverTimestamp() });
+
+    // Sipariş tamamlandıysa: ilgili ürünlerin satisAdedi'ni artır
+    if (yeniDurum === 'tamamlandi') {
+      const siparis = _siparisler.find(s => s.id === sipId);
+      if (siparis && _magaza?.id) {
+        // Ürün ID'leri varsa her birini güncelle
+        const urunIdler = siparis.urunIdler || (siparis.urunId ? [siparis.urunId] : []);
+        for (const uid of urunIdler) {
+          try {
+            const urunRef = doc(db, 'magaza_urunler', uid);
+            // Firestore increment ile atomik artırım
+            const { increment } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+            await updateDoc(urunRef, { satisAdedi: increment(siparis.adet || 1) });
+          } catch(e) { console.warn('satisAdedi güncellenemedi:', e); }
+        }
+      }
+    }
+
+    // Yerel state güncelle
+    const idx = _siparisler.findIndex(s => s.id === sipId);
+    if (idx !== -1) _siparisler[idx].durum = yeniDurum;
+    renderSiparisler();
+    renderSonSip();
+    renderFinans();
+    ozetGuncelle();
+    toast(yeniDurum === 'tamamlandi' ? '✅ Sipariş tamamlandı, satış sayısı güncellendi.' : yeniDurum === 'kargo' ? '🚚 Kargoya verildi.' : '❌ Sipariş iptal edildi.');
+  } catch(e) {
+    toast('⚠️ Güncelleme hatası: ' + e.message);
+    if (selectEl) selectEl.value = '';
+  }
+};
 window.sipFiltre=function(tip,btn){
   _sFiltre=tip;
   document.querySelectorAll('#sayfa-siparisler .f-btn').forEach(b=>b.classList.remove('on'));

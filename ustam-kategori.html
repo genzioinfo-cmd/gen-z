@@ -738,7 +738,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Firebase hazır olana kadar bekle, sonra Firestore'dan çek
   function bekleVeYukle(deneme) {
-    if (deneme > 20) {
+    if (deneme > 30) {
       // Firebase gelmedi, demo göster
       var demo = getUstalarByCategory(catId);
       document.getElementById('ustaCount').textContent = demo.length;
@@ -749,12 +749,13 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(function() { bekleVeYukle(deneme + 1); }, 200);
       return;
     }
-    var db = window._genzAuth.db;
-    var firestore = window._genzAuth.firestore || window._genzFirestore;
-    if (!firestore) {
+    // _genzFirestore ya da _genzAuth.firestore hazır olana kadar bekle
+    var firestore = window._genzFirestore || window._genzAuth.firestore;
+    if (!firestore || !firestore.query) {
       setTimeout(function() { bekleVeYukle(deneme + 1); }, 200);
       return;
     }
+    var db = window._genzAuth.db;
     var q = firestore.query(
       firestore.collection(db, 'ustam_ilanlar'),
       firestore.where('durum', '==', 'onaylandi')

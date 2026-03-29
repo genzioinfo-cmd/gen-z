@@ -3159,19 +3159,7 @@ window.urunEkle=async function(){
 
   let resimUrls=[];
   try{
-    resimUrls = await Promise.all(_resimler.map(async (r)=>{
-      const fileName = `magaza_urunler/${_magaza.id}/${Date.now()}_${r.file.name}`;
-      const formData = new FormData();
-      formData.append('file', r.file);
-      formData.append('key', fileName);
-      const res = await fetch('https://genz-upload.genzio-info.workers.dev', {
-        method: 'POST',
-        body: formData
-      });
-      if(!res.ok) throw new Error('Yükleme hatası');
-      const data = await res.json();
-      return data.url;
-    }));
+    resimUrls = await window.magazaResimleriYukle();
   }catch(e){
     urunOverlayKapat();
     err.textContent='⚠ Fotoğraf yüklenemedi: ' + e.message + ' — Lütfen tekrar deneyin.';
@@ -3219,7 +3207,7 @@ window.urunEkle=async function(){
     ok.classList.add('v');
     urunOverlayBasarili();
     ['uAd','uFiyat','uStok','uDesc','uSku'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-    _resimler=[];_bedenler=[];_renkler=[];
+    window.magazaResimleriTemizle();_bedenler=[];_renkler=[];
     Object.keys(_ekAlanlar).forEach(k=>delete _ekAlanlar[k]);
     document.getElementById('resimPreview').innerHTML='';
     _secKat='';
@@ -3434,56 +3422,7 @@ function renderFinans(){
 
 // ── RESİM YÜKLEYİCİ ──
 /* Fotoğrafı canvas üzerinden sıkıştırır; max 1200px, JPEG %82 kalite */
-function gorselSikistir(file){
-  return new Promise(resolve=>{
-    const MAX_W=1200,MAX_H=1200,QUALITY=0.72;
-    const reader=new FileReader();
-    reader.onload=e=>{
-      const img=new Image();
-      img.onload=()=>{
-        let w=img.width,h=img.height;
-        if(w>MAX_W||h>MAX_H){
-          const ratio=Math.min(MAX_W/w,MAX_H/h);
-          w=Math.round(w*ratio);h=Math.round(h*ratio);
-        }
-        const canvas=document.createElement('canvas');
-        canvas.width=w;canvas.height=h;
-        canvas.getContext('2d').drawImage(img,0,0,w,h);
-        canvas.toBlob(blob=>{
-          const sFile=new File([blob],file.name.replace(/\.[^.]+$/,'.jpg'),{type:'image/jpeg'});
-          const url=canvas.toDataURL('image/jpeg',QUALITY);
-          resolve({file:sFile,url});
-        },'image/jpeg',QUALITY);
-      };
-      img.src=e.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
-window.resimSec=async function(files){
-  const MAX_BOYUT=1.5*1024*1024; /* Max 1.5MB kabul et, sıkıştırılacak */
-  for(const f of Array.from(files)){
-    if(_resimler.length>=5) break;
-    if(!f.type.startsWith('image/')) continue;
-    if(f.size>MAX_BOYUT){ showToast('⚠ Fotoğraf çok büyük! Max 1.5MB olmalı. ('+f.name+' — '+Math.round(f.size/1024/1024*10)/10+'MB)'); continue; }
-    const sikistirilmis=await gorselSikistir(f);
-    _resimler.push(sikistirilmis);
-    resimPreviewGuncelle();
-    formKontrol();
-  }
-};
-window.dragOver=function(e){e.preventDefault();document.getElementById('resimAlan').classList.add('dragover');};
-window.dragLeave=function(){document.getElementById('resimAlan').classList.remove('dragover');};
-window.dropResim=function(e){e.preventDefault();document.getElementById('resimAlan').classList.remove('dragover');resimSec(e.dataTransfer.files);};
-function resimPreviewGuncelle(){
-  document.getElementById('resimPreview').innerHTML=_resimler.map((r,i)=>`
-    <div class="resim-thumb${i===0?' ana':''}">
-      <img src="${r.url}" alt="resim">
-      <button class="r-sil" onclick="resimSil(${i})">✕</button>
-    </div>`).join('');
-}
-window.resimSil=function(i){_resimler.splice(i,1);resimPreviewGuncelle();formKontrol();};
+// Fotoğraf kodu upload.js modülünde — window.resimSec, window.dragOver vs. oradan geliyor
 
 window.etiketEkle=function(inputId,listId){
   const inp=document.getElementById(inputId);
@@ -4942,6 +4881,7 @@ window.iadeAc = function(s) { _iadeModalAcFn(typeof s==='string'?JSON.parse(s):s
 <script type="module" src="modpanel-ilan-gencz.js"></script>
 <script type="module" src="modpanel-pro.js"></script>
 <script src="cookie-consent.js"></script>
+<script type="module" src="upload.js"></script>
 
 <!-- CHAT MODAL -->
 <div class="chat-overlay" id="chatOverlay" onclick="chatKapat(event)">

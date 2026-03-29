@@ -16,6 +16,8 @@ const _db = () => {
   return apps.length ? getFirestore(apps[0]) : getFirestore(getApp());
 };
 
+// Fotoğraf fonksiyonları upload.js modülünden geliyor (window.ilanResimSec, window.gzResimSec vs.)
+
 // CSS: gz-kat-kart (modülden inject et)
 (function() {
   if (document.getElementById('gzKatCSS')) return;
@@ -137,6 +139,46 @@ function ilanFormIcerikOlustur() {
         <input class="fi" id="ilanMusait" placeholder="Hafta içi 08:00-18:00, Cumartesi 09:00-14:00" style="font-size:.72rem;" value="${window._ustaVeri?.availability||''}">
       </div>
 
+      <div class="fa">
+        <label>📷 Kapak Fotoğrafı (opsiyonel)</label>
+        <div style="border:1.5px dashed rgba(201,168,76,.2);border-radius:6px;padding:1.5rem;text-align:center;cursor:pointer;transition:all .25s;position:relative;"
+          onclick="document.getElementById('ilanResimInput').click()"
+          ondragover="event.preventDefault();this.style.borderColor='var(--gold)'"
+          ondragleave="this.style.borderColor='rgba(201,168,76,.2)'"
+          ondrop="ilanResimDrop(event)">
+          <input type="file" id="ilanResimInput" accept="image/*" style="display:none" onchange="ilanResimSec(this.files)">
+          <div id="ilanResimOnizleme" style="display:none;">
+            <img id="ilanResimImg" style="max-width:100%;max-height:160px;border-radius:6px;object-fit:cover;">
+            <button type="button" onclick="event.stopPropagation();ilanResimTemizle()" style="display:block;margin:.5rem auto 0;padding:.3rem .8rem;background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.3);color:var(--red);border-radius:4px;font-size:.58rem;cursor:pointer;">✕ Kaldır</button>
+          </div>
+          <div id="ilanResimPlaceholder">
+            <div style="font-size:1.8rem;margin-bottom:.4rem;opacity:.4;">📷</div>
+            <div style="font-size:.62rem;color:var(--t2);">Fotoğraf seç veya sürükle bırak</div>
+            <div style="font-size:.55rem;color:var(--t3);margin-top:.2rem;">JPG, PNG, WebP — max 1.5MB</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fa">
+        <label>📷 Kapak Fotoğrafı (opsiyonel)</label>
+        <div style="border:1.5px dashed rgba(201,168,76,.2);border-radius:6px;padding:1.5rem;text-align:center;cursor:pointer;transition:all .25s;position:relative;"
+          onclick="document.getElementById('ilanResimInput').click()"
+          ondragover="event.preventDefault();this.style.borderColor='var(--gold)'"
+          ondragleave="this.style.borderColor='rgba(201,168,76,.2)'"
+          ondrop="ilanResimDrop(event)">
+          <input type="file" id="ilanResimInput" accept="image/*" style="display:none" onchange="ilanResimSec(this.files)">
+          <div id="ilanResimOnizleme" style="display:none;">
+            <img id="ilanResimImg" style="max-width:100%;max-height:160px;border-radius:6px;object-fit:cover;">
+            <button type="button" onclick="event.stopPropagation();ilanResimTemizle()" style="display:block;margin:.5rem auto 0;padding:.3rem .8rem;background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.3);color:#e05555;border-radius:4px;font-size:.58rem;cursor:pointer;">✕ Kaldır</button>
+          </div>
+          <div id="ilanResimPlaceholder">
+            <div style="font-size:1.8rem;margin-bottom:.4rem;opacity:.4;">📷</div>
+            <div style="font-size:.62rem;color:rgba(240,235,224,.42);">Fotoğraf seç veya sürükle bırak</div>
+            <div style="font-size:.55rem;color:rgba(240,235,224,.2);margin-top:.3rem;">JPG, PNG, WebP — max 1.5MB &nbsp;·&nbsp; <a href="https://squoosh.app" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:#c9a84c;opacity:.7;text-decoration:underline;">Boyutu buradan düşürebilirsin</a></div>
+          </div>
+        </div>
+      </div>
+
       <div class="ferr" id="ilanErr" style="display:none;"></div>
       <div class="fok" id="ilanOk" style="display:none;"></div>
 
@@ -150,6 +192,7 @@ function ilanFormIcerikOlustur() {
 window.ilanFormSifirla = function() {
   const el = document.getElementById('ilanFormIcerik');
   if(el) el.innerHTML = ilanFormIcerikOlustur();
+  window._ilanResimDosya = null;
 };
 
 // Sayfa açılınca formu doldur
@@ -186,6 +229,16 @@ window.ilanGonder = async function() {
   if (!baslik) { errEl.textContent='İlan başlığı zorunludur.'; errEl.style.display='block'; return; }
   if (!hizmet) { errEl.textContent='Hizmet türü seçin.'; errEl.style.display='block'; return; }
 
+  // Kapak fotoğrafı yükle (upload.js)
+  let kapakUrl = null;
+  if (window._ilanResimDosya) {
+    try {
+      kapakUrl = await window.ilanKapakYukle();
+    } catch(e) {
+      errEl.textContent = '⚠ Fotoğraf yüklenemedi: ' + e.message; errEl.style.display='block'; return;
+    }
+  }
+
   try {
     await addDoc(collection(_db(),'ustam_ilanlar'),{
       ustaUid    : window._aktifUid,
@@ -200,6 +253,7 @@ window.ilanGonder = async function() {
       ilce,
       aciklama,
       musaitlik  : musait,
+      kapakFoto  : kapakUrl,
       durum      : 'bekliyor',
       ts         : serverTimestamp()
     });
@@ -295,6 +349,28 @@ window.gzKatSec = function(ad, el) {
       <input class="fi" id="gzAlan_${alan}" type="${cfg.type||'text'}" placeholder="${cfg.placeholder}" style="font-size:.72rem;"></div>`;
   }).join('');
 
+  // Kapak fotoğrafı alanı ekle
+  alanDiv.innerHTML += `
+    <div>
+      <label class="dan-lbl">📷 Kapak Fotoğrafı (opsiyonel)</label>
+      <div style="border:1.5px dashed rgba(123,92,240,.25);border-radius:6px;padding:1.5rem;text-align:center;cursor:pointer;transition:all .25s;"
+        onclick="document.getElementById('gzResimInput').click()"
+        ondragover="event.preventDefault();this.style.borderColor='#7B5CF0'"
+        ondragleave="this.style.borderColor='rgba(123,92,240,.25)'"
+        ondrop="gzResimDrop(event)">
+        <input type="file" id="gzResimInput" accept="image/*" style="display:none" onchange="gzResimSec(this.files)">
+        <div id="gzResimOnizleme" style="display:none;">
+          <img id="gzResimImg" style="max-width:100%;max-height:160px;border-radius:6px;object-fit:cover;">
+          <button type="button" onclick="event.stopPropagation();gzResimTemizle()" style="display:block;margin:.5rem auto 0;padding:.3rem .8rem;background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.3);color:#e05555;border-radius:4px;font-size:.58rem;cursor:pointer;">✕ Kaldır</button>
+        </div>
+        <div id="gzResimPlaceholder">
+          <div style="font-size:1.8rem;margin-bottom:.4rem;opacity:.4;">📷</div>
+          <div style="font-size:.62rem;color:rgba(240,235,224,.42);">Fotoğraf seç veya sürükle bırak</div>
+          <div style="font-size:.55rem;color:rgba(240,235,224,.2);margin-top:.3rem;">JPG, PNG, WebP — max 1.5MB &nbsp;·&nbsp; <a href="https://squoosh.app" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:#a78bfa;opacity:.7;text-decoration:underline;">Boyutu buradan düşürebilirsin</a></div>
+        </div>
+      </div>
+    </div>`;
+
   formDiv.style.display = 'flex';
   const errEl = document.getElementById('gzErr');
   const okEl  = document.getElementById('gzOk');
@@ -336,12 +412,23 @@ window.gzIcerikGonder = async function() {
 
   if (eksik) { errEl.textContent='Başlık ve açıklama zorunludur.'; errEl.style.display='block'; return; }
 
+  // Kapak fotoğrafı yükle (upload.js)
+  let kapakUrl = null;
+  if (window._gzResimDosya) {
+    try {
+      kapakUrl = await window.gzKapakYukle();
+    } catch(e) {
+      errEl.textContent = '⚠ Fotoğraf yüklenemedi: ' + e.message; errEl.style.display='block'; return;
+    }
+  }
+
   try {
     await addDoc(collection(_db(),'gencz_icerikler'),{
       uid      : window._aktifUid,
       email    : window._ustaVeri?.email||'',
       kategori : _gzSeciliKat,
       ...veri,
+      kapakFoto: kapakUrl,
       durum    : 'bekliyor',
       ts       : serverTimestamp()
     });
@@ -350,6 +437,7 @@ window.gzIcerikGonder = async function() {
     // Formu sıfırla
     meta.alanlar.forEach(alan => { const el=document.getElementById('gzAlan_'+alan); if(el) el.value=''; });
     _gzSeciliKat = null;
+    window._gzResimDosya = null;
     document.querySelectorAll('#gzKatGrid .gz-kat-kart').forEach(k=>k.classList.remove('secili'));
     document.getElementById('gzDinamikForm').style.display='none';
     genczYukle();

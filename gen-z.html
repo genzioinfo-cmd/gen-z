@@ -789,11 +789,21 @@ let GZ_PRODUCTS = [];
 
 /* ── Firestore'dan ürünleri çek ── */
 async function fetchProducts() {
+  // _genzAuth ve _genzFirestore hazır olana kadar bekle (firebase-config.js yüklenince gelir)
+  let beklemeSayac = 0;
+  while ((!window._genzAuth?.db || !window._genzFirestore) && beklemeSayac < 30) {
+    await new Promise(r => setTimeout(r, 200));
+    beklemeSayac++;
+  }
+  if (!window._genzAuth?.db || !window._genzFirestore) {
+    console.warn('Firebase hazır olmadı, ürünler yüklenemedi');
+    return;
+  }
   try {
-    const db = window._genzAuth?.db;
-    if (!db) { console.warn('Firebase bağlantısı yok'); return; }
-    const { collection, getDocs, query, where } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    const q = query(collection(db, 'magaza_urunler'), where('durum', '==', 'onaylandi'));
+    const db = window._genzAuth.db;
+    const { collection, getDocs, query, where } = window._genzFirestore;
+    // ── gencz_icerikler koleksiyonundan çek (doğru koleksiyon) ──
+    const q = query(collection(db, 'gencz_icerikler'), where('durum', '==', 'onaylandi'));
     const snap = await getDocs(q);
     const GRAD_PAIRS = [
       ['rgba(240,197,92,0.18)', 'rgba(123,92,240,0.1)'],
@@ -802,38 +812,43 @@ async function fetchProducts() {
       ['rgba(92,180,240,0.15)', 'rgba(240,140,92,0.1)'],
       ['rgba(180,92,240,0.15)', 'rgba(92,240,197,0.1)'],
     ];
-    const CAT_EMOJI = { muzik:'🎵', tasarim:'🎨', yazilim:'💻', video:'📹',
-      fotograf:'📷', yazi:'📝', moda:'👗', oyun:'🎮' };
+    const CAT_EMOJI = {
+      'Şiir & Edebiyat':'📝', 'Kitap & Hikaye':'📚', 'Grafik Tasarım':'🎨',
+      'Fotoğrafçılık':'📷', 'Müzik':'🎵', 'Video & İçerik':'🎬',
+      'İllüstrasyon':'🖌️', 'El Sanatları':'✂️', 'Dijital Sanat':'💻', 'Diğer':'⚡'
+    };
     if (snap.empty) { GZ_PRODUCTS = []; return; }
     GZ_PRODUCTS = snap.docs.map((doc, i) => {
       const d = doc.data();
       const grad = GRAD_PAIRS[i % GRAD_PAIRS.length];
-      const initials = (d.magazaAd || 'M').split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
-      const resim = (d.resimler && d.resimler.length > 0) ? d.resimler[0] : null;
+      const sanatciAd = d.sanatciAd || d.displayName || d.email?.split('@')[0] || 'Sanatçı';
+      const initials = sanatciAd.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+      const resim = d.kapakFoto || null;
       return {
         id: doc.id,
-        name: d.ad || '',
-        price: d.kdvDahilFiyat || d.fiyat || 0,
+        name: d.baslik || d.ad || '',
+        price: d.fiyat || 0,
         oldPrice: null,
         rating: d.rating || 0,
         reviews: d.reviewCount || 0,
-        badge: d.badge || null,
-        tags: d.etiketler || [],
+        badge: null,
+        tags: d.kategori ? [d.kategori] : [],
         category: d.kategori || 'diger',
         desc: d.aciklama || '',
-        emoji: CAT_EMOJI[d.kategori] || '📦',
+        emoji: CAT_EMOJI[d.kategori] || '⚡',
         resim: resim,
         gradA: grad[0],
         gradB: grad[1],
+        linkUrl: d.linkUrl || d.portfolyoLink || d.publuu || null,
         seller: {
-          id: d.magazaId || doc.id,
-          name: d.magazaAd || 'Mağaza',
+          id: d.uid || doc.id,
+          name: sanatciAd,
           initials: initials,
-          sales: d.satisAdedi || 0,
+          sales: 0,
           joined: d.ts ? new Date(d.ts.seconds * 1000).getFullYear().toString() : '2025',
-          rating: d.magazaRating || 0,
-          ratingCount: d.magazaRatingCount || 0,
-          desc: '',
+          rating: 0,
+          ratingCount: 0,
+          desc: d.aciklama || '',
         }
       };
     });

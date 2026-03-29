@@ -218,3 +218,21 @@ window.doSignOut = async function() {
 };
 
 window._genzAuth = { auth, db, googleProvider };
+
+// Firestore fonksiyonlarını global olarak erişilebilir yap
+// (module olmayan script'ler için)
+import {
+  collection as _col, getDocs as _getDocs, query as _query,
+  where as _where, orderBy as _orderBy, limit as _limit,
+  doc as _doc, getDoc as _getDoc, addDoc as _addDoc,
+  updateDoc as _updateDoc, serverTimestamp as _serverTimestamp,
+  onSnapshot as _onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+window._genzFirestore = {
+  collection: _col, getDocs: _getDocs, query: _query,
+  where: _where, orderBy: _orderBy, limit: _limit,
+  doc: _doc, getDoc: _getDoc, addDoc: _addDoc,
+  updateDoc: _updateDoc, serverTimestamp: _serverTimestamp,
+  onSnapshot: _onSnapshot
+};

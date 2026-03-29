@@ -511,13 +511,10 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
         <!-- GENÇ-Z BÖLÜMÜ -->
         <div id="genczMenuBlok" style="display:none;border-top:1px solid rgba(123,92,240,.15);margin:.5rem 0;padding-top:.5rem;">
           <div style="font-size:.45rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(123,92,240,.5);padding:.3rem .8rem .2rem;">⚡ Genç-Z</div>
-          <button class="sb-btn" onclick="git('gencz-ozet',this)"><span class="ikon">📊</span> Genel Bakış</button>
+          <button class="sb-btn" onclick="git('gencz-ozet',this)"><span class="ikon">📊</span> Özet</button>
+          <button class="sb-btn" onclick="git('urunler',this)"><span class="ikon">🛍</span> Ürünlerim</button>
           <button class="sb-btn" onclick="git('gencz-icerik',this)"><span class="ikon">🎨</span> İçeriklerim</button>
           <button class="sb-btn" onclick="git('gencz-yeni',this)"><span class="ikon">✏️</span> Yeni İçerik</button>
-          <button class="sb-btn" onclick="git('gencz-magaza',this)"><span class="ikon">🛍</span> Dijital Mağazam</button>
-          <button class="sb-btn" onclick="git('gencz-kazanc',this)"><span class="ikon">💰</span> Kazancım</button>
-          <button class="sb-btn" onclick="git('gencz-portfolyo',this)"><span class="ikon">🖼</span> Portföyüm</button>
-          <button class="sb-btn" onclick="git('gencz-analitik',this)"><span class="ikon">📈</span> İçerik Analitik</button>
           <button class="sb-btn" onclick="git('gencz-ozel-istekler',this)"><span class="ikon">✨</span> Özel İstekler <span class="sb-badge" id="ozelIstekBadge" style="display:none;background:linear-gradient(135deg,#7B5CF0,#9b6ef0);"></span></button>
           <button class="sb-btn" onclick="git('gelir-gider',this)"><span class="ikon">📒</span> Gelir & Gider</button>
         </div>
@@ -1123,7 +1120,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
           <div class="oz-k"><div class="oz-n" style="color:var(--orange)" id="ustaAbonelikBitisTarih">—</div><div class="oz-l">Bitiş Tarihi</div></div>
         </div>
         <div style="display:flex;gap:1rem;flex-wrap:wrap;padding:1rem 0;">
-          <button onclick="ilanModalAc()" style="padding:.75rem 2rem;background:linear-gradient(135deg,#5a3eb0,#7B5CF0);color:#fff;font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.26em;text-transform:uppercase;border-radius:3px;font-weight:700;border:none;cursor:pointer;">+ Yeni İlan Ver</button>
+          <button onclick="git('usta-ilanlar',document.querySelector('[onclick*=usta-ilanlar]'))" style="padding:.75rem 2rem;background:linear-gradient(135deg,#5a3eb0,#7B5CF0);color:#fff;font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.26em;text-transform:uppercase;border-radius:3px;font-weight:700;border:none;cursor:pointer;">+ Yeni İlan Ver</button>
           <a href="ustam-profil.html" style="padding:.72rem 2rem;background:transparent;border:1px solid rgba(123,92,240,.3);color:#a78bfa;font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.26em;text-transform:uppercase;border-radius:3px;text-decoration:none;">Profilimi Gör</a>
         </div>
       </div>
@@ -1170,14 +1167,25 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
 
       <!-- USTA İLANLARIM -->
       <div class="sayfa" id="sayfa-usta-ilanlar">
-        <div class="sh"><span class="eyebrow">İlan Yönetimi</span><h1>İlanlarım</h1></div>
-        <div class="twrap">
-          <div class="tbaslik" style="display:flex;justify-content:space-between;align-items:center;">
-            <h3>Tüm İlanlar</h3>
-            <button onclick="ilanModalAc()" style="padding:.5rem 1.2rem;background:linear-gradient(135deg,#5a3eb0,#7B5CF0);color:#fff;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;border-radius:3px;font-weight:700;border:none;cursor:pointer;">+ Yeni İlan</button>
+        <div class="sh"><span class="eyebrow">İlan Yönetimi</span><h1>İlan <em>Ver & Yönet</em></h1></div>
+
+        <!-- YENİ İLAN FORMU — direkt açık -->
+        <div class="fkart">
+          <div class="fkart-top" onclick="toggle('ilanFormBody','ilanFormArr')">
+            <h2>➕ Yeni İlan Ver</h2>
+            <span class="arr ac" id="ilanFormArr">▲</span>
           </div>
-          <div id="ustaIlanListesi" style="margin-top:1rem;"></div>
+          <div class="fkart-body ac" id="ilanFormBody">
+            <div id="ilanFormIcerik">
+              <!-- modpanel-ilan-gencz.js doldurur -->
+              <div style="color:var(--t2);font-size:.7rem;font-style:italic;">Yükleniyor…</div>
+            </div>
+          </div>
         </div>
+
+        <!-- İLAN LİSTESİ -->
+        <div style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:300;margin:1.5rem 0 1rem;">İlanlarım</div>
+        <div id="ustaIlanListesi"></div>
       </div>
 
 

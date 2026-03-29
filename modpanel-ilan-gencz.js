@@ -65,14 +65,10 @@ const USTA_KAT_HIZMETLER = {
 };
 
 // Usta ilanı modal aç
-window.ilanModalAc = function() {
-  // Ustanın kategorisini belirle
+// Form içeriğini oluştur — sayfa yüklenince çağrılır
+function ilanFormIcerikOlustur() {
   const katRaw = (window._ustaVeri?.kategori || window._ustaVeri?.isKolu || '').toLowerCase();
   const hizmetler = USTA_KAT_HIZMETLER[katRaw] || null;
-
-  // Modal içeriği oluştur
-  const modalEl = document.getElementById('ilanModalIcerik');
-  if (!modalEl) return;
 
   const hizmetOptions = hizmetler
     ? hizmetler.map(h => `<div class="gz-kat-kart" onclick="ilanHizmetSec(this)" data-hizmet="${h}">${h}</div>`).join('')
@@ -80,89 +76,83 @@ window.ilanModalAc = function() {
         `<optgroup label="${k.toUpperCase()}">${v.map(h=>`<option>${h}</option>`).join('')}</optgroup>`
       ).join('');
 
-  modalEl.innerHTML = `
+  return `
     <div style="display:flex;flex-direction:column;gap:.9rem;">
-
       ${hizmetler ? `
-      <div class="sm-blok">
-        <div class="sm-blok-baslik">🔧 Hizmet Seçin</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.4rem;margin-top:.3rem;" id="ilanHizmetGrid">
+      <div class="fa">
+        <label>🔧 Hizmet Seçin *</label>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.4rem;" id="ilanHizmetGrid">
           ${hizmetOptions}
         </div>
         <input class="fi" id="ilanHizmetOzel" placeholder="Listede yok? Buraya yaz…" style="margin-top:.5rem;font-size:.7rem;">
       </div>` : `
-      <div class="sm-blok">
-        <div class="sm-blok-baslik">🔧 Hizmet Türü</div>
+      <div class="fa">
+        <label>🔧 Hizmet Türü *</label>
         <select class="fi" id="ilanHizmetSec" style="font-size:.72rem;">${hizmetOptions}</select>
       </div>`}
 
-      <div class="sm-blok">
-        <div class="sm-blok-baslik">📝 İlan Detayları</div>
-        <div style="display:flex;flex-direction:column;gap:.6rem;">
-          <div>
-            <label class="dan-lbl">İlan Başlığı *</label>
-            <input class="fi" id="ilanBaslik" placeholder="Örn: Ankara'da Elektrik Tesisatı" style="font-size:.72rem;">
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
-            <div>
-              <label class="dan-lbl">Başlangıç Fiyatı (₺)</label>
-              <input class="fi" id="ilanFiyat" type="number" placeholder="0" min="0" style="font-size:.72rem;">
-            </div>
-            <div>
-              <label class="dan-lbl">Fiyat Tipi</label>
-              <select class="fi" id="ilanFiyatTip" style="font-size:.72rem;">
-                <option value="saat">Saatlik</option>
-                <option value="is">İş Başı</option>
-                <option value="m2">m² başına</option>
-                <option value="gorusme">Görüşmeye göre</option>
-              </select>
-            </div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
-            <div>
-              <label class="dan-lbl">Şehir</label>
-              <input class="fi" id="ilanSehir" placeholder="Ankara" style="font-size:.72rem;" value="${window._ustaVeri?.sehir||''}">
-            </div>
-            <div>
-              <label class="dan-lbl">İlçe</label>
-              <input class="fi" id="ilanIlce" placeholder="Çankaya" style="font-size:.72rem;" value="${window._ustaVeri?.ilce||''}">
-            </div>
-          </div>
-          <div>
-            <label class="dan-lbl">Açıklama</label>
-            <textarea class="fi" id="ilanAciklama" placeholder="Deneyiminizi, kullandığınız malzemeleri, garantiyi anlatın…" style="font-size:.72rem;min-height:80px;resize:vertical;"></textarea>
-          </div>
-          <div>
-            <label class="dan-lbl">Müsait Günler / Saatler</label>
-            <input class="fi" id="ilanMusait" placeholder="Hafta içi 08:00-18:00, Cumartesi 09:00-14:00" style="font-size:.72rem;" value="${window._ustaVeri?.availability||''}">
+      <div class="f2">
+        <div class="fa">
+          <label>İlan Başlığı *</label>
+          <input class="fi" id="ilanBaslik" placeholder="Örn: Ankara'da Elektrik Tesisatı" style="font-size:.72rem;">
+        </div>
+        <div class="fa">
+          <label>Başlangıç Fiyatı (₺)</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
+            <input class="fi" id="ilanFiyat" type="number" placeholder="0" min="0" style="font-size:.72rem;">
+            <select class="fi" id="ilanFiyatTip" style="font-size:.72rem;">
+              <option value="saat">Saatlik</option>
+              <option value="is">İş Başı</option>
+              <option value="m2">m² başına</option>
+              <option value="gorusme">Görüşmeye göre</option>
+            </select>
           </div>
         </div>
       </div>
 
+      <div class="f2">
+        <div class="fa">
+          <label>Şehir</label>
+          <input class="fi" id="ilanSehir" placeholder="Ankara" style="font-size:.72rem;" value="${window._ustaVeri?.sehir||''}">
+        </div>
+        <div class="fa">
+          <label>İlçe</label>
+          <input class="fi" id="ilanIlce" placeholder="Çankaya" style="font-size:.72rem;" value="${window._ustaVeri?.ilce||''}">
+        </div>
+      </div>
+
+      <div class="fa">
+        <label>Açıklama</label>
+        <textarea class="fi" id="ilanAciklama" placeholder="Deneyiminizi, kullandığınız malzemeleri, garantiyi anlatın…" style="font-size:.72rem;min-height:80px;resize:vertical;"></textarea>
+      </div>
+
+      <div class="fa">
+        <label>Müsait Günler / Saatler</label>
+        <input class="fi" id="ilanMusait" placeholder="Hafta içi 08:00-18:00, Cumartesi 09:00-14:00" style="font-size:.72rem;" value="${window._ustaVeri?.availability||''}">
+      </div>
+
       <div class="ferr" id="ilanErr" style="display:none;"></div>
-      <button onclick="ilanGonder()" style="padding:1rem;background:linear-gradient(135deg,#5a3eb0,#7B5CF0);color:#fff;border:none;border-radius:6px;font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.1em;cursor:pointer;">✦ Admin Onayına Gönder</button>
-    </div>
-  `;
+      <div class="fok" id="ilanOk" style="display:none;"></div>
 
-  // Kart seçimi için CSS
-  if (!document.getElementById('ilanKatCSS')) {
-    const s = document.createElement('style');
-    s.id = 'ilanKatCSS';
-    s.textContent = `.gz-kat-kart{padding:.45rem .7rem;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:6px;font-size:.65rem;cursor:pointer;transition:all .15s;text-align:center;} .gz-kat-kart:hover{border-color:var(--accent);} .gz-kat-kart.secili{background:rgba(123,92,240,.15);border-color:var(--accent);color:var(--accent2);font-weight:700;}`;
-    document.head.appendChild(s);
+      <div style="display:flex;gap:.6rem;">
+        <button onclick="ilanGonder()" class="submit-btn" style="flex:2;">✦ Admin Onayına Gönder</button>
+        <button onclick="ilanFormSifirla()" style="padding:.9rem 1.2rem;background:transparent;border:1px solid rgba(201,168,76,.22);color:var(--t2);font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;border-radius:3px;">✕ Sıfırla</button>
+      </div>
+    </div>`;
+}
+
+window.ilanFormSifirla = function() {
+  const el = document.getElementById('ilanFormIcerik');
+  if(el) el.innerHTML = ilanFormIcerikOlustur();
+};
+
+// Sayfa açılınca formu doldur
+window.ilanSayfasiAc = function() {
+  const el = document.getElementById('ilanFormIcerik');
+  if(el && el.children.length <= 1) {
+    el.innerHTML = ilanFormIcerikOlustur();
   }
-
-  document.getElementById('ilanModal').classList.add('open');
-};
-
-window.ilanHizmetSec = function(el) {
-  document.querySelectorAll('#ilanHizmetGrid .gz-kat-kart').forEach(k=>k.classList.remove('secili'));
-  el.classList.add('secili');
-};
-
-window.ilanModalKapat = function(e) {
-  if (e && e.target !== document.getElementById('ilanModal')) return;
-  document.getElementById('ilanModal').classList.remove('open');
+  if(typeof ustaYukle === 'function') ustaYukle();
 };
 
 window.ilanGonder = async function() {
@@ -191,7 +181,7 @@ window.ilanGonder = async function() {
       ustaUid    : window._aktifUid,
       ustaAdi    : window._ustaVeri?.displayName || window._ustaVeri?.ad || '',
       ustaEmail  : window._ustaVeri?.email || '',
-      kategori   : (window._ustaVeri?.kategori||_ustaVeri?.isKolu||hizmet).toLowerCase(),
+      kategori   : (window._ustaVeri?.kategori || window._ustaVeri?.isKolu || hizmet).toLowerCase(),
       hizmet,
       ad         : baslik,
       fiyat,
@@ -203,9 +193,10 @@ window.ilanGonder = async function() {
       durum      : 'bekliyor',
       ts         : serverTimestamp()
     });
-    document.getElementById('ilanModal').classList.remove('open');
-    (typeof toast==='function'?toast:window.toast||console.log)('✦ İlanınız admin onayına gönderildi!');
-    ustaYukle();
+    const okEl = document.getElementById('ilanOk');
+    if(okEl){ okEl.textContent='✦ İlanınız admin onayına gönderildi!'; okEl.style.display='block'; setTimeout(()=>okEl.style.display='none',4000); }
+    ilanFormSifirla();
+    if(typeof ustaYukle==='function') ustaYukle();
   } catch(e) {
     errEl.textContent='Hata: '+e.message; errEl.style.display='block';
   }
@@ -494,6 +485,7 @@ function patchGit() {
     _orig(id, btn);
     if (id==='gencz-yeni') genczKatGridOlustur();
     if (id==='gencz-icerik'||id==='gencz-ozet') genczYukle();
+    if (id==='usta-ilanlar') ilanSayfasiAc();
   };
 }
 patchGit();

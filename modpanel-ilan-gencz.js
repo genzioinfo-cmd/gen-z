@@ -374,10 +374,11 @@ window.genczYukle = async function genczYukle() {
   try {
     const snap = await getDocs(query(
       collection(db,'gencz_icerikler'),
-      where('uid','==',window._aktifUid),
-      orderBy('ts','desc')
+      where('uid','==',window._aktifUid)
     )).catch(()=>null);
     _gzIcerikler = snap ? snap.docs.map(d=>({id:d.id,...d.data()})) : [];
+    // Client-side sırala (index gerektirmez)
+    _gzIcerikler.sort((a,b)=>(b.ts?.seconds||0)-(a.ts?.seconds||0));
 
     // Özet
     const s = (id,v) => { const el=document.getElementById(id); if(el)el.textContent=v; };

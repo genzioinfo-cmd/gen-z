@@ -28,10 +28,9 @@
     <div class="info-row-icon">⚡</div>
     <div class="info-row-content">
       <div class="info-row-label">Rol</div>
-      <div class="info-row-val" id="info-role">Üye</div>
+      <div class="info-row-val" id="info-role">Genç-Z</div>
     </div>
-    <!-- Rol değiştirilemez, sadece okunabilir -->
-    <span style="font-size:11px;color:var(--text3,#888);padding:6px 10px;opacity:.6;">Sabit</span>
+    <button class="info-edit-btn" onclick="editField('role')">Düzenle</button>
   </div>
   <div class="info-row">
     <div class="info-row-icon">📱</div>
@@ -50,49 +49,9 @@
     <button class="info-edit-btn" onclick="editField('city')">Ekle</button>
   </div>
 </div>
-<!-- Gizli panel linkleri - sadece admin/mod rolündeyse görünür -->
-<div id="gizli-panel-links" style="display:none;margin:12px 0 4px 0;display:none;">
-  <a id="link-adminpanel" href="adminpanel.html" style="display:none;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);color:#F0C55C;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:8px;">
-    👑 Admin Paneli
-  </a>
-  <a id="link-modpanel" href="modpanel.html" style="display:none;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;background:rgba(123,92,240,.08);border:1px solid rgba(123,92,240,.25);color:#a78bfa;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:8px;">
-    🛡️ Moderatör Paneli
-  </a>
-</div>
-
 <div class="signout-row">
   <button class="btn-signout" onclick="doSignOut()">🚪 Çıkış Yap</button>
 </div>
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
-<script src="tema-loader.js"></script>
 <script src="cookie-consent.js"></script>
-<script>
-// Admin/Mod panel linklerini rol kontrolüyle göster
-(function _panelLinkKontrol() {
-  function goster() {
-    const ku = window._genzKullanici;
-    if (!ku) return;
-    const rol = ku.rol || '';
-    const roller = ku.roller || [];
-    const isAdmin = rol === 'admin' || roller.includes('admin');
-    const isMod   = rol === 'mod'   || roller.includes('mod');
-    if (isAdmin || isMod) {
-      document.getElementById('gizli-panel-links').style.display = 'flex';
-      document.getElementById('gizli-panel-links').style.flexDirection = 'column';
-    }
-    if (isAdmin) {
-      const el = document.getElementById('link-adminpanel');
-      el.style.display = 'flex';
-    }
-    if (isMod || isAdmin) {
-      const el = document.getElementById('link-modpanel');
-      el.style.display = 'flex';
-    }
-  }
-  // firebase-sync.js yüklenince tetiklenir
-  window.addEventListener('genzSyncYuklendi', goster);
-  // Zaten yüklüyse hemen kontrol
-  if (window._genzKullanici) goster();
-})();
-</script>

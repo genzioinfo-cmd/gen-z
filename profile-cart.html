@@ -19,74 +19,12 @@
       return Array.isArray(p) ? p.map(i => ({...i, id: String(i.id), price: Number(i.price)||0, qty: Math.max(1, parseInt(i.qty)||1)})) : [];
     } catch { return []; }
   }
-
-  // Firebase'e sepeti kaydet (async, fire-and-forget)
-  async function syncToFirebase(items) {
-    try {
-      const uid = window._genzAuth?.auth?.currentUser?.uid
-        || JSON.parse(localStorage.getItem('genz-user') || 'null')?.uid;
-      if (!uid) return; // Giriş yapılmamış
-      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-      const { getFirestore, doc, setDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-      const app = getApps().length ? getApps()[0] : initializeApp({
-        apiKey: 'AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ',
-        authDomain: 'gen-z-io.firebaseapp.com', projectId: 'gen-z-io',
-        storageBucket: 'gen-z-io.firebasestorage.app',
-        messagingSenderId: '97338868944', appId: '1:97338868944:web:d7b429e416d8c505b14ad5'
-      });
-      const db = getFirestore(app);
-      await setDoc(doc(db, 'sepetler', uid), {
-        uid, items,
-        guncellendi: serverTimestamp()
-      });
-    } catch(e) {
-      console.warn('Sepet Firebase sync hatası:', e);
-    }
-  }
-
-  // Firebase'den sepeti yükle (sayfa açılışında)
-  async function loadFromFirebase() {
-    try {
-      const uid = window._genzAuth?.auth?.currentUser?.uid
-        || JSON.parse(localStorage.getItem('genz-user') || 'null')?.uid;
-      if (!uid) return;
-      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-      const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-      const app = getApps().length ? getApps()[0] : initializeApp({
-        apiKey: 'AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ',
-        authDomain: 'gen-z-io.firebaseapp.com', projectId: 'gen-z-io',
-        storageBucket: 'gen-z-io.firebasestorage.app',
-        messagingSenderId: '97338868944', appId: '1:97338868944:web:d7b429e416d8c505b14ad5'
-      });
-      const db = getFirestore(app);
-      const snap = await getDoc(doc(db, 'sepetler', uid));
-      if (snap.exists()) {
-        const fbItems = snap.data().items || [];
-        const localItems = load();
-        // Merge: Firebase ve localStorage'ı birleştir, aynı ID'yi topla
-        const merged = [...fbItems];
-        localItems.forEach(li => {
-          const existing = merged.find(m => m.id === li.id);
-          if (!existing) merged.push(li);
-        });
-        if (merged.length > 0) {
-          localStorage.setItem(KEY, JSON.stringify(merged));
-          render(); // Güncellenen sepeti göster
-        }
-      }
-    } catch(e) {
-      console.warn('Sepet Firebase yükleme hatası:', e);
-    }
-  }
-
   function save(items) {
     try {
       localStorage.setItem(KEY, JSON.stringify(items));
       // profil badge'ini güncelle
       const badge = document.getElementById('cart-badge');
       if (badge) badge.textContent = items.reduce((t,i) => t + (i.qty||1), 0) || '';
-      // Firebase'e de yaz (async)
-      syncToFirebase(items);
     } catch {}
   }
 
@@ -158,11 +96,8 @@
   }
 
   render();
-  // Firebase'den sepeti çek (giriş yapılmışsa)
-  loadFromFirebase();
 })();
 </script>
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
-<script src="tema-loader.js"></script>
 <script src="cookie-consent.js"></script>

@@ -456,8 +456,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
     <li><a href="ustam.html" data-tr="Ustam" data-en="Ustam">Ustam</a></li>
     <li><a href="gen-z.html" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a></li>
     <li><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a></li>
-    <li><a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a><a href="hakkimizda.html">Hakkımızda</a></li>
-    <li><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a></li>
+    <li><a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a></li>
     <li><a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a></li>
     <li><a href="birlikte-buyuyelim.html" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a></li>
     <li><a href="elden-ele.html" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a></li>
@@ -478,7 +477,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
   <a href="ustam.html" data-tr="Ustam" data-en="Ustam">Ustam</a>
   <a href="gen-z.html" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a>
   <a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a>
-  <a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a><a href="hakkimizda.html">Hakkımızda</a>
+  <a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a>
   <a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a>
   <a href="birlikte-buyuyelim.html" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a>
   <a href="elden-ele.html" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a>
@@ -537,12 +536,6 @@ nav, .modal-overlay-auth, .modal-box, .toast {
       <div class="form-group">
         <label class="form-label">Şifre</label>
         <input class="form-input" id="signup-pass" type="password" placeholder="En az 8 karakter"/>
-      </div>
-      <div class="form-group" style="margin-bottom:4px;">
-        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px;color:var(--text2);line-height:1.5;">
-          <input type="checkbox" id="signup-kvkk" style="margin-top:2px;accent-color:var(--accent);flex-shrink:0;"/>
-          <span><a href="gizlilik.html" target="_blank" style="color:var(--accent);text-decoration:none;">Gizlilik Politikası</a>'nı ve <a href="kullanim-sartlari.html" target="_blank" style="color:var(--accent);text-decoration:none;">Kullanım Şartları</a>'nı okudum, kabul ediyorum.</span>
-        </label>
       </div>
       <button class="btn-submit" onclick="doSignUp()">Kayıt Ol</button>
     </div>
@@ -720,72 +713,7 @@ function renderStars(rating) {
 
 /* ── PAGE SCRIPT ── */
 initThemeLang();
-
-const MAGAZA_FB_CONFIG = {
-  apiKey: 'AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ',
-  authDomain: 'gen-z-io.firebaseapp.com', projectId: 'gen-z-io',
-  storageBucket: 'gen-z-io.firebasestorage.app',
-  messagingSenderId: '97338868944', appId: '1:97338868944:web:d7b429e416d8c505b14ad5'
-};
-const MAGAZA_GRAD = [
-  ['rgba(240,197,92,0.18)','rgba(123,92,240,0.1)'],
-  ['rgba(92,240,180,0.15)','rgba(123,92,240,0.1)'],
-  ['rgba(240,92,130,0.15)','rgba(92,140,240,0.1)'],
-  ['rgba(92,180,240,0.15)','rgba(240,140,92,0.1)'],
-  ['rgba(180,92,240,0.15)','rgba(92,240,197,0.1)'],
-];
-const MAGAZA_CAT_EMOJI = { bakim:'🧴', dekor:'🖼️', giyim:'👗', yiyecek:'🍵', kirtasiye:'🖊️', teknoloji:'🎧', bahce:'🌱', sanat:'🎨' };
-
-async function fetchMagazaSaticiUrunler(magazaId) {
-  try {
-    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-    const { getFirestore, collection, getDocs, query, where, orderBy, limit } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    const app = getApps().length ? getApps()[0] : initializeApp(MAGAZA_FB_CONFIG);
-    const db = getFirestore(app);
-    let snap;
-    try {
-      snap = await getDocs(query(
-        collection(db, 'magaza_urunler'),
-        where('durum', '==', 'onaylandi'),
-        where('magazaId', '==', magazaId),
-        orderBy('ts', 'desc'), limit(100)
-      ));
-    } catch(e) {
-      snap = await getDocs(query(
-        collection(db, 'magaza_urunler'),
-        where('magazaId', '==', magazaId),
-        orderBy('ts', 'desc'), limit(100)
-      ));
-    }
-    return snap.docs.map((doc, i) => {
-      const u = { id: doc.id, ...doc.data() };
-      const grad = MAGAZA_GRAD[i % MAGAZA_GRAD.length];
-      const initials = (u.magazaAd||'M').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-      const resim = u.resimler?.[0] || null;
-      return {
-        id: u.id, name: u.ad || '',
-        price: u.kdvDahilFiyat || u.fiyat || 0, oldPrice: u.eskiFiyat || null,
-        rating: u.rating || 0, reviews: u.reviewCount || 0,
-        badge: u.badge || null, tags: u.etiketler || [],
-        category: u.kategori || 'diger', desc: u.aciklama || '',
-        emoji: resim ? null : (MAGAZA_CAT_EMOJI[u.kategori] || '🛍️'),
-        resim, gradA: grad[0], gradB: grad[1],
-        seller: {
-          id: u.magazaId || u.id, name: u.magazaAd || 'Mağaza',
-          initials, sales: u.satisAdedi || 0,
-          joined: u.ts ? new Date(u.ts.seconds*1000).getFullYear().toString() : '2025',
-          rating: u.magazaRating || 0, ratingCount: u.magazaRatingCount || 0,
-          desc: u.magazaAciklama || '', comments: []
-        }
-      };
-    });
-  } catch(e) {
-    console.warn('Mağaza satıcı ürünleri yüklenemedi:', e);
-    return [];
-  }
-}
-
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.mobile-menu a').forEach(a => {
     a.addEventListener('click', () => {
       const mm = document.getElementById('mobileMenu');
@@ -799,16 +727,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   requestAnimationFrame(() => { document.body.style.opacity = '1'; });
 
   const sellerId = getParam('seller');
-  if (!sellerId) {
-    document.querySelector('.satici-inner').innerHTML = '<div style="text-align:center;padding:80px 20px;color:var(--text3);"><div style="font-size:48px;margin-bottom:16px;">😕</div><div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--text2);margin-bottom:8px;">Satıcı bulunamadı</div><div style="font-size:14px;"><a href="magaza.html" style="color:var(--accent)">← Mağazaya dön</a></div></div>';
-    return;
-  }
-
-  // Loading
-  document.getElementById('saticiHeader').innerHTML = '<div style="color:var(--text3);font-size:14px;padding:20px 0">Yükleniyor…</div>';
-
-  const products = await fetchMagazaSaticiUrunler(sellerId);
-  const seller = products.length > 0 ? products[0].seller : null;
+  const seller = getSellerById(sellerId);
+  const products = getProductsBySeller(sellerId);
 
   if (!seller) {
     document.querySelector('.satici-inner').innerHTML = '<div style="text-align:center;padding:80px 20px;color:var(--text3);"><div style="font-size:48px;margin-bottom:16px;">😕</div><div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--text2);margin-bottom:8px;">Satıcı bulunamadı</div><div style="font-size:14px;"><a href="magaza.html" style="color:var(--accent)">← Mağazaya dön</a></div></div>';
@@ -817,37 +737,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   document.title = 'GEN-Z · ' + seller.name;
   const badge = getBadgeLevel(seller.sales);
+
   document.getElementById('breadcrumb').innerHTML = '<a href="magaza.html">Mağaza</a><span class="sep">›</span><span class="current">' + seller.name + '</span>';
 
+  /* Takip durumu — localStorage'da kullanıcı adına bağlı */
   const followKey = 'genz-follow-' + sellerId;
   let isFollowing = JSON.parse(_ls.get(followKey, 'false'));
   const fakeFollowers = Math.floor(seller.sales * 0.7) + 12;
 
   function getFollowBtnHTML() {
-    return isFollowing
-      ? '<button class="btn-follow following" id="followBtn" onclick="toggleFollow()">✓ Takip Ediliyor</button>'
-      : '<button class="btn-follow" id="followBtn" onclick="toggleFollow()">+ Takip Et</button>';
+    if (isFollowing) {
+      return '<button class="btn-follow following" id="followBtn" data-seller="' + (seller.id || '') + '" onclick="toggleFollow()">✓ Takip Ediliyor</button>';
+    }
+    return '<button class="btn-follow" id="followBtn" data-seller="' + (seller.id || '') + '" onclick="toggleFollow()">+ Takip Et</button>';
   }
 
   function renderHeader() {
     const followerCount = isFollowing ? fakeFollowers + 1 : fakeFollowers;
-    document.getElementById('saticiHeader').innerHTML =
-      '<div class="satici-avatar"><div class="satici-badge-ring badge-ring-' + badge.level + '"></div>' + seller.initials + '</div>' +
-      '<div class="satici-meta">' +
-        '<div class="satici-name">' + seller.name + ' <span class="seller-badge-pill badge-' + badge.level + '">' + badge.label + '</span></div>' +
-        '<div class="satici-desc">' + (seller.desc || '') + '</div>' +
-        '<div class="satici-stats-row">' +
-          '<div class="satici-stat"><div class="satici-stat-num">' + seller.sales.toLocaleString('tr-TR') + '</div><div class="satici-stat-label">Satış</div></div>' +
-          '<div class="satici-stat"><div class="satici-stat-num">' + (seller.rating || '—') + '</div><div class="satici-stat-label">Puan</div></div>' +
-          '<div class="satici-stat"><div class="satici-stat-num">' + products.length + '</div><div class="satici-stat-label">Ürün</div></div>' +
-          '<div class="satici-stat"><div class="satici-stat-num">' + seller.joined + '</div><div class="satici-stat-label">Üye</div></div>' +
-        '</div>' +
-        '<div class="satici-follow-bar"><span><strong>' + followerCount.toLocaleString('tr-TR') + '</strong> takipçi</span><span class="follow-dot"></span><span><strong>' + (seller.ratingCount || 0) + '</strong> değerlendirme</span></div>' +
-        '<div class="satici-actions">' + getFollowBtnHTML() +
-          '<button class="btn-satici-action" onclick="sendMessage()">💬 Mesaj Gönder</button>' +
-          '<button class="btn-satici-action" onclick="shareSeller()">↗ Paylaş</button>' +
-        '</div>' +
-      '</div>';
+    document.getElementById('saticiHeader').innerHTML = '<div class="satici-avatar"><div class="satici-badge-ring badge-ring-' + badge.level + '"></div>' + seller.initials + '</div><div class="satici-meta"><div class="satici-name">' + seller.name + ' <span class="seller-badge-pill badge-' + badge.level + '">' + badge.label + '</span></div><div class="satici-desc">' + (seller.desc || '') + '</div><div class="satici-stats-row"><div class="satici-stat"><div class="satici-stat-num">' + seller.sales.toLocaleString('tr-TR') + '</div><div class="satici-stat-label">Satış</div></div><div class="satici-stat"><div class="satici-stat-num">' + seller.rating + '</div><div class="satici-stat-label">Puan</div></div><div class="satici-stat"><div class="satici-stat-num">' + products.length + '</div><div class="satici-stat-label">Ürün</div></div><div class="satici-stat"><div class="satici-stat-num">' + seller.joined + '</div><div class="satici-stat-label">Üye</div></div></div><div class="satici-follow-bar"><span><strong>' + followerCount.toLocaleString('tr-TR') + '</strong> takipçi</span><span class="follow-dot"></span><span><strong>' + seller.ratingCount + '</strong> değerlendirme</span></div><div class="satici-actions">' + getFollowBtnHTML() + '<button class="btn-satici-action" onclick="sendMessage()">💬 Mesaj Gönder</button><button class="btn-satici-action" onclick="shareSeller()">↗ Paylaş</button></div></div>';
   }
 
   window.toggleFollow = function() {
@@ -855,12 +762,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     isFollowing = !isFollowing;
     _ls.set(followKey, JSON.stringify(isFollowing));
     renderHeader();
-    showToast(isFollowing ? seller.name + ' takip ediliyor ✓' : 'Takipten çıkıldı');
+    if (isFollowing) {
+      showToast(seller.name + ' takip ediliyor ✓');
+    } else {
+      showToast('Takipten çıkıldı');
+    }
   };
+
   window.sendMessage = function() {
     if (!currentUser) { openAuth('signin'); showToast('Mesaj göndermek için giriş yapmalısın ⚠️'); return; }
     showToast('Mesajlaşma sistemi yakında aktif olacak 🔜');
   };
+
   window.shareSeller = function() {
     if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
     showToast('Mağaza bağlantısı kopyalandı ↗');
@@ -869,17 +782,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderHeader();
 
   /* Ürünler */
-  let html = '<div class="satici-section-title">🏪 Ürünleri (' + products.length + ')</div>';
-  if (products.length === 0) {
-    html += '<div style="text-align:center;padding:40px 0;color:var(--text3);font-size:14px;">Bu mağazaya ait onaylı ürün bulunamadı.</div>';
-  } else {
-    html += '<div class="satici-products-grid">';
-    products.forEach(p => {
-      const badgeHtml = p.badge ? '<span class="product-badge badge-' + p.badge + '">' + (p.badge === 'new' ? '✦ Yeni' : p.badge === 'hot' ? '🔥 Popüler' : '🏷️ İndirim') + '</span>' : '';
-      const imgHtml = p.resim
-        ? '<img src="' + p.resim + '" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" loading="lazy" alt="' + p.name + '">'
-        : '<div class="product-image-gradient" style="--grad-a:' + p.gradA + ';--grad-b:' + p.gradB + '"></div>' + badgeHtml + '<div class="product-image-placeholder">' + (p.emoji || '🛍️') + '</div>';
-      html += '<a class="product-card" href="magaza-urun.html?id=' + p.id + '"><div class="product-image">' + imgHtml + '</div><div class="product-info"><div class="product-name">' + p.name + '</div><div class="product-meta"><span class="product-rating">' + renderStars(p.rating) + '</span><span class="product-review-count">(' + p.reviews + ')</span></div><div class="product-footer"><div class="product-price"><span class="currency">₺</span>' + p.price.toLocaleString('tr-TR') + (p.oldPrice ? '<span class="old-price">₺' + p.oldPrice + '</span>' : '') + '</div></div></div></a>';
+  let html = '<div class="satici-section-title">🏪 Ürünleri (' + products.length + ')</div><div class="satici-products-grid">';
+  products.forEach(p => {
+    const badgeHtml = p.badge ? '<span class="product-badge badge-' + p.badge + '">' + (p.badge === 'new' ? '✦ Yeni' : p.badge === 'hot' ? '🔥 Popüler' : '🏷️ İndirim') + '</span>' : '';
+    html += '<a class="product-card" href="magaza-urun.html?id=' + p.id + '"><div class="product-image"><div class="product-image-gradient" style="--grad-a:' + p.gradA + ';--grad-b:' + p.gradB + '"></div>' + badgeHtml + '<div class="product-image-placeholder">' + p.emoji + '</div></div><div class="product-info"><div class="product-name">' + p.name + '</div><div class="product-meta"><span class="product-rating">' + renderStars(p.rating) + '</span><span class="product-review-count">(' + p.reviews + ')</span></div><div class="product-footer"><div class="product-price"><span class="currency">₺</span>' + p.price.toLocaleString('tr-TR') + (p.oldPrice ? '<span class="old-price">₺' + p.oldPrice + '</span>' : '') + '</div></div></div></a>';
+  });
+  html += '</div>';
+
+  /* Yorumlar */
+  const allComments = [];
+  products.forEach(p => { p.seller.comments.forEach(c => allComments.push(c)); });
+  if (allComments.length > 0) {
+    html += '<div class="satici-reviews"><div class="satici-section-title">💬 Müşteri Yorumları (' + allComments.length + ')</div>';
+    allComments.forEach(c => {
+      html += '<div class="comment-item"><div class="comment-header"><div class="comment-avatar">' + c.user.charAt(0).toUpperCase() + '</div><span class="comment-user">' + c.user + '</span><span class="comment-stars">' + '★'.repeat(c.stars) + '</span><span class="comment-date">' + c.date + '</span></div><div class="comment-text">' + c.text + '</div></div>';
     });
     html += '</div>';
   }
@@ -890,24 +806,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
-<script src="tema-loader.js"></script>
 <script src="cookie-consent.js"></script>
-
-<!-- FOOTER -->
-
-<!-- GEN-Z Reklam Alanı: Sayfa altı (Admin'den yönet) -->
-<div id="genz-rek-1" style="display:none;max-width:960px;margin:0 auto 20px auto;padding:0 24px;"></div>
-<footer style="position:relative;z-index:1;border-top:1px solid var(--border);padding:24px;text-align:center;margin-top:auto;">
-  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px;font-size:12px;color:var(--text3);">
-    <a href="hakkimizda.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Hakkımızda</a>
-    <span>·</span>
-    <a href="gizlilik.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Gizlilik Politikası</a>
-    <span>·</span>
-    <a href="kullanim-sartlari.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Kullanım Şartları</a>
-    <span>·</span>
-    <a href="iletisim.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">İletişim</a>
-  </div>
-  <div style="margin-top:10px;font-size:11px;color:var(--text3);opacity:.5;">© 2025 GEN-Z · Tüm hakları saklıdır.</div>
-</footer>
 </body>
 </html>

@@ -279,8 +279,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
     <li><a href="magaza.html" data-tr="Mağaza" data-en="Shop">Mağaza</a></li>
     <li><a href="ustam.html" class="active" data-tr="Ustam" data-en="Ustam">Ustam</a></li>
     <li><a href="gen-z.html" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a></li>
-    <li><a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a><a href="hakkimizda.html">Hakkımızda</a></li>
-    <li><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a></li>
+    <li><a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a></li>
     <li><a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a></li>
     <li><a href="birlikte-buyuyelim.html" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a></li>
     <li><a href="elden-ele.html" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a></li>
@@ -296,14 +295,11 @@ nav, .modal-overlay-auth, .modal-box, .toast {
   <a href="magaza.html" data-tr="Mağaza" data-en="Shop">Mağaza</a>
   <a href="ustam.html" data-tr="Ustam" data-en="Ustam">Ustam</a>
   <a href="gen-z.html" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a>
-  <a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a><a href="hakkimizda.html">Hakkımızda</a>
+  <a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a>
   <a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a>
   <a href="birlikte-buyuyelim.html" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a>
   <a href="elden-ele.html" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a>
 </nav>
-<!-- GEN-Z Üst Reklam Bandı (Admin'den yönet) -->
-<div id="genz-rek-2" style="display:none;width:100%;"></div>
-
 
 
 <!-- PAGE HEADER -->
@@ -375,12 +371,6 @@ nav, .modal-overlay-auth, .modal-box, .toast {
       <div class="form-group"><label class="form-label">Kullanıcı Adı</label><div class="input-wrap"><span class="input-prefix">@</span><input class="form-input username-field" id="signup-username" type="text" placeholder="kullaniciadin"/></div></div>
       <div class="form-group"><label class="form-label">E-posta</label><input class="form-input" id="signup-email" type="email" placeholder="ornek@mail.com"/></div>
       <div class="form-group"><label class="form-label">Şifre</label><input class="form-input" id="signup-pass" type="password" placeholder="En az 8 karakter"/></div>
-      <div class="form-group" style="margin-bottom:4px;">
-        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px;color:var(--text2);line-height:1.5;">
-          <input type="checkbox" id="signup-kvkk" style="margin-top:2px;accent-color:var(--accent);flex-shrink:0;"/>
-          <span><a href="gizlilik.html" target="_blank" style="color:var(--accent);text-decoration:none;">Gizlilik Politikası</a>'nı ve <a href="kullanim-sartlari.html" target="_blank" style="color:var(--accent);text-decoration:none;">Kullanım Şartları</a>'nı okudum, kabul ediyorum.</span>
-        </label>
-      </div>
       <button class="btn-submit" onclick="doSignUp()">Kayıt Ol</button>
     </div>
     <div class="auth-panel" id="panel-forgot">
@@ -410,16 +400,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
 
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="categories.js"></script>
-<script src="data.js"></script><script>
-// ── Davet referans kodunu sessionStorage'a kaydet ──
-(function() {
-  try {
-    const ref = new URLSearchParams(location.search).get('ref');
-    if (ref) sessionStorage.setItem('genz-davet-ref', ref);
-  } catch(e) {}
-})();
-
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="categories.js"></script><script>
 /* ── MAGAZA-DATA (inline) ── */
 /* ══════════════════════════════════════════════════════════
    GEN-Z MAĞAZA — Paylaşılan Veri & Yardımcılar
@@ -877,90 +858,19 @@ const DEMO_USTALAR = [
     comments:[{user:'le**',stars:5,date:'Şubat 2025',text:'İnşaat sonrası temizliği pırıl pırıl yaptılar.'}] },
 ];
 
-let USTALAR = [...DEMO_USTALAR]; // Firebase yüklenince güncellenir
-
-function getUstaById(id) { return USTALAR.find(u => u.id === id) || DEMO_USTALAR.find(u => u.id === id); }
-function getUstalarByCategory(catId) {
-  const list = USTALAR.length ? USTALAR : DEMO_USTALAR;
-  return catId === 'all' ? list : list.filter(u => u.category === catId);
-}
+function getUstaById(id) { return DEMO_USTALAR.find(u => u.id === id); }
+function getUstalarByCategory(catId) { return catId === 'all' ? DEMO_USTALAR : DEMO_USTALAR.filter(u => u.category === catId); }
 function renderStars(r) { return '★'.repeat(Math.round(r)) + '☆'.repeat(5 - Math.round(r)); }
 
-async function fetchUstalarFirebase() {
-  try {
-    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-    const { getFirestore, collection, getDocs, query, where, orderBy, limit } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    const firebaseConfig = {
-      apiKey: 'AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ',
-      authDomain: 'gen-z-io.firebaseapp.com', projectId: 'gen-z-io',
-      storageBucket: 'gen-z-io.firebasestorage.app',
-      messagingSenderId: '97338868944',
-      appId: '1:97338868944:web:d7b429e416d8c505b14ad5'
-    };
-    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const q = query(
-      collection(db, 'usta_ilanlar'),
-      where('durum', '==', 'onaylandi'),
-      orderBy('ts', 'desc'),
-      limit(100)
-    );
-    const snap = await getDocs(q);
-    if (snap.empty) return; // DEMO_USTALAR korunur
-    const GRAD_PAIRS = [
-      ['rgba(240,197,92,0.15)','rgba(240,140,60,0.1)'],
-      ['rgba(92,160,240,0.15)','rgba(92,240,180,0.1)'],
-      ['rgba(123,92,240,0.15)','rgba(240,197,92,0.08)'],
-      ['rgba(240,140,60,0.15)','rgba(140,40,70,0.1)'],
-      ['rgba(20,60,80,0.18)','rgba(92,180,220,0.1)'],
-    ];
-    USTALAR = snap.docs.map((doc, i) => {
-      const u = { id: doc.id, ...doc.data() };
-      const grad = GRAD_PAIRS[i % GRAD_PAIRS.length];
-      const initials = (u.ustaAd || u.ad || 'U').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-      return {
-        id: u.id,
-        name: u.ustaAd || u.ad || '',
-        initials,
-        title: u.uzmanlik || u.title || '',
-        category: u.kategori || 'diger',
-        rating: u.rating || 0,
-        reviewCount: u.reviewCount || 0,
-        jobCount: u.isAdedi || 0,
-        joined: u.ts ? new Date(u.ts.seconds*1000).getFullYear().toString() : '2025',
-        city: u.sehir || '',
-        district: u.ilce || '',
-        desc: u.aciklama || '',
-        tags: u.etiketler || [],
-        gradA: grad[0], gradB: grad[1],
-        badge: u.badge || null,
-        comments: u.yorumlar || []
-      };
-    });
-    // İş kolları sayılarını güncelle
-    document.querySelectorAll('.is-kolu-count').forEach(el => {
-      const card = el.closest('.is-kolu-card');
-      if (!card) return;
-      const catId = (card.getAttribute('href') || '').split('cat=')[1];
-      if (catId) el.textContent = getUstalarByCategory(catId).length + ' usta';
-    });
-  } catch(e) {
-    console.warn('Ustalar Firebase hatası:', e);
-    USTALAR = [...DEMO_USTALAR];
-  }
-}
 
 /* ── PAGE SCRIPT ── */
 initThemeLang();
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.mobile-menu a').forEach(a => {
     a.addEventListener('click', () => { const mm=document.getElementById('mobileMenu'); const hb=document.getElementById('hamburgerBtn'); if(mm)mm.classList.remove('open'); if(hb)hb.classList.remove('open'); });
   });
   document.body.style.opacity='0'; document.body.style.transition='opacity 0.3s';
   requestAnimationFrame(() => { document.body.style.opacity='1'; });
-
-  /* Firebase'den ustaları çek (arka planda) */
-  fetchUstalarFirebase();
 
   /* Planlar */
   const pg = document.getElementById('plansGrid');
@@ -1032,22 +942,5 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
-
-<!-- FOOTER -->
-
-<!-- GEN-Z Reklam Alanı: Sayfa altı (Admin'den yönet) -->
-<div id="genz-rek-1" style="display:none;max-width:960px;margin:0 auto 20px auto;padding:0 24px;"></div>
-<footer style="position:relative;z-index:1;border-top:1px solid var(--border);padding:24px;text-align:center;margin-top:auto;">
-  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px;font-size:12px;color:var(--text3);">
-    <a href="hakkimizda.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Hakkımızda</a>
-    <span>·</span>
-    <a href="gizlilik.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Gizlilik Politikası</a>
-    <span>·</span>
-    <a href="kullanim-sartlari.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Kullanım Şartları</a>
-    <span>·</span>
-    <a href="iletisim.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">İletişim</a>
-  </div>
-  <div style="margin-top:10px;font-size:11px;color:var(--text3);opacity:.5;">© 2025 GEN-Z · Tüm hakları saklıdır.</div>
-</footer>
 </body>
 </html>

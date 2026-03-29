@@ -46,8 +46,7 @@ async function kullaniciyiKaydet(user, extraData = {}) {
     };
     if (!snap.exists()) {
       data.olusturuldu = serverTimestamp();
-      data.rol = 'uye';
-      data.onboardingTamamlandi = false;
+      data.rol = 'gencz';
     }
     await setDoc(ref, data, { merge: true });
   } catch(e) { console.warn('Firestore yazma hatası:', e); }
@@ -85,19 +84,13 @@ onAuthStateChanged(auth, (user) => {
 });
 
 /* ── Giriş sonrası yenile ── */
-async function girisYaptiktan(user, mesaj) {
-  if (typeof showToast === 'function') showToast(mesaj);
-  // Yeni kullanıcıysa (onboarding tamamlanmadıysa) onboarding'e yönlendir
-  try {
-    const ref  = doc(db, 'kullanicilar', user.uid);
-    const snap = await getDoc(ref);
-    const onboardingTamamlandi = snap.exists() ? snap.data().onboardingTamamlandi : true;
-    if (onboardingTamamlandi === false) {
-      setTimeout(() => { window.location.href = 'onboarding.html'; }, 900);
-      return;
-    }
-  } catch(e) { /* Firestore hatası → normal akış */ }
-  setTimeout(() => window.location.reload(), 900);
+function girisYaptiktan(user, mesaj) {
+  if (typeof showToast === 'function') {
+    showToast(mesaj);
+    setTimeout(() => window.location.reload(), 900);
+  } else {
+    window.location.reload();
+  }
 }
 
 /* ── Google Giriş ── */
@@ -135,36 +128,14 @@ window.doSignUp = async function() {
   const username = document.getElementById('signup-username')?.value.trim();
   const email    = document.getElementById('signup-email')?.value.trim();
   const pass     = document.getElementById('signup-pass')?.value;
-  const kvkk = document.getElementById('signup-kvkk');
-  if (kvkk && !kvkk.checked) { if(typeof showToast==='function') showToast('Gizlilik Politikası ve Kullanım Şartlarını kabul etmelisiniz ⚠️'); return; }
   if (!username || !email || !pass) { if(typeof showToast==='function') showToast('Lütfen tüm alanları doldurun ⚠️'); return; }
   if (pass.length < 8) { if(typeof showToast==='function') showToast('Şifre en az 8 karakter olmalı ⚠️'); return; }
   try {
     const result = await createUserWithEmailAndPassword(auth, email, pass);
     await updateProfile(result.user, { displayName: username });
-    // Kayıt olan herkes normal kullanıcı (uye) olarak başlar.
+    // Kayıt olan herkes normal kullanıcı (gencz) olarak başlar.
     // Satıcı / Usta rolü ancak başvuru doldurup admin onayından sonra verilir.
-    await kullaniciyiKaydet(result.user, { username, rol: 'uye' });
-    // ── Davet kodu kontrolü ──
-    try {
-      const davetKod = sessionStorage.getItem('genz-davet-ref');
-      if (davetKod) {
-        const { collection, query, where, getDocs: _gd, updateDoc: _ud, doc: _doc, serverTimestamp: _sts } =
-          await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-        const davetSnap = await _gd(query(collection(db, 'kullanicilar'), where('davetKod', '==', davetKod)));
-        if (!davetSnap.empty) {
-          const davetSahibi = davetSnap.docs[0];
-          const mp = davetSahibi.data().puanlar || {};
-          mp.davet = (mp.davet || 0) + 10;
-          mp.toplam = Object.entries(mp).filter(([k]) => k !== 'toplam').reduce((t, [,v]) => t + (v||0), 0);
-          await _ud(_doc(db, 'kullanicilar', davetSahibi.id), { puanlar: mp, guncellendi: _sts() });
-          sessionStorage.removeItem('genz-davet-ref');
-        }
-      }
-      // Yeni kullanıcıya benzersiz davet kodu ata
-      const yeniKod = result.user.uid.slice(0, 8).toUpperCase();
-      await kullaniciyiKaydet(result.user, { davetKod: yeniKod });
-    } catch(e) { /* davet hatası sessiz */ }
+    await kullaniciyiKaydet(result.user, { username, rol: 'gencz' });
     girisYaptiktan(result.user, 'Hesabın oluşturuldu, hoş geldin 🎉');
   } catch(e) {
     const msg = e.code === 'auth/email-already-in-use' ? 'Bu e-posta zaten kayıtlı ⚠️'

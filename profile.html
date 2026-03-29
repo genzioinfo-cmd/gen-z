@@ -648,11 +648,6 @@ nav, .toast, .edit-modal-overlay, .edit-modal,
           </div>
         </div>
         <div class="profile-badge" id="profileRoleBadge">⚡ Genç-Z</div>
-        <!-- Puan Rozet Paneli -->
-        <div id="puanRozetPanel" style="display:none;margin-top:12px;padding:12px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:12px;width:100%;max-width:340px;">
-          <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:10px;">Puanlar & Rozetler</div>
-          <div id="rozetListesi" style="display:flex;flex-direction:column;gap:8px;"></div>
-        </div>
       </div>
     </div>
 
@@ -880,13 +875,7 @@ async function loadTab(tab) {
       if (el2) el2.textContent = currentUser.email || '';
       if (el3 && currentUser.phone) el3.textContent = currentUser.phone;
       if (el4 && currentUser.city) el4.textContent = currentUser.city;
-      if (el5 && currentUser.rol) {
-        const ROL_ETIKET = {
-          'uye': 'Üye', 'gencz': 'Genç-Z', 'usta': 'Usta',
-          'satici': 'Satıcı', 'mod': 'Moderatör', 'admin': 'Admin'
-        };
-        el5.textContent = ROL_ETIKET[currentUser.rol] || currentUser.rol;
-      }
+      if (el5 && currentUser.rol) el5.textContent = currentUser.rol;
     }
 
     /* notifications sekmesinde kayıtlı tercihleri uygula */
@@ -1011,8 +1000,6 @@ function saveReview() {
   document.getElementById('reviewStars' + num).textContent = '★'.repeat(_reviewRating) + '☆'.repeat(5 - _reviewRating);
   closeReviewModal();
   showToast('Değerlendirme güncellendi ✓');
-  // Yorum puanı ekle
-  if (typeof puanEkle === 'function') puanEkle('yorum', 3).catch(() => {});
 }
 function deleteReview(id) {
   const el = document.getElementById(id);
@@ -1154,93 +1141,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-<script src="data.js"></script>
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
-<script src="tema-loader.js"></script>
 <script src="cookie-consent.js"></script>
-
-<!-- FOOTER -->
-
-<!-- GEN-Z Reklam Alanı: Sayfa altı (Admin'den yönet) -->
-<div id="genz-rek-1" style="display:none;max-width:960px;margin:0 auto 20px auto;padding:0 24px;"></div>
-<footer style="position:relative;z-index:1;border-top:1px solid var(--border);padding:24px;text-align:center;margin-top:auto;">
-  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px;font-size:12px;color:var(--text3);">
-    <a href="hakkimizda.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Hakkımızda</a>
-    <span>·</span>
-    <a href="gizlilik.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Gizlilik Politikası</a>
-    <span>·</span>
-    <a href="kullanim-sartlari.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Kullanım Şartları</a>
-    <span>·</span>
-    <a href="iletisim.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">İletişim</a>
-  </div>
-  <div style="margin-top:10px;font-size:11px;color:var(--text3);opacity:.5;">© 2025 GEN-Z · Tüm hakları saklıdır.</div>
-</footer>
-
-<script>
-// ── Puan rozetlerini profile'da göster ──
-function puanRozetleriGoster(puanlar) {
-  if (!puanlar || typeof tumRozetler === 'undefined') return;
-  const panel = document.getElementById('puanRozetPanel');
-  const liste = document.getElementById('rozetListesi');
-  if (!panel || !liste) return;
-
-  const rozetler = tumRozetler(puanlar);
-  const tp = toplamPuan(puanlar);
-
-  const ETIKET = { alis: 'Alış', satis: 'Satış', eldenEle: 'Elden-Ele', yorum: 'Yorum', davet: 'Davet' };
-
-  liste.innerHTML = Object.entries(rozetler).map(([key, r]) => {
-    if (!r) return '';
-    return `<div style="display:flex;align-items:center;gap:10px;">
-      <span style="display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:${r.bg};color:${r.renk};border:1px solid ${r.renk}33;white-space:nowrap;">${r.label}</span>
-      <div style="flex:1;">
-        <div style="height:4px;border-radius:999px;background:var(--border);overflow:hidden;">
-          <div style="height:100%;border-radius:999px;background:${r.renk};width:${r.ilerleme}%;transition:width .6s;"></div>
-        </div>
-        ${r.sonrakiLabel ? `<div style="font-size:10px;color:var(--text3);margin-top:2px;">${r.puan}/${r.sonrakiMin} → ${r.sonrakiLabel}</div>` : '<div style="font-size:10px;color:var(--accent3);margin-top:2px;">Maks seviye! 🏆</div>'}
-      </div>
-      <span style="font-size:11px;color:var(--text3);font-weight:700;">${r.puan}p</span>
-    </div>`;
-  }).join('');
-
-  // Toplam puan
-  liste.insertAdjacentHTML('afterbegin', `<div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:4px;"><span style="font-size:13px;font-weight:700;color:var(--text);">⭐ Toplam Puan</span><span style="font-size:16px;font-weight:800;color:var(--accent2);">${tp}</span></div>`);
-
-  panel.style.display = 'block';
-
-  // Davet linki göster
-  const davetKod = (window._genzKullanici?.davetKod) ||
-    (() => { try { return JSON.parse(localStorage.getItem('genz-user')||'{}').davetKod; } catch(e){} return null; })();
-  if (davetKod) {
-    const davetDiv = document.getElementById('davetLinkDiv') || (() => {
-      const d = document.createElement('div');
-      d.id = 'davetLinkDiv';
-      d.style.cssText = 'margin-top:10px;padding:10px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;font-size:12px;';
-      panel.after(d);
-      return d;
-    })();
-    const link = location.origin + '/index.html?ref=' + davetKod;
-    davetDiv.innerHTML = `<div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">📨 Davet Linkin</div>
-      <div style="display:flex;gap:6px;align-items:center;">
-        <span style="font-size:11px;color:var(--accent);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${link}</span>
-        <button onclick="navigator.clipboard.writeText('${link}');showToast('Davet linki kopyalandı! 📨')" style="border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:6px;padding:3px 8px;font-size:11px;cursor:pointer;white-space:nowrap;">Kopyala</button>
-      </div>
-      <div style="font-size:10px;color:var(--text3);margin-top:4px;">Arkadaşın kayıt olunca +10 Davet Puanı kazanırsın</div>`;
-  }
-}
-
-// genzSyncYuklendi veya localStorage'dan yükle
-window.addEventListener('genzSyncYuklendi', () => {
-  const ku = window._genzKullanici;
-  if (ku?.puanlar) puanRozetleriGoster(ku.puanlar);
-});
-// localStorage fallback
-try {
-  const u = JSON.parse(localStorage.getItem('genz-user') || '{}');
-  if (u.puanlar) puanRozetleriGoster(u.puanlar);
-} catch(e) {}
-</script>
-
 </body>
 </html>

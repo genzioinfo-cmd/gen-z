@@ -367,8 +367,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
     <li><a href="ustam.html" data-tr="Ustam" data-en="Ustam">Ustam</a></li>
     <li><a href="gen-z.html" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a></li>
     <li><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a></li>
-    <li><a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a><a href="hakkimizda.html">Hakkımızda</a></li>
-    <li><a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a></li>
+    <li><a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a></li>
     <li><a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a></li>
     <li><a href="birlikte-buyuyelim.html" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a></li>
     <li><a href="elden-ele.html" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a></li>
@@ -393,7 +392,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
   <a href="ustam.html" data-tr="Ustam" data-en="Ustam">Ustam</a>
   <a href="gen-z.html" data-tr="Genç-Z" data-en="Gen-Z">Genç-Z</a>
   <a href="hakkimizda.html" data-tr="Hakkımızda" data-en="About">Hakkımızda</a>
-  <a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a><a href="hakkimizda.html">Hakkımızda</a>
+  <a href="topluluk.html" data-tr="Topluluk" data-en="Community">Topluluk</a>
   <a href="iletisim.html" data-tr="Kurucu" data-en="Founder">Kurucu</a>
   <a href="birlikte-buyuyelim.html" data-tr="Birlikte Büyüyelim" data-en="Grow Together">Birlikte Büyüyelim</a>
   <a href="elden-ele.html" data-tr="Elden Ele" data-en="Hand to Hand">Elden Ele</a>
@@ -460,12 +459,6 @@ nav, .modal-overlay-auth, .modal-box, .toast {
       <div class="form-group">
         <label class="form-label">Şifre</label>
         <input class="form-input" id="signup-pass" type="password" placeholder="En az 8 karakter"/>
-      </div>
-      <div class="form-group" style="margin-bottom:4px;">
-        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px;color:var(--text2);line-height:1.5;">
-          <input type="checkbox" id="signup-kvkk" style="margin-top:2px;accent-color:var(--accent);flex-shrink:0;"/>
-          <span><a href="gizlilik.html" target="_blank" style="color:var(--accent);text-decoration:none;">Gizlilik Politikası</a>'nı ve <a href="kullanim-sartlari.html" target="_blank" style="color:var(--accent);text-decoration:none;">Kullanım Şartları</a>'nı okudum, kabul ediyorum.</span>
-        </label>
       </div>
       <button class="btn-submit" onclick="doSignUp()">Kayıt Ol</button>
     </div>
@@ -643,7 +636,7 @@ function renderStars(rating) {
 
 /* ── PAGE SCRIPT ── */
 initThemeLang();
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.mobile-menu a').forEach(a => {
     a.addEventListener('click', () => {
       const mm = document.getElementById('mobileMenu');
@@ -657,64 +650,21 @@ document.addEventListener('DOMContentLoaded', async () => {
   requestAnimationFrame(() => { document.body.style.opacity = '1'; });
 
   const grid = document.getElementById('kategoriGrid');
-
-  // Önce statik grid'i hızlı render et
   CATEGORIES.forEach(cat => {
     if (cat.id === 'all') return;
     const card = document.createElement('div');
     card.className = 'kategori-card' + (cat.coming ? ' disabled' : '');
-    card.dataset.catId = cat.id;
-    card.innerHTML = '<div class="kategori-card-icon">' + cat.icon + '</div>'
-      + '<div class="kategori-card-name">' + cat.name + '</div>'
-      + (cat.coming ? '<span class="kategori-card-badge">Yakında</span>' : '');
+    card.innerHTML = '<div class="kategori-card-icon">' + cat.icon + '</div><div class="kategori-card-name">' + cat.name + '</div>' + (cat.coming ? '<span class="kategori-card-badge">Yakında</span>' : '');
     if (!cat.coming) {
       card.onclick = () => navigateTo('magaza.html?cat=' + cat.id);
     }
     grid.appendChild(card);
   });
-
-  // Firebase'den mağaza ürün sayılarını çek
-  try {
-    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-    const { getFirestore, collection, getDocs, query, where } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    const app = getApps().length ? getApps()[0] : initializeApp({
-      apiKey: 'AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ',
-      authDomain: 'gen-z-io.firebaseapp.com', projectId: 'gen-z-io',
-      storageBucket: 'gen-z-io.firebasestorage.app',
-      messagingSenderId: '97338868944', appId: '1:97338868944:web:d7b429e416d8c505b14ad5'
-    });
-    const db = getFirestore(app);
-    let snap;
-    try {
-      snap = await getDocs(query(collection(db, 'magaza_urunler'), where('durum', '==', 'onaylandi'), where('platform', '==', 'magaza')));
-    } catch(e) {
-      snap = await getDocs(query(collection(db, 'magaza_urunler'), where('durum', '==', 'onaylandi')));
-    }
-    const counts = {};
-    snap.docs.forEach(d => {
-      const kat = d.data().kategori || 'diger';
-      counts[kat] = (counts[kat] || 0) + 1;
-    });
-    grid.querySelectorAll('.kategori-card:not(.disabled)').forEach(card => {
-      const catId = card.dataset.catId;
-      const count = counts[catId] || 0;
-      if (count > 0) {
-        const badge = document.createElement('span');
-        badge.className = 'kategori-card-badge';
-        badge.style.cssText = 'background:rgba(123,92,240,.12);color:#7b5cf0;border:1px solid rgba(123,92,240,.25)';
-        badge.textContent = count + ' ürün';
-        card.appendChild(badge);
-      }
-    });
-  } catch(e) {
-    console.warn('Kategori sayıları yüklenemedi:', e);
-  }
 });
 </script>
 
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
-<script src="tema-loader.js"></script>
 <script src="cookie-consent.js"></script>
 <script>
 // ── Navbar sepet badge ──
@@ -727,22 +677,5 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch(e) {}
 })();
 </script>
-
-<!-- FOOTER -->
-
-<!-- GEN-Z Reklam Alanı: Sayfa altı (Admin'den yönet) -->
-<div id="genz-rek-1" style="display:none;max-width:960px;margin:0 auto 20px auto;padding:0 24px;"></div>
-<footer style="position:relative;z-index:1;border-top:1px solid var(--border);padding:24px;text-align:center;margin-top:auto;">
-  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px;font-size:12px;color:var(--text3);">
-    <a href="hakkimizda.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Hakkımızda</a>
-    <span>·</span>
-    <a href="gizlilik.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Gizlilik Politikası</a>
-    <span>·</span>
-    <a href="kullanim-sartlari.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">Kullanım Şartları</a>
-    <span>·</span>
-    <a href="iletisim.html" style="color:var(--text3);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text3)'">İletişim</a>
-  </div>
-  <div style="margin-top:10px;font-size:11px;color:var(--text3);opacity:.5;">© 2025 GEN-Z · Tüm hakları saklıdır.</div>
-</footer>
 </body>
 </html>

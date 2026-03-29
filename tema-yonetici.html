@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GEN-Z · Tema Yöneticisi</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --accent:#7B5CF0;--accent2:#a78bfa;--accent3:#F0C55C;--accent4:#5CF0B4;
+  --ink:#0a0a0f;--ink2:#13131a;--ink3:#1c1c28;
+  --surface:#22222f;--border:rgba(123,92,240,.18);
+  --text:#f0eeff;--text2:rgba(240,238,255,.55);--text3:rgba(240,238,255,.22);
+  --red:#e05555;--green:#4caf82;--orange:#e67e22;
+  --sidebar:256px;--radius:10px;--radius-sm:6px;
+}
+html,body{min-height:100%;background:var(--ink);}
+body{font-family:'DM Sans',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased;}
+.sidebar{position:fixed;top:0;left:0;width:var(--sidebar);height:100vh;background:var(--ink2);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;overflow-y:auto;}
+.sb-logo{padding:1.4rem 1.3rem 1.1rem;border-bottom:1px solid var(--border);}
+.sb-logo-main{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;letter-spacing:.08em;}
+.sb-logo-main span{color:var(--accent);}
+.sb-logo-sub{font-size:.46rem;letter-spacing:.28em;text-transform:uppercase;color:var(--text3);margin-top:.2rem;}
+.sb-nav{flex:1;padding:.6rem 0;}
+.sb-section{font-size:.42rem;letter-spacing:.28em;text-transform:uppercase;color:var(--text3);padding:.65rem 1.3rem .25rem;}
+.sb-btn{display:flex;align-items:center;gap:.6rem;width:100%;padding:.6rem 1.3rem;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);text-align:left;transition:all .2s;position:relative;}
+.sb-btn:hover{color:var(--text);background:rgba(255,255,255,.03);}
+.sb-btn.on{color:var(--accent2);background:rgba(123,92,240,.08);}
+.sb-btn.on::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--accent);border-radius:0 2px 2px 0;}
+.sb-badge{margin-left:auto;padding:.07rem .38rem;border-radius:20px;font-size:.44rem;font-weight:700;background:var(--accent);color:#fff;}
+.sb-bottom{padding:.9rem 1.3rem;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:.5rem;}
+.back-link{display:flex;align-items:center;gap:.5rem;padding:.5rem .8rem;border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text2);font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;background:none;width:100%;transition:all .22s;font-family:'DM Sans',sans-serif;}
+.back-link:hover{border-color:rgba(123,92,240,.4);color:var(--accent2);}
+.undo-bar{display:flex;gap:.4rem;}
+.undo-btn{flex:1;padding:.42rem .5rem;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text3);font-size:.7rem;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;}
+.undo-btn:hover:not(:disabled){background:rgba(123,92,240,.1);color:var(--accent2);border-color:rgba(123,92,240,.3);}
+.undo-btn:disabled{opacity:.3;cursor:not-allowed;}
+.undo-count{font-size:.48rem;letter-spacing:.1em;color:var(--text3);text-align:center;}
+.main{margin-left:var(--sidebar);min-height:100vh;}
+.topbar{position:sticky;top:0;z-index:50;padding:.75rem 1.8rem;background:rgba(10,10,15,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.topbar-left h1{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:400;}
+.topbar-left p{font-size:.56rem;color:var(--text2);letter-spacing:.06em;margin-top:.1rem;}
+.topbar-right{display:flex;gap:.6rem;align-items:center;flex-shrink:0;}
+.save-all-btn{padding:.5rem 1.2rem;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:var(--radius-sm);color:#fff;font-family:'DM Sans',sans-serif;font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;font-weight:700;transition:all .25s;box-shadow:0 4px 18px rgba(123,92,240,.3);}
+.save-all-btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(123,92,240,.45);}
+.btn-sifirla{padding:.5rem 1rem;background:none;border:1px solid rgba(255,255,255,.08);border-radius:var(--radius-sm);color:var(--text2);font-family:'DM Sans',sans-serif;font-size:.54rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .22s;}
+.btn-sifirla:hover{border-color:var(--red);color:var(--red);}
+.sayfa{display:none;padding:1.6rem 1.8rem 3rem;}
+.sayfa.on{display:grid;grid-template-columns:1fr 340px;gap:1.4rem;align-items:start;}
+.sayfa-sol{display:flex;flex-direction:column;gap:1.2rem;}
+.sayfa-sag{display:flex;flex-direction:column;gap:1.2rem;position:sticky;top:80px;}
+.sayfa.fw.on{display:block;}
+.sayfa.fw .sayfa-sol{gap:1.2rem;}
+.mockup-wrap{background:var(--ink2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.mockup-topbar{display:flex;align-items:center;gap:.4rem;padding:.55rem .8rem;background:rgba(255,255,255,.02);border-bottom:1px solid var(--border);}
+.mockup-dot{width:7px;height:7px;border-radius:50%;}
+.mockup-url{flex:1;background:rgba(255,255,255,.04);border-radius:4px;padding:.25rem .6rem;font-size:.52rem;color:var(--text3);font-family:monospace;margin:0 .5rem;}
+.mockup-screen{width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;cursor:pointer;}
+.mockup-screen::after{content:'🔍 Büyüt';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);color:#fff;font-size:.65rem;letter-spacing:.12em;opacity:0;transition:opacity .2s;}
+.mockup-screen:hover::after{opacity:1;}
+.mockup-label{font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);padding:.5rem .8rem;border-top:1px solid var(--border);text-align:center;}
+.kart{background:var(--ink2);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem;}
+.kart-baslik{display:flex;align-items:center;gap:.55rem;margin-bottom:1.1rem;padding-bottom:.7rem;border-bottom:1px solid var(--border);}
+.kart-baslik h3{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;}
+.kart-tag{margin-left:auto;padding:.1rem .5rem;border-radius:20px;font-size:.46rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;background:rgba(123,92,240,.15);color:var(--accent2);border:1px solid rgba(123,92,240,.25);}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.9rem;}
+.form-group{display:flex;flex-direction:column;gap:.42rem;}
+.form-group.full{grid-column:1/-1;}
+.f-label{font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text2);font-weight:600;}
+.f-desc{font-size:.58rem;color:var(--text3);}
+.f-input{background:rgba(255,255,255,.03);border:1px solid rgba(123,92,240,.15);border-radius:var(--radius-sm);padding:.6rem .85rem;font-family:'DM Sans',sans-serif;font-size:.76rem;color:var(--text);outline:none;transition:border-color .22s;}
+.f-input:focus{border-color:rgba(123,92,240,.5);background:rgba(123,92,240,.04);}
+.f-input::placeholder{color:var(--text3);}
+.f-textarea{background:rgba(255,255,255,.03);border:1px solid rgba(123,92,240,.15);border-radius:var(--radius-sm);padding:.6rem .85rem;font-family:'DM Sans',sans-serif;font-size:.76rem;color:var(--text);outline:none;resize:vertical;min-height:80px;}
+.f-select{background:rgba(255,255,255,.03);border:1px solid rgba(123,92,240,.15);border-radius:var(--radius-sm);padding:.6rem .85rem;font-family:'DM Sans',sans-serif;font-size:.76rem;color:var(--text);outline:none;cursor:pointer;}
+.f-select option{background:#1c1c28;}
+.color-row{display:flex;align-items:center;gap:.6rem;}
+.color-preview{width:32px;height:32px;border-radius:7px;border:2px solid rgba(255,255,255,.1);cursor:pointer;transition:transform .2s;flex-shrink:0;}
+.color-preview:hover{transform:scale(1.1);}
+.color-picker-native{opacity:0;position:absolute;width:0;height:0;}
+.toggle-wrap{display:flex;align-items:center;justify-content:space-between;padding:.55rem 0;}
+.toggle-info{display:flex;flex-direction:column;gap:.18rem;}
+.toggle-label{font-size:.7rem;color:var(--text);font-weight:500;}
+.toggle-desc{font-size:.6rem;color:var(--text3);}
+.toggle{position:relative;width:42px;height:23px;background:rgba(255,255,255,.1);border-radius:99px;cursor:pointer;transition:background .3s;border:none;flex-shrink:0;}
+.toggle.on{background:var(--accent);}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:17px;height:17px;border-radius:50%;background:#fff;transition:transform .3s;}
+.toggle.on::after{transform:translateX(19px);}
+.slider-wrap{display:flex;align-items:center;gap:.7rem;}
+.slider-wrap input[type=range]{flex:1;-webkit-appearance:none;height:3px;border-radius:4px;outline:none;cursor:pointer;}
+.slider-wrap input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent2);border:2px solid #fff;cursor:pointer;}
+.slider-val{min-width:40px;text-align:center;font-size:.68rem;font-weight:700;color:var(--accent2);background:rgba(123,92,240,.12);border:1px solid rgba(123,92,240,.25);border-radius:5px;padding:.18rem .45rem;}
+.gradient-preview{height:48px;border-radius:var(--radius-sm);border:1px solid var(--border);transition:all .3s;}
+.sep{height:1px;background:var(--border);margin:.9rem 0;}
+.btn-row{display:flex;gap:.6rem;margin-top:1rem;flex-wrap:wrap;}
+.btn-kaydet{padding:.5rem 1.1rem;background:rgba(123,92,240,.15);border:1px solid rgba(123,92,240,.3);border-radius:var(--radius-sm);color:var(--accent2);font-family:'DM Sans',sans-serif;font-size:.53rem;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:all .22s;font-weight:700;}
+.btn-kaydet:hover{background:rgba(123,92,240,.28);}
+.sec-title{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;}
+.sec-sub{font-size:.68rem;color:var(--text2);margin-top:.3rem;}
+/* TEMA ŞABLONLARI */
+.tema-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;}
+.tema-kart{border-radius:var(--radius-sm);padding:.8rem;cursor:pointer;border:2px solid transparent;transition:all .25s;position:relative;overflow:hidden;}
+.tema-kart:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4);}
+.tema-kart.aktif{border-color:rgba(255,255,255,.5);}
+.tema-kart.aktif::after{content:'✓ Aktif';position:absolute;top:.4rem;right:.5rem;font-size:.52rem;color:#fff;font-weight:700;background:rgba(0,0,0,.3);padding:.1rem .4rem;border-radius:4px;}
+.tema-ad{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;color:#fff;margin-bottom:.35rem;text-shadow:0 1px 4px rgba(0,0,0,.5);}
+.tema-renkler{display:flex;gap:.25rem;margin-top:.4rem;}
+.tema-renk{width:14px;height:14px;border-radius:50%;border:1px solid rgba(255,255,255,.2);}
+/* REKLAM */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:.7rem;margin-bottom:1.1rem;}
+.info-kart{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.8rem;text-align:center;}
+.i-num{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;color:var(--accent2);line-height:1;}
+.i-label{font-size:.48rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);margin-top:.3rem;}
+.ad-tabs{display:flex;gap:.4rem;margin-bottom:1.1rem;flex-wrap:wrap;}
+.ad-tab{padding:.3rem .75rem;background:none;border:1px solid var(--border);border-radius:20px;font-family:'DM Sans',sans-serif;font-size:.54rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;color:var(--text2);transition:all .2s;}
+.ad-tab:hover{color:var(--text);}
+.ad-tab.on{background:rgba(240,197,92,.1);border-color:rgba(240,197,92,.4);color:var(--accent3);}
+.ad-area-kart{background:rgba(255,255,255,.02);border:1px solid rgba(240,197,92,.12);border-radius:var(--radius);padding:1.1rem;margin-bottom:.8rem;}
+.ad-area-head{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;}
+.ad-num{width:26px;height:26px;border-radius:7px;background:rgba(240,197,92,.1);border:1px solid rgba(240,197,92,.25);color:var(--accent3);font-size:.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Syne',sans-serif;}
+.ad-name{font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;}
+.ad-page-tag{font-size:.5rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-left:auto;}
+.takvim-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-top:.7rem;padding-top:.7rem;border-top:1px solid var(--border);}
+.takvim-row label{font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text2);font-weight:600;display:block;margin-bottom:.35rem;}
+.f-date{background:rgba(255,255,255,.03);border:1px solid rgba(240,197,92,.2);border-radius:var(--radius-sm);padding:.55rem .8rem;font-family:'DM Sans',sans-serif;font-size:.74rem;color:var(--text);outline:none;width:100%;cursor:pointer;}
+.f-date::-webkit-calendar-picker-indicator{filter:invert(.6);cursor:pointer;}
+.ad-preview-bar{padding:.6rem 1rem;border-radius:5px;font-size:.76rem;text-align:center;font-family:'DM Sans',sans-serif;transition:all .3s;margin-top:.8rem;}
+.ad-durum{display:inline-flex;align-items:center;gap:.35rem;font-size:.52rem;font-weight:700;padding:.18rem .5rem;border-radius:20px;}
+.ad-durum.aktif{background:rgba(76,175,130,.1);color:var(--green);border:1px solid rgba(76,175,130,.2);}
+.ad-durum.pasif{background:rgba(224,85,85,.08);color:var(--red);border:1px solid rgba(224,85,85,.18);}
+.ad-durum.planli{background:rgba(230,126,34,.1);color:var(--orange);border:1px solid rgba(230,126,34,.2);}
+.css-output{background:rgba(0,0,0,.3);border:1px solid rgba(123,92,240,.2);border-radius:var(--radius-sm);padding:.8rem;font-family:monospace;font-size:.7rem;color:#a78bfa;line-height:1.6;white-space:pre;overflow-x:auto;min-height:160px;resize:vertical;width:100%;}
+/* GECMİS */
+.gecmis-liste{max-height:220px;overflow-y:auto;}
+.gecmis-item{display:flex;align-items:center;gap:.6rem;padding:.5rem .6rem;border-radius:var(--radius-sm);cursor:pointer;transition:all .18s;border:1px solid transparent;}
+.gecmis-item:hover{background:rgba(255,255,255,.03);border-color:var(--border);}
+.gecmis-item.guncel{background:rgba(123,92,240,.06);border-color:rgba(123,92,240,.2);}
+.gecmis-item .g-zaman{font-size:.5rem;color:var(--text3);font-family:monospace;flex-shrink:0;}
+.gecmis-item .g-acik{font-size:.63rem;color:var(--text2);flex:1;}
+.gecmis-item .g-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+.gecmis-bos{text-align:center;padding:1.5rem;font-size:.68rem;color:var(--text3);font-style:italic;}
+#toast{position:fixed;bottom:2rem;right:2rem;z-index:9999;background:var(--ink2);border:1px solid rgba(123,92,240,.3);border-radius:var(--radius-sm);padding:.65rem 1.1rem;font-size:.66rem;color:var(--text);box-shadow:0 8px 32px rgba(0,0,0,.5);transform:translateY(20px);opacity:0;transition:all .3s;pointer-events:none;}
+#toast.show{transform:none;opacity:1;}
+#toast.success{border-color:rgba(76,175,130,.35);color:var(--green);}
+#toast.error{border-color:rgba(224,85,85,.35);color:var(--red);}
+#toast.info{border-color:rgba(123,92,240,.35);color:var(--accent2);}
+.modal-overlay{position:fixed;inset:0;z-index:8000;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:1.5rem;}
+.modal-overlay.v{display:flex;}
+.modal-inner{background:var(--ink2);border:1px solid var(--border);border-radius:var(--radius);width:min(920px,96vw);max-height:90vh;overflow:hidden;display:flex;flex-direction:column;}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.3rem;border-bottom:1px solid var(--border);}
+.modal-head h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;}
+.modal-kapat{background:none;border:none;color:var(--text2);font-size:1.2rem;cursor:pointer;padding:.2rem;line-height:1;}
+.modal-kapat:hover{color:var(--text);}
+.modal-body iframe{width:100%;height:600px;border:none;background:var(--ink);}
+@media(max-width:1100px){.sayfa.on{grid-template-columns:1fr;}.sayfa-sag{position:static;}}
+@media(max-width:900px){:root{--sidebar:0px;}.sidebar{transform:translateX(-100%);transition:transform .3s;width:256px;}.sidebar.open{transform:none;}.main{margin-left:0;}.hamburger{display:flex;}.form-grid,.form-grid-3{grid-template-columns:1fr;}}
+.hamburger{display:none;position:fixed;top:.7rem;left:.8rem;z-index:200;flex-direction:column;gap:4px;background:var(--ink2);border:1px solid var(--border);border-radius:6px;padding:.5rem;cursor:pointer;}
+.hamburger span{display:block;width:18px;height:1.5px;background:var(--accent2);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+.sayfa-sol>*{animation:fadeUp .3s ease both;}
+.sayfa-sol>*:nth-child(2){animation-delay:.05s;}
+.sayfa-sol>*:nth-child(3){animation-delay:.1s;}
+.sayfa-sol>*:nth-child(4){animation-delay:.15s;}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+<button class="hamburger" id="hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+
+<!-- Modal -->
+<div class="modal-overlay" id="buyutModal">
+  <div class="modal-inner">
+    <div class="modal-head">
+      <h3 id="buyutBaslik">Önizleme</h3>
+      <button class="modal-kapat" onclick="document.getElementById('buyutModal').classList.remove('v')">✕</button>
+    </div>
+    <div class="modal-body"><iframe id="buyutFrame" srcdoc=""></iframe></div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <div class="sb-logo-main">GEN-<span>Z</span></div>
+    <div class="sb-logo-sub">Tema Yöneticisi</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Sayfalar</div>
+    <button class="sb-btn on" onclick="sayfaGec('index',this)">🏠 Index (Giriş)</button>
+    <button class="sb-btn" onclick="sayfaGec('magaza',this)">🛍 Mağaza</button>
+    <button class="sb-btn" onclick="sayfaGec('ustam',this)">🔧 Ustam</button>
+    <button class="sb-btn" onclick="sayfaGec('genz',this)">🎓 Gen-Z</button>
+    <div class="sb-section">Reklam</div>
+    <button class="sb-btn" onclick="sayfaGec('reklamlar',this)">📢 Reklam Alanları <span class="sb-badge" id="adBadge">0</span></button>
+    <div class="sb-section">Global</div>
+    <button class="sb-btn" onclick="sayfaGec('temalar',this)">🎭 Tema Şablonları</button>
+    <button class="sb-btn" onclick="sayfaGec('global',this)">🌐 Global Renkler</button>
+    <button class="sb-btn" onclick="sayfaGec('yazitipi',this)">✍ Yazı Tipleri</button>
+  </nav>
+  <div class="sb-bottom">
+    <div class="undo-bar">
+      <button class="undo-btn" id="undoBtn" onclick="undo()" disabled>↩ Geri</button>
+      <button class="undo-btn" id="redoBtn" onclick="redo()" disabled>İleri ↪</button>
+    </div>
+    <div class="undo-count" id="undoCount">Geçmiş: 0 adım</div>
+    <button class="back-link" onclick="window.location.href='adminpanel.html'">← Admin Paneline Dön</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <h1>🎨 Tema Yöneticisi</h1>
+      <p>Sayfaların görünümünü, renklerini ve reklam alanlarını yönet</p>
+    </div>
+    <div class="topbar-right">
+      <button class="btn-sifirla" onclick="sifirlaHepsi()">↺ Sıfırla</button>
+      <button class="save-all-btn" onclick="hepsiniKaydet()">💾 Tüm Değişiklikleri Kaydet</button>
+    </div>
+  </div>
+
+  <!-- INDEX -->
+  <div class="sayfa on" id="sayfa-index">
+    <div class="sayfa-sol">
+      <div><div class="sec-title">🏠 Index — Giriş Sayfası</div><div class="sec-sub">Karşılama sayfasının renkleri, blob'lar ve yazıları</div></div>
+      <div class="kart">
+        <div class="kart-baslik"><h3>🎨 Arka Plan & Metin</h3><span class="kart-tag">index.html</span></div>
+        <div class="form-grid">
+          <div class="form-group"><label class="f-label">Ana Arka Plan</label><div class="color-row"><div class="color-preview" id="prev-idx-bg" style="background:#0a0a0f" onclick="openPicker('idx-bg')"></div><input class="f-input" id="idx-bg" value="#0a0a0f" oninput="clr('idx-bg');liveMockup()"/><input type="color" class="color-picker-native" id="picker-idx-bg" value="#0a0a0f" oninput="syncPk('idx-bg');liveMockup()"/></div></div>
+          <div class="form-group"><label class="f-label">Metin Rengi</label><div class="color-row"><div class="color-preview" id="prev-idx-text" style="background:#f0eeff" onclick="openPicker('idx-text')"></div><input class="f-input" id="idx-text" value="#f0eeff" oninput="clr('idx-text');liveMockup()"/><input type="color" class="color-picker-native" id="picker-idx-text" value="#f0eeff" oninput="syncPk('idx-text');liveMockup()"/></div></div>
+        </div>
+      </div>
+      <div class="kart">
+        <div class="kart-baslik"><h3>🌈 Logo Gradient</h3></div>
+        <div class="form-grid-3">
+          <div class="form-group"><label class="f-label">Başlangıç</label><div class="color-row"><div class="color-preview" id="prev-idx-g1" style="background:#ffffff" onclick="openPicker('idx-g1')"></div><input class="f-input" id="idx-g1" value="#ffffff" oninput="clr('idx-g1');updateGrad();liveMockup()"/><input type="color" class="color-picker-native" id="picker-idx-g1" value="#ffffff" oninput="syncPk('idx-g1');updateGrad();liveMockup()"/></div></div>
+          <div class="form-group"><label class="f-label">Orta</label><div class="color-row"><div class="color-preview" id="prev-idx-g2" style="background:#c4b5fd" onclick="openPicker('idx-g2')"></div><input class="f-input" id="idx-g2" value="#c4b5fd" oninput="clr('idx-g2');updateGrad();liveMockup()"/><input type="color" class="color-picker-native" id="picker-idx-g2" value="#c4b5fd" oninput="syncPk('idx-g2');updateGrad();liveMockup()"/></div></div>
+          <div class="form-group"><label class="f-label">Bitiş</label><div class="color-row"><div class="color-preview" id="prev-idx-g3" style="background:#F0C55C" onclick="openPicker('idx-g3')"></div><input class="f-input" id="idx-g3" value="#F0C55C" oninput="clr('idx-g3');updateGrad();liveMockup()"/><input type="color" class="color-picker-native" id="picker-idx-g3" value="#F0C55C" oninput="syncPk('idx-g3');updateGrad();liveMockup()"/></div></div>
+        </div>
+        <div style="margin-top:.8rem;"><label class="f-label" style="display:block;margin-bottom:.4rem;">Önizleme</label><div class="gradient-preview" id="grad-preview"></div></div>
+      </div>
+      <div class="kart">
+        <div class="kart-baslik"><h3>💧 Blob Renkleri</h3></div>
+        <div class="form-grid-3">
+          <div class="form-group"><label class="f-label">Blob 1</label><div class="color-row"><div class="color-preview" id="prev-blob1" style="background:#7B5CF0" onclick="openPicker('blob1')"></div><input class="f-input" id="blob1" value="#7B5CF0" oninput="clr('blob1');liveMockup()"/><input type="color" class="color-picker-native" id="picker-blob1" value="#7B5CF0" oninput="syncPk('blob1');liveMockup()"/></div></div>
+          <div class="form-group"><label class="f-label">Blob 2</label><div class="color-row"><div class="color-preview" id="prev-blob2" style="background:#F0C55C" onclick="openPicker('blob2')"></div><input class="f-input" id="blob2" value="#F0C55C" oninput="clr('blob2');liveMockup()"/><input type="color" class="color-picker-native" id="picker-blob2" value="#F0C55C" oninput="syncPk('blob2');liveMockup()"/></div></div>
+          <div class="form-group"><label class="f-label">Blob 3</label><div class="color-row"><div class="color-preview" id="prev-blob3" style="background:#5CF0B4" onclick="openPicker('blob3')"></div><input class="f-input" id="blob3" value="#5CF0B4" oninput="clr('blob3');liveMockup()"/><input type="color" class="color-picker-native" id="picker-blob3" value="#5CF0B4" oninput="syncPk('blob3');liveMockup()"/></div></div>
+        </div>
+        <div class="sep"></div>
+        <div class="form-group" style="max-width:360px;"><label class="f-label">Blob Opaklığı</label><div class="slider-wrap"><input type="range" min="0" max="100" value="12" id="blob-op" oninput="slUp(this,'blob-op-v','%');liveMockup()"/><div class="slider-val" id="blob-op-v">12%</div></div></div>
+      </div>
+      <div class="kart">
+        <div class="kart-baslik"><h3>✏️ Sayfa Yazıları</h3></div>
+        <div class="form-grid">
+          <div class="form-group full"><label class="f-label">Ana Tagline</label><input class="f-input" id="idx-tagline" value="Türkiye'nin yeni nesil platformu geliyor." oninput="changed();liveMockup()"/></div>
+          <div class="form-group"><label class="f-label">Vurgulanan Kelime</label><input class="f-input" id="idx-em" value="geliyor." oninput="changed();liveMockup()"/></div>
+          <div class="form-group"><label class="f-label">Durum Rozeti</label><input class="f-input" id="idx-badge" value="Beta Süreci" oninput="changed();liveMockup()"/></div>
+          <div class="form-group"><label class="f-label">Alt Hint</label><input class="f-input" id="idx-hint" value="Mağaza · Ustam · Genç-Z" oninput="changed()"/></div>
+          <div class="form-group"><label class="f-label">Footer</label><input class="f-input" id="idx-footer" value="© 2025 GEN-Z · Tüm hakları saklıdır" oninput="changed()"/></div>
+        </div>
+      </div>
+      <div class="kart">
+        <div class="kart-baslik"><h3>⚙️ Animasyon</h3></div>
+        <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Blob Animasyonu</div><div class="toggle-desc">Blob'ların yüzme animasyonu</div></div><button class="toggle on" id="tog-blob-anim" onclick="toggleBtn(this);changed()"></button></div>
+        <div class="sep"></div>
+        <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">FadeUp Girişi</div><div class="toggle-desc">Aşağıdan belirme efekti</div></div><button class="toggle on" id="tog-fadein" onclick="toggleBtn(this);changed()"></button></div>
+        <div class="sep"></div>
+        <div class="form-group" style="max-width:360px;margin-top:.4rem;"><label class="f-label">Blob Hızı</label><div class="slider-wrap"><input type="range" min="3" max="20" value="8" id="blob-speed" oninput="slUp(this,'blob-speed-v','s')"/><div class="slider-val" id="blob-speed-v">8s</div></div></div>
+      </div>
+      <div class="btn-row"><button class="save-all-btn" onclick="kaydetSayfa('index')">💾 Index'i Kaydet</button><button class="btn-sifirla" onclick="sifirla('index')">↺ Sıfırla</button></div>
+    </div>
+    <div class="sayfa-sag">
+      <div class="mockup-wrap">
+        <div class="mockup-topbar"><div class="mockup-dot" style="background:#ff5f57"></div><div class="mockup-dot" style="background:#febc2e"></div><div class="mockup-dot" style="background:#28c840"></div><div class="mockup-url">index.html</div></div>
+        <div class="mockup-screen" onclick="buyutMockup('index')"><canvas id="mc-index" style="width:100%;height:100%;display:block;"></canvas></div>
+        <div class="mockup-label">🖱 Tıkla → Tam Ekran</div>
+      </div>
+      <div class="kart">
+        <div class="kart-baslik"><h3>🕐 Değişiklik Geçmişi</h3></div>
+        <div class="gecmis-liste" id="gecmis-liste"><div class="gecmis-bos">Henüz değişiklik yapılmadı</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAĞAZA -->
+  <div class="sayfa" id="sayfa-magaza">
+    <div class="sayfa-sol">
+      <div><div class="sec-title">🛍 Mağaza</div><div class="sec-sub">magaza.html — CSS değişkenleri</div></div>
+      <div class="kart">
+        <div class="kart-baslik"><h3>🎨 Dark Mode Renkleri</h3><span class="kart-tag">magaza.html</span></div>
+        <div class="form-grid">
+          <div class="form-group"><label class="f-label">--accent</label><div class="color-row"><div class="color-preview" id="prev-mag-a" style="background:#7B5CF0" onclick="openPicker('mag-a')"></div><input class="f-input" id="mag-a" value="#7B5CF0" oninput="clr('mag-a')"/><input type="color" class="color-picker-native" id="picker-mag-a" value="#7B5CF0" oninput="syncPk('mag-a')"/></div></div>
+          <div class="form-group"><label class="f-label">--accent2</label><div class="color-row"><div class="color-preview" id="prev-mag-a2" style="background:#F0C55C" onclick="openPicker('mag-a2')"></div><input class="f-input" id="mag-a2" value="#F0C55C" oninput="clr('mag-a2')"/><input type="color" class="color-picker-native" id="picker-mag-a2" value="#F0C55C" oninput="syncPk('mag-a2')"/></div></div>
+          <div class="form-group"><label class="f-label">--accent3</label><div class="color-row"><div class="color-preview" id="prev-mag-a3" style="background:#5CF0B4" onclick="openPicker('mag-a3')"></div><input class="f-input" id="mag-a3" value="#5CF0B4" oninput="clr('mag-a3')"/><input type="color" class="color-picker-native" id="picker-mag-a3" value="#5CF0B4" oninput="syncPk('mag-a3')"/></div></div>
+          <div class="form-group"><label class="f-label">--bg</label><div class="color-row"><div class="color-preview" id="prev-mag-bg" style="background:#0a0a0f" onclick="openPicker('mag-bg')"></div><input class="f-input" id="mag-bg" value="#0a0a0f" oninput="clr('mag-bg')"/><input type="color" class="color-picker-native" id="picker-mag-bg" value="#0a0a0f" oninput="syncPk('mag-bg')"/></div></div>
+          <div class="form-group"><label class="f-label">--bg2</label><div class="color-row"><div class="color-preview" id="prev-mag-bg2" style="background:#13131a" onclick="openPicker('mag-bg2')"></div><input class="f-input" id="mag-bg2" value="#13131a" oninput="clr('mag-bg2')"/><input type="color" class="color-picker-native" id="picker-mag-bg2" value="#13131a" oninput="syncPk('mag-bg2')"/></div></div>
+          <div class="form-group"><label class="f-label">--surface</label><div class="color-row"><div class="color-preview" id="prev-mag-surf" style="background:#22222f" onclick="openPicker('mag-surf')"></div><input class="f-input" id="mag-surf" value="#22222f" oninput="clr('mag-surf')"/><input type="color" class="color-picker-native" id="picker-mag-surf" value="#22222f" oninput="syncPk('mag-surf')"/></div></div>
+        </div>
+      </div>
+      <div class="kart">
+        <div class="kart-baslik"><h3>⚙️ Özellikler</h3></div>
+        <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Dark Mode Varsayılan</div></div><button class="toggle on" id="tog-mag-dark" onclick="toggleBtn(this);changed()"></button></div>
+        <div class="sep"></div>
+        <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Dil Seçici</div></div><button class="toggle on" id="tog-mag-lang" onclick="toggleBtn(this);changed()"></button></div>
+        <div class="sep"></div>
+        <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Noise Texture</div></div><button class="toggle on" id="tog-mag-noise" onclick="toggleBtn(this);changed()"></button></div>
+      </div>
+      <div class="btn-row"><button class="save-all-btn" onclick="kaydetSayfa('magaza')">💾 Mağaza'yı Kaydet</button><button class="btn-sifirla" onclick="sifirla('magaza')">↺ Sıfırla</button></div>
+    </div>
+    <div class="sayfa-sag">
+      <div class="mockup-wrap">
+        <div class="mockup-topbar"><div class="mockup-dot" style="background:#ff5f57"></div><div class="mockup-dot" style="background:#febc2e"></div><div class="mockup-dot" style="background:#28c840"></div><div class="mockup-url">magaza.html</div></div>
+        <div class="mockup-screen" onclick="buyutMockup('magaza')"><canvas id="mc-magaza" style="width:100%;height:100%;display:block;"></canvas></div>
+        <div class="mockup-label">🖱 Tıkla → Tam Ekran</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- USTAM -->
+  <div class="sayfa" id="sayfa-ustam">
+    <div class="sayfa-sol">
+      <div><div class="sec-title">🔧 Ustam</div><div class="sec-sub">ustam.html — Renk teması</div></div>
+      <div class="kart">
+        <div class="kart-baslik"><h3>🎨 Renk Teması</h3><span class="kart-tag">ustam.html</span></div>
+        <div class="form-grid">
+          <div class="form-group"><label class="f-label">--accent</label><div class="color-row"><div class="color-preview" id="prev-ust-a" style="background:#7B5CF0" onclick="openPicker('ust-a')"></div><input class="f-input" id="ust-a" value="#7B5CF0" oninput="clr('ust-a')"/><input type="color" class="color-picker-native" id="picker-ust-a" value="#7B5CF0" oninput="syncPk('ust-a')"/></div></div>
+          <div class="form-group"><label class="f-label">--accent2</label><div class="color-row"><div class="color-preview" id="prev-ust-a2" style="background:#F0C55C" onclick="openPicker('ust-a2')"></div><input class="f-input" id="ust-a2" value="#F0C55C" oninput="clr('ust-a2')"/><input type="color" class="color-picker-native" id="picker-ust-a2" value="#F0C55C" oninput="syncPk('ust-a2')"/></div></div>
+          <div class="form-group"><label class="f-label">--bg</label><div class="color-row"><div class="color-preview" id="prev-ust-bg" style="background:#0a0a0f" onclick="openPicker('ust-bg')"></div><input class="f-input" id="ust-bg" value="#0a0a0f" oninput="clr('ust-bg')"/><input type="color" class="color-picker-native" id="picker-ust-bg" value="#0a0a0f" oninput="syncPk('ust-bg')"/></div></div>
+          <div class="form-group"><label class="f-label">--surface</label><div class="color-row"><div class="color-preview" id="prev-ust-surf" style="background:#22222f" onclick="openPicker('ust-surf')"></div><input class="f-input" id="ust-surf" value="#22222f" oninput="clr('ust-surf')"/><input type="color" class="color-picker-native" id="picker-ust-surf" value="#22222f" oninput="syncPk('ust-surf')"/></div></div>
+        </div>
+      </div>
+      <div class="kart">
+        <div class="kart-baslik"><h3>⚙️ Özellikler</h3></div>
+        <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Dark Mode Varsayılan</div></div><button class="toggle on" id="tog-ust-dark" onclick="toggleBtn(this);changed()"></button></div>
+        <div class="sep"></div>
+        <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Noise Texture</div></div><button class="toggle on" id="tog-ust-noise" onclick="toggleBtn(this);changed()"></button></div>
+      </div>
+      <div class="btn-row"><button class="save-all-btn" onclick="kaydetSayfa('ustam')">💾 Ustam'ı Kaydet</button><button class="btn-sifirla" onclick="sifirla('ustam')">↺ Sıfırla</button></div>
+    </div>
+    <div class="sayfa-sag">
+      <div class="mockup-wrap">
+        <div class="mockup-topbar"><div class="mockup-dot" style="background:#ff5f57"></div><div class="mockup-dot" style="background:#febc2e"></div><div class="mockup-dot" style="background:#28c840"></div><div class="mockup-url">ustam.html</div></div>
+        <div class="mockup-screen" onclick="buyutMockup('ustam')"><canvas id="mc-ustam" style="width:100%;height:100%;display:block;"></canvas></div>
+        <div class="mockup-label">🖱 Tıkla → Tam Ekran</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GEN-Z -->
+  <div class="sayfa" id="sayfa-genz">
+    <div class="sayfa-sol">
+      <div><div class="sec-title">🎓 Gen-Z</div><div class="sec-sub">gen-z.html — Renk teması</div></div>
+      <div class="kart">
+        <div class="kart-baslik"><h3>🎨 Renk Teması</h3><span class="kart-tag">gen-z.html</span></div>
+        <div class="form-grid">
+          <div class="form-group"><label class="f-label">--accent</label><div class="color-row"><div class="color-preview" id="prev-gz-a" style="background:#7B5CF0" onclick="openPicker('gz-a')"></div><input class="f-input" id="gz-a" value="#7B5CF0" oninput="clr('gz-a')"/><input type="color" class="color-picker-native" id="picker-gz-a" value="#7B5CF0" oninput="syncPk('gz-a')"/></div></div>
+          <div class="form-group"><label class="f-label">--accent2</label><div class="color-row"><div class="color-preview" id="prev-gz-a2" style="background:#F0C55C" onclick="openPicker('gz-a2')"></div><input class="f-input" id="gz-a2" value="#F0C55C" oninput="clr('gz-a2')"/><input type="color" class="color-picker-native" id="picker-gz-a2" value="#F0C55C" oninput="syncPk('gz-a2')"/></div></div>
+          <div class="form-group"><label class="f-label">--bg</label><div class="color-row"><div class="color-preview" id="prev-gz-bg" style="background:#0a0a0f" onclick="openPicker('gz-bg')"></div><input class="f-input" id="gz-bg" value="#0a0a0f" oninput="clr('gz-bg')"/><input type="color" class="color-picker-native" id="picker-gz-bg" value="#0a0a0f" oninput="syncPk('gz-bg')"/></div></div>
+          <div class="form-group"><label class="f-label">--surface</label><div class="color-row"><div class="color-preview" id="prev-gz-surf" style="background:#22222f" onclick="openPicker('gz-surf')"></div><input class="f-input" id="gz-surf" value="#22222f" oninput="clr('gz-surf')"/><input type="color" class="color-picker-native" id="picker-gz-surf" value="#22222f" oninput="syncPk('gz-surf')"/></div></div>
+        </div>
+      </div>
+      <div class="kart">
+        <div class="kart-baslik"><h3>⚙️ Özellikler</h3></div>
+        <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Dark Mode Varsayılan</div></div><button class="toggle on" id="tog-gz-dark" onclick="toggleBtn(this);changed()"></button></div>
+        <div class="sep"></div>
+        <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Noise Texture</div></div><button class="toggle on" id="tog-gz-noise" onclick="toggleBtn(this);changed()"></button></div>
+      </div>
+      <div class="btn-row"><button class="save-all-btn" onclick="kaydetSayfa('genz')">💾 Gen-Z'yi Kaydet</button><button class="btn-sifirla" onclick="sifirla('genz')">↺ Sıfırla</button></div>
+    </div>
+    <div class="sayfa-sag">
+      <div class="mockup-wrap">
+        <div class="mockup-topbar"><div class="mockup-dot" style="background:#ff5f57"></div><div class="mockup-dot" style="background:#febc2e"></div><div class="mockup-dot" style="background:#28c840"></div><div class="mockup-url">gen-z.html</div></div>
+        <div class="mockup-screen" onclick="buyutMockup('genz')"><canvas id="mc-genz" style="width:100%;height:100%;display:block;"></canvas></div>
+        <div class="mockup-label">🖱 Tıkla → Tam Ekran</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REKLAMLAR -->
+  <div class="sayfa fw" id="sayfa-reklamlar">
+    <div class="sayfa-sol">
+      <div><div class="sec-title">📢 Reklam Alanları</div><div class="sec-sub">Planlı yayın takvimiyle reklam yönetimi</div></div>
+      <div class="info-grid">
+        <div class="info-kart"><div class="i-num" id="ad-aktif-c">0</div><div class="i-label">Aktif</div></div>
+        <div class="info-kart"><div class="i-num" id="ad-planli-c">0</div><div class="i-label">Planlı</div></div>
+        <div class="info-kart"><div class="i-num">4</div><div class="i-label">Toplam Alan</div></div>
+      </div>
+      <div class="ad-tabs">
+        <button class="ad-tab on" onclick="adF('hepsi',this)">Hepsi</button>
+        <button class="ad-tab" onclick="adF('index',this)">🏠 Index</button>
+        <button class="ad-tab" onclick="adF('magaza',this)">🛍 Mağaza</button>
+        <button class="ad-tab" onclick="adF('ustam',this)">🔧 Ustam</button>
+        <button class="ad-tab" onclick="adF('genz',this)">🎓 Gen-Z</button>
+      </div>
+      <!-- AD1 -->
+      <div class="ad-area-kart" data-page="index">
+        <div class="ad-area-head"><div class="ad-num">1</div><div><div class="ad-name">Index — Üst Banner</div><div style="font-size:.56rem;color:var(--text3)">Tam genişlik, sayfanın tepesinde</div></div><div class="ad-page-tag">index.html</div><span id="ad1-d" class="ad-durum pasif">● Pasif</span><button class="toggle" id="tog-ad1" onclick="toggleBtn(this);adDurum(1);adCount()" style="margin-left:.7rem;"></button></div>
+        <div class="form-grid">
+          <div class="form-group"><label class="f-label">Reklam Metni</label><input class="f-input" id="ad1-text" placeholder="Yaz indirimi! %50'ye varan indirimler" oninput="adPrev(1)"/></div>
+          <div class="form-group"><label class="f-label">Link URL</label><input class="f-input" id="ad1-url" placeholder="https://…"/></div>
+          <div class="form-group"><label class="f-label">Arka Plan</label><div class="color-row"><div class="color-preview" id="prev-ad1-bg" style="background:#7B5CF0" onclick="openPicker('ad1-bg')"></div><input class="f-input" id="ad1-bg" value="#7B5CF0" oninput="clr('ad1-bg');adPrev(1)"/><input type="color" class="color-picker-native" id="picker-ad1-bg" value="#7B5CF0" oninput="syncPk('ad1-bg');adPrev(1)"/></div></div>
+          <div class="form-group"><label class="f-label">Metin Rengi</label><div class="color-row"><div class="color-preview" id="prev-ad1-txt" style="background:#ffffff" onclick="openPicker('ad1-txt')"></div><input class="f-input" id="ad1-txt" value="#ffffff" oninput="clr('ad1-txt');adPrev(1)"/><input type="color" class="color-picker-native" id="picker-ad1-txt" value="#ffffff" oninput="syncPk('ad1-txt');adPrev(1)"/></div></div>
+          <div class="form-group"><label class="f-label">Tür</label><select class="f-select" id="ad1-type"><option value="banner">Üst Banner</option><option value="floating">Floating</option></select></div>
+          <div class="form-group"><label class="f-label">Kapatılabilir?</label><select class="f-select" id="ad1-closable"><option value="yes">Evet</option><option value="no">Hayır</option></select></div>
+        </div>
+        <div class="takvim-row"><div><label>📅 Yayın Başlangıcı</label><input type="date" class="f-date" id="ad1-bas" onchange="adDurum(1)"/></div><div><label>📅 Yayın Bitişi</label><input type="date" class="f-date" id="ad1-bit" onchange="adDurum(1)"/></div></div>
+        <div class="ad-preview-bar" id="ad1-prev" style="background:#7B5CF0;color:#fff;">Reklam metni buraya gelecek</div>
+      </div>
+      <!-- AD2 -->
+      <div class="ad-area-kart" data-page="magaza">
+        <div class="ad-area-head"><div class="ad-num">2</div><div><div class="ad-name">Mağaza — Ürünler Arası</div><div style="font-size:.56rem;color:var(--text3)">4. sırada inline banner</div></div><div class="ad-page-tag">magaza.html</div><span id="ad2-d" class="ad-durum pasif">● Pasif</span><button class="toggle" id="tog-ad2" onclick="toggleBtn(this);adDurum(2);adCount()" style="margin-left:.7rem;"></button></div>
+        <div class="form-grid">
+          <div class="form-group"><label class="f-label">Reklam Metni</label><input class="f-input" id="ad2-text" placeholder="Sınırlı stok!" oninput="adPrev(2)"/></div>
+          <div class="form-group"><label class="f-label">Buton</label><input class="f-input" id="ad2-btn" value="Keşfet →"/></div>
+          <div class="form-group"><label class="f-label">Arka Plan</label><div class="color-row"><div class="color-preview" id="prev-ad2-bg" style="background:#F0C55C" onclick="openPicker('ad2-bg')"></div><input class="f-input" id="ad2-bg" value="#F0C55C" oninput="clr('ad2-bg');adPrev(2)"/><input type="color" class="color-picker-native" id="picker-ad2-bg" value="#F0C55C" oninput="syncPk('ad2-bg');adPrev(2)"/></div></div>
+          <div class="form-group"><label class="f-label">Metin Rengi</label><div class="color-row"><div class="color-preview" id="prev-ad2-txt" style="background:#0a0a0f" onclick="openPicker('ad2-txt')"></div><input class="f-input" id="ad2-txt" value="#0a0a0f" oninput="clr('ad2-txt');adPrev(2)"/><input type="color" class="color-picker-native" id="picker-ad2-txt" value="#0a0a0f" oninput="syncPk('ad2-txt');adPrev(2)"/></div></div>
+        </div>
+        <div class="takvim-row"><div><label>📅 Yayın Başlangıcı</label><input type="date" class="f-date" id="ad2-bas" onchange="adDurum(2)"/></div><div><label>📅 Yayın Bitişi</label><input type="date" class="f-date" id="ad2-bit" onchange="adDurum(2)"/></div></div>
+        <div class="ad-preview-bar" id="ad2-prev" style="background:#F0C55C;color:#0a0a0f;">Reklam metni buraya gelecek</div>
+      </div>
+      <!-- AD3 -->
+      <div class="ad-area-kart" data-page="ustam">
+        <div class="ad-area-head"><div class="ad-num">3</div><div><div class="ad-name">Ustam — Sidebar Kutu</div><div style="font-size:.56rem;color:var(--text3)">Yan sütunda sabit kutu</div></div><div class="ad-page-tag">ustam.html</div><span id="ad3-d" class="ad-durum pasif">● Pasif</span><button class="toggle" id="tog-ad3" onclick="toggleBtn(this);adDurum(3);adCount()" style="margin-left:.7rem;"></button></div>
+        <div class="form-grid">
+          <div class="form-group"><label class="f-label">Başlık</label><input class="f-input" id="ad3-title" placeholder="Profesyonel Usta Ol!"/></div>
+          <div class="form-group"><label class="f-label">Alt Yazı</label><input class="f-input" id="ad3-sub" placeholder="Bugün kayıt ol"/></div>
+          <div class="form-group"><label class="f-label">Buton</label><input class="f-input" id="ad3-btn" value="Başvur →"/></div>
+          <div class="form-group"><label class="f-label">Vurgu Rengi</label><div class="color-row"><div class="color-preview" id="prev-ad3-bg" style="background:#5CF0B4" onclick="openPicker('ad3-bg')"></div><input class="f-input" id="ad3-bg" value="#5CF0B4" oninput="clr('ad3-bg')"/><input type="color" class="color-picker-native" id="picker-ad3-bg" value="#5CF0B4" oninput="syncPk('ad3-bg')"/></div></div>
+        </div>
+        <div class="takvim-row"><div><label>📅 Yayın Başlangıcı</label><input type="date" class="f-date" id="ad3-bas" onchange="adDurum(3)"/></div><div><label>📅 Yayın Bitişi</label><input type="date" class="f-date" id="ad3-bit" onchange="adDurum(3)"/></div></div>
+      </div>
+      <!-- AD4 -->
+      <div class="ad-area-kart" data-page="genz">
+        <div class="ad-area-head"><div class="ad-num">4</div><div><div class="ad-name">Gen-Z — Hero Altı</div><div style="font-size:.56rem;color:var(--text3)">Hero bölümünün hemen altı</div></div><div class="ad-page-tag">gen-z.html</div><span id="ad4-d" class="ad-durum pasif">● Pasif</span><button class="toggle" id="tog-ad4" onclick="toggleBtn(this);adDurum(4);adCount()" style="margin-left:.7rem;"></button></div>
+        <div class="form-grid">
+          <div class="form-group"><label class="f-label">Reklam Metni</label><input class="f-input" id="ad4-text" placeholder="Yeni bir şey keşfet…" oninput="adPrev(4)"/></div>
+          <div class="form-group"><label class="f-label">Link URL</label><input class="f-input" id="ad4-url" placeholder="https://…"/></div>
+          <div class="form-group"><label class="f-label">Arka Plan</label><div class="color-row"><div class="color-preview" id="prev-ad4-bg" style="background:#a78bfa" onclick="openPicker('ad4-bg')"></div><input class="f-input" id="ad4-bg" value="#a78bfa" oninput="clr('ad4-bg');adPrev(4)"/><input type="color" class="color-picker-native" id="picker-ad4-bg" value="#a78bfa" oninput="syncPk('ad4-bg');adPrev(4)"/></div></div>
+          <div class="form-group"><label class="f-label">Kapatılabilir?</label><select class="f-select" id="ad4-closable"><option value="yes">Evet</option><option value="no">Hayır</option></select></div>
+        </div>
+        <div class="takvim-row"><div><label>📅 Yayın Başlangıcı</label><input type="date" class="f-date" id="ad4-bas" onchange="adDurum(4)"/></div><div><label>📅 Yayın Bitişi</label><input type="date" class="f-date" id="ad4-bit" onchange="adDurum(4)"/></div></div>
+        <div class="ad-preview-bar" id="ad4-prev" style="background:#a78bfa;color:#fff;">Reklam metni buraya gelecek</div>
+      </div>
+      <div class="btn-row"><button class="save-all-btn" onclick="kaydetReklamlar()">💾 Reklamları Kaydet</button></div>
+    </div>
+  </div>
+
+  <!-- TEMA ŞABLONLARI -->
+  <div class="sayfa fw" id="sayfa-temalar">
+    <div class="sayfa-sol">
+      <div><div class="sec-title">🎭 Tema Şablonları</div><div class="sec-sub">Hazır paletten seç, tek tıkla tüm sayfalara uygula</div></div>
+      <div class="kart"><div class="kart-baslik"><h3>✨ Hazır Temalar</h3></div><div class="tema-grid" id="tema-grid"></div></div>
+      <div class="kart">
+        <div class="kart-baslik"><h3>💾 Özel Tema Kaydet</h3></div>
+        <div class="form-grid"><div class="form-group full"><label class="f-label">Tema Adı</label><input class="f-input" id="ozel-tema-ad" placeholder="Örn: Yaz Kampanyası 2025"/></div></div>
+        <div class="btn-row"><button class="btn-kaydet" onclick="ozelTemayiKaydet()">💾 Mevcut Ayarları Kaydet</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GLOBAL -->
+  <div class="sayfa fw" id="sayfa-global">
+    <div class="sayfa-sol">
+      <div><div class="sec-title">🌐 Global Renkler</div><div class="sec-sub">Tüm sayfalarda ortak CSS değişkenleri</div></div>
+      <div class="kart">
+        <div class="kart-baslik"><h3>🔵 Ana Değişkenler</h3><span class="kart-tag">Tüm Sayfalar</span></div>
+        <div class="form-grid-3">
+          <div class="form-group"><label class="f-label">--accent</label><div class="color-row"><div class="color-preview" id="prev-g-a" style="background:#7B5CF0" onclick="openPicker('g-a')"></div><input class="f-input" id="g-a" value="#7B5CF0" oninput="clr('g-a')"/><input type="color" class="color-picker-native" id="picker-g-a" value="#7B5CF0" oninput="syncPk('g-a')"/></div></div>
+          <div class="form-group"><label class="f-label">--accent2</label><div class="color-row"><div class="color-preview" id="prev-g-a2" style="background:#F0C55C" onclick="openPicker('g-a2')"></div><input class="f-input" id="g-a2" value="#F0C55C" oninput="clr('g-a2')"/><input type="color" class="color-picker-native" id="picker-g-a2" value="#F0C55C" oninput="syncPk('g-a2')"/></div></div>
+          <div class="form-group"><label class="f-label">--accent3</label><div class="color-row"><div class="color-preview" id="prev-g-a3" style="background:#5CF0B4" onclick="openPicker('g-a3')"></div><input class="f-input" id="g-a3" value="#5CF0B4" oninput="clr('g-a3')"/><input type="color" class="color-picker-native" id="picker-g-a3" value="#5CF0B4" oninput="syncPk('g-a3')"/></div></div>
+          <div class="form-group"><label class="f-label">--bg</label><div class="color-row"><div class="color-preview" id="prev-g-bg" style="background:#0a0a0f" onclick="openPicker('g-bg')"></div><input class="f-input" id="g-bg" value="#0a0a0f" oninput="clr('g-bg')"/><input type="color" class="color-picker-native" id="picker-g-bg" value="#0a0a0f" oninput="syncPk('g-bg')"/></div></div>
+          <div class="form-group"><label class="f-label">--bg2</label><div class="color-row"><div class="color-preview" id="prev-g-bg2" style="background:#13131a" onclick="openPicker('g-bg2')"></div><input class="f-input" id="g-bg2" value="#13131a" oninput="clr('g-bg2')"/><input type="color" class="color-picker-native" id="picker-g-bg2" value="#13131a" oninput="syncPk('g-bg2')"/></div></div>
+          <div class="form-group"><label class="f-label">--surface</label><div class="color-row"><div class="color-preview" id="prev-g-surf" style="background:#22222f" onclick="openPicker('g-surf')"></div><input class="f-input" id="g-surf" value="#22222f" oninput="clr('g-surf')"/><input type="color" class="color-picker-native" id="picker-g-surf" value="#22222f" oninput="syncPk('g-surf')"/></div></div>
+        </div>
+      </div>
+      <div class="kart"><div class="kart-baslik"><h3>📋 CSS Kodu Üret</h3></div><textarea class="css-output" id="css-out" readonly></textarea><div class="btn-row"><button class="btn-kaydet" onclick="cssUret()">🔄 Üret</button><button class="btn-kaydet" onclick="cssCopy()">📋 Kopyala</button></div></div>
+      <div class="btn-row"><button class="save-all-btn" onclick="kaydetGlobal()">💾 Global Kaydet</button></div>
+    </div>
+  </div>
+
+  <!-- YAZI TİPİ -->
+  <div class="sayfa fw" id="sayfa-yazitipi">
+    <div class="sayfa-sol">
+      <div><div class="sec-title">✍ Yazı Tipleri</div><div class="sec-sub">Display ve body font ayarları</div></div>
+      <div class="kart">
+        <div class="kart-baslik"><h3>🔤 Display Font (Başlıklar)</h3></div>
+        <div class="form-grid">
+          <div class="form-group"><label class="f-label">Font</label><select class="f-select" id="font-display" onchange="fontPrev()"><option value="'Syne',sans-serif" selected>Syne</option><option value="'Space Grotesk',sans-serif">Space Grotesk</option><option value="'Plus Jakarta Sans',sans-serif">Plus Jakarta Sans</option><option value="'Outfit',sans-serif">Outfit</option><option value="'Raleway',sans-serif">Raleway</option></select></div>
+          <div class="form-group"><label class="f-label">Ağırlık</label><select class="f-select" id="font-dw"><option>400</option><option>700</option><option selected>800</option></select></div>
+        </div>
+        <div style="margin-top:.8rem;padding:1rem;background:rgba(255,255,255,.03);border-radius:var(--radius-sm);border:1px solid var(--border);"><div id="fp-d" style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;">GEN-Z Platform</div></div>
+      </div>
+      <div class="kart">
+        <div class="kart-baslik"><h3>📝 Body Font</h3></div>
+        <div class="form-grid">
+          <div class="form-group"><label class="f-label">Font</label><select class="f-select" id="font-body" onchange="fontPrev()"><option value="'DM Sans',sans-serif" selected>DM Sans</option><option value="'Inter',sans-serif">Inter</option><option value="'Manrope',sans-serif">Manrope</option><option value="'Nunito',sans-serif">Nunito</option><option value="'Poppins',sans-serif">Poppins</option></select></div>
+          <div class="form-group"><label class="f-label">Boyut</label><div class="slider-wrap"><input type="range" min="12" max="18" value="14" id="font-sz" oninput="slUp(this,'fsv','px')"/><div class="slider-val" id="fsv">14px</div></div></div>
+        </div>
+        <div style="margin-top:.8rem;padding:1rem;background:rgba(255,255,255,.03);border-radius:var(--radius-sm);border:1px solid var(--border);"><div id="fp-b" style="font-family:'DM Sans',sans-serif;font-size:.84rem;color:var(--text2);line-height:1.7;">Türkiye'nin yeni nesil platformu GEN-Z, gençlerin ürettiği ve birbirinden öğrendiği eşsiz bir ekosistem sunuyor.</div></div>
+      </div>
+      <div class="btn-row"><button class="save-all-btn" onclick="kaydetFont()">💾 Kaydet</button></div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+// ─── TEMALAR ───────────────────────────────────────────────────────────────
+const TEMALAR=[
+  {ad:'GEN-Z Varsayılan',bg:'#0a0a0f',a:'#7B5CF0',a2:'#F0C55C',a3:'#5CF0B4',g1:'#ffffff',g2:'#c4b5fd',g3:'#F0C55C'},
+  {ad:'Okyanus Gecesi', bg:'#060c1a',a:'#3b82f6',a2:'#06b6d4',a3:'#a3e635',g1:'#ffffff',g2:'#93c5fd',g3:'#06b6d4'},
+  {ad:'Ember Kırmızı',  bg:'#0f0806',a:'#ef4444',a2:'#f97316',a3:'#fbbf24',g1:'#fff7ed',g2:'#fca5a5',g3:'#f97316'},
+  {ad:'Zümrüt Ormanı', bg:'#030d07',a:'#10b981',a2:'#6ee7b7',a3:'#fde68a',g1:'#ecfdf5',g2:'#6ee7b7',g3:'#fde68a'},
+  {ad:'Gece Pembe',     bg:'#0d0410',a:'#ec4899',a2:'#f472b6',a3:'#c084fc',g1:'#fdf2f8',g2:'#f9a8d4',g3:'#c084fc'},
+  {ad:'Altın & Siyah',  bg:'#0a0800',a:'#d97706',a2:'#fbbf24',a3:'#f0c55c',g1:'#fffbeb',g2:'#fcd34d',g3:'#f97316'},
+  {ad:'Buz Mavisi',     bg:'#050d14',a:'#0ea5e9',a2:'#38bdf8',a3:'#67e8f9',g1:'#f0f9ff',g2:'#bae6fd',g3:'#67e8f9'},
+  {ad:'Mor Gece',       bg:'#06020f',a:'#8b5cf6',a2:'#a78bfa',a3:'#ddd6fe',g1:'#f5f3ff',g2:'#c4b5fd',g3:'#a78bfa'},
+];
+let aktifTema=0;
+
+function temaGrid(){
+  const g=document.getElementById('tema-grid'); g.innerHTML='';
+  TEMALAR.forEach((t,i)=>{
+    const d=document.createElement('div');
+    d.className='tema-kart'+(i===aktifTema?' aktif':'');
+    d.style.cssText=`background:linear-gradient(135deg,${t.bg} 0%,${t.a}44 100%);`;
+    d.innerHTML=`<div class="tema-ad">${t.ad}</div><div class="tema-renkler">${[t.a,t.a2,t.a3,t.bg].map(c=>`<div class="tema-renk" style="background:${c}"></div>`).join('')}</div>`;
+    d.onclick=()=>temaUygula(i);
+    g.appendChild(d);
+  });
+  try{
+    const oz=JSON.parse(localStorage.getItem('genz_oz_tema')||'[]');
+    oz.forEach((t)=>{
+      const d=document.createElement('div');
+      d.className='tema-kart';
+      d.style.cssText=`background:linear-gradient(135deg,${t.bg} 0%,${t.a}44 100%);`;
+      d.innerHTML=`<div class="tema-ad">${t.ad} <span style="font-size:.5rem;opacity:.6">⭐</span></div><div class="tema-renkler">${[t.a,t.a2,t.a3].map(c=>`<div class="tema-renk" style="background:${c}"></div>`).join('')}</div>`;
+      d.onclick=()=>temaUygula(null,t);
+      g.appendChild(d);
+    });
+  }catch(e){}
+}
+
+function temaUygula(i,oz){
+  const t=oz||TEMALAR[i]; aktifTema=i??-1;
+  pushH('Tema: '+t.ad);
+  const mp={'idx-bg':t.bg,'idx-g1':t.g1,'idx-g2':t.g2,'idx-g3':t.g3,'blob1':t.a,'blob2':t.a2,'blob3':t.a3,
+    'mag-a':t.a,'mag-a2':t.a2,'mag-a3':t.a3,'mag-bg':t.bg,'ust-a':t.a,'ust-a2':t.a2,'ust-bg':t.bg,
+    'gz-a':t.a,'gz-a2':t.a2,'gz-bg':t.bg,'g-a':t.a,'g-a2':t.a2,'g-a3':t.a3,'g-bg':t.bg};
+  for(const[id,val]of Object.entries(mp)){const el=document.getElementById(id);if(el){el.value=val;clr(id);}}
+  updateGrad(); liveMockup(); temaGrid();
+  toast('✓ '+t.ad+' uygulandı','success');
+}
+
+function ozelTemayiKaydet(){
+  const ad=document.getElementById('ozel-tema-ad').value.trim();
+  if(!ad){toast('Tema adı girin','error');return;}
+  const t={ad,bg:gv('idx-bg'),a:gv('idx-g2'),a2:gv('idx-g3'),a3:gv('blob3'),g1:gv('idx-g1'),g2:gv('idx-g2'),g3:gv('idx-g3')};
+  const oz=JSON.parse(localStorage.getItem('genz_oz_tema')||'[]');
+  oz.push(t); localStorage.setItem('genz_oz_tema',JSON.stringify(oz));
+  document.getElementById('ozel-tema-ad').value=''; temaGrid();
+  toast('✓ Özel tema kaydedildi','success');
+}
+
+// ─── UNDO/REDO ─────────────────────────────────────────────────────────────
+let hStack=[],fStack=[]; let hTimer=null;
+
+function snapshot(){
+  const s={};
+  document.querySelectorAll('.f-input,.f-select,.f-textarea').forEach(e=>{if(e.id)s[e.id]=e.value;});
+  document.querySelectorAll('.toggle').forEach(e=>{if(e.id)s[e.id]=e.classList.contains('on');});
+  document.querySelectorAll('input[type=range]').forEach(e=>{if(e.id)s[e.id]=e.value;});
+  return s;
+}
+
+function applySnap(s){
+  for(const[id,val]of Object.entries(s)){
+    const el=document.getElementById(id); if(!el)continue;
+    if(el.type==='range'){el.value=val;sliderRefresh(el);}
+    else if(el.classList.contains('toggle')){el.classList.toggle('on',val===true||val==='true');}
+    else el.value=val;
+    if(el.classList.contains('f-input'))clr(id);
+  }
+  updateGrad(); liveMockup();
+}
+
+function pushH(label){
+  hStack.push({s:snapshot(),label,t:new Date().toLocaleTimeString('tr')});
+  if(hStack.length>30)hStack.shift();
+  fStack=[];
+  undoRefresh(); gecmisRender();
+}
+
+function changed(){clearTimeout(hTimer);hTimer=setTimeout(()=>pushH('Ayar değiştirildi'),700);}
+
+function undo(){
+  if(hStack.length<2)return;
+  fStack.push(hStack.pop()); applySnap(hStack[hStack.length-1].s);
+  undoRefresh(); gecmisRender(); toast('↩ Geri alındı','info');
+}
+
+function redo(){
+  if(!fStack.length)return;
+  const x=fStack.pop(); hStack.push(x); applySnap(x.s);
+  undoRefresh(); gecmisRender(); toast('↪ İleri','info');
+}
+
+function undoRefresh(){
+  document.getElementById('undoBtn').disabled=hStack.length<2;
+  document.getElementById('redoBtn').disabled=!fStack.length;
+  document.getElementById('undoCount').textContent='Geçmiş: '+hStack.length+' adım';
+}
+
+function gecmisRender(){
+  const el=document.getElementById('gecmis-liste'); if(!el)return;
+  if(!hStack.length){el.innerHTML='<div class="gecmis-bos">Henüz değişiklik yapılmadı</div>';return;}
+  el.innerHTML=[...hStack].reverse().map((h,i)=>
+    `<div class="gecmis-item${i===0?' guncel':''}"><div class="g-dot"></div><div class="g-acik">${h.label}</div><div class="g-zaman">${h.t}</div></div>`
+  ).join('');
+}
+
+// ─── MOCKUP (Canvas) ───────────────────────────────────────────────────────
+function liveMockup(){['index','magaza','ustam','genz'].forEach(renderMC);}
+
+function hexRgb(hex){const r=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);return r?{r:parseInt(r[1],16),g:parseInt(r[2],16),b:parseInt(r[3],16)}:{r:10,g:10,b:15};}
+
+function renderMC(pg){
+  const cv=document.getElementById('mc-'+pg); if(!cv)return;
+  const wp=cv.parentElement; const W=wp.clientWidth||340; const H=Math.round(W*9/16);
+  cv.width=W; cv.height=H;
+  const c=cv.getContext('2d');
+  let bg,a,a2,a3,g1,g2,g3,tagline,badge;
+  if(pg==='index'){bg=gv('idx-bg')||'#0a0a0f';a=gv('blob1')||'#7B5CF0';a2=gv('blob2')||'#F0C55C';a3=gv('blob3')||'#5CF0B4';g1=gv('idx-g1')||'#fff';g2=gv('idx-g2')||'#c4b5fd';g3=gv('idx-g3')||'#F0C55C';tagline=gv('idx-tagline')||"Türkiye'nin yeni nesil platformu";badge=gv('idx-badge')||'Beta Süreci';}
+  else if(pg==='magaza'){bg=gv('mag-bg')||'#0a0a0f';a=gv('mag-a')||'#7B5CF0';a2=gv('mag-a2')||'#F0C55C';a3=gv('mag-a3')||'#5CF0B4';g1=a;g2=a2;g3=a3;}
+  else if(pg==='ustam'){bg=gv('ust-bg')||'#0a0a0f';a=gv('ust-a')||'#7B5CF0';a2=gv('ust-a2')||'#F0C55C';a3='#5CF0B4';g1=a;g2=a2;g3=a3;}
+  else{bg=gv('gz-bg')||'#0a0a0f';a=gv('gz-a')||'#7B5CF0';a2=gv('gz-a2')||'#F0C55C';a3='#5CF0B4';g1=a;g2=a2;g3=a3;}
+  const bgR=hexRgb(bg);
+  c.fillStyle=bg; c.fillRect(0,0,W,H);
+  const bop=(parseInt(document.getElementById('blob-op')?.value||12))/100;
+  const drawBlob=(cx,cy,rad,col)=>{const r=hexRgb(col);const gr=c.createRadialGradient(cx,cy,0,cx,cy,rad);gr.addColorStop(0,`rgba(${r.r},${r.g},${r.b},${bop})`);gr.addColorStop(1,'transparent');c.fillStyle=gr;c.fillRect(0,0,W,H);};
+  drawBlob(W*.15,H*.15,W*.5,a); drawBlob(W*.85,H*.85,W*.45,a2); drawBlob(W*.5,H*.5,W*.35,a3);
+  // Navbar
+  c.fillStyle=`rgba(${bgR.r},${bgR.g},${bgR.b},.9)`;c.fillRect(0,0,W,H*.12);
+  c.strokeStyle='rgba(255,255,255,.06)';c.lineWidth=.5;c.beginPath();c.moveTo(0,H*.12);c.lineTo(W,H*.12);c.stroke();
+  // Logo
+  const lg=c.createLinearGradient(W*.08,0,W*.45,0);lg.addColorStop(0,g1);lg.addColorStop(.5,g2);lg.addColorStop(1,g3);
+  c.font=`bold ${Math.round(W*.054)}px Syne,sans-serif`;c.fillStyle=lg;c.fillText('GEN-Z',W*.07,H*.075);
+  [.38,.5,.62].forEach(x=>{c.fillStyle='rgba(255,255,255,.22)';c.fillRect(W*x-10,H*.053,20,2.5);});
+  if(pg==='index'){
+    // badge
+    c.font=`bold ${Math.round(W*.026)}px DM Sans,sans-serif`;c.textAlign='center';
+    const bw=c.measureText((badge||'Beta Süreci').toUpperCase()).width+20;
+    const r1=hexRgb(a);c.fillStyle=`rgba(${r1.r},${r1.g},${r1.b},.18)`;rRect(c,W/2-bw/2,H*.23,bw,H*.055,20);
+    c.fillStyle=g2;c.fillText((badge||'Beta Süreci').toUpperCase(),W/2,H*.267);
+    // main logo
+    const lg2=c.createLinearGradient(0,0,W,0);lg2.addColorStop(0,g1);lg2.addColorStop(.5,g2);lg2.addColorStop(1,g3);
+    c.font=`800 ${Math.round(W*.155)}px Syne,sans-serif`;c.fillStyle=lg2;c.fillText('GEN-Z',W/2,H*.51);
+    // tagline
+    c.font=`${Math.round(W*.032)}px DM Sans,sans-serif`;c.fillStyle='rgba(240,238,255,.5)';
+    c.fillText(tagline||"Türkiye'nin yeni nesil platformu",W/2,H*.615);
+    // dots
+    [-14,0,14].forEach((dx,i)=>{c.beginPath();c.arc(W/2+dx,H*.72,4,0,Math.PI*2);c.fillStyle=i===1?a:`rgba(${r1.r},${r1.g},${r1.b},.4)`;c.fill();});
+    c.font=`${Math.round(W*.021)}px DM Sans,sans-serif`;c.fillStyle='rgba(240,238,255,.16)';c.fillText('© 2025 GEN-Z',W/2,H*.93);
+  } else {
+    const lg2=c.createLinearGradient(0,0,W,0);lg2.addColorStop(0,g1);lg2.addColorStop(.5,g2);lg2.addColorStop(1,g3);
+    c.font=`800 ${Math.round(W*.075)}px Syne,sans-serif`;c.fillStyle=lg2;c.textAlign='center';
+    const lbl=pg==='magaza'?'🛍 MAĞAZA':pg==='ustam'?'🔧 USTAM':'🎓 GEN-Z';
+    c.fillText(lbl,W/2,H*.38);
+    const r1=hexRgb(a);
+    [[W*.12,H*.5],[W*.43,H*.5],[W*.74,H*.5]].forEach(([cx,cy])=>{
+      const cw=W*.28,ch=H*.18;c.fillStyle='rgba(255,255,255,.04)';rRect(c,cx,cy,cw,ch,5);
+      c.fillStyle='rgba(255,255,255,.08)';c.fillRect(cx+5,cy+5,cw-10,ch*.42);
+      c.fillStyle='rgba(255,255,255,.14)';c.fillRect(cx+5,cy+ch*.54,cw*.6,3);
+      c.fillStyle=`rgba(${r1.r},${r1.g},${r1.b},.7)`;c.fillRect(cx+5,cy+ch*.72,cw*.38,3);
+    });
+    c.fillStyle=a;c.fillRect(0,H-2,W,2);
+    c.font=`${Math.round(W*.022)}px DM Sans,sans-serif`;c.fillStyle='rgba(240,238,255,.16)';c.fillText('© 2025 GEN-Z',W/2,H*.95);
+  }
+  c.textAlign='left';
+}
+
+function rRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();ctx.fill();}
+
+function buyutMockup(pg){
+  const cv=document.getElementById('mc-'+pg); if(!cv)return;
+  document.getElementById('buyutFrame').srcdoc=`<!DOCTYPE html><html><body style="margin:0;background:#050508;display:flex;align-items:center;justify-content:center;height:100vh;"><img src="${cv.toDataURL()}" style="max-width:100%;max-height:100%;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.6);"></body></html>`;
+  const lbl={index:'🏠 Index',magaza:'🛍 Mağaza',ustam:'🔧 Ustam',genz:'🎓 Gen-Z'};
+  document.getElementById('buyutBaslik').textContent=lbl[pg]||'Önizleme';
+  document.getElementById('buyutModal').classList.add('v');
+}
+
+// ─── YARDIMCILAR ───────────────────────────────────────────────────────────
+const gv=id=>document.getElementById(id)?.value||'';
+
+function sayfaGec(id,btn){
+  document.querySelectorAll('.sayfa').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.sb-btn').forEach(b=>b.classList.remove('on'));
+  const h=document.getElementById('sayfa-'+id);if(h)h.classList.add('on');
+  btn.classList.add('on');
+  setTimeout(liveMockup,60);
+  if(window.innerWidth<900)document.getElementById('sidebar').classList.remove('open');
+}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');}
+function openPicker(id){document.getElementById('picker-'+id)?.click();}
+function clr(id){
+  const val=document.getElementById(id)?.value; if(!val)return;
+  const pv=document.getElementById('prev-'+id); if(pv)pv.style.background=val;
+  const pk=document.getElementById('picker-'+id); if(pk&&/^#[0-9a-fA-F]{6}$/.test(val))pk.value=val;
+  changed();
+}
+function syncPk(id){const v=document.getElementById('picker-'+id)?.value;if(!v)return;const el=document.getElementById(id);if(el)el.value=v;clr(id);}
+function toggleBtn(btn){btn.classList.toggle('on');}
+function slUp(inp,vid,suf){const el=document.getElementById(vid);if(el)el.textContent=inp.value+(suf||'');sliderRefresh(inp);changed();}
+function sliderRefresh(inp){const p=((inp.value-inp.min)/(inp.max-inp.min))*100;inp.style.background=`linear-gradient(90deg,var(--accent) ${p}%,rgba(255,255,255,.1) ${p}%)`;}
+function updateGrad(){const el=document.getElementById('grad-preview');if(el)el.style.background=`linear-gradient(135deg,${gv('idx-g1')||'#fff'} 0%,${gv('idx-g2')||'#c4b5fd'} 50%,${gv('idx-g3')||'#F0C55C'} 100%)`;}
+function fontPrev(){document.getElementById('fp-d').style.fontFamily=gv('font-display');document.getElementById('fp-b').style.fontFamily=gv('font-body');}
+
+// ─── REKLAM ───────────────────────────────────────────────────────────────
+function adF(pg,btn){
+  document.querySelectorAll('.ad-tab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  document.querySelectorAll('.ad-area-kart').forEach(k=>{k.style.display=(pg==='hepsi'||k.dataset.page===pg)?'':'none';});
+}
+
+function adPrev(n){
+  const p=document.getElementById('ad'+n+'-prev'); if(!p)return;
+  const txt=document.getElementById('ad'+n+'-text')?.value;
+  const bg=document.getElementById('ad'+n+'-bg')?.value;
+  const tc=document.getElementById('ad'+n+'-txt')?.value;
+  if(bg)p.style.background=bg; if(tc)p.style.color=tc;
+  if(txt!==undefined)p.textContent=txt||'Reklam metni buraya gelecek';
+}
+
+function adDurum(n){
+  const tog=document.getElementById('tog-ad'+n);
+  const bas=document.getElementById('ad'+n+'-bas')?.value;
+  const bit=document.getElementById('ad'+n+'-bit')?.value;
+  const d=document.getElementById('ad'+n+'-d'); if(!d)return;
+  const today=new Date().toISOString().split('T')[0];
+  if(!tog.classList.contains('on')){d.className='ad-durum pasif';d.textContent='● Pasif';}
+  else if(bas&&bas>today){d.className='ad-durum planli';d.textContent='⏰ Planlı';}
+  else if(bit&&bit<today){d.className='ad-durum pasif';d.textContent='● Süresi Doldu';}
+  else{d.className='ad-durum aktif';d.textContent='● Aktif';}
+  adCount();
+}
+
+function adCount(){
+  let ak=0,pl=0;
+  [1,2,3,4].forEach(n=>{const d=document.getElementById('ad'+n+'-d');if(!d)return;if(d.textContent.includes('Aktif'))ak++;if(d.textContent.includes('Planlı'))pl++;});
+  document.getElementById('ad-aktif-c').textContent=ak;
+  document.getElementById('ad-planli-c').textContent=pl;
+  document.getElementById('adBadge').textContent=ak+pl;
+}
+
+// ─── CSS ──────────────────────────────────────────────────────────────────
+function cssUret(){
+  document.getElementById('css-out').value=`:root {\n  --accent: ${gv('g-a')||'#7B5CF0'};\n  --accent2: ${gv('g-a2')||'#F0C55C'};\n  --accent3: ${gv('g-a3')||'#5CF0B4'};\n  --bg: ${gv('g-bg')||'#0a0a0f'};\n  --bg2: ${gv('g-bg2')||'#13131a'};\n  --surface: ${gv('g-surf')||'#22222f'};\n}`;
+  toast('CSS oluşturuldu','success');
+}
+function cssCopy(){const el=document.getElementById('css-out');if(!el.value)cssUret();navigator.clipboard.writeText(el.value).then(()=>toast('📋 Kopyalandı','success'));}
+
+// ─── KAYDET/YUKLE ─────────────────────────────────────────────────────────
+function kaydetSayfa(s){pushH(s+' kaydedildi');localStorage.setItem('genz_t_'+s,JSON.stringify(snapshot()));toast('✓ '+s+' kaydedildi','success');}
+function kaydetReklamlar(){
+  const ads={};
+  [1,2,3,4].forEach(n=>{ads[n]={text:gv('ad'+n+'-text'),url:gv('ad'+n+'-url'),bg:gv('ad'+n+'-bg'),txt:gv('ad'+n+'-txt'),btn:gv('ad'+n+'-btn'),title:gv('ad'+n+'-title'),bas:gv('ad'+n+'-bas'),bit:gv('ad'+n+'-bit'),active:document.getElementById('tog-ad'+n)?.classList.contains('on')};});
+  localStorage.setItem('genz_reklamlar',JSON.stringify(ads));
+  toast('✓ Reklamlar kaydedildi','success');
+}
+function kaydetGlobal(){cssUret();localStorage.setItem('genz_global',JSON.stringify({a:gv('g-a'),a2:gv('g-a2'),a3:gv('g-a3'),bg:gv('g-bg'),bg2:gv('g-bg2'),surf:gv('g-surf')}));toast('✓ Global kaydedildi','success');}
+function kaydetFont(){localStorage.setItem('genz_fonts',JSON.stringify({d:gv('font-display'),b:gv('font-body'),sz:gv('font-sz')}));toast('✓ Fontlar kaydedildi','success');}
+function hepsiniKaydet(){['index','magaza','ustam','genz'].forEach(kaydetSayfa);kaydetReklamlar();kaydetGlobal();kaydetFont();toast('✅ Tüm değişiklikler kaydedildi!','success');}
+function sifirla(s){localStorage.removeItem('genz_t_'+s);toast('↺ '+s+' sıfırlandı','info');}
+function sifirlaHepsi(){['index','magaza','ustam','genz'].forEach(s=>localStorage.removeItem('genz_t_'+s));['genz_reklamlar','genz_global','genz_fonts'].forEach(k=>localStorage.removeItem(k));hStack=[];fStack=[];undoRefresh();gecmisRender();toast('↺ Sıfırlandı','info');}
+
+function yukle(){
+  try{
+    const ads=JSON.parse(localStorage.getItem('genz_reklamlar')||'null');
+    if(ads){[1,2,3,4].forEach(n=>{const a=ads[n];if(!a)return;['text','url','bg','txt','btn','title','bas','bit'].forEach(k=>{const el=document.getElementById('ad'+n+'-'+k);if(el&&a[k])el.value=a[k];});const t=document.getElementById('tog-ad'+n);if(t)t.classList.toggle('on',!!a.active);clr('ad'+n+'-bg');adPrev(n);adDurum(n);});}
+    const fonts=JSON.parse(localStorage.getItem('genz_fonts')||'null');
+    if(fonts){if(fonts.d)document.getElementById('font-display').value=fonts.d;if(fonts.b)document.getElementById('font-body').value=fonts.b;fontPrev();}
+  }catch(e){}
+}
+
+// ─── TOAST ────────────────────────────────────────────────────────────────
+let toastT;
+function toast(msg,type=''){const el=document.getElementById('toast');el.textContent=msg;el.className='show '+type;clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),3000);}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('input[type=range]').forEach(sliderRefresh);
+  yukle(); updateGrad(); adCount(); temaGrid();
+  setTimeout(()=>{liveMockup();pushH('Başlangıç durumu');},200);
+  document.getElementById('buyutModal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('v');});
+});
+</script>
+</body>
+</html>

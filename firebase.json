@@ -33,5 +33,9 @@
       }
     ],
     "404": "404.html"
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
   }
 }

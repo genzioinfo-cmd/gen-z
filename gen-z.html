@@ -784,23 +784,90 @@ const GZ_CATEGORIES = [
   { id: 'oyun',     name: 'Oyun & Anime',        icon: '🎮', count: null },
 ];
 
+/* ── DEMO / FALLBACK VERİSİ ── */
+const DEMO_PRODUCTS = [
+  {
+    id: 'demo-1', emoji: '🎵', name: 'Lo-fi Beat Pack — Midnight Study Vol.1',
+    price: 149, oldPrice: 220, rating: 4.9, reviews: 112,
+    badge: 'hot', tags: ['müzik', 'lo-fi', 'beat'], category: 'muzik',
+    desc: '20 adet üretim kalitesinde lo-fi beat.',
+    gradA: 'rgba(240,197,92,0.18)', gradB: 'rgba(123,92,240,0.1)',
+    resim: null,
+    seller: { id: 'beatztr', name: 'BeatzTR', initials: 'BT', sales: 340, rating: 4.9, ratingCount: 98, joined: '2024' }
+  },
+  {
+    id: 'demo-2', emoji: '🎨', name: 'UI Kit — Gen-Z Dark Mode Components',
+    price: 299, oldPrice: null, rating: 4.8, reviews: 67,
+    badge: 'new', tags: ['ui kit', 'figma'], category: 'tasarim',
+    desc: '120+ Figma bileşeni.',
+    gradA: 'rgba(123,92,240,0.18)', gradB: 'rgba(92,240,180,0.08)',
+    resim: null,
+    seller: { id: 'uidesignz', name: 'UI Design Z', initials: 'UD', sales: 89, rating: 4.8, ratingCount: 44, joined: '2024' }
+  },
+  {
+    id: 'demo-3', emoji: '💻', name: 'Next.js Başlangıç Şablonu + Auth',
+    price: 199, oldPrice: 350, rating: 4.7, reviews: 43,
+    badge: 'viral', tags: ['nextjs', 'typescript'], category: 'yazilim',
+    desc: 'Next.js 14, TypeScript, TailwindCSS şablonu.',
+    gradA: 'rgba(92,240,180,0.15)', gradB: 'rgba(92,160,240,0.1)',
+    resim: null,
+    seller: { id: 'codeztr', name: 'Code-Z', initials: 'CZ', sales: 156, rating: 4.8, ratingCount: 72, joined: '2023' }
+  },
+  {
+    id: 'demo-4', emoji: '📹', name: 'Vlog Preset Paketi — Cinematic TR',
+    price: 89, oldPrice: 140, rating: 4.6, reviews: 88,
+    badge: 'hot', tags: ['preset', 'lightroom'], category: 'video',
+    desc: '15 adet Lightroom & Lr Mobile preset.',
+    gradA: 'rgba(240,140,60,0.18)', gradB: 'rgba(240,197,92,0.08)',
+    resim: null,
+    seller: { id: 'visualz', name: 'Visual-Z', initials: 'VZ', sales: 620, rating: 4.7, ratingCount: 201, joined: '2023' }
+  },
+  {
+    id: 'demo-5', emoji: '🖼️', name: 'Procreate Fırça Seti — Suluboya',
+    price: 69, oldPrice: null, rating: 4.9, reviews: 74,
+    badge: 'new', tags: ['procreate', 'fırça'], category: 'tasarim',
+    desc: '25 adet Procreate suluboya fırçası.',
+    gradA: 'rgba(240,92,160,0.18)', gradB: 'rgba(240,197,92,0.1)',
+    resim: null,
+    seller: { id: 'brushztr', name: 'Brush-Z', initials: 'BZ', sales: 510, rating: 4.9, ratingCount: 198, joined: '2023' }
+  },
+  {
+    id: 'demo-6', emoji: '📷', name: 'Portre Kompozisyon Kılavuzu PDF',
+    price: 59, oldPrice: null, rating: 4.9, reviews: 31,
+    badge: null, tags: ['portre', 'pdf'], category: 'fotograf',
+    desc: '45 sayfalık portre rehberi.',
+    gradA: 'rgba(240,92,160,0.15)', gradB: 'rgba(123,92,240,0.08)',
+    resim: null,
+    seller: { id: 'lenslenz', name: 'Lens & Z', initials: 'LZ', sales: 22, rating: 4.9, ratingCount: 18, joined: '2025' }
+  },
+  {
+    id: 'demo-7', emoji: '📝', name: "Freelance Sözleşme Şablonları (5'li)",
+    price: 79, oldPrice: 120, rating: 4.8, reviews: 55,
+    badge: null, tags: ['freelance', 'sözleşme'], category: 'yazi',
+    desc: '5 farklı freelance proje için Türkçe sözleşme.',
+    gradA: 'rgba(92,240,120,0.15)', gradB: 'rgba(240,197,92,0.08)',
+    resim: null,
+    seller: { id: 'legalzgen', name: 'Legal-Z', initials: 'LG', sales: 2100, rating: 4.8, ratingCount: 430, joined: '2022' }
+  },
+  {
+    id: 'demo-8', emoji: '🎮', name: 'İndie Oyun Müzik Paketi — 8-bit',
+    price: 125, oldPrice: 180, rating: 4.5, reviews: 38,
+    badge: 'viral', tags: ['oyun müziği', '8-bit'], category: 'oyun',
+    desc: '30 adet 8-bit ve chiptune loop.',
+    gradA: 'rgba(240,197,92,0.15)', gradB: 'rgba(92,240,120,0.08)',
+    resim: null,
+    seller: { id: 'chiptunez', name: 'Chiptune-Z', initials: 'CZ', sales: 77, rating: 4.6, ratingCount: 35, joined: '2024' }
+  },
+];
+
 let GZ_PRODUCTS = [];
 
 /* ── Firestore'dan ürünleri çek ── */
 async function fetchProducts() {
   try {
-    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-    const { getFirestore, collection, getDocs, query, where, orderBy } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    const firebaseConfig = {
-      apiKey: 'AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ',
-      authDomain: 'gen-z-io.firebaseapp.com',
-      projectId: 'gen-z-io',
-      storageBucket: 'gen-z-io.firebasestorage.app',
-      messagingSenderId: '97338868944',
-      appId: '1:97338868944:web:d7b429e416d8c505b14ad5'
-    };
-    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    const db = window._genzAuth?.db;
+    if (!db) { GZ_PRODUCTS = DEMO_PRODUCTS; return; }
+    const { collection, getDocs, query, where } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
     const q = query(collection(db, 'magaza_urunler'), where('durum', '==', 'aktif'));
     const snap = await getDocs(q);
     const GRAD_PAIRS = [
@@ -812,6 +879,7 @@ async function fetchProducts() {
     ];
     const CAT_EMOJI = { muzik:'🎵', tasarim:'🎨', yazilim:'💻', video:'📹',
       fotograf:'📷', yazi:'📝', moda:'👗', oyun:'🎮' };
+    if (snap.empty) { GZ_PRODUCTS = DEMO_PRODUCTS; return; }
     GZ_PRODUCTS = snap.docs.map((doc, i) => {
       const d = doc.data();
       const grad = GRAD_PAIRS[i % GRAD_PAIRS.length];
@@ -845,8 +913,8 @@ async function fetchProducts() {
       };
     });
   } catch(e) {
-    console.warn('Ürünler yüklenemedi:', e);
-    GZ_PRODUCTS = [];
+    console.warn('Ürünler yüklenemedi, demo data kullanılıyor:', e);
+    GZ_PRODUCTS = DEMO_PRODUCTS;
   }
 }
 
@@ -1012,6 +1080,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   const grid = document.getElementById('productsGrid');
   if (grid) grid.innerHTML = '<div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-text">Ürünler yükleniyor...</div></div>';
 
+  /* firebase-config.js module olarak yüklendiği için _genzAuth hazır olana kadar bekle */
+  await new Promise(resolve => {
+    if (window._genzAuth) { resolve(); return; }
+    let attempts = 0;
+    const t = setInterval(() => {
+      attempts++;
+      if (window._genzAuth || attempts > 20) { clearInterval(t); resolve(); }
+    }, 100);
+  });
   await fetchProducts();
 
   let filteredProducts = [...GZ_PRODUCTS];

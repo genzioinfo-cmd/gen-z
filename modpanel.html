@@ -419,6 +419,37 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
 .stok-row-kritik{background:rgba(255,80,80,.04)!important;}
 .stok-row-bitti{background:rgba(80,80,80,.06)!important;opacity:.7;}
 
+/* ── PROJE KARTI ── */
+.prj-kart{background:rgba(255,255,255,.022);border:1px solid var(--border);border-radius:8px;padding:1.4rem 1.6rem;margin-bottom:.9rem;transition:border-color .25s;}
+.prj-kart:hover{border-color:rgba(123,92,240,.35);}
+.prj-kart.onay-bekliyor{border-color:rgba(230,126,34,.5);animation:prjPulse 2s infinite;}
+@keyframes prjPulse{0%,100%{box-shadow:0 0 0 0 rgba(230,126,34,0);}50%{box-shadow:0 0 0 4px rgba(230,126,34,.15);}}
+.prj-ust{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;}
+.prj-baslik{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:300;margin-bottom:.2rem;}
+.prj-meta{font-size:.6rem;color:var(--t2);letter-spacing:.05em;}
+.prj-bar-wrap{margin:.9rem 0;}
+.prj-bar-label{display:flex;justify-content:space-between;font-size:.55rem;color:var(--t2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.35rem;}
+.prj-bar-track{height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;}
+.prj-bar-fill{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1);background:linear-gradient(90deg,#7B5CF0,#5CF0B4);}
+.prj-bar-fill.iptal{background:var(--red);}
+.prj-bar-fill.tamam{background:var(--green);}
+.prj-adimlar{display:flex;gap:.5rem;flex-wrap:wrap;margin:.8rem 0;}
+.prj-adim{font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .6rem;border-radius:20px;border:1px solid rgba(255,255,255,.08);color:var(--t2);}
+.prj-adim.onaylandi{background:rgba(76,175,130,.1);border-color:rgba(76,175,130,.3);color:var(--green);}
+.prj-adim.reddedildi{background:rgba(224,85,85,.1);border-color:rgba(224,85,85,.3);color:var(--red);}
+.prj-adim.bekliyor{background:rgba(230,126,34,.1);border-color:rgba(230,126,34,.3);color:var(--orange);}
+.prj-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;}
+.prj-ilerleme-btn{padding:.45rem 1rem;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border:1px solid rgba(123,92,240,.35);background:rgba(123,92,240,.08);color:#a48af0;transition:all .2s;}
+.prj-ilerleme-btn:hover{border-color:var(--gold);background:rgba(123,92,240,.18);color:var(--cream);}
+.prj-ilerleme-btn:disabled{opacity:.35;cursor:not-allowed;}
+.prj-ilerleme-btn.tamam-btn{border-color:rgba(76,175,130,.4);background:rgba(76,175,130,.08);color:var(--green);}
+.prj-ilerleme-btn.tamam-btn:hover{background:rgba(76,175,130,.2);}
+.prj-durum{font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .65rem;border-radius:20px;white-space:nowrap;}
+.prj-durum.devam{color:var(--orange);background:rgba(230,126,34,.1);border:1px solid rgba(230,126,34,.25);}
+.prj-durum.tamamlandi{color:var(--green);background:rgba(76,175,130,.1);border:1px solid rgba(76,175,130,.25);}
+.prj-durum.iptal{color:var(--red);background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.25);}
+.prj-durum.onay-bk{color:var(--orange);background:rgba(230,126,34,.15);border:1px solid rgba(230,126,34,.4);}
+
 </style>
 </head>
 <body>
@@ -496,6 +527,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
           <button class="sb-btn" onclick="git('usta-ozet',this)"><span class="ikon">📊</span> Usta Özeti</button>
           <button class="sb-btn" onclick="git('usta-ilanlar',this)"><span class="ikon">📋</span> İlanlarım <span class="sb-badge" id="ustaIlanBadge" style="display:none">!</span></button>
           <button class="sb-btn" onclick="git('usta-randevular',this)"><span class="ikon">📅</span> Randevular <span class="sb-badge" id="rdvBadge" style="display:none;background:var(--red);">!</span></button>
+          <button class="sb-btn" onclick="git('usta-projeler',this)"><span class="ikon">📋</span> Projeler <span class="sb-badge" id="proje-badge" style="display:none;background:var(--orange);"></span></button>
           <button class="sb-btn" onclick="git('usta-abonelik',this)"><span class="ikon">⏱</span> Aboneliğim</button>
           <button class="sb-btn" onclick="git('gelir-gider',this)"><span class="ikon">📒</span> Gelir & Gider</button>
           <button class="sb-btn" onclick="git('usta-one-cikar',this)"><span class="ikon">⭐</span> Öne Çıkar</button>
@@ -1109,6 +1141,29 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
             </div>
           </div>
           <div id="rdvTablo" style="min-height:120px;"></div>
+        </div>
+      </div>
+
+      <!-- USTA PROJELERİM -->
+      <div class="sayfa" id="sayfa-usta-projeler">
+        <div class="sh"><span class="eyebrow">İş Takip Sistemi</span><h1>Projeler <em>&amp; İşler</em></h1></div>
+
+        <div class="oz-grid" id="projeOzetGrid">
+          <div class="oz-k"><div class="oz-n" id="prj-toplam">—</div><div class="oz-l">Toplam Proje</div></div>
+          <div class="oz-k"><div class="oz-n" style="color:var(--orange)" id="prj-devam">—</div><div class="oz-l">Devam Eden</div></div>
+          <div class="oz-k"><div class="oz-n" style="color:var(--green)" id="prj-tamam">—</div><div class="oz-l">Tamamlanan</div></div>
+          <div class="oz-k"><div class="oz-n" style="color:var(--red)" id="prj-iptal">—</div><div class="oz-l">İptal</div></div>
+        </div>
+
+        <div class="filtre-row" style="margin-bottom:1.2rem;">
+          <button class="f-btn on" onclick="prjFiltre('hepsi',this)">Tümü</button>
+          <button class="f-btn" onclick="prjFiltre('devam',this)">⚙️ Devam Eden</button>
+          <button class="f-btn" onclick="prjFiltre('tamamlandi',this)">✅ Tamamlanan</button>
+          <button class="f-btn" onclick="prjFiltre('iptal',this)">🚫 İptal</button>
+        </div>
+
+        <div id="projeListesi">
+          <div style="color:var(--t2);font-size:.75rem;font-style:italic;padding:2rem 0;">Randevu onaylandığında projeler burada görünür.</div>
         </div>
       </div>
 
@@ -3999,6 +4054,7 @@ window.git=function(id,btn){
   document.getElementById('sayfa-'+id).classList.add('on');
   btn.classList.add('on');
   if(id==='usta-randevular') randevulariYukle();
+  if(id==='usta-projeler') window.projeModulYukle && window.projeModulYukle();
   if(id==='usta-ilanlar'||id==='usta-ozet') ustaYukle();
   if(id==='stok') window.stokModulYukle && window.stokModulYukle();
   if(id==='iadeler') window._iadeTalepleriYukle && window._iadeTalepleriYukle();
@@ -4289,6 +4345,133 @@ window.chatGonder = async function() {
       </div>
   </div>
 </div>
+
+<script type="module">
+/* ── PROJE TAKİP MODÜLü ── */
+import {
+  getFirestore, collection, query, where, orderBy,
+  onSnapshot, doc, updateDoc, serverTimestamp, getDoc
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const db = getFirestore();
+let _projeler = [];
+let _prjFiltre = 'hepsi';
+let _prjUnsub  = null;
+
+async function ilerlemeyiGuncelle(projeId, yuzde) {
+  const projeRef = doc(db, 'ustam_projeler', projeId);
+  const snap = await getDoc(projeRef);
+  const eskiAdimlar = snap.data()?.adimlar || [];
+  const yeniAdim = { yuzde, ustaTs: new Date().toISOString(), musteriOnay: null, musteriTs: null };
+  await updateDoc(projeRef, {
+    ilerleme     : yuzde,
+    onayBekliyor : true,
+    adimlar      : [...eskiAdimlar, yeniAdim],
+    sonGuncelleme: serverTimestamp(),
+  });
+}
+
+function ozetGuncelle() {
+  const el = (id) => document.getElementById(id);
+  if (!el('prj-toplam')) return;
+  el('prj-toplam').textContent = _projeler.length;
+  el('prj-devam').textContent  = _projeler.filter(p => p.durum === 'devam').length;
+  el('prj-tamam').textContent  = _projeler.filter(p => p.durum === 'tamamlandi').length;
+  el('prj-iptal').textContent  = _projeler.filter(p => p.durum === 'iptal').length;
+  const bekleyen = _projeler.filter(p => p.onayBekliyor).length;
+  const badge = document.getElementById('proje-badge');
+  if (badge) { badge.textContent = bekleyen || ''; badge.style.display = bekleyen ? 'inline' : 'none'; }
+}
+
+window.prjFiltre = function(filtre, btn) {
+  _prjFiltre = filtre;
+  document.querySelectorAll('#sayfa-usta-projeler .f-btn').forEach(b => b.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+  prjRender();
+};
+
+function projeKartHTML(p) {
+  const durumMap = {
+    devam      : { label:'⚙️ Devam Ediyor', cls:'devam' },
+    tamamlandi : { label:'✅ Tamamlandı',   cls:'tamamlandi' },
+    iptal      : { label:'🚫 İptal',        cls:'iptal' },
+  };
+  const d = durumMap[p.durum] || durumMap.devam;
+  const tarih = p.ts?.toDate ? p.ts.toDate().toLocaleDateString('tr-TR') : '—';
+  let barCls = p.durum === 'iptal' ? 'iptal' : p.durum === 'tamamlandi' ? 'tamam' : '';
+
+  const adimlarHTML = (p.adimlar || []).map(a => {
+    const cls    = a.musteriOnay === true ? 'onaylandi' : a.musteriOnay === false ? 'reddedildi' : 'bekliyor';
+    const etiket = a.musteriOnay === true ? `%${a.yuzde} ✓` : a.musteriOnay === false ? `%${a.yuzde} ✗` : `%${a.yuzde} ⏳`;
+    return `<span class="prj-adim ${cls}">${etiket}</span>`;
+  }).join('');
+
+  let aksiyonHTML = '';
+  if (p.durum === 'devam' && !p.onayBekliyor) {
+    const adimlar = [25, 50, 100].filter(y => y > (p.ilerleme || 0));
+    aksiyonHTML = `<div class="prj-actions">
+      ${adimlar.map(y => `<button class="prj-ilerleme-btn ${y===100?'tamam-btn':''}" onclick="prjIlerle('${p.id}',${y})">
+        ${y===100 ? '✅ İşi Tamamlandı Olarak İşaretle' : `%${y} Tamamlandı`}
+      </button>`).join('')}
+    </div>`;
+  } else if (p.onayBekliyor) {
+    aksiyonHTML = `<div style="margin-top:.8rem;font-size:.65rem;color:var(--orange);background:rgba(230,126,34,.07);border:1px solid rgba(230,126,34,.2);border-radius:4px;padding:.5rem .8rem;">
+      ⏳ Müşteri onayı bekleniyor…
+    </div>`;
+  }
+
+  return `<div class="prj-kart ${p.onayBekliyor?'onay-bekliyor':''}">
+    <div class="prj-ust">
+      <div>
+        <div class="prj-baslik">${p.isAdi}</div>
+        <div class="prj-meta">📍 ${p.sehir||'—'} &nbsp;·&nbsp; 👤 ${p.musteriAd} &nbsp;·&nbsp; 📅 ${tarih}</div>
+      </div>
+      <span class="prj-durum ${p.onayBekliyor&&p.durum==='devam'?'onay-bk':d.cls}">
+        ${p.onayBekliyor&&p.durum==='devam'?'⏳ Onay Bekliyor':d.label}
+      </span>
+    </div>
+    <div class="prj-bar-wrap">
+      <div class="prj-bar-label"><span>İlerleme</span><span>%${p.ilerleme||0}</span></div>
+      <div class="prj-bar-track"><div class="prj-bar-fill ${barCls}" style="width:${p.ilerleme||0}%"></div></div>
+    </div>
+    ${adimlarHTML ? `<div class="prj-adimlar">${adimlarHTML}</div>` : ''}
+    ${aksiyonHTML}
+  </div>`;
+}
+
+function prjRender() {
+  const el = document.getElementById('projeListesi');
+  if (!el) return;
+  const liste = _projeler.filter(p => _prjFiltre === 'hepsi' || p.durum === _prjFiltre);
+  if (!liste.length) {
+    el.innerHTML = `<div style="text-align:center;padding:3rem 1rem;color:var(--t2);font-family:'Syne',sans-serif;font-style:italic;">
+      ${_prjFiltre==='hepsi' ? 'Henüz proje yok. Randevu onaylandığında otomatik oluşur.' : 'Bu filtrede proje yok.'}
+    </div>`;
+    return;
+  }
+  el.innerHTML = liste.map(projeKartHTML).join('');
+}
+
+window.prjIlerle = async function(projeId, yuzde) {
+  if (!confirm(`%${yuzde} tamamlandı olarak işaretlensin mi? Müşteriye onay isteği gönderilecek.`)) return;
+  try {
+    await ilerlemeyiGuncelle(projeId, yuzde);
+    toast(`%${yuzde} bildirimi gönderildi ✦`);
+  } catch(e) { toast('Hata oluştu ⚠️', 'err'); }
+};
+
+window.projeModulYukle = function() {
+  if (_prjUnsub) return; // zaten dinleniyor
+  const uid = _aktifUid;
+  if (!uid) return;
+  const q = query(collection(db, 'ustam_projeler'), where('ustaUid','==',uid), orderBy('ts','desc'));
+  _prjUnsub = onSnapshot(q, snap => {
+    _projeler = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    ozetGuncelle();
+    prjRender();
+  });
+};
+</script>
 
 </body>
 </html>

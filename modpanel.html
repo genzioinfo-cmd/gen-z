@@ -666,7 +666,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
                 <input type="file" id="resimInput" accept="image/*" multiple onchange="resimSec(this.files)">
                 <div class="r-ikon">📷</div>
                 <div class="r-yaz">Fotoğraf seç veya sürükle bırak</div>
-                <div class="r-alt">JPG, PNG, WebP — max 2.5MB/adet &nbsp;·&nbsp; <a href="https://squoosh.app" target="_blank" rel="noopener" style="color:var(--gold);opacity:.7;text-decoration:underline;font-size:inherit;" onclick="event.stopPropagation()">Fotoğrafının boyutunu buradan düşürebilirsin</a></div>
+                <div class="r-alt">JPG, PNG, WebP — max 1.5MB/adet &nbsp;·&nbsp; <a href="https://squoosh.app" target="_blank" rel="noopener" style="color:var(--gold);opacity:.7;text-decoration:underline;font-size:inherit;" onclick="event.stopPropagation()">Fotoğrafının boyutunu buradan düşürebilirsin</a></div>
               </div>
               <div class="resim-preview" id="resimPreview"></div>
             </div>
@@ -3154,6 +3154,7 @@ window.urunEkle=async function(){
   if(!desc){err.textContent='Açıklama zorunludur.';err.classList.add('v');return;}
   const btn=document.getElementById('ekleBtn');
   btn.textContent='Yükleniyor…';btn.disabled=true;
+  urunOverlayAc();
 
   let resimUrls=[];
   try{
@@ -3203,6 +3204,7 @@ window.urunEkle=async function(){
     });
     ok.textContent='✦ Ürün gönderildi! Admin onayından sonra mağazada görünecek.';
     ok.classList.add('v');
+    urunOverlayBasarili();
     ['uAd','uFiyat','uStok','uDesc','uSku'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
     _resimler=[];_bedenler=[];_renkler=[];
     Object.keys(_ekAlanlar).forEach(k=>delete _ekAlanlar[k]);
@@ -3219,6 +3221,7 @@ window.urunEkle=async function(){
     await urunleriYukle();
     ozetGuncelle();
   }catch(e){
+    urunOverlayKapat();
     err.textContent='Hata: '+e.message;
     err.classList.add('v');
   } finally {
@@ -3446,11 +3449,11 @@ function gorselSikistir(file){
 }
 
 window.resimSec=async function(files){
-  const MAX_BOYUT=2.5*1024*1024; /* Max 2.5MB kabul et, sıkıştırılacak */
+  const MAX_BOYUT=1.5*1024*1024; /* Max 1.5MB kabul et, sıkıştırılacak */
   for(const f of Array.from(files)){
     if(_resimler.length>=5) break;
     if(!f.type.startsWith('image/')) continue;
-    if(f.size>MAX_BOYUT){ showToast('⚠ Fotoğraf çok büyük (max 2.5MB): '+f.name+' — Boyutu küçültmek için squoosh.app kullanabilirsin'); continue; }
+    if(f.size>MAX_BOYUT){ showToast('⚠ Fotoğraf çok büyük! Max 1.5MB olmalı. ('+f.name+' — '+Math.round(f.size/1024/1024*10)/10+'MB)'); continue; }
     const sikistirilmis=await gorselSikistir(f);
     _resimler.push(sikistirilmis);
     resimPreviewGuncelle();
@@ -5160,5 +5163,36 @@ window.projeModulYukle = function() {
 };
 </script>
 
+<!-- ── ÜRÜN YÜKLEME OVERLAY ── -->
+<div id="urunYukleOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.82);backdrop-filter:blur(6px);flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;">
+  <div id="urunYukleIkon" style="font-size:2.2rem;">⏳</div>
+  <div id="urunYukleBaslik" style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:#f0ebe0;letter-spacing:.08em;">Ürün yükleniyor…</div>
+  <div id="urunYukleAlt" style="font-size:.7rem;color:rgba(240,235,224,.45);letter-spacing:.12em;text-transform:uppercase;">Bu işlem biraz uzun sürebilir, lütfen bekleyin</div>
+  <div id="urunYukleBar" style="width:220px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;">
+    <div id="urunYukleBarIc" style="height:100%;width:0%;background:linear-gradient(90deg,#7B5CF0,#a78bfa);border-radius:2px;transition:width .4s ease;"></div>
+  </div>
+</div>
+<script>
+function urunOverlayAc(){
+  const o=document.getElementById('urunYukleOverlay');
+  o.style.display='flex';
+  document.getElementById('urunYukleIkon').textContent='⏳';
+  document.getElementById('urunYukleBaslik').textContent='Ürün yükleniyor…';
+  document.getElementById('urunYukleAlt').textContent='Bu işlem biraz uzun sürebilir, lütfen bekleyin';
+  document.getElementById('urunYukleBarIc').style.width='0%';
+  setTimeout(()=>document.getElementById('urunYukleBarIc').style.width='40%',100);
+  setTimeout(()=>document.getElementById('urunYukleBarIc').style.width='70%',1200);
+}
+function urunOverlayBasarili(){
+  document.getElementById('urunYukleIkon').textContent='✅';
+  document.getElementById('urunYukleBaslik').textContent='Ürün başarıyla yüklendi!';
+  document.getElementById('urunYukleAlt').textContent='Admin onayından sonra mağazanda görünecek';
+  document.getElementById('urunYukleBarIc').style.width='100%';
+  setTimeout(()=>{ document.getElementById('urunYukleOverlay').style.display='none'; },2200);
+}
+function urunOverlayKapat(){
+  document.getElementById('urunYukleOverlay').style.display='none';
+}
+</script>
 </body>
 </html>

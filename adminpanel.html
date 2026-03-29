@@ -342,6 +342,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
       <button class="sb-item" onclick="sayfaGit('gelirGider',this)">📒 <span>Gelir & Gider</span></button>
       <div class="sb-ayrac">Platform</div>
       <button class="sb-item" onclick="sayfaGit('urunler',this)">🎨 <span>Paylaşılan Ürünler</span> <span class="sb-badge" id="badgeUrun" style="background:var(--gold);color:var(--ink)">—</span></button>
+      <button class="sb-item" onclick="sayfaGit('ustaIlanlar',this)">🔨 <span>Usta İlanları</span> <span class="sb-badge" id="badgeUstaIlan" style="display:none;background:var(--orange);"></span></button>
       <button class="sb-item" onclick="sayfaGit('genczIcerikler',this)">⚡ <span>Genç-Z İçerikleri</span> <span class="sb-badge" id="badgeGenczIcerik" style="display:none;background:var(--orange);"></span></button>
       <button class="sb-item" onclick="window.open('tema-yonetici.html','_blank')">🖌️ <span>Tema Yöneticisi</span></button>
     </nav>
@@ -511,6 +512,26 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
           <button class="f-tab" onclick="filtreUrun('gencz',this)">⚡ Genç-Z</button>
         </div>
         <div id="urunTablo"><div class="yukleniyor">✦ Yükleniyor…</div></div>
+      </div>
+    </div>
+
+    <!-- USTA İLANLARI -->
+    <div class="sayfa" id="sayfa-ustaIlanlar">
+      <div class="ozet-grid" style="margin-bottom:2rem;">
+        <div class="ozet-kart" style="border-color:rgba(201,168,76,.25);"><div class="ozet-ikon">🔨</div><div class="ozet-sayi" style="color:var(--gold)" id="uiToplamSayi">—</div><div class="ozet-etiket">Toplam İlan</div></div>
+        <div class="ozet-kart" style="border-color:rgba(230,126,34,.25);"><div class="ozet-ikon">⏳</div><div class="ozet-sayi" style="color:var(--orange)" id="uiBekleyenSayi">—</div><div class="ozet-etiket">Bekleyen</div></div>
+        <div class="ozet-kart" style="border-color:rgba(76,175,130,.25);"><div class="ozet-ikon">✅</div><div class="ozet-sayi" style="color:var(--green)" id="uiOnayliSayi">—</div><div class="ozet-etiket">Onaylanan</div></div>
+        <div class="ozet-kart" style="border-color:rgba(224,85,85,.25);"><div class="ozet-ikon">❌</div><div class="ozet-sayi" style="color:var(--red)" id="uiReddiSayi">—</div><div class="ozet-etiket">Reddedilen</div></div>
+      </div>
+      <div class="tablo-wrap">
+        <div class="tablo-baslik"><h3>🔨 Usta İlanları</h3><span id="uiSayiEtiket" style="font-size:.6rem;color:var(--t3)">— ilan</span></div>
+        <div class="f-tabs" style="margin-bottom:1rem;">
+          <button class="f-tab aktif" onclick="uiFiltre('bekliyor',this)">⏳ Bekliyor</button>
+          <button class="f-tab" onclick="uiFiltre('onaylandi',this)">✅ Onaylanan</button>
+          <button class="f-tab" onclick="uiFiltre('reddedildi',this)">❌ Reddedilen</button>
+          <button class="f-tab" onclick="uiFiltre('hepsi',this)">Hepsi</button>
+        </div>
+        <div id="uiTablo"><div class="yukleniyor">✦ Yükleniyor…</div></div>
       </div>
     </div>
 
@@ -760,7 +781,7 @@ onAuthStateChanged(auth,async function(user){
 });
 
 async function tumVerileriYukle(){
-  await Promise.all([basvurulariYukle(),siparisleriYukle(),kullanicilariYukle(),gencimBasvurulariYukle(),cekmeTalepleriYukle(),genczIcerikleriYukle()]);
+  await Promise.all([basvurulariYukle(),siparisleriYukle(),kullanicilariYukle(),gencimBasvurulariYukle(),cekmeTalepleriYukle(),genczIcerikleriYukle(),ustaIlanlariYukle()]);
   ozetGuncelle();
 }
 
@@ -1295,6 +1316,122 @@ window.adminIadeFiltre = function(tip, btn) {
 };
 
 window.modalKapat=function(){document.getElementById('modalOverlay').classList.remove('v');};
+
+// ══════════════════════════════════════════════════
+// USTA İLANLARI
+// ══════════════════════════════════════════════════
+let _uiIlanlar = [];
+let _uiFiltre = 'bekliyor';
+let _uiRedId = null;
+
+async function ustaIlanlariYukle() {
+  try {
+    const snap = await getDocs(query(collection(db,'ustam_ilanlar'), orderBy('ts','desc'))).catch(()=>null);
+    _uiIlanlar = snap ? snap.docs.map(d=>({id:d.id,...d.data()})) : [];
+
+    const toplam   = _uiIlanlar.length;
+    const bekleyen = _uiIlanlar.filter(i=>!i.durum||i.durum==='bekliyor').length;
+    const onayli   = _uiIlanlar.filter(i=>i.durum==='onaylandi').length;
+    const reddi    = _uiIlanlar.filter(i=>i.durum==='reddedildi').length;
+
+    const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+    s('uiToplamSayi', toplam);
+    s('uiBekleyenSayi', bekleyen);
+    s('uiOnayliSayi', onayli);
+    s('uiReddiSayi', reddi);
+
+    const badge = document.getElementById('badgeUstaIlan');
+    if(badge){ badge.textContent=bekleyen||''; badge.style.display=bekleyen?'':'none'; }
+
+    uiRender();
+  } catch(e) { console.error(e); }
+}
+
+function uiRender() {
+  const el = document.getElementById('uiTablo');
+  if(!el) return;
+  let liste = _uiIlanlar;
+  if(_uiFiltre !== 'hepsi') liste = liste.filter(i=>(i.durum||'bekliyor')===_uiFiltre);
+  const s = document.getElementById('uiSayiEtiket');
+  if(s) s.textContent = liste.length + ' ilan';
+  if(!liste.length){
+    el.innerHTML='<table><tbody><tr class="bos-satir"><td>İlan bulunamadı ✦</td></tr></tbody></table>';
+    return;
+  }
+  el.innerHTML=`<table>
+    <thead><tr>
+      <th>Hizmet / Başlık</th><th>Usta</th><th>Şehir</th><th>Fiyat</th><th>Düzeltme Notu</th><th>Tarih</th><th>Durum</th><th>İşlem</th>
+    </tr></thead>
+    <tbody>${liste.map(i=>{
+      const durum = i.durum||'bekliyor';
+      const durumRenk = durum==='onaylandi'?'var(--green)':durum==='reddedildi'?'var(--red)':'var(--orange)';
+      const durumLabel = durum==='onaylandi'?'✅ Onaylı':durum==='reddedildi'?'❌ Reddedildi':'⏳ Bekliyor';
+      const tarih = i.ts?.toDate ? i.ts.toDate().toLocaleDateString('tr-TR') : '—';
+      const redSebepHTML = durum==='reddedildi'&&i.redSebep
+        ? `<div style="font-size:.55rem;color:var(--red);margin-top:.2rem;opacity:.8;">↳ ${i.redSebep}</div>` : '';
+      return `<tr>
+        <td><strong style="font-size:.72rem;">${i.ad||i.hizmet||'—'}</strong><div style="font-size:.6rem;color:var(--t2);">${i.kategori||''}</div></td>
+        <td style="font-size:.62rem;color:var(--t2);">${i.ustaAd||i.email||i.ustaUid?.substring(0,8)||'—'}</td>
+        <td style="font-size:.62rem;color:var(--t2);">${i.sehir||'—'}</td>
+        <td style="font-size:.68rem;color:var(--gold);">${i.fiyat?'₺'+Number(i.fiyat).toLocaleString('tr-TR')+'/'+(i.fiyatTip||'iş'):'—'}</td>
+        <td style="font-size:.6rem;color:#5CF0B4;">${i.duzeltmeNotu||'—'}</td>
+        <td style="font-size:.62rem;color:var(--t2);">${tarih}</td>
+        <td><span style="font-size:.6rem;font-weight:700;color:${durumRenk};">${durumLabel}</span>${redSebepHTML}</td>
+        <td style="white-space:nowrap;">
+          ${durum==='bekliyor'||durum==='reddedildi'?`<button class="eylem-btn onayla" onclick="uiDurum('${i.id}','onaylandi')">✓ Onayla</button>`:''}
+          ${durum==='bekliyor'?`<button class="eylem-btn reddet" style="margin-left:.3rem" onclick="uiRedAc('${i.id}')">✕ Reddet</button>`:''}
+          ${durum==='onaylandi'?`<button class="eylem-btn reddet" onclick="uiDurum('${i.id}','reddedildi')">✕ Kaldır</button>`:''}
+        </td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>`;
+}
+
+window.uiFiltre = function(tip, btn) {
+  _uiFiltre = tip;
+  document.querySelectorAll('#sayfa-ustaIlanlar .f-tab').forEach(b=>b.classList.remove('aktif'));
+  btn.classList.add('aktif');
+  uiRender();
+};
+
+window.uiDurum = async function(id, durum) {
+  try {
+    await updateDoc(doc(db,'ustam_ilanlar',id), { durum, guncellendi: serverTimestamp(), redSebep: null });
+    const i = _uiIlanlar.find(x=>x.id===id);
+    if(i) i.durum = durum;
+    ustaIlanlariYukle();
+    bildir(durum==='onaylandi' ? '✅ İlan onaylandı!' : '❌ İlan kaldırıldı.');
+  } catch(e) { bildir('Hata: '+e.message,'hata'); }
+};
+
+window.uiRedAc = function(id) {
+  _uiRedId = id;
+  document.getElementById('uiRedSebebiInput').value = '';
+  document.getElementById('uiRedModalOverlay').classList.add('v');
+};
+
+window.uiRedModalKapat = function() {
+  document.getElementById('uiRedModalOverlay').classList.remove('v');
+  _uiRedId = null;
+};
+
+window.uiRedOnayla = async function() {
+  if(!_uiRedId) return;
+  const sebep = document.getElementById('uiRedSebebiInput').value.trim();
+  if(!sebep){ bildir('Lütfen red sebebi yazın.','hata'); return; }
+  try {
+    await updateDoc(doc(db,'ustam_ilanlar',_uiRedId), {
+      durum: 'reddedildi',
+      redSebep: sebep,
+      guncellendi: serverTimestamp()
+    });
+    const i = _uiIlanlar.find(x=>x.id===_uiRedId);
+    if(i){ i.durum='reddedildi'; i.redSebep=sebep; }
+    uiRedModalKapat();
+    ustaIlanlariYukle();
+    bildir('❌ İlan reddedildi. Sebep ustaya iletildi.');
+  } catch(e) { bildir('Hata: '+e.message,'hata'); }
+};
 
 // ══════════════════════════════════════════════════
 // GENÇ-Z İÇERİKLERİ
@@ -1898,7 +2035,7 @@ window.sayfaGit=function(id,el){
   document.querySelectorAll('.sb-item').forEach(s=>s.classList.remove('aktif'));
   document.getElementById('sayfa-'+id)?.classList.add('aktif');
   if(el)el.classList.add('aktif');
-  const basliklar={ozet:'📊 Özet',basvurular:'📋 Ortak Başvuruları',siparisler:'🛒 Tüm Siparişler',ustaSiparisler:'✂ Usta Siparişlerii',kullanicilar:'👥 Kullanıcılar',gencimBasvurular:'🎓 Gencim — Sanatçı Başvuruları',finans:'💰 Finans Özeti',urunler:'🎨 Paylaşılan Ürünler',cekim:'💸 Çekim Talepleri',cekmeTalepleri:'💸 Çekme Talepleri',gelirGider:'📒 Gelir & Gider',genczIcerikler:'⚡ Genç-Z İçerikleri'};
+  const basliklar={ozet:'📊 Özet',basvurular:'📋 Ortak Başvuruları',siparisler:'🛒 Tüm Siparişler',ustaSiparisler:'✂ Usta Siparişlerii',kullanicilar:'👥 Kullanıcılar',gencimBasvurular:'🎓 Gencim — Sanatçı Başvuruları',finans:'💰 Finans Özeti',urunler:'🎨 Paylaşılan Ürünler',cekim:'💸 Çekim Talepleri',cekmeTalepleri:'💸 Çekme Talepleri',gelirGider:'📒 Gelir & Gider',genczIcerikler:'⚡ Genç-Z İçerikleri',ustaIlanlar:'🔨 Usta İlanları'};
   document.getElementById('topbarBaslik').textContent=basliklar[id]||id;
   if(id==='finans')renderFinans();
   if(id==='urunler')renderUrunler();
@@ -1906,6 +2043,7 @@ window.sayfaGit=function(id,el){
   if(id==='cekim'||id==='cekmeTalepleri')renderCekmeTalepleri();
   if(id==='gelirGider')ggRender();
   if(id==='genczIcerikler')genczIcerikleriYukle();
+  if(id==='ustaIlanlar')ustaIlanlariYukle();
 };
 
 window.filtreBasvuru=function(tip,el){window._filtreBasvuru=tip;document.querySelectorAll('#sayfa-basvurular .f-tab').forEach(t=>t.classList.remove('aktif'));el.classList.add('aktif');renderBasvurular();};
@@ -1950,6 +2088,29 @@ window.toggleSidebar=function(){document.getElementById('sidebar').classList.tog
     </div>
   </div>
 </div>
+<!-- USTA İLAN RED MODAL -->
+<div class="modal-overlay" id="uiRedModalOverlay" onclick="if(event.target===this)uiRedModalKapat()">
+  <div class="modal-kart" style="max-width:480px;width:100%;">
+    <div class="modal-ust">
+      <h3 style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:300;">❌ İlanı Reddet</h3>
+      <button onclick="uiRedModalKapat()" style="background:none;border:none;color:var(--t2);font-size:1.2rem;cursor:pointer;">✕</button>
+    </div>
+    <div style="padding:1.4rem;">
+      <p style="font-size:.72rem;color:var(--t2);margin-bottom:1rem;line-height:1.7;">Usta bu mesajı görecek ve ilanı düzenleyerek tekrar gönderebilecek.</p>
+      <label style="display:block;font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--t2);margin-bottom:.4rem;">Red Sebebi *</label>
+      <textarea id="uiRedSebebiInput" placeholder="Örn: Hizmet açıklaması eksik, fiyat bilgisi yetersiz…"
+        style="width:100%;min-height:110px;background:rgba(255,255,255,.03);border:1px solid rgba(224,85,85,.25);border-radius:4px;
+        padding:.75rem 1rem;font-family:'DM Sans',sans-serif;font-size:.75rem;color:var(--cream);outline:none;resize:vertical;line-height:1.6;"
+        onfocus="this.style.borderColor='rgba(224,85,85,.5)'"
+        onblur="this.style.borderColor='rgba(224,85,85,.25)'"></textarea>
+      <div style="display:flex;gap:.6rem;margin-top:1rem;justify-content:flex-end;">
+        <button onclick="uiRedModalKapat()" style="padding:.6rem 1.2rem;background:none;border:1px solid var(--border);color:var(--t2);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.62rem;cursor:pointer;">İptal</button>
+        <button onclick="uiRedOnayla()" style="padding:.6rem 1.4rem;background:rgba(224,85,85,.15);border:1px solid rgba(224,85,85,.4);color:var(--red);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:700;cursor:pointer;">❌ Reddet & Bildir</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- GENÇ-Z İÇERİK RED MODAL -->
 <div class="modal-overlay" id="giRedModalOverlay" onclick="if(event.target===this)giRedModalKapat()">
   <div class="modal-kart" style="max-width:480px;width:100%;">

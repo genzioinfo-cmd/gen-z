@@ -2635,22 +2635,81 @@ async function ustaYukle(){
       } else {
         const durumRenk = (d) => d==='onaylandi'?'var(--green)':d==='reddedildi'?'var(--red)':'var(--gold)';
         const durumTxt  = (d) => d==='onaylandi'?'✅ Onaylı':d==='reddedildi'?'❌ Reddedildi':'⏳ Onay Bekliyor';
-        liste.innerHTML = ilanlar.map(il=>`
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem;background:rgba(255,255,255,.022);border:1px solid rgba(201,168,76,.12);border-radius:6px;margin-bottom:.7rem;gap:1rem;flex-wrap:wrap;">
-            <div style="flex:1;min-width:0;">
-              <div style="font-family:'Syne',sans-serif;font-size:.95rem;color:#f0ebe0;margin-bottom:.2rem;">${il.ad||il.hizmet||'—'}</div>
-              <div style="font-size:.58rem;color:rgba(201,168,76,.6);letter-spacing:.1em;">${il.hizmet||il.kategori||'—'} · ${il.fiyat?'₺'+(il.fiyat).toLocaleString('tr-TR')+' / '+(il.fiyatTip||'iş'):''} · ${il.sehir||''}</div>
+        liste.innerHTML = ilanlar.map(il=>{
+          const durum = il.durum||'bekliyor';
+          const redSebebiHTML = durum==='reddedildi' && il.redSebep
+            ? `<div style="margin-top:.5rem;padding:.5rem .7rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.2);border-radius:4px;">
+                <div style="font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:.2rem;">⚠️ Red Sebebi</div>
+                <div style="font-size:.65rem;color:rgba(240,238,255,.75);line-height:1.6;">${il.redSebep}</div>
+              </div>` : '';
+          const tekrarBtn = durum==='reddedildi'
+            ? `<button onclick="ilanTekrarGonder('${il.id}')" style="margin-top:.5rem;padding:.4rem .9rem;background:rgba(92,240,180,.08);border:1px solid rgba(92,240,180,.3);color:#5CF0B4;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">🔄 Düzelt & Tekrar Gönder</button>` : '';
+          const silBtn = `<button onclick="ilanSil('${il.id}')" style="margin-top:.5rem;margin-left:.4rem;padding:.4rem .9rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.25);color:var(--red);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">🗑 Sil</button>`;
+          return `<div style="padding:1rem;background:rgba(255,255,255,.022);border:1px solid ${durum==='reddedildi'?'rgba(224,85,85,.25)':'rgba(201,168,76,.12)'};border-radius:6px;margin-bottom:.7rem;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+              <div style="flex:1;min-width:0;">
+                <div style="font-family:'Syne',sans-serif;font-size:.95rem;color:#f0ebe0;margin-bottom:.2rem;">${il.ad||il.hizmet||'—'}</div>
+                <div style="font-size:.58rem;color:rgba(201,168,76,.6);letter-spacing:.1em;">${il.hizmet||il.kategori||'—'} · ${il.fiyat?'₺'+(il.fiyat).toLocaleString('tr-TR')+' / '+(il.fiyatTip||'iş'):''} · ${il.sehir||''}</div>
+              </div>
+              <span style="font-size:.58rem;font-weight:700;color:${durumRenk(durum)};flex-shrink:0;">${durumTxt(durum)}</span>
             </div>
-            <span style="font-size:.58rem;font-weight:700;color:${durumRenk(il.durum||'bekliyor')};">${durumTxt(il.durum||'bekliyor')}</span>
-          </div>
-        `).join('');
+            ${redSebebiHTML}
+            <div>${tekrarBtn}${silBtn}</div>
+          </div>`;
+        }).join('');
       }
     }
   }catch(e){ console.error('ustaYukle hata:',e); }
   rdvBadgeGuncelle();
 }
 
-// ── RANDEVU FONKSİYONLARI ──
+// ── İLAN TEKRAR GÖNDER ──────────────────────────────────────────────────
+window.ilanTekrarGonder = function(id) {
+  let modal = document.getElementById('ilanTekrarModal');
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id = 'ilanTekrarModal';
+    modal.style.cssText = 'position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1rem;';
+    modal.innerHTML = `
+      <div style="background:#0d0d14;border:1px solid rgba(201,168,76,.25);border-radius:8px;padding:1.6rem;width:min(460px,94vw);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+          <h3 style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:300;">🔄 İlanı Tekrar Gönder</h3>
+          <button onclick="document.getElementById('ilanTekrarModal').remove()" style="background:none;border:none;color:var(--t2);font-size:1.2rem;cursor:pointer;">✕</button>
+        </div>
+        <p style="font-size:.68rem;color:var(--t2);margin-bottom:1rem;line-height:1.7;">Admin'e bir not bırakabilirsin. Örn: "Fiyat güncellendi", "Açıklama düzeltildi"</p>
+        <label style="display:block;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--t2);margin-bottom:.4rem;">Notun (isteğe bağlı)</label>
+        <textarea id="ilanTekrarNot" placeholder="Örn: Belirtilen eksiklikleri tamamladım…"
+          style="width:100%;min-height:90px;background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:.7rem 1rem;font-family:'DM Sans',sans-serif;font-size:.72rem;color:var(--cream);outline:none;resize:vertical;line-height:1.6;"></textarea>
+        <div style="display:flex;gap:.6rem;margin-top:1rem;justify-content:flex-end;">
+          <button onclick="document.getElementById('ilanTekrarModal').remove()" style="padding:.6rem 1.2rem;background:none;border:1px solid var(--border);color:var(--t2);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.62rem;cursor:pointer;">İptal</button>
+          <button id="ilanTekrarOnayla" style="padding:.6rem 1.4rem;background:rgba(92,240,180,.1);border:1px solid rgba(92,240,180,.3);color:#5CF0B4;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:700;cursor:pointer;">🔄 Onaya Gönder</button>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+  }
+  document.getElementById('ilanTekrarNot').value = '';
+  document.getElementById('ilanTekrarOnayla').onclick = async () => {
+    const not = document.getElementById('ilanTekrarNot')?.value.trim();
+    try {
+      const guncelleme = { durum:'bekliyor', redSebep:null, guncellendi:serverTimestamp() };
+      if(not) guncelleme.duzeltmeNotu = not;
+      await updateDoc(doc(db,'ustam_ilanlar',id), guncelleme);
+      document.getElementById('ilanTekrarModal')?.remove();
+      toast('✅ İlan tekrar onaya gönderildi!');
+      ustaYukle();
+    } catch(e) { toast('Hata: '+e.message,'err'); }
+  };
+};
+
+// ── İLAN SİL ────────────────────────────────────────────────────────────
+window.ilanSil = async function(id) {
+  if(!confirm('Bu ilanı silmek istediğine emin misin?')) return;
+  try {
+    await deleteDoc(doc(db,'ustam_ilanlar',id));
+    toast('🗑 İlan silindi.');
+    ustaYukle();
+  } catch(e) { toast('Hata: '+e.message,'err'); }
+};
 let _rdvListesi = [];
 let _rdvFiltreSec = 'hepsi';
 

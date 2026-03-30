@@ -1,69 +1,304 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" data-theme="dark">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>GEN-Z — Çok Yakında</title>
+<meta name="description" content="GEN-Z — Mağaza, Ustam ve Genç-Z platformu. Türkiye'nin yeni nesil dijital pazaryeri."/>
+<title>GEN-Z — Ana Sayfa</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html,body{width:100%;height:100%;background:#0a0a0f;color:#f0eeff;font-family:'DM Sans',sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none;}
-body::before{content:'';position:fixed;inset:0;z-index:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;opacity:0.5;}
-.blob{position:fixed;border-radius:50%;filter:blur(120px);opacity:0.12;pointer-events:none;z-index:0;animation:float 8s ease-in-out infinite;}
-.blob-1{width:600px;height:600px;background:#7B5CF0;top:-200px;left:-100px;animation-delay:0s;}
-.blob-2{width:500px;height:500px;background:#F0C55C;bottom:-150px;right:-100px;animation-delay:-3s;}
-.blob-3{width:400px;height:400px;background:#5CF0B4;top:40%;left:50%;transform:translate(-50%,-50%);animation-delay:-6s;}
-@keyframes float{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(20px,-20px) scale(1.05);}66%{transform:translate(-15px,15px) scale(0.97);}}
-.lines{position:fixed;inset:0;z-index:0;pointer-events:none;display:flex;justify-content:space-between;padding:0 8%;}
-.line{width:1px;background:linear-gradient(180deg,transparent 0%,rgba(123,92,240,.08) 30%,rgba(123,92,240,.08) 70%,transparent 100%);}
-.wrap{position:relative;z-index:1;width:100%;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;pointer-events:none;}
-.beta-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(123,92,240,.15);border:1px solid rgba(123,92,240,.35);border-radius:999px;padding:6px 18px;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#a78bfa;margin-bottom:2rem;animation:fadeUp .8s ease both;}
-.beta-dot{width:7px;height:7px;border-radius:50%;background:#a78bfa;animation:pulse 1.5s ease-in-out infinite;}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);}}
-.logo{font-family:'Syne',sans-serif;font-size:clamp(3.5rem,12vw,8rem);font-weight:800;letter-spacing:-3px;background:linear-gradient(135deg,#fff 0%,#c4b5fd 50%,#F0C55C 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:1.2rem;animation:fadeUp .8s .1s ease both;}
-.tagline{font-family:'Syne',sans-serif;font-size:clamp(1.1rem,3vw,1.8rem);font-weight:400;color:rgba(240,238,255,.55);letter-spacing:-.3px;margin-bottom:2.5rem;animation:fadeUp .8s .2s ease both;}
-.tagline em{font-style:normal;color:#5CF0B4;}
-.divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,rgba(123,92,240,.5),transparent);margin:0 auto 2.5rem;animation:fadeUp .8s .3s ease both;}
-.coming{font-size:clamp(.75rem,2vw,.9rem);letter-spacing:.35em;text-transform:uppercase;color:rgba(240,238,255,.3);margin-bottom:3rem;animation:fadeUp .8s .35s ease both;}
-.dots{display:flex;gap:10px;justify-content:center;margin-bottom:3.5rem;animation:fadeUp .8s .4s ease both;}
-.dot{width:8px;height:8px;border-radius:50%;background:rgba(123,92,240,.4);animation:blink 1.4s ease-in-out infinite;}
-.dot:nth-child(2){animation-delay:.2s;}
-.dot:nth-child(3){animation-delay:.4s;}
-@keyframes blink{0%,100%{background:rgba(123,92,240,.4);transform:scale(1);}50%{background:#7B5CF0;transform:scale(1.4);}}
-.hint{font-size:.8rem;color:rgba(240,238,255,.2);letter-spacing:.05em;animation:fadeUp .8s .5s ease both;}
-.hint span{color:rgba(240,197,92,.5);}
-.footer{position:fixed;bottom:2rem;left:0;right:0;text-align:center;font-size:.7rem;letter-spacing:.15em;color:rgba(240,238,255,.12);text-transform:uppercase;z-index:1;pointer-events:none;animation:fadeUp .8s .6s ease both;}
-.blocker{position:fixed;inset:0;z-index:9999;cursor:default;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+:root{
+  --accent:#7B5CF0;--accent2:#F0C55C;--accent3:#5CF0B4;
+  --bg:#0a0a0f;--bg2:#13131a;--bg3:#1c1c28;
+  --surface:#22222f;--border:#2e2e3f;
+  --text:#f0eeff;--text2:rgba(240,238,255,.65);--text3:rgba(240,238,255,.3);
+}
+[data-theme="light"]{
+  --bg:#f5f4ff;--bg2:#ffffff;--bg3:#ede9ff;
+  --surface:#e8e4ff;--border:#d0cbf5;
+  --text:#1a1730;--text2:rgba(26,23,48,.65);--text3:rgba(26,23,48,.35);
+}
+html,body{width:100%;min-height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;transition:background .3s,color .3s;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;padding:0 5%;height:64px;backdrop-filter:blur(14px);background:rgba(10,10,15,.75);border-bottom:1px solid var(--border);}
+[data-theme="light"] nav{background:rgba(245,244,255,.88);}
+.nav-logo{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,#fff 0%,#c4b5fd 50%,#F0C55C 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none;margin-right:2rem;}
+.nav-links{display:flex;gap:4px;list-style:none;}
+.nav-links a{text-decoration:none;color:var(--text2);font-size:.875rem;padding:6px 14px;border-radius:8px;transition:all .2s;}
+.nav-links a:hover{color:var(--text);background:var(--surface);}
+.nav-right{display:flex;align-items:center;gap:8px;margin-left:auto;}
+.btn-nav{padding:7px 18px;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;border:none;font-family:'DM Sans',sans-serif;}
+.btn-giris{background:transparent;border:1px solid var(--border);color:var(--text2);}
+.btn-giris:hover{border-color:var(--accent);color:var(--accent);}
+.btn-kayit{background:var(--accent);color:#fff;}
+.btn-kayit:hover{opacity:.88;transform:translateY(-1px);}
+.theme-btn{background:none;border:none;cursor:pointer;font-size:1.05rem;color:var(--text3);padding:4px 8px;}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--text2);border-radius:2px;transition:.2s;}
+.mobile-menu{display:none;flex-direction:column;gap:2px;position:fixed;top:64px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 5%;z-index:99;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{text-decoration:none;color:var(--text2);font-size:.9rem;padding:10px 14px;border-radius:8px;}
+.mobile-menu a:hover{background:var(--surface);color:var(--text);}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 5% 60px;position:relative;overflow:hidden;}
+.blob{position:absolute;border-radius:50%;filter:blur(120px);opacity:.1;pointer-events:none;animation:float 10s ease-in-out infinite;}
+.blob-1{width:600px;height:600px;background:#7B5CF0;top:-200px;left:-150px;}
+.blob-2{width:500px;height:500px;background:#F0C55C;bottom:-100px;right:-100px;animation-delay:-4s;}
+.blob-3{width:350px;height:350px;background:#5CF0B4;top:50%;left:50%;transform:translate(-50%,-50%);animation-delay:-7s;}
+@keyframes float{0%,100%{transform:translate(0,0);}33%{transform:translate(20px,-20px);}66%{transform:translate(-15px,15px);}}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(123,92,240,.12);border:1px solid rgba(123,92,240,.3);border-radius:999px;padding:6px 18px;font-size:.75rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#a78bfa;margin-bottom:2rem;}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:#a78bfa;animation:pulse 1.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.hero-title{font-family:'Syne',sans-serif;font-size:clamp(3.5rem,12vw,8rem);font-weight:800;letter-spacing:-3px;background:linear-gradient(135deg,#fff 0%,#c4b5fd 50%,#F0C55C 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:1.2rem;}
+.hero-sub{font-size:clamp(1rem,2.5vw,1.35rem);color:var(--text2);max-width:540px;margin:0 auto 2.5rem;line-height:1.7;}
+.hero-sub em{font-style:normal;color:var(--accent3);}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:3.5rem;}
+.btn-primary{padding:13px 30px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;text-decoration:none;font-family:'DM Sans',sans-serif;}
+.btn-primary:hover{opacity:.88;transform:translateY(-2px);box-shadow:0 8px 24px rgba(123,92,240,.35);}
+.btn-secondary{padding:13px 30px;background:transparent;color:var(--text);border:1px solid var(--border);border-radius:10px;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;text-decoration:none;font-family:'DM Sans',sans-serif;}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
+.hero-stats{display:flex;gap:40px;justify-content:center;flex-wrap:wrap;}
+.stat-num{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;}
+.stat-lbl{font-size:.72rem;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
+.section{padding:80px 5%;}
+.section-title{font-family:'Syne',sans-serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;text-align:center;margin-bottom:.5rem;}
+.section-sub{text-align:center;color:var(--text2);margin-bottom:3rem;font-size:.95rem;}
+.platform-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;max-width:1100px;margin:0 auto;}
+.pkart{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:30px 26px;text-decoration:none;color:var(--text);transition:all .25s;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden;}
+.pkart::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;}
+.pkart:hover{transform:translateY(-4px);}
+.pkart.magaza{--kr:#7B5CF0;}
+.pkart.magaza:hover{border-color:#7B5CF0;}
+.pkart.magaza::before{background:radial-gradient(ellipse at top left,rgba(123,92,240,.07),transparent 60%);}
+.pkart.usta{--kr:#5CF0B4;}
+.pkart.usta:hover{border-color:#5CF0B4;}
+.pkart.usta::before{background:radial-gradient(ellipse at top left,rgba(92,240,180,.07),transparent 60%);}
+.pkart.gencz{--kr:#F0C55C;}
+.pkart.gencz:hover{border-color:#F0C55C;}
+.pkart.gencz::before{background:radial-gradient(ellipse at top left,rgba(240,197,92,.07),transparent 60%);}
+.pkart-ikon{font-size:2.2rem;}
+.pkart-baslik{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:700;}
+.pkart-acik{color:var(--text2);font-size:.875rem;line-height:1.7;flex:1;}
+.pkart-link{font-size:.82rem;font-weight:600;color:var(--kr);}
+.etiketler{display:flex;gap:6px;flex-wrap:wrap;}
+.etiket{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:999px;padding:3px 10px;font-size:.7rem;color:var(--text3);}
+.adimlar{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;max-width:860px;margin:0 auto;}
+.adim{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:22px 18px;text-align:center;}
+.adim-no{width:38px;height:38px;border-radius:50%;background:rgba(123,92,240,.14);border:1px solid rgba(123,92,240,.28);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem;color:#a78bfa;margin:0 auto 12px;}
+.adim-baslik{font-weight:600;margin-bottom:5px;font-size:.92rem;}
+.adim-acik{color:var(--text2);font-size:.8rem;line-height:1.6;}
+.cta-blok{background:linear-gradient(135deg,rgba(123,92,240,.1),rgba(240,197,92,.05));border:1px solid rgba(123,92,240,.22);border-radius:20px;padding:56px 36px;text-align:center;max-width:680px;margin:0 auto;}
+.cta-baslik{font-family:'Syne',sans-serif;font-size:clamp(1.5rem,4vw,2.1rem);font-weight:800;margin-bottom:.7rem;}
+.cta-alt{color:var(--text2);margin-bottom:2rem;font-size:.92rem;}
+footer{border-top:1px solid var(--border);padding:36px 5%;text-align:center;color:var(--text3);font-size:.78rem;}
+footer a{color:var(--text3);text-decoration:none;margin:0 10px;}
+footer a:hover{color:var(--text2);}
+@media(max-width:768px){
+  .nav-links,.btn-giris,.btn-kayit{display:none;}
+  .hamburger{display:flex;}
+  .hero{padding:88px 5% 50px;}
+  .hero-stats{gap:20px;}
+  .section{padding:56px 5%;}
+  .cta-blok{padding:36px 18px;}
+}
 </style>
 </head>
 <body>
-<div class="blocker" oncontextmenu="return false"></div>
-<div class="lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
-<div class="blob blob-1"></div>
-<div class="blob blob-2"></div>
-<div class="blob blob-3"></div>
-<div class="wrap">
-  <div class="beta-badge"><div class="beta-dot"></div>Beta Süreci</div>
-  <div class="logo">GEN-Z</div>
-  <div class="tagline">Türkiye'nin yeni nesil platformu <em>geliyor.</em></div>
-  <div class="divider"></div>
-  <div class="coming">Çok Yakında</div>
-  <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-  <div class="hint">Mağaza · Ustam · <span>Genç-Z</span></div>
+
+<nav>
+  <a class="nav-logo" href="index.html">GEN-Z</a>
+  <ul class="nav-links">
+    <li><a href="magaza.html">Mağaza</a></li>
+    <li><a href="ustam.html">Ustam</a></li>
+    <li><a href="gen-z.html">Genç-Z</a></li>
+    <li><a href="birlikte-buyuyelim.html">Birlikte Büyüyelim</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌙</button>
+    <button class="btn-nav btn-giris" id="btnGiris" onclick="girisSayfasina('signin')">Giriş Yap</button>
+    <button class="btn-nav btn-kayit" id="btnKayit" onclick="girisSayfasina('signup')">Kayıt Ol</button>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="magaza.html">🏪 Mağaza</a>
+  <a href="ustam.html">🔨 Ustam</a>
+  <a href="gen-z.html">⚡ Genç-Z</a>
+  <a href="birlikte-buyuyelim.html">🤝 Birlikte Büyüyelim</a>
+  <a href="magaza.html?auth=signin">👤 Giriş Yap</a>
+  <a href="magaza.html?auth=signup">✨ Kayıt Ol</a>
 </div>
-<div class="footer">© 2025 GEN-Z · Tüm hakları saklıdır</div>
+
+<section class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div style="position:relative;z-index:1;width:100%;">
+    <div class="hero-badge"><div class="badge-dot"></div>Türkiye'nin Yeni Nesil Platformu</div>
+    <h1 class="hero-title">GEN-Z</h1>
+    <p class="hero-sub">Mağaza aç, usta bul veya <em>yaratıcılığını</em> sat.<br>Tek platform, sonsuz imkân.</p>
+    <div class="hero-btns">
+      <a href="magaza.html" class="btn-primary">Alışverişe Başla</a>
+      <a href="birlikte-buyuyelim.html" class="btn-secondary">Ortak Ol</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">3</div>
+        <div class="stat-lbl">Platform</div>
+      </div>
+      <div>
+        <div class="stat-num">%10</div>
+        <div class="stat-lbl">Komisyon</div>
+      </div>
+      <div>
+        <div class="stat-num">7/24</div>
+        <div class="stat-lbl">Destek</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Üç platform, bir ekosistem</h2>
+  <p class="section-sub">İhtiyacına göre seç — alıcı, satıcı ya da yaratıcı ol.</p>
+  <div class="platform-grid">
+
+    <a href="magaza.html" class="pkart magaza">
+      <div class="pkart-ikon">🏪</div>
+      <div class="pkart-baslik">Mağaza</div>
+      <div class="pkart-acik">Onaylı satıcıların ürünlerini keşfet. Güvenli ödeme, hızlı teslimat, kolay iade.</div>
+      <div class="etiketler">
+        <span class="etiket">El yapımı</span>
+        <span class="etiket">Vintage</span>
+        <span class="etiket">Dijital</span>
+        <span class="etiket">Giyim</span>
+      </div>
+      <span class="pkart-link">Mağazayı Keşfet →</span>
+    </a>
+
+    <a href="ustam.html" class="pkart usta">
+      <div class="pkart-ikon">🔨</div>
+      <div class="pkart-baslik">Ustam</div>
+      <div class="pkart-acik">Elektrik, tesisat, marangoz ve daha fazlası. Güvenilir ustayı bul, randevu al.</div>
+      <div class="etiketler">
+        <span class="etiket">Elektrik</span>
+        <span class="etiket">Su tesisatı</span>
+        <span class="etiket">İnşaat</span>
+        <span class="etiket">Temizlik</span>
+      </div>
+      <span class="pkart-link">Usta Bul →</span>
+    </a>
+
+    <a href="gen-z.html" class="pkart gencz">
+      <div class="pkart-ikon">⚡</div>
+      <div class="pkart-baslik">Genç-Z</div>
+      <div class="pkart-acik">Genç yaratıcıların dijital içeriklerini keşfet. Müzik, tasarım, yazı ve daha fazlası.</div>
+      <div class="etiketler">
+        <span class="etiket">Müzik</span>
+        <span class="etiket">Tasarım</span>
+        <span class="etiket">İllüstrasyon</span>
+        <span class="etiket">Yazılım</span>
+      </div>
+      <span class="pkart-link">Keşfet →</span>
+    </a>
+
+  </div>
+</section>
+
+<section class="section" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <h2 class="section-title">Nasıl çalışır?</h2>
+  <p class="section-sub">Üç adımda başla.</p>
+  <div class="adimlar">
+    <div class="adim">
+      <div class="adim-no">1</div>
+      <div class="adim-baslik">Kayıt Ol</div>
+      <div class="adim-acik">Ücretsiz hesap oluştur. Mağaza, usta veya Genç-Z ortağı olmak için başvur.</div>
+    </div>
+    <div class="adim">
+      <div class="adim-no">2</div>
+      <div class="adim-baslik">Onay Al</div>
+      <div class="adim-acik">Başvurunu inceleriz ve onaylarsak platforma erişimin açılır.</div>
+    </div>
+    <div class="adim">
+      <div class="adim-no">3</div>
+      <div class="adim-baslik">Kazan</div>
+      <div class="adim-acik">Ürün sat, hizmet ver veya içerik paylaş. %10 komisyonla net kazancını çek.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="cta-blok">
+    <h2 class="cta-baslik">Hâlâ bekliyor musun?</h2>
+    <p class="cta-alt">Şimdi kayıt ol, mağazanı veya profilini oluştur. Platform ücretsiz.</p>
+    <div class="hero-btns">
+      <a href="birlikte-buyuyelim.html" class="btn-primary">Ortak Başvurusu Yap</a>
+      <a href="magaza.html" class="btn-secondary">Gezmeye Devam Et</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div style="margin-bottom:10px;">
+    <a href="hakkimizda.html">Hakkımızda</a>
+    <a href="iletisim.html">İletişim</a>
+    <a href="gizlilik.html">Gizlilik</a>
+    <a href="kullanim-sartlari.html">Kullanım Şartları</a>
+    <a href="yasal-vergilendirme.html">Yasal & Vergi</a>
+  </div>
+  © 2025 GEN-Z · Tüm hakları saklıdır
+</footer>
+
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="firebase-sync.js"></script>
+<script src="cookie-consent.js"></script>
 <script>
-  window.location.replace('gen-z.html');
-</script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js")
-      .then(r => console.log("[GEN-Z] SW kayıtlı:", r.scope))
-      .catch(e => console.warn("[GEN-Z] SW hatası:", e));
-  });
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
 }
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+  try { localStorage.setItem('genz-theme', isDark ? 'light' : 'dark'); } catch(e) {}
+}
+function girisSayfasina(tab) {
+  window.location.href = 'magaza.html?auth=' + tab;
+}
+// Tema yükle
+try {
+  const t = localStorage.getItem('genz-theme');
+  if (t) {
+    document.documentElement.setAttribute('data-theme', t);
+    document.getElementById('themeBtn').textContent = t === 'dark' ? '🌙' : '☀️';
+  }
+} catch(e) {}
+// Giriş durumuna göre nav güncelle
+function navGuncelle(user) {
+  if (!user) return;
+  const g = document.getElementById('btnGiris');
+  const k = document.getElementById('btnKayit');
+  if (g) { g.textContent = '👤 Profilim'; g.onclick = () => location.href='profile.html'; }
+  if (k) { k.textContent = '🎛️ Panel'; k.onclick = () => location.href='modpanel.html'; }
+  const ml = document.getElementById('mobileMenu');
+  if (ml) {
+    ml.insertAdjacentHTML('beforeend',
+      '<a href="profile.html">👤 Profilim</a><a href="modpanel.html">🎛️ Kontrol Paneli</a>'
+    );
+  }
+}
+// _genzAuth hazır olunca kontrol et
+let _navCheck = 0;
+function bekleNavGuncelle() {
+  if (window._genzAuth?.auth?.currentUser) { navGuncelle(window._genzAuth.auth.currentUser); return; }
+  if (_navCheck++ < 20) setTimeout(bekleNavGuncelle, 300);
+}
+bekleNavGuncelle();
 </script>
 </body>
 </html>

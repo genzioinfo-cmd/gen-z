@@ -822,7 +822,7 @@ async function fetchAllProducts() {
   try {
     const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
     const { getFirestore, collection, getDocs, query, where, orderBy } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    const cfg = { apiKey:"AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ", authDomain:"gen-z-io.firebaseapp.com", projectId:"gen-z-io", storageBucket:"gen-z-io.firebasestorage.app", messagingSenderId:"97338868994", appId:"1:97338868944:web:d7b429e416d8c505b14ad5" };
+    const cfg = { apiKey:"AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ", authDomain:"gen-z-io.firebaseapp.com", projectId:"gen-z-io", storageBucket:"gen-z-io.firebasestorage.app", messagingSenderId:"97338868944", appId:"1:97338868944:web:d7b429e416d8c505b14ad5" };
     const app = getApps().length ? getApps()[0] : initializeApp(cfg);
     const db = getFirestore(app);
     const q = query(collection(db, 'magaza_urunler'), where('durum', '==', 'onaylandi'), orderBy('ts', 'desc'));
@@ -1338,4 +1338,12 @@ document.addEventListener('DOMContentLoaded', async () => { await fetchAllProduc
     html += '</div>';
   }
 
-  document.getElemen
+  document.getElementById('saticiContent').innerHTML = html;
+
+}); // closes DOMContentLoaded
+</script>
+
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="firebase-sync.js"></script>
+</body>
+</html>

@@ -83,8 +83,10 @@ import {
   getFirestore, collection, query, where, orderBy,
   getDocs, updateDoc, addDoc, doc, serverTimestamp, onSnapshot, limit
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 
-const db = getFirestore();
+let db;
+try { db = getFirestore(getApp()); } catch(e) { db = getFirestore(); }
 let _mstUid = null;
 let _chatUnsub = null;
 let _chatRdvId = null;

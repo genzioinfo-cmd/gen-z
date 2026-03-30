@@ -10,8 +10,10 @@ import {
   addDoc, updateDoc, getDocs, onSnapshot,
   query, where, orderBy, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 
-const db = getFirestore();
+let db;
+try { db = getFirestore(getApp()); } catch(e) { db = getFirestore(); }
 const COL = 'ustam_projeler';
 
 /* ── Yardımcı ── */

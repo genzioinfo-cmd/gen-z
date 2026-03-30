@@ -804,10 +804,11 @@ function placeOrder(){
   // Sipariş kodu
   const kod = 'GZ-' + Math.random().toString(36).substring(2,8).toUpperCase();
 
-  // Siparişi localStorage'a kaydet
   const subtotal = items.reduce((t,i)=>t+i.price*(i.qty||1),0);
   const kapidaEk = odemeYontemi==='kapida' ? 15 : 0;
   const toplam = subtotal + kargoUcret + kapidaEk;
+  const kulllanici = _ls.getJSON('genz-user', null); // BUG FIX: was "kulllanici" (3 l's) — variable name kept for compatibility below
+  const kullanici = kulllanici; // alias fix
   const yeniSiparis = {
     kod,
     tarih: new Date().toLocaleDateString('tr-TR', { day:'numeric', month:'long', year:'numeric' }),
@@ -817,13 +818,52 @@ function placeOrder(){
     kargo: { ad: kargoAdi, sure: kargoSure, ucret: kargoUcret },
     odeme: odemeYontemi,
     toplam,
-    durum: 'hazirlaniyor'
+    durum: 'beklemede'
   };
+
+  // localStorage'a kaydet (hızlı okuma için)
   try {
     const mevcutlar = JSON.parse(localStorage.getItem('genz-siparisler') || '[]');
     mevcutlar.unshift(yeniSiparis);
     localStorage.setItem('genz-siparisler', JSON.stringify(mevcutlar));
-  } catch(e) { console.warn('Sipariş kaydedilemedi:', e); }
+  } catch(e) { console.warn('localStorage sipariş kaydı başarısız:', e); }
+
+  // Firestore magaza_siparisler koleksiyonuna kaydet
+  if (kulllanici && kulllanici.uid) {
+    (async () => {
+      try {
+        const { getFirestore, collection, addDoc, serverTimestamp } =
+          await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+        const { getApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+        let db;
+        try { db = getFirestore(getApp()); } catch(e) { db = getFirestore(); }
+        // Satıcı bazında grupla — her ürün grubunu ayrı sipariş olarak kaydet
+        const saticiMap = {};
+        items.forEach(item => {
+          const saticiId = item.saticiId || item.sellerId || 'bilinmiyor';
+          if (!saticiMap[saticiId]) saticiMap[saticiId] = [];
+          saticiMap[saticiId].push(item);
+        });
+        for (const [saticiId, saticiItems] of Object.entries(saticiMap)) {
+          const saticiToplam = saticiItems.reduce((t,i)=>t+i.price*(i.qty||1),0);
+          await addDoc(collection(db, 'magaza_siparisler'), {
+            kod,
+            musteriUid:   kulllanici.uid,
+            musteriEmail: kulllanici.email || '',
+            saticiId,
+            urunler:  saticiItems,
+            adres:    { ad, soyad, tel, adres, il },
+            kargo:    { ad: kargoAdi, sure: kargoSure, ucret: kargoUcret },
+            odeme:    odemeYontemi,
+            araToplamUrun: saticiToplam,
+            toplam:   saticiToplam + kargoUcret + kapidaEk,
+            durum:    'beklemede',
+            ts:       serverTimestamp(),
+          });
+        }
+      } catch(e) { console.warn('Firestore sipariş kaydı başarısız:', e); }
+    })();
+  }
 
   // Sepeti temizle
   saveCart([]);

@@ -1554,8 +1554,10 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
         onSnapshot, doc, addDoc, updateDoc,
         serverTimestamp, getDocs
       } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+      import { getApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 
-      const db = getFirestore();
+      let db;
+      try { db = getFirestore(getApp()); } catch(e) { db = getFirestore(); }
 
       let _oiFiltre   = 'hepsi';
       let _oiAktif    = null;   // açık sohbetin Firestore belge ID'si
@@ -2920,6 +2922,31 @@ window.rdvDurum=async function(id,yeniDurum){
         okundu: false,
         ts: serverTimestamp()
       }).catch(()=>{});
+    }
+
+    // Onaylandığında ustam_projeler'de proje oluştur
+    if (yeniDurum === 'onaylandi' && rdv) {
+      try {
+        const projeSnap = await getDocs(query(collection(db,'ustam_projeler'), where('rdvId','==',id)));
+        if (projeSnap.empty) {
+          await addDoc(collection(db,'ustam_projeler'), {
+            rdvId        : id,
+            ustaUid      : rdv.ustaUid      || _aktifUid,
+            musteriUid   : rdv.musteriUid   || '',
+            musteriAd    : rdv.musteriAd    || rdv.musteriUsername || 'Müşteri',
+            ustaAdi      : rdv.ustaAdi      || '',
+            isAdi        : rdv.hizmet       || rdv.isAdi || 'Hizmet',
+            sehir        : rdv.sehir        || '',
+            aciklama     : rdv.mesaj        || '',
+            durum        : 'devam',
+            ilerleme     : 0,
+            onayBekliyor : false,
+            adimlar      : [],
+            ts           : serverTimestamp(),
+            tamamlanmaTarihi: null,
+          });
+        }
+      } catch(pe) { console.warn('Proje oluşturma hatası:', pe); }
     }
 
     renderRdvTablo();
@@ -5045,8 +5072,10 @@ import {
   getFirestore, collection, query, where, orderBy,
   onSnapshot, doc, updateDoc, serverTimestamp, getDoc
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 
-const db = getFirestore();
+let db;
+try { db = getFirestore(getApp()); } catch(e) { db = getFirestore(); }
 let _projeler = [];
 let _prjFiltre = 'hepsi';
 let _prjUnsub  = null;

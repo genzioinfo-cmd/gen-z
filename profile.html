@@ -802,7 +802,7 @@ if (currentUser) {
   const infoEmail = document.getElementById('info-email');
   if (infoUser) infoUser.textContent = currentUser.username;
   if (infoEmail) infoEmail.textContent = currentUser.email;
-  document.getElementById('avatarInitial').textContent      = currentUser.username.replace('@','').charAt(0).toUpperCase();
+  document.getElementById('avatarInitial').textContent      = (currentUser.username || currentUser.email || '?').replace('@','').charAt(0).toUpperCase();
 
   // localStorage'daki rol bilgisiyle hemen göster
   renderRolKisayollar(currentUser);

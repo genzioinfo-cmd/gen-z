@@ -1568,10 +1568,12 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
 
       /* ── Giriş yapmış üreticinin UID'si ── */
       function _uid() {
-        return window._aktifUid
-          || window._genzAuth?.auth?.currentUser?.uid
-          || JSON.parse(localStorage.getItem('genz-user')||'null')?.uid
-          || 'demo';
+        try {
+          return window._aktifUid
+            || window._genzAuth?.auth?.currentUser?.uid
+            || JSON.parse(localStorage.getItem('genz-user')||'null')?.uid
+            || 'demo';
+        } catch(e) { return window._aktifUid || 'demo'; }
       }
 
       /* ─── ÖZET KARTLARI GÜNCELLE ─── */
@@ -1739,7 +1741,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
               { tip:'gelen',  metin: x.onIzlenim||'Merhaba!', zaman: (x.tarih||'').split(' ')[1]||'', ts: serverTimestamp() },
             ];
             if (x.istekMetni) baslangic.push({ tip:'gelen', metin:'📋 Özel İstek: ' + x.istekMetni, ts: serverTimestamp() });
-            baslangic.forEach(m => addDoc(msgRef, m));
+            await Promise.all(baslangic.map(m => addDoc(msgRef, m).catch(e => console.warn('[GEN-Z] Mesaj yazılamadı:', e))));
           } else {
             snap.docs.forEach(d => {
               const m = d.data();
@@ -5225,6 +5227,11 @@ function urunOverlayBasarili(){
 function urunOverlayKapat(){
   document.getElementById('urunYukleOverlay').style.display='none';
 }
+
+window.addEventListener('beforeunload', () => {
+  if (typeof _chatUnsub === 'function') { _chatUnsub(); }
+  if (typeof _prjUnsub  === 'function') { _prjUnsub();  }
+});
 </script>
 <script>
 if ("serviceWorker" in navigator) {

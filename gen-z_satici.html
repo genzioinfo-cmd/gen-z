@@ -1223,7 +1223,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (_fs) return _fs;
       _fs = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
       const { getFirestore } = _fs;
-      _db = getFirestore();
+      const { getApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+      try { _db = getFirestore(getApp()); } catch(e) { _db = getFirestore(); }
       return _fs;
     }
 

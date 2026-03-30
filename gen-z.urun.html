@@ -854,7 +854,7 @@ function sepeteEkleDetay() {
   if (!_detayUrun) return;
   const KEY = 'genz-sepet';
   try {
-    let sepet = JSON.parse(localStorage.getItem(KEY) || '[]');
+    let sepet; try { sepet = JSON.parse(localStorage.getItem(KEY) || '[]'); if (!Array.isArray(sepet)) sepet = []; } catch(e) { sepet = []; }
     if (!Array.isArray(sepet)) sepet = [];
     const uid = String(_detayUrun.id);
     const mevcut = sepet.find(i => String(i.id) === uid);
@@ -1037,7 +1037,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // ── Navbar sepet badge ──
 (function(){
   try {
-    const sepet = JSON.parse(localStorage.getItem('genz-sepet') || '[]');
+    let sepet; try { sepet = JSON.parse(localStorage.getItem('genz-sepet') || '[]'); } catch(e) { sepet = []; localStorage.removeItem('genz-sepet'); }
     const adet = Array.isArray(sepet) ? sepet.reduce((t,i)=>t+(i.qty||1),0) : 0;
     const badge = document.getElementById('navCartBadge');
     if (badge && adet > 0) { badge.textContent = adet; badge.style.display = 'flex'; }

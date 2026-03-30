@@ -127,8 +127,9 @@ let _unsub = null;
 async function uidBekle() {
   return new Promise(resolve => {
     const iv = setInterval(() => {
-      const uid = window._genzAuth?.auth?.currentUser?.uid
-        || JSON.parse(localStorage.getItem('genz-user') || 'null')?.uid;
+      let lsUid = null;
+      try { lsUid = JSON.parse(localStorage.getItem('genz-user') || 'null')?.uid; } catch(e) {}
+      const uid = window._genzAuth?.auth?.currentUser?.uid || lsUid;
       if (uid) { clearInterval(iv); resolve(uid); }
     }, 200);
     setTimeout(() => { clearInterval(iv); resolve(null); }, 6000);
@@ -282,4 +283,6 @@ window.prjIlerle = async function(projeId, yuzde) {
 };
 
 baslat();
+
+window.addEventListener('beforeunload', () => { if (_unsub) { _unsub(); _unsub = null; } });
 </script>

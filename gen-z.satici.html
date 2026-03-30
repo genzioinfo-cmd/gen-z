@@ -202,6 +202,169 @@ nav {
 }
 .btn-satici-action:hover { border-color: var(--accent); color: var(--accent); }
 
+/* ── ÖZEL İSTEK BUTONU ── */
+.btn-ozel-istek {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, rgba(123,92,240,0.18), rgba(240,197,92,0.12));
+  border: 1px solid rgba(123,92,240,0.5);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: 13px; font-weight: 600;
+  color: #a48af0; cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+  transition: all 0.25s; position: relative; overflow: hidden;
+  animation: oiGlow 3s ease-in-out infinite;
+}
+@keyframes oiGlow {
+  0%,100% { box-shadow: 0 0 0 0 rgba(123,92,240,0); }
+  50%      { box-shadow: 0 0 14px rgba(123,92,240,0.25); }
+}
+.btn-ozel-istek:hover { border-color: var(--accent2); color: var(--accent2); transform: translateY(-1px); background: linear-gradient(135deg, rgba(123,92,240,0.28), rgba(240,197,92,0.18)); }
+.btn-ozel-istek .oi-fiyat { color: var(--accent2); font-weight: 800; }
+
+/* ── ÖZEL İSTEK MODAL — GENEL ── */
+.oi-overlay {
+  position: fixed; inset: 0; z-index: 400;
+  background: rgba(0,0,0,0.82); backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  padding: 20px;
+}
+.oi-overlay.open { opacity: 1; pointer-events: all; }
+.oi-box {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 20px; width: 100%; max-width: 480px;
+  max-height: 88vh; overflow-y: auto;
+  transform: translateY(28px) scale(0.96);
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow: 0 32px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(123,92,240,0.08);
+  position: relative;
+}
+.oi-overlay.open .oi-box { transform: none; }
+.oi-kapat {
+  position: absolute; top: 14px; right: 14px;
+  width: 30px; height: 30px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
+  color: var(--text2); font-size: 15px;
+  display: flex; align-items: center; justify-content: center; transition: color 0.2s;
+}
+.oi-kapat:hover { color: var(--text); }
+
+/* Header */
+.oi-header {
+  padding: 26px 26px 18px;
+  background: linear-gradient(135deg, rgba(123,92,240,0.06), rgba(240,197,92,0.03));
+  border-bottom: 1px solid var(--border);
+}
+.oi-baslik {
+  font-family: var(--font-display); font-size: 20px; font-weight: 800; margin-bottom: 4px;
+  background: linear-gradient(135deg, #a48af0, var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.oi-alt { font-size: 13px; color: var(--text2); }
+.oi-fiyat-satir {
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(123,92,240,0.08); border: 1px solid rgba(123,92,240,0.18);
+  border-radius: 12px; padding: 12px 16px; margin-top: 14px; flex-wrap: wrap; gap: 10px;
+}
+.oi-fiyat-ana { font-family: var(--font-display); font-size: 26px; font-weight: 800; color: var(--accent2); }
+.oi-fiyat-acik { font-size: 12px; color: var(--text2); }
+.oi-dagil { font-size: 11px; text-align: right; }
+.oi-dagil span { display: block; }
+.oi-dagil .d-u { color: #5CF0B4; font-weight: 700; }
+.oi-dagil .d-p { color: #a48af0; font-weight: 700; }
+
+/* Body */
+.oi-body { padding: 22px 26px 26px; }
+
+/* Adım göster/gizle */
+.oi-adim { display: none; }
+.oi-adim.on { display: block; }
+
+/* Adım 1 — bilgi listesi */
+.oi-bilgi-liste { margin-bottom: 18px; }
+.oi-bilgi-satir { display: flex; gap: 12px; padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.oi-bilgi-satir:last-child { border: none; }
+.oi-b-ikon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+.oi-b-txt { font-size: 13px; color: var(--text2); line-height: 1.6; }
+.oi-b-txt strong { color: var(--text); }
+.oi-odeme-btn {
+  width: 100%; padding: 14px; border: none; border-radius: 12px; cursor: pointer;
+  font-family: var(--font-display); font-size: 15px; font-weight: 800;
+  background: linear-gradient(135deg, #5a3eb0, #7B5CF0);
+  color: #fff; transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  box-shadow: 0 4px 20px rgba(123,92,240,0.4);
+}
+.oi-odeme-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(123,92,240,0.5); }
+.oi-odeme-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.oi-guvenli { text-align: center; margin-top: 10px; font-size: 11px; color: var(--text3); }
+
+/* Adım 2 — sohbet */
+.oi-onay-satir { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+.oi-onay-yazi { font-size: 12px; font-weight: 700; color: #5CF0B4; }
+.oi-canli { font-size: 11px; color: var(--text3); display: flex; align-items: center; gap: 5px; }
+.oi-canli::before { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #5CF0B4; box-shadow: 0 0 6px #5CF0B4; animation: oiPulse 1.5s infinite; }
+@keyframes oiPulse { 0%,100%{opacity:1;}50%{opacity:0.4;} }
+
+.oi-sohbet-alan {
+  height: 260px; overflow-y: auto;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px; display: flex; flex-direction: column; gap: 8px;
+  scroll-behavior: smooth;
+}
+.oi-balon {
+  max-width: 82%; padding: 9px 13px; border-radius: 11px;
+  font-size: 13px; line-height: 1.6; word-break: break-word;
+  animation: oiFadeUp 0.2s ease;
+}
+@keyframes oiFadeUp { from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;} }
+.oi-balon.gelen { background: var(--surface); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 3px; }
+.oi-balon.giden { background: var(--accent); color: #fff; align-self: flex-end; border-bottom-right-radius: 3px; }
+.oi-balon.sistem { background: rgba(92,240,180,0.07); border: 1px solid rgba(92,240,180,0.2); color: #5CF0B4; align-self: center; text-align: center; font-size: 11px; max-width: 92%; border-radius: 8px; }
+.oi-zaman { font-size: 10px; opacity: 0.45; margin-top: 2px; }
+.oi-balon.giden .oi-zaman { color: rgba(255,255,255,0.6); }
+
+.oi-inp-row { display: flex; gap: 8px; margin-top: 10px; align-items: flex-end; }
+.oi-inp {
+  flex: 1; padding: 10px 13px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; font-family: var(--font-body); font-size: 13px;
+  color: var(--text); outline: none; resize: none;
+  min-height: 42px; max-height: 96px; transition: border-color 0.2s;
+}
+.oi-inp:focus { border-color: var(--accent); }
+.oi-gonder {
+  width: 42px; height: 42px; border-radius: 10px; border: none; cursor: pointer;
+  background: var(--accent); color: #fff; font-size: 17px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s; flex-shrink: 0;
+}
+.oi-gonder:hover { background: #6a4de0; transform: scale(1.06); }
+
+/* Özel istek formu */
+.oi-form-blok { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+.oi-form-label { font-size: 11px; font-weight: 600; color: var(--accent2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.oi-form-ta {
+  width: 100%; padding: 11px 13px;
+  background: var(--bg3); border: 1px solid rgba(240,197,92,0.25);
+  border-radius: 10px; font-family: var(--font-body); font-size: 13px;
+  color: var(--text); outline: none; resize: vertical; min-height: 76px;
+  transition: border-color 0.2s;
+}
+.oi-form-ta:focus { border-color: var(--accent2); }
+.oi-form-btn {
+  margin-top: 8px; width: 100%; padding: 11px;
+  background: rgba(240,197,92,0.08); border: 1px solid rgba(240,197,92,0.3);
+  border-radius: 10px; color: var(--accent2);
+  font-family: var(--font-body); font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+}
+.oi-form-btn:hover { background: rgba(240,197,92,0.16); transform: translateY(-1px); }
+
+/* Spinner */
+@keyframes oiSpin { to{transform:rotate(360deg);} }
+.oi-spin { display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:oiSpin 0.7s linear infinite; }
+
 /* ── TAKİPÇİ BİLGİ BARI ── */
 .satici-follow-bar {
   display: flex; align-items: center; gap: 16px; margin-top: 14px;
@@ -558,7 +721,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
       </div>
       <div class="profile-field">
         <span class="profile-field-label">E-posta</span>
-        <span class="profile-field-val" id="profile-email">ornek@mail.com</span>
+        <span class="profile-field-val" id="profile-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="07687569626c476a666e6b2964686a">[email&#160;protected]</a></span>
       </div>
       <button class="btn-submit" style="background:transparent;color:var(--accent);border:1px solid var(--accent);margin-top:8px" onclick="goToProfile()">
         👤 Profil Sayfam
@@ -568,22 +731,111 @@ nav, .modal-overlay-auth, .modal-box, .toast {
   </div>
 </div>
 
+<!-- ÖZEL İSTEK MODAL -->
+<div class="oi-overlay" id="oiOverlay" onclick="oiDisTikla(event)">
+  <div class="oi-box">
+    <button class="oi-kapat" onclick="ozelIstekKapat()">&#x2715;</button>
+
+    <div class="oi-header">
+      <div class="oi-baslik">✨ Özel İstek</div>
+      <div class="oi-alt" id="oiAlt">Üreticiyle birebir görüş, isteğini ilet</div>
+      <div class="oi-fiyat-satir">
+        <div>
+          <div class="oi-fiyat-ana">₺50</div>
+          <div class="oi-fiyat-acik">Tek seferlik · Sınırsız sohbet</div>
+        </div>
+        <div class="oi-dagil">
+          <span style="color:var(--text3);font-size:10px;">Gelir paylaşımı</span>
+          <span class="d-u">₺25 → Üretici</span>
+          <span class="d-p">₺25 → Platform</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="oi-body">
+
+      <!-- ADIM 1: Ödeme bilgisi -->
+      <div class="oi-adim on" id="oi-adim-1">
+        <div class="oi-bilgi-liste">
+          <div class="oi-bilgi-satir">
+            <span class="oi-b-ikon">💬</span>
+            <div class="oi-b-txt"><strong>Birebir Sohbet</strong> — Üreticiyle doğrudan mesajlaş, dilediğin kadar yaz.</div>
+          </div>
+          <div class="oi-bilgi-satir">
+            <span class="oi-b-ikon">📋</span>
+            <div class="oi-b-txt"><strong>Özel İstek Formu</strong> — Kişisel ürün, tasarım veya danışmanlık talebini net şekilde ilet.</div>
+          </div>
+          <div class="oi-bilgi-satir">
+            <span class="oi-b-ikon">🔒</span>
+            <div class="oi-b-txt"><strong>Güvenli Ödeme</strong> — ₺25 üreticiye, ₺25 platforma. Anında işlenir.</div>
+          </div>
+          <div class="oi-bilgi-satir">
+            <span class="oi-b-ikon">⚡</span>
+            <div class="oi-b-txt"><strong>Anında Erişim</strong> — Ödeme onaylanır onaylanmaz sohbet açılır, üretici bildirim alır.</div>
+          </div>
+        </div>
+        <button class="oi-odeme-btn" id="oiOdemeBtn" onclick="oiOdemeBaslat()">
+          🔐 ₺50 Öde &amp; Sohbeti Başlat
+        </button>
+        <div class="oi-guvenli">🔒 256-bit şifreli · Güvenli ödeme altyapısı</div>
+      </div>
+
+      <!-- ADIM 2: Sohbet -->
+      <div class="oi-adim" id="oi-adim-2">
+        <div class="oi-onay-satir">
+          <span class="oi-onay-yazi">✅ Ödeme Onaylandı — Aktif Sohbet</span>
+          <span class="oi-canli">Canlı</span>
+        </div>
+
+        <div class="oi-sohbet-alan" id="oiSohbetAlan"></div>
+
+        <div class="oi-inp-row">
+          <textarea class="oi-inp" id="oiMesajInp"
+            placeholder="Üreticiye mesaj yaz…" rows="1"
+            onkeydown="oiEnter(event)"
+            oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+          <button class="oi-gonder" onclick="oiMesajGonder()">&#x2191;</button>
+        </div>
+
+        <div class="oi-form-blok">
+          <div class="oi-form-label">📋 Özel İstek Formu</div>
+          <textarea class="oi-form-ta" id="oiFormTa"
+            placeholder="Detaylı isteğini yaz: ürün özellikleri, renk, boyut, teslim tarihi, kişiselleştirme…"></textarea>
+          <button class="oi-form-btn" onclick="oiFormGonder()">✨ Özel İsteği Üreticiye Gönder</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 
 /* ── Firestore Ürün Yükleme ── */
 let _CACHED_PRODUCTS = [];
+let _CACHED_GENCZ    = [];   // gencz_icerikler önbelleği
+let _db = null;               // paylaşılan Firestore instance
 
+// ── Firebase init (tek seferlik) ────────────────────────────────────────
+async function getDB() {
+  if (_db) return _db;
+  const { initializeApp, getApps, getApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+  const { getFirestore } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+  const cfg = { apiKey:"AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ", authDomain:"gen-z-io.firebaseapp.com", projectId:"gen-z-io", storageBucket:"gen-z-io.firebasestorage.app", messagingSenderId:"97338868944", appId:"1:97338868944:web:d7b429e416d8c505b14ad5" };
+  const app = getApps().length ? getApp() : initializeApp(cfg);
+  _db = getFirestore(app);
+  return _db;
+}
+
+// ── magaza_urunler (Mağaza satıcıları) ──────────────────────────────────
 async function fetchAllProducts() {
   if (_CACHED_PRODUCTS.length > 0) return _CACHED_PRODUCTS;
   try {
-    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-    const { getFirestore, collection, getDocs, query, where, orderBy } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    const cfg = { apiKey:"AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ", authDomain:"gen-z-io.firebaseapp.com", projectId:"gen-z-io", storageBucket:"gen-z-io.firebasestorage.app", messagingSenderId:"97338868994", appId:"1:97338868944:web:d7b429e416d8c505b14ad5" };
-    const app = getApps().length ? getApps()[0] : initializeApp(cfg);
-    const db = getFirestore(app);
+    const db = await getDB();
+    const { collection, getDocs, query, where, orderBy } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
     const q = query(collection(db, 'magaza_urunler'), where('durum', '==', 'onaylandi'), orderBy('ts', 'desc'));
     const snap = await getDocs(q);
     _CACHED_PRODUCTS = snap.docs.map(d => {
@@ -604,11 +856,111 @@ async function fetchAllProducts() {
   } catch(e) { console.warn('Ürünler yüklenemedi:', e); return []; }
 }
 
-function getProductById(id) { return _CACHED_PRODUCTS.find(p => String(p.id) === String(id)); }
-function getProductsBySeller(sid) { return _CACHED_PRODUCTS.filter(p => p.seller.id === sid); }
-function getSellerById(sid) { const p = _CACHED_PRODUCTS.find(p => p.seller.id === sid); return p ? p.seller : null; }
-function getAllSellers() { const m = {}; _CACHED_PRODUCTS.forEach(p => { if(!m[p.seller.id]) m[p.seller.id]={...p.seller,products:[]}; m[p.seller.id].products.push(p); }); return Object.values(m); }
-function getProductsByCategory(cat) { if(cat==='all') return _CACHED_PRODUCTS; return _CACHED_PRODUCTS.filter(p=>p.category===cat); }
+// ── gencz_icerikler (Genç-Z satıcıları) — FIX: eksik koleksiyon desteği ─
+async function fetchGenzIcerikler(saticiUid) {
+  try {
+    const db = await getDB();
+    const { collection, getDocs, query, where, orderBy, doc, getDoc } =
+      await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+
+    // Kullanıcı profilini çek
+    let profilAd = '', profilFoto = null, profilAciklama = '';
+    try {
+      const kulSnap = await getDoc(doc(db, 'kullanicilar', saticiUid));
+      if (kulSnap.exists()) {
+        const kd = kulSnap.data();
+        profilAd = kd.displayName || kd.username || '';
+        profilFoto = kd.photoURL || null;
+        profilAciklama = kd.bio || kd.hakkinda || '';
+      }
+    } catch(e) { /* profil okunamazsa devam */ }
+
+    // İçeriklerini çek
+    const q = query(
+      collection(db, 'gencz_icerikler'),
+      where('uid', '==', saticiUid),
+      where('durum', '==', 'onaylandi'),
+      orderBy('ts', 'desc')
+    );
+    const snap = await getDocs(q);
+    const icerikler = snap.docs.map(d => {
+      const ic = d.data();
+      const initials = profilAd.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2) || '?';
+      return {
+        id: d.id,
+        name: ic.baslik || ic.ad || '',
+        price: ic.fiyat || 0,
+        oldPrice: null,
+        rating: ic.rating || 0,
+        reviews: ic.reviewCount || 0,
+        badge: null,
+        tags: ic.etiketler || [],
+        category: ic.kategori || 'gencz',
+        desc: ic.aciklama || '',
+        emoji: '⚡',
+        resim: ic.kapakFoto || ic.foto || null,
+        gradA: 'rgba(92,240,180,0.12)',
+        gradB: 'rgba(240,197,92,0.06)',
+        tip: ic.tip || 'urun',   // 'urun' | 'hizmet' | 'dijital'
+        seller: {
+          id: saticiUid,
+          uid: saticiUid,
+          name: profilAd || 'Genç-Z Satıcı',
+          initials: initials,
+          photoURL: profilFoto,
+          sales: ic.satisAdedi || 0,
+          joined: ic.ts ? new Date(ic.ts.seconds*1000).getFullYear() : '2025',
+          rating: 0,
+          ratingCount: 0,
+          desc: profilAciklama,
+          comments: []
+        }
+      };
+    });
+    _CACHED_GENCZ = icerikler;
+    return icerikler;
+  } catch(e) {
+    console.warn('Genç-Z içerikler yüklenemedi:', e);
+    return [];
+  }
+}
+
+// ── Genç-Z satıcı profili için doğrudan uid ile yükle ───────────────────
+// URL: gen-z_satici.html?seller=<uid>&tip=gencz
+async function fetchGenzSaticiProfil(uid) {
+  const icerikler = await fetchGenzIcerikler(uid);
+  if (!icerikler.length) return null;
+  // seller bilgisi ilk içerikten al
+  return icerikler[0].seller;
+}
+
+function getProductById(id) {
+  return _CACHED_PRODUCTS.find(p => String(p.id) === String(id))
+      || _CACHED_GENCZ.find(p => String(p.id) === String(id));
+}
+function getProductsBySeller(sid) {
+  const mag = _CACHED_PRODUCTS.filter(p => p.seller.id === sid);
+  const gnc = _CACHED_GENCZ.filter(p => p.seller.id === sid);
+  return [...mag, ...gnc];
+}
+function getSellerById(sid) {
+  const p = _CACHED_PRODUCTS.find(p => p.seller.id === sid)
+         || _CACHED_GENCZ.find(p => p.seller.id === sid);
+  return p ? p.seller : null;
+}
+function getAllSellers() {
+  const m = {};
+  [..._CACHED_PRODUCTS, ..._CACHED_GENCZ].forEach(p => {
+    if (!m[p.seller.id]) m[p.seller.id] = {...p.seller, products: []};
+    m[p.seller.id].products.push(p);
+  });
+  return Object.values(m);
+}
+function getProductsByCategory(cat) {
+  const all = [..._CACHED_PRODUCTS, ..._CACHED_GENCZ];
+  if (cat === 'all') return all;
+  return all.filter(p => p.category === cat);
+}
 /* ── MAGAZA-DATA (inline) ── */
 /* ══════════════════════════════════════════════════════════
    GEN-Z MAĞAZA — Paylaşılan Veri & Yardımcılar
@@ -774,7 +1126,7 @@ function renderStars(rating) {
 
 /* ── PAGE SCRIPT ── */
 initThemeLang();
-document.addEventListener('DOMContentLoaded', async () => { await fetchAllProducts();
+document.addEventListener('DOMContentLoaded', async () => {
   document.querySelectorAll('.mobile-menu a').forEach(a => {
     a.addEventListener('click', () => {
       const mm = document.getElementById('mobileMenu');
@@ -788,8 +1140,24 @@ document.addEventListener('DOMContentLoaded', async () => { await fetchAllProduc
   requestAnimationFrame(() => { document.body.style.opacity = '1'; });
 
   const sellerId = getParam('seller');
-  const seller = getSellerById(sellerId);
-  const products = getProductsBySeller(sellerId);
+  const tip      = getParam('tip'); // 'gencz' veya null → mağaza
+
+  // FIX: Genç-Z satıcıları için gencz_icerikler, mağaza satıcıları için magaza_urunler
+  let seller, products;
+  if (tip === 'gencz' && sellerId) {
+    await fetchGenzIcerikler(sellerId);
+    seller   = getSellerById(sellerId);
+    products = getProductsBySeller(sellerId);
+  } else {
+    await fetchAllProducts();
+    seller   = getSellerById(sellerId);
+    products = getProductsBySeller(sellerId);
+    if (!seller && sellerId) {
+      await fetchGenzIcerikler(sellerId);
+      seller   = getSellerById(sellerId);
+      products = getProductsBySeller(sellerId);
+    }
+  }
 
   if (!seller) {
     document.querySelector('.satici-inner').innerHTML = '<div style="text-align:center;padding:80px 20px;color:var(--text3);"><div style="font-size:48px;margin-bottom:16px;">😕</div><div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--text2);margin-bottom:8px;">Satıcı bulunamadı</div><div style="font-size:14px;"><a href="magaza.html" style="color:var(--accent)">← Mağazaya dön</a></div></div>';
@@ -815,7 +1183,7 @@ document.addEventListener('DOMContentLoaded', async () => { await fetchAllProduc
 
   function renderHeader() {
     const followerCount = isFollowing ? fakeFollowers + 1 : fakeFollowers;
-    document.getElementById('saticiHeader').innerHTML = '<div class="satici-avatar"><div class="satici-badge-ring badge-ring-' + badge.level + '"></div>' + seller.initials + '</div><div class="satici-meta"><div class="satici-name">' + seller.name + ' <span class="seller-badge-pill badge-' + badge.level + '">' + badge.label + '</span></div><div class="satici-desc">' + (seller.desc || '') + '</div><div class="satici-stats-row"><div class="satici-stat"><div class="satici-stat-num">' + seller.sales.toLocaleString('tr-TR') + '</div><div class="satici-stat-label">Satış</div></div><div class="satici-stat"><div class="satici-stat-num">' + seller.rating + '</div><div class="satici-stat-label">Puan</div></div><div class="satici-stat"><div class="satici-stat-num">' + products.length + '</div><div class="satici-stat-label">Ürün</div></div><div class="satici-stat"><div class="satici-stat-num">' + seller.joined + '</div><div class="satici-stat-label">Üye</div></div></div><div class="satici-follow-bar"><span><strong>' + followerCount.toLocaleString('tr-TR') + '</strong> takipçi</span><span class="follow-dot"></span><span><strong>' + seller.ratingCount + '</strong> değerlendirme</span></div><div class="satici-actions">' + getFollowBtnHTML() + '<button class="btn-satici-action" onclick="sendMessage()">💬 Mesaj Gönder</button><button class="btn-satici-action" onclick="shareSeller()">↗ Paylaş</button></div></div>';
+    document.getElementById('saticiHeader').innerHTML = '<div class="satici-avatar"><div class="satici-badge-ring badge-ring-' + badge.level + '"></div>' + seller.initials + '</div><div class="satici-meta"><div class="satici-name">' + seller.name + ' <span class="seller-badge-pill badge-' + badge.level + '">' + badge.label + '</span></div><div class="satici-desc">' + (seller.desc || '') + '</div><div class="satici-stats-row"><div class="satici-stat"><div class="satici-stat-num">' + seller.sales.toLocaleString('tr-TR') + '</div><div class="satici-stat-label">Satış</div></div><div class="satici-stat"><div class="satici-stat-num">' + seller.rating + '</div><div class="satici-stat-label">Puan</div></div><div class="satici-stat"><div class="satici-stat-num">' + products.length + '</div><div class="satici-stat-label">Ürün</div></div><div class="satici-stat"><div class="satici-stat-num">' + seller.joined + '</div><div class="satici-stat-label">Üye</div></div></div><div class="satici-follow-bar"><span><strong>' + followerCount.toLocaleString('tr-TR') + '</strong> takipçi</span><span class="follow-dot"></span><span><strong>' + seller.ratingCount + '</strong> değerlendirme</span></div><div class="satici-actions">' + getFollowBtnHTML() + '<button class="btn-satici-action" onclick="sendMessage()">💬 Mesaj Gönder</button><button class="btn-ozel-istek" onclick="ozelIstekAc()">✨ Özel İstek <span class="oi-fiyat">₺50</span></button><button class="btn-satici-action" onclick="shareSeller()">↗ Paylaş</button></div></div>';
   }
 
   window.toggleFollow = function() {
@@ -834,6 +1202,243 @@ document.addEventListener('DOMContentLoaded', async () => { await fetchAllProduc
     if (!currentUser) { openAuth('signin'); showToast('Mesaj göndermek için giriş yapmalısın ⚠️'); return; }
     showToast('Mesajlaşma sistemi yakında aktif olacak 🔜');
   };
+
+  /* ══════════════════════════════════════════════════════════════
+     ÖZEL İSTEK SİSTEMİ — Firestore Entegrasyonlu
+     ─────────────────────────────────────────────────────────────
+     Firestore koleksiyonları:
+       ozelIstekler/{istekId}           → istek belgesi
+       ozelIstekler/{istekId}/mesajlar  → alt-koleksiyon
+     Çift ödeme koruması: Firestore sorgusu ile kontrol
+  ══════════════════════════════════════════════════════════════ */
+  (() => {
+    /* ── Firestore import (lazy — firebase-config.js zaten yüklemiş olmalı) ── */
+    let _db = null;
+    let _fs = null; // firestore modülü
+    let _aktifIstekId      = null;  // Firestore belge ID
+    let _msgUnsub          = null;  // real-time mesaj dinleyici
+    let _saticiFirebaseUid = null;  // sellerId'ye karşılık gelen gerçek Firebase uid
+
+    async function _getFS() {
+      if (_fs) return _fs;
+      _fs = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      const { getFirestore } = _fs;
+      const { getApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+      try { _db = getFirestore(getApp()); } catch(e) { _db = getFirestore(); }
+      return _fs;
+    }
+
+    /* ── Satıcının gerçek Firebase uid'sini magazalar koleksiyonundan çek ── */
+    async function _getSaticiUid() {
+      if (_saticiFirebaseUid) return _saticiFirebaseUid;
+      try {
+        const { collection, query, where, getDocs, doc, getDoc } = await _getFS();
+        /* Önce doğrudan doc ID olarak dene (magazaId = doc.id durumu) */
+        const directDoc = await getDoc(doc(_db, 'magazalar', sellerId));
+        if (directDoc.exists()) {
+          _saticiFirebaseUid = directDoc.data().uid || sellerId;
+          return _saticiFirebaseUid;
+        }
+        /* Bulamazsa uid veya magazaId alanına göre ara */
+        const q = query(collection(_db, 'magazalar'), where('magazaId', '==', sellerId));
+        const snap = await getDocs(q);
+        if (!snap.empty) {
+          _saticiFirebaseUid = snap.docs[0].data().uid || snap.docs[0].id;
+          return _saticiFirebaseUid;
+        }
+      } catch(e) {
+        console.warn('Satıcı uid çekilemedi, sellerId fallback kullanılıyor:', e);
+      }
+      /* Fallback: sellerId'yi olduğu gibi kullan */
+      _saticiFirebaseUid = sellerId;
+      return _saticiFirebaseUid;
+    }
+
+    function _saat() {
+      const n = new Date();
+      return n.getHours().toString().padStart(2,'0') + ':' + n.getMinutes().toString().padStart(2,'0');
+    }
+
+    function _adimGec(n) {
+      document.querySelectorAll('.oi-adim').forEach(el => el.classList.remove('on'));
+      document.getElementById('oi-adim-' + n)?.classList.add('on');
+    }
+
+    /* ─ Modal aç ─ */
+    window.ozelIstekAc = async function() {
+      if (!currentUser) { openAuth('signin'); showToast('Özel istek için giriş yapmalısın ⚠️'); return; }
+      document.getElementById('oiOverlay').classList.add('open');
+
+      /* Daha önce ödeme yapıldı mı? — Firestore'dan kontrol */
+      try {
+        const { getFirestore, collection, query, where, getDocs } = await _getFS();
+        const q = query(
+          collection(_db, 'ozelIstekler'),
+          where('saticiUid', '==', sellerId),
+          where('buyerUid',  '==', currentUser.uid)
+        );
+        const snap = await getDocs(q);
+        if (!snap.empty) {
+          _aktifIstekId = snap.docs[0].id;
+          _adimGec(2);
+          _sohbetDinle(snap.docs[0].id);
+        } else {
+          _adimGec(1);
+        }
+      } catch(e) {
+        /* Firestore ulaşılamazsa demo moda geç */
+        console.warn('Firestore bağlantı hatası, demo modda çalışıyor:', e);
+        _adimGec(1);
+      }
+    };
+
+    window.ozelIstekKapat = function() {
+      if (_msgUnsub) { _msgUnsub(); _msgUnsub = null; }
+      document.getElementById('oiOverlay').classList.remove('open');
+    };
+    window.oiDisTikla = function(e) {
+      if (e.target === document.getElementById('oiOverlay')) ozelIstekKapat();
+    };
+
+    /* ─ Ödeme başlat (sahte ödeme + Firestore'a yaz) ─ */
+    window.oiOdemeBaslat = async function() {
+      const btn = document.getElementById('oiOdemeBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="oi-spin"></span> İşleniyor…';
+
+      try {
+        /* ── GERÇEK ENTEGRASYON NOKTASI ────────────────────────────
+           Buraya iyzico/Stripe webhook callback entegre edilecek.
+           Başarılı ödeme sonrası aşağıdaki Firestore yazımı çalışır.
+        ──────────────────────────────────────────────────────────── */
+        await new Promise(r => setTimeout(r, 1500)); // demo bekleme
+
+        const { getFirestore, collection, addDoc, serverTimestamp } = await _getFS();
+
+        /* Çift kayıt önleme: zaten varsa atla */
+        const { query, where, getDocs } = _fs;
+        const q = query(
+          collection(_db, 'ozelIstekler'),
+          where('saticiUid', '==', sellerId),
+          where('buyerUid',  '==', currentUser.uid)
+        );
+        const mevcut = await getDocs(q);
+        let istekId;
+
+        if (!mevcut.empty) {
+          istekId = mevcut.docs[0].id;
+        } else {
+          /* Firestore'a yeni istek belgesi yaz */
+          const ref = await addDoc(collection(_db, 'ozelIstekler'), {
+            saticiUid : sellerId,
+            buyerUid  : currentUser.uid,
+            musteri   : currentUser.username || currentUser.email?.split('@')[0] || 'Müşteri',
+            tarih     : new Date().toLocaleString('tr-TR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}),
+            durum     : 'yeni',
+            kazanc    : 25,
+            onIzlenim : '…',
+            istekMetni: '',
+            ts        : serverTimestamp(),
+          });
+          istekId = ref.id;
+
+          /* Açılış mesajlarını alt-koleksiyona yaz */
+          const msgCol = collection(_db, 'ozelIstekler', istekId, 'mesajlar');
+          await addDoc(msgCol, { tip:'sistem', metin:'🎉 Ödeme onaylandı! ' + seller.name + ' ile özel sohbetin başladı.', ts: serverTimestamp() });
+          await addDoc(msgCol, { tip:'gelen',  metin:'Merhaba! Özel isteğin için teşekkürler 🙏 Sana nasıl yardımcı olabilirim?', ts: serverTimestamp() });
+        }
+
+        _aktifIstekId = istekId;
+        showToast('Ödeme başarılı! Sohbet açılıyor ✨');
+        _adimGec(2);
+        _sohbetDinle(istekId);
+
+      } catch(err) {
+        console.error(err);
+        showToast('İşlem başarısız, tekrar dene ⚠️');
+        btn.disabled = false;
+        btn.innerHTML = '🔐 ₺50 Öde &amp; Sohbeti Başlat';
+      }
+    };
+
+    /* ─ Sohbet mesajlarını real-time dinle ─ */
+    function _sohbetDinle(istekId) {
+      const alan = document.getElementById('oiSohbetAlan');
+      alan.innerHTML = '<div style="text-align:center;padding:1rem;color:rgba(240,235,224,.3);font-size:.65rem;">Yükleniyor…</div>';
+
+      _getFS().then(({ collection, query, orderBy, onSnapshot }) => {
+        if (_msgUnsub) { _msgUnsub(); }
+        const q = query(
+          collection(_db, 'ozelIstekler', istekId, 'mesajlar'),
+          orderBy('ts', 'asc')
+        );
+        _msgUnsub = onSnapshot(q, snap => {
+          alan.innerHTML = '';
+          snap.docs.forEach(d => {
+            const m = d.data();
+            const zaman = m.ts?.toDate ? m.ts.toDate().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}) : (m.zaman||'');
+            _balonEkle({ ...m, zaman }, alan);
+          });
+          alan.scrollTop = alan.scrollHeight;
+        });
+      });
+    }
+
+    /* ─ Balon render ─ */
+    function _balonEkle(m, alan) {
+      const d = document.createElement('div');
+      d.innerHTML = `<div class="oi-balon ${m.tip}">${m.metin}${m.zaman ? '<div class="oi-zaman">'+m.zaman+'</div>':''}</div>`;
+      alan.appendChild(d);
+      alan.scrollTop = alan.scrollHeight;
+    }
+
+    /* ─ Müşteri mesaj gönder ─ */
+    window.oiMesajGonder = async function() {
+      const inp = document.getElementById('oiMesajInp');
+      const txt = inp.value.trim();
+      if (!txt || !_aktifIstekId) return;
+      inp.value = ''; inp.style.height = 'auto';
+
+      const { collection, addDoc, updateDoc, doc, serverTimestamp } = await _getFS();
+      await addDoc(collection(_db, 'ozelIstekler', _aktifIstekId, 'mesajlar'), {
+        tip      : 'giden',
+        gonderen : 'musteri',
+        metin    : txt,
+        ts       : serverTimestamp(),
+      });
+      /* onIzlenim güncelle (üretici listesinde görünsün) */
+      await updateDoc(doc(_db, 'ozelIstekler', _aktifIstekId), {
+        onIzlenim: txt.substring(0, 60) + (txt.length > 60 ? '…' : ''),
+      });
+    };
+    window.oiEnter = function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); oiMesajGonder(); }
+    };
+
+    /* ─ Özel istek formu gönder ─ */
+    window.oiFormGonder = async function() {
+      const ta  = document.getElementById('oiFormTa');
+      const txt = ta.value.trim();
+      if (!txt) { showToast('Lütfen isteğini yaz ⚠️'); return; }
+      if (!_aktifIstekId) return;
+
+      const { collection, addDoc, updateDoc, doc, serverTimestamp } = await _getFS();
+      const metin = '📋 <strong>Özel İstek:</strong><br>' + txt.replace(/\n/g,'<br>');
+      await addDoc(collection(_db, 'ozelIstekler', _aktifIstekId, 'mesajlar'), {
+        tip      : 'giden',
+        gonderen : 'musteri',
+        metin,
+        ts       : serverTimestamp(),
+      });
+      /* istekMetni belgeye yaz — üretici modpanelde görsün */
+      await updateDoc(doc(_db, 'ozelIstekler', _aktifIstekId), {
+        istekMetni: txt,
+        onIzlenim : txt.substring(0, 60) + (txt.length > 60 ? '…' : ''),
+      });
+      ta.value = '';
+      showToast('Özel isteğin üreticiye iletildi ✨');
+    };
+  })();
 
   window.shareSeller = function() {
     if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
@@ -862,20 +1467,11 @@ document.addEventListener('DOMContentLoaded', async () => { await fetchAllProduc
   }
 
   document.getElementById('saticiContent').innerHTML = html;
-});
+
+}); // closes DOMContentLoaded
 </script>
 
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
-<script src="cookie-consent.js"></script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js")
-      .then(r => console.log("[GEN-Z] SW:", r.scope))
-      .catch(e => console.warn("[GEN-Z] SW hatasi:", e));
-  });
-}
-</script>
 </body>
 </html>

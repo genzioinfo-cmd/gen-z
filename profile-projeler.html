@@ -249,6 +249,8 @@ window.mprjOnayla = async function(projeId, onay) {
 };
 
 baslat();
-
-window.addEventListener('beforeunload', () => { if (_unsub) { _unsub(); _unsub = null; } });
 </script>
+
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="firebase-sync.js"></script>
+<script src="cookie-consent.js"></script>

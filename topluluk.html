@@ -294,15 +294,5 @@ function goToProfile(){if(currentUser){closeAuth();navigateTo('profile.html');}}
 document.addEventListener('DOMContentLoaded',()=>{initThemeLang();document.body.style.opacity='0';document.body.style.transition='opacity 0.3s';requestAnimationFrame(()=>{document.body.style.opacity='1';});document.querySelectorAll('.mobile-menu a').forEach(a=>a.addEventListener('click',()=>{document.getElementById('mobileMenu')?.classList.remove('open');document.getElementById('hamburgerBtn')?.classList.remove('open');}));document.querySelectorAll('a[href]').forEach(a=>{const href=a.getAttribute('href');if(href&&!href.startsWith('#')&&!href.startsWith('javascript')&&!href.startsWith('mailto')){a.addEventListener('click',function(e){e.preventDefault();document.body.style.transition='opacity 0.25s';document.body.style.opacity='0';setTimeout(()=>{window.location.href=href;},270);});}});});
 </script>
 <script type="module" src="firebase-config.js"></script>
-<script type="module" src="firebase-sync.js"></script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js")
-      .then(r => console.log("[GEN-Z] SW kayıtlı:", r.scope))
-      .catch(e => console.warn("[GEN-Z] SW hatası:", e));
-  });
-}
-</script>
 </body>
 </html>

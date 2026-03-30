@@ -738,7 +738,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Firebase hazır olana kadar bekle, sonra Firestore'dan çek
   function bekleVeYukle(deneme) {
-    if (deneme > 30) {
+    if (deneme > 20) {
       // Firebase gelmedi, demo göster
       var demo = getUstalarByCategory(catId);
       document.getElementById('ustaCount').textContent = demo.length;
@@ -749,13 +749,12 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(function() { bekleVeYukle(deneme + 1); }, 200);
       return;
     }
-    // _genzFirestore ya da _genzAuth.firestore hazır olana kadar bekle
-    var firestore = window._genzFirestore || window._genzAuth.firestore;
-    if (!firestore || !firestore.query) {
+    var db = window._genzAuth.db;
+    var firestore = window._genzAuth.firestore || window._genzFirestore;
+    if (!firestore) {
       setTimeout(function() { bekleVeYukle(deneme + 1); }, 200);
       return;
     }
-    var db = window._genzAuth.db;
     var q = firestore.query(
       firestore.collection(db, 'ustam_ilanlar'),
       firestore.where('durum', '==', 'onaylandi')
@@ -820,14 +819,5 @@ function renderUstalar(ustalar, grid) {
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
 <script src="cookie-consent.js"></script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js")
-      .then(r => console.log("[GEN-Z] SW:", r.scope))
-      .catch(e => console.warn("[GEN-Z] SW hatasi:", e));
-  });
-}
-</script>
 </body>
 </html>

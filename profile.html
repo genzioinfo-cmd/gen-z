@@ -668,15 +668,12 @@ nav, .toast, .edit-modal-overlay, .edit-modal,
           <span class="nav-icon">🛒</span> Sepetim
           <span class="nav-badge" id="cart-badge"></span>
         </button>
-        <!-- Randevular: sadece ustam_randevular'da müşterisi olan kullanıcılara gösterilir -->
-        <button class="profile-nav-item" onclick="loadTab('randevular')" id="pnav-randevular" style="display:none;">
+        <button class="profile-nav-item" onclick="loadTab('randevular')" id="pnav-randevular">
           <span class="nav-icon">📅</span> Randevularım
           <span class="nav-badge" id="rdv-badge"></span>
         </button>
-        <!-- Projeler: usta onayı olan kullanıcılara gösterilir -->
-        <button class="profile-nav-item" onclick="loadTab('projeler')" id="pnav-projeler" style="display:none;">
-          <span class="nav-icon">📋</span> Projelerim
-          <span class="nav-badge" id="proj-badge"></span>
+        <button class="profile-nav-item" onclick="loadTab('projeler')" id="pnav-projeler">
+          <span class="nav-icon">🔧</span> Projelerim
         </button>
         <button class="profile-nav-item" onclick="loadTab('reviews')" id="pnav-reviews">
           <span class="nav-icon">⭐</span> Değerlendirmelerim
@@ -802,11 +799,10 @@ if (currentUser) {
   const infoEmail = document.getElementById('info-email');
   if (infoUser) infoUser.textContent = currentUser.username;
   if (infoEmail) infoEmail.textContent = currentUser.email;
-  document.getElementById('avatarInitial').textContent      = (currentUser.username || currentUser.email || '?').replace('@','').charAt(0).toUpperCase();
+  document.getElementById('avatarInitial').textContent      = currentUser.username.replace('@','').charAt(0).toUpperCase();
 
   // localStorage'daki rol bilgisiyle hemen göster
   renderRolKisayollar(currentUser);
-  renderRolTablar(currentUser);
 
   // Firestore'dan güncel rol bilgisini çek ve güncelle
   (async () => {
@@ -827,8 +823,6 @@ if (currentUser) {
         const rzCont = document.getElementById('rol-kisayollar');
         if (rzCont) { rzCont.innerHTML = '<div style="font-size:10px; color:var(--text3); text-transform:uppercase; letter-spacing:0.6px; padding:4px 8px 6px; font-weight:600;">Profillerim</div>'; rzCont.style.display = 'none'; }
         renderRolKisayollar(updated);
-        // Rol bazlı tab'ları göster/gizle
-        renderRolTablar(updated);
       }
     } catch(e) { console.warn('Profil güncel veri hatası:', e); }
   })();
@@ -856,26 +850,6 @@ function toggleTheme() {
   setTimeout(() => document.body.classList.remove('theme-transitioning'), 350);
 }
 
-/* ── ROL BAZLI TAB GÖRÜNÜRLÜĞÜ ── */
-function renderRolTablar(user) {
-  const roller_arr = Array.isArray(user.roller) ? user.roller.map(r => r.toLowerCase()) : [];
-  const tumRoller = new Set([...roller_arr, (user.rol || '').toLowerCase()]);
-  const isAdmin = tumRoller.has('admin') || user.admin === true;
-
-  // Randevular: usta müşterisi olan herkes görebilir (Firestore'da randevusu varsa)
-  // Basit kontrol: ustaOnay'ı olan veya daha önce randevu almış kullanıcılar
-  // Tab her zaman görünür olsun, içerik sayfası zaten boş gösterir
-  const rdvBtn = document.getElementById('pnav-randevular');
-  if (rdvBtn) rdvBtn.style.display = '';  // herkese aç (içerik kendi filtreler)
-
-  // Projeler: usta onayı olan kullanıcılar veya admin
-  const projBtn = document.getElementById('pnav-projeler');
-  if (projBtn) {
-    const gorunur = isAdmin || user.ustaOnay === true || tumRoller.has('usta') || tumRoller.has('ustam');
-    projBtn.style.display = gorunur ? '' : 'none';
-  }
-}
-
 /* ── ROL KISAYOLLARI ── */
 function renderRolKisayollar(user) {
   const container = document.getElementById('rol-kisayollar');
@@ -884,48 +858,59 @@ function renderRolKisayollar(user) {
   const roller_arr = Array.isArray(user.roller) ? user.roller.map(r => r.toLowerCase()) : [];
   const tumRoller = new Set([...roller_arr, ...(rol ? [rol] : [])]);
   const isAdmin = tumRoller.has('admin') || user.admin === true;
+
+  // Rol kontrolü — Firestore'daki gerçek alanlarla eşleşiyor
+  const hasMagaza = user.magazaOnay === true || tumRoller.has('magaza') || tumRoller.has('satici');
+  const hasUsta   = user.ustaOnay   === true || tumRoller.has('usta')   || tumRoller.has('ustam');
+  const hasGencz  = user.gencimDurum === 'onaylandi' || tumRoller.has('gencz');
+
   const uid = user.uid || user.id || '';
-
-  // Koşul fonksiyonları ile esnek kontrol
-  const ROL_MAP = [
-    {
-      label: '🏪 Mağazam',
-      href:  'magaza-satici.html',
-      goster: () => user.magazaOnay === true || tumRoller.has('magaza'),
-    },
-    {
-      label: '🔧 Usta Profilim',
-      href:  'ustam-profil.html',
-      // Firestore'da 'usta' olarak kaydediliyor, 'ustam' değil
-      goster: () => user.ustaOnay === true || tumRoller.has('usta') || tumRoller.has('ustam'),
-    },
-    {
-      label: '⚡ Genç-Z Profilim',
-      href:  'gen-z_profil.html',
-      // gencimDurum: 'onaylandi' veya roller'da 'gencz'
-      goster: () => user.gencimDurum === 'onaylandi' || tumRoller.has('gencz'),
-    },
-    {
-      label: '⚙️ Kontrol Panelim',
-      href:  'modpanel.html',
-      // Admin veya herhangi bir özel rolü olan herkes
-      goster: () => isAdmin || user.magazaOnay === true || user.ustaOnay === true || user.gencimDurum === 'onaylandi'
-                    || tumRoller.has('magaza') || tumRoller.has('usta') || tumRoller.has('ustam') || tumRoller.has('gencz'),
-    },
-  ];
-
-  container.innerHTML = '';
   let added = 0;
-  ROL_MAP.forEach(({ label, href, goster }) => {
-    if (!isAdmin && !goster()) return;
+
+  // Modpanel linki — tüm roller için en önemli link
+  if (hasMagaza || hasUsta || hasGencz || isAdmin) {
+    const panel = document.createElement('a');
+    panel.className = 'profile-nav-item';
+    panel.href = 'modpanel.html';
+    panel.style.cssText = 'text-decoration:none;display:flex;align-items:center;gap:8px;background:rgba(123,92,240,0.08);border-radius:6px;';
+    panel.innerHTML = '<span>🎛️ Kontrol Paneli</span>';
+    container.appendChild(panel);
+    added++;
+  }
+
+  // Mağaza profil linki
+  if (isAdmin || hasMagaza) {
     const btn = document.createElement('a');
     btn.className = 'profile-nav-item';
-    btn.href = uid ? `${href}?uid=${encodeURIComponent(uid)}` : href;
+    btn.href = uid ? `magaza-satici.html?uid=${encodeURIComponent(uid)}` : 'magaza-satici.html';
     btn.style.cssText = 'text-decoration:none;display:flex;align-items:center;gap:8px;';
-    btn.innerHTML = `<span>${label}</span>`;
+    btn.innerHTML = '<span>🏪 Mağazam</span>';
     container.appendChild(btn);
     added++;
-  });
+  }
+
+  // Usta profil linki
+  if (isAdmin || hasUsta) {
+    const btn = document.createElement('a');
+    btn.className = 'profile-nav-item';
+    btn.href = uid ? `ustam-profil.html?uid=${encodeURIComponent(uid)}` : 'ustam-profil.html';
+    btn.style.cssText = 'text-decoration:none;display:flex;align-items:center;gap:8px;';
+    btn.innerHTML = '<span>🔨 Usta Profilim</span>';
+    container.appendChild(btn);
+    added++;
+  }
+
+  // Genç-Z profil linki
+  if (isAdmin || hasGencz) {
+    const btn = document.createElement('a');
+    btn.className = 'profile-nav-item';
+    btn.href = uid ? `gen-z_satici.html?uid=${encodeURIComponent(uid)}` : 'gen-z_satici.html';
+    btn.style.cssText = 'text-decoration:none;display:flex;align-items:center;gap:8px;';
+    btn.innerHTML = '<span>⚡ Genç-Z Profilim</span>';
+    container.appendChild(btn);
+    added++;
+  }
+
   if (added > 0) container.style.display = 'block';
 }
 
@@ -1239,7 +1224,7 @@ document.getElementById('editModal').addEventListener('click', e => {
 document.addEventListener('DOMContentLoaded', () => {
   // URL'den tab parametresi oku (sepet ikonu bağlantısı için)
   const _urlTab = new URLSearchParams(window.location.search).get('tab');
-  loadTab(_urlTab && ['orders','favorites','cart','reviews','addresses','notifications','info','randevular','projeler'].includes(_urlTab) ? _urlTab : 'orders');
+  loadTab(_urlTab && ['orders','favorites','cart','reviews','addresses','notifications','info','randevular'].includes(_urlTab) ? _urlTab : 'orders');
 
   /* ── SEPET BADGE INIT ── */
   (function() {
@@ -1257,14 +1242,5 @@ document.addEventListener('DOMContentLoaded', () => {
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
 <script src="cookie-consent.js"></script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js")
-      .then(r => console.log("[GEN-Z] SW kayıtlı:", r.scope))
-      .catch(e => console.warn("[GEN-Z] SW hatası:", e));
-  });
-}
-</script>
 </body>
 </html>

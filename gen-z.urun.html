@@ -854,7 +854,7 @@ function sepeteEkleDetay() {
   if (!_detayUrun) return;
   const KEY = 'genz-sepet';
   try {
-    let sepet; try { sepet = JSON.parse(localStorage.getItem(KEY) || '[]'); if (!Array.isArray(sepet)) sepet = []; } catch(e) { sepet = []; }
+    let sepet = JSON.parse(localStorage.getItem(KEY) || '[]');
     if (!Array.isArray(sepet)) sepet = [];
     const uid = String(_detayUrun.id);
     const mevcut = sepet.find(i => String(i.id) === uid);
@@ -989,7 +989,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('urunTags').innerHTML = p.tags.map(t => '<span class="urun-tag">' + t + '</span>').join('');
 
   const badge = getBadgeLevel(p.seller.sales);
-  document.getElementById('sellerCard').href = 'gen-z_satici.html?seller=' + p.seller.id;
+  document.getElementById('sellerCard').href = 'gen-z.satici.html?seller=' + p.seller.id;
   document.getElementById('sellerInitial').textContent = p.seller.initials;
   document.getElementById('sellerName').textContent = p.seller.name;
   document.getElementById('sellerBadge').textContent = badge.label;
@@ -1037,21 +1037,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 // ── Navbar sepet badge ──
 (function(){
   try {
-    let sepet; try { sepet = JSON.parse(localStorage.getItem('genz-sepet') || '[]'); } catch(e) { sepet = []; localStorage.removeItem('genz-sepet'); }
+    const sepet = JSON.parse(localStorage.getItem('genz-sepet') || '[]');
     const adet = Array.isArray(sepet) ? sepet.reduce((t,i)=>t+(i.qty||1),0) : 0;
     const badge = document.getElementById('navCartBadge');
     if (badge && adet > 0) { badge.textContent = adet; badge.style.display = 'flex'; }
   } catch(e) {}
 })();
-</script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js")
-      .then(r => console.log("[GEN-Z] SW:", r.scope))
-      .catch(e => console.warn("[GEN-Z] SW hatasi:", e));
-  });
-}
 </script>
 </body>
 </html>

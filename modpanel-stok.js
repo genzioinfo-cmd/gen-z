@@ -11,10 +11,8 @@ import {
   getFirestore, collection, query, where, getDocs,
   doc, updateDoc, getDoc, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { getApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 
-let db;
-try { db = getFirestore(getApp()); } catch(e) { db = getFirestore(); }
+const db = getFirestore();
 
 // ── QR kütüphanesi ───────────────────────────────────────────────────────
 function loadQRLib() {

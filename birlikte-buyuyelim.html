@@ -799,8 +799,7 @@ window.submitForm = async function(role) {
   try {
     const { getFirestore, collection, addDoc, serverTimestamp } =
       await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    const { getApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-    const db2 = getFirestore(getApp());
+    const db2 = getFirestore();
 
     await addDoc(collection(db2, koleksiyon), {
       uid:        currentUser.uid   || '',
@@ -927,15 +926,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js")
-      .then(r => console.log("[GEN-Z] SW kayıtlı:", r.scope))
-      .catch(e => console.warn("[GEN-Z] SW hatası:", e));
-  });
-}
-</script>
-<script type="module" src="firebase-sync.js"></script>
 </body>
 </html>

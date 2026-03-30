@@ -1554,10 +1554,8 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
         onSnapshot, doc, addDoc, updateDoc,
         serverTimestamp, getDocs
       } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-      import { getApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 
-      let db;
-      try { db = getFirestore(getApp()); } catch(e) { db = getFirestore(); }
+      const db = getFirestore();
 
       let _oiFiltre   = 'hepsi';
       let _oiAktif    = null;   // açık sohbetin Firestore belge ID'si
@@ -1568,12 +1566,10 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
 
       /* ── Giriş yapmış üreticinin UID'si ── */
       function _uid() {
-        try {
-          return window._aktifUid
-            || window._genzAuth?.auth?.currentUser?.uid
-            || JSON.parse(localStorage.getItem('genz-user')||'null')?.uid
-            || 'demo';
-        } catch(e) { return window._aktifUid || 'demo'; }
+        return window._aktifUid
+          || window._genzAuth?.auth?.currentUser?.uid
+          || JSON.parse(localStorage.getItem('genz-user')||'null')?.uid
+          || 'demo';
       }
 
       /* ─── ÖZET KARTLARI GÜNCELLE ─── */
@@ -1741,7 +1737,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
               { tip:'gelen',  metin: x.onIzlenim||'Merhaba!', zaman: (x.tarih||'').split(' ')[1]||'', ts: serverTimestamp() },
             ];
             if (x.istekMetni) baslangic.push({ tip:'gelen', metin:'📋 Özel İstek: ' + x.istekMetni, ts: serverTimestamp() });
-            await Promise.all(baslangic.map(m => addDoc(msgRef, m).catch(e => console.warn('[GEN-Z] Mesaj yazılamadı:', e))));
+            baslangic.forEach(m => addDoc(msgRef, m));
           } else {
             snap.docs.forEach(d => {
               const m = d.data();
@@ -2926,31 +2922,6 @@ window.rdvDurum=async function(id,yeniDurum){
       }).catch(()=>{});
     }
 
-    // Onaylandığında ustam_projeler'de proje oluştur
-    if (yeniDurum === 'onaylandi' && rdv) {
-      try {
-        const projeSnap = await getDocs(query(collection(db,'ustam_projeler'), where('rdvId','==',id)));
-        if (projeSnap.empty) {
-          await addDoc(collection(db,'ustam_projeler'), {
-            rdvId        : id,
-            ustaUid      : rdv.ustaUid      || _aktifUid,
-            musteriUid   : rdv.musteriUid   || '',
-            musteriAd    : rdv.musteriAd    || rdv.musteriUsername || 'Müşteri',
-            ustaAdi      : rdv.ustaAdi      || '',
-            isAdi        : rdv.hizmet       || rdv.isAdi || 'Hizmet',
-            sehir        : rdv.sehir        || '',
-            aciklama     : rdv.mesaj        || '',
-            durum        : 'devam',
-            ilerleme     : 0,
-            onayBekliyor : false,
-            adimlar      : [],
-            ts           : serverTimestamp(),
-            tamamlanmaTarihi: null,
-          });
-        }
-      } catch(pe) { console.warn('Proje oluşturma hatası:', pe); }
-    }
-
     renderRdvTablo();
     rdvBadgeGuncelle();
     toast(yeniDurum==='onaylandi'?'✅ Randevu onaylandı.':'❌ Randevu reddedildi.');
@@ -3372,69 +3343,21 @@ function renderSiparisler(){
   if(_sFiltre!=='hepsi') liste=liste.filter(s=>s.durum===_sFiltre);
   if(!liste.length){el.innerHTML='<table><tbody><tr class="bos-tr"><td>Sipariş bulunamadı ✦</td></tr></tbody></table>';return;}
   el.innerHTML=`<table>
-    <thead><tr><th>Sipariş No</th><th>Ürün</th><th>Müşteri</th><th>Tutar</th><th>Tarih</th><th>Durum</th><th>İşlem</th></tr></thead>
+    <thead><tr><th>Sipariş No</th><th>Ürün</th><th>Müşteri</th><th>Tutar</th><th>Tarih</th><th>Durum</th></tr></thead>
     <tbody>${liste.map(s=>{
       const tarih=s.ts?.toDate?s.ts.toDate().toLocaleDateString('tr-TR'):'—';
-      const sonDurum=s.durum||'beklemede';
-      const bitiyor=sonDurum==='tamamlandi'||sonDurum==='iptal';
-      const durumSecenekleri=bitiyor?'':`
-        <select onchange="siparisDurumGuncelle('${s.id}',this.value,this)" style="font-size:.65rem;background:var(--bg2);color:var(--t1);border:1px solid var(--border);border-radius:6px;padding:3px 6px;cursor:pointer;">
-          <option value="" disabled selected>Güncelle</option>
-          <option value="kargo">🚚 Kargoya Ver</option>
-          <option value="tamamlandi">✅ Tamamlandı</option>
-          <option value="iptal">❌ İptal Et</option>
-        </select>`;
       return`<tr>
         <td style="font-family:'Syne',sans-serif;font-size:.9rem;color:var(--gold)">#${(s.id||'').slice(-6).toUpperCase()}</td>
         <td>${(s.urunler||[s.urun||'—']).slice(0,2).join(', ')}${(s.urunler||[]).length>2?'…':''}</td>
         <td style="color:var(--t2);font-size:.68rem">${s.musteriAd||s.musteri||'—'}</td>
         <td style="font-family:'Syne',sans-serif;color:var(--gold)">${para(s.toplam||0)} ₺</td>
         <td style="font-size:.65rem;color:var(--t2)">${tarih}</td>
-        <td><span class="badge ${sonDurum}">${durumMetin(sonDurum)}</span></td>
-        <td>${durumSecenekleri}</td>
+        <td><span class="badge ${s.durum||'beklemede'}">${durumMetin(s.durum)}</span></td>
       </tr>`;
     }).join('')}</tbody>
   </table>`;
 }
 function durumMetin(d){return d==='tamamlandi'?'✅ Tamamlandı':d==='kargo'?'🚚 Kargoda':d==='iptal'?'❌ İptal':'⏳ Beklemede';}
-
-/* Sipariş durumu Firestore'da güncelle + tamamlandi olunca satisAdedi artır */
-window.siparisDurumGuncelle = async function(sipId, yeniDurum, selectEl) {
-  if (!sipId || !yeniDurum) return;
-  try {
-    const sipRef = doc(db, 'magaza_siparisler', sipId);
-    await updateDoc(sipRef, { durum: yeniDurum, durumGuncellendi: serverTimestamp() });
-
-    // Sipariş tamamlandıysa: ilgili ürünlerin satisAdedi'ni artır
-    if (yeniDurum === 'tamamlandi') {
-      const siparis = _siparisler.find(s => s.id === sipId);
-      if (siparis && _magaza?.id) {
-        // Ürün ID'leri varsa her birini güncelle
-        const urunIdler = siparis.urunIdler || (siparis.urunId ? [siparis.urunId] : []);
-        for (const uid of urunIdler) {
-          try {
-            const urunRef = doc(db, 'magaza_urunler', uid);
-            // Firestore increment ile atomik artırım
-            const { increment } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-            await updateDoc(urunRef, { satisAdedi: increment(siparis.adet || 1) });
-          } catch(e) { console.warn('satisAdedi güncellenemedi:', e); }
-        }
-      }
-    }
-
-    // Yerel state güncelle
-    const idx = _siparisler.findIndex(s => s.id === sipId);
-    if (idx !== -1) _siparisler[idx].durum = yeniDurum;
-    renderSiparisler();
-    renderSonSip();
-    renderFinans();
-    ozetGuncelle();
-    toast(yeniDurum === 'tamamlandi' ? '✅ Sipariş tamamlandı, satış sayısı güncellendi.' : yeniDurum === 'kargo' ? '🚚 Kargoya verildi.' : '❌ Sipariş iptal edildi.');
-  } catch(e) {
-    toast('⚠️ Güncelleme hatası: ' + e.message);
-    if (selectEl) selectEl.value = '';
-  }
-};
 window.sipFiltre=function(tip,btn){
   _sFiltre=tip;
   document.querySelectorAll('#sayfa-siparisler .f-btn').forEach(b=>b.classList.remove('on'));
@@ -5074,10 +4997,8 @@ import {
   getFirestore, collection, query, where, orderBy,
   onSnapshot, doc, updateDoc, serverTimestamp, getDoc
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { getApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 
-let db;
-try { db = getFirestore(getApp()); } catch(e) { db = getFirestore(); }
+const db = getFirestore();
 let _projeler = [];
 let _prjFiltre = 'hepsi';
 let _prjUnsub  = null;
@@ -5226,20 +5147,6 @@ function urunOverlayBasarili(){
 }
 function urunOverlayKapat(){
   document.getElementById('urunYukleOverlay').style.display='none';
-}
-
-window.addEventListener('beforeunload', () => {
-  if (typeof _chatUnsub === 'function') { _chatUnsub(); }
-  if (typeof _prjUnsub  === 'function') { _prjUnsub();  }
-});
-</script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js")
-      .then(r => console.log("[GEN-Z] SW kayıtlı:", r.scope))
-      .catch(e => console.warn("[GEN-Z] SW hatası:", e));
-  });
 }
 </script>
 </body>

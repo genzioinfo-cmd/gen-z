@@ -3,20 +3,12 @@
     "public": ".",
     "ignore": [
       "firebase.json",
-      "firestore.rules",
-      "firestore.indexes.json",
       "**/.*",
-      "**/node_modules/**",
-      "README.md"
+      "**/node_modules/**"
     ],
     "cleanUrls": false,
     "trailingSlash": false,
-    "rewrites": [
-      {
-        "source": "/404",
-        "destination": "/404.html"
-      }
-    ],
+    "rewrites": [],
     "redirects": [],
     "headers": [
       {
@@ -27,50 +19,17 @@
             "value": "no-cache, no-store, must-revalidate"
           },
           {
-            "key": "Pragma",
-            "value": "no-cache"
-          },
-          {
             "key": "X-Content-Type-Options",
             "value": "nosniff"
           },
           {
             "key": "X-Frame-Options",
             "value": "SAMEORIGIN"
-          },
-          {
-            "key": "X-XSS-Protection",
-            "value": "1; mode=block"
-          },
-          {
-            "key": "Referrer-Policy",
-            "value": "strict-origin-when-cross-origin"
-          },
-          {
-            "key": "Permissions-Policy",
-            "value": "camera=(), microphone=(), geolocation=(self)"
-          },
-          {
-            "key": "Content-Security-Policy",
-            "value": "default-src 'self' https://*.googleapis.com https://*.firebaseapp.com https://*.firebasestorage.app https://www.gstatic.com https://genz-upload.genzio-info.workers.dev; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com https://*.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.firebasestorage.app https://*.googleapis.com https://genz-upload.genzio-info.workers.dev; connect-src 'self' https://*.firebaseio.com https://*.googleapis.com https://*.firebasestorage.app https://genz-upload.genzio-info.workers.dev wss://*.firebaseio.com; worker-src 'self'; frame-src 'none';"
           }
         ]
       },
       {
-        "source": "**/*.@(js|mjs)",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "public, max-age=86400, stale-while-revalidate=3600"
-          },
-          {
-            "key": "X-Content-Type-Options",
-            "value": "nosniff"
-          }
-        ]
-      },
-      {
-        "source": "**/*.@(css)",
+        "source": "**/*.@(js|css)",
         "headers": [
           {
             "key": "Cache-Control",
@@ -83,33 +42,7 @@
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "public, max-age=604800, immutable"
-          }
-        ]
-      },
-      {
-        "source": "/sw.js",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "no-cache, no-store, must-revalidate"
-          },
-          {
-            "key": "Service-Worker-Allowed",
-            "value": "/"
-          }
-        ]
-      },
-      {
-        "source": "/manifest.json",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "public, max-age=86400"
-          },
-          {
-            "key": "Content-Type",
-            "value": "application/manifest+json"
+            "value": "public, max-age=604800"
           }
         ]
       }

@@ -1121,7 +1121,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         '<div class="product-info">' +
           '<div class="product-seller">' +
             '<div class="seller-avatar">' + p.seller.initials + '</div>' +
-            '<span class="seller-name seller-name-link" onclick="event.preventDefault();event.stopPropagation();navigateTo(\'gen-z_satici.html?seller=' + p.seller.id + '\')">' + p.seller.name + '</span>' +
+            '<span class="seller-name seller-name-link" onclick="event.preventDefault();event.stopPropagation();navigateTo(\'gen-z.satici.html?seller=' + p.seller.id + '\')">' + p.seller.name + '</span>' +
             '<span class="seller-badge-icon">' + badge.emoji + '</span>' +
           '</div>' +
           '<div class="product-name">' + p.name + '</div>' +
@@ -1163,21 +1163,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 // ── Navbar sepet badge ──
 (function(){
   try {
-    let sepet; try { sepet = JSON.parse(localStorage.getItem('genz-sepet') || '[]'); } catch(e) { sepet = []; localStorage.removeItem('genz-sepet'); }
+    const sepet = JSON.parse(localStorage.getItem('genz-sepet') || '[]');
     const adet = Array.isArray(sepet) ? sepet.reduce((t,i)=>t+(i.qty||1),0) : 0;
     const badge = document.getElementById('navCartBadge');
     if (badge && adet > 0) { badge.textContent = adet; badge.style.display = 'flex'; }
   } catch(e) {}
 })();
-</script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js")
-      .then(r => console.log("[GEN-Z] SW kayıtlı:", r.scope))
-      .catch(e => console.warn("[GEN-Z] SW hatası:", e));
-  });
-}
 </script>
 </body>
 </html>

@@ -670,21 +670,12 @@ document.addEventListener('DOMContentLoaded', () => {
 // ── Navbar sepet badge ──
 (function(){
   try {
-    let sepet; try { sepet = JSON.parse(localStorage.getItem('genz-sepet') || '[]'); } catch(e) { sepet = []; localStorage.removeItem('genz-sepet'); }
+    const sepet = JSON.parse(localStorage.getItem('genz-sepet') || '[]');
     const adet = Array.isArray(sepet) ? sepet.reduce((t,i)=>t+(i.qty||1),0) : 0;
     const badge = document.getElementById('navCartBadge');
     if (badge && adet > 0) { badge.textContent = adet; badge.style.display = 'flex'; }
   } catch(e) {}
 })();
-</script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js")
-      .then(r => console.log("[GEN-Z] SW:", r.scope))
-      .catch(e => console.warn("[GEN-Z] SW hatasi:", e));
-  });
-}
 </script>
 </body>
 </html>

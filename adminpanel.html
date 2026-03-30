@@ -746,7 +746,8 @@ window.girisYap=async function(){
     const uid=uc.user.uid;
     if(!ADMIN_UIDS.includes(uid)){
       const snap=await getDoc(doc(db,'kullanicilar',uid));
-      if(snap.data()?.rol!=='admin'){
+      const snap2=await getDoc(doc(db,'users',uid));
+      if(snap.data()?.rol!=='admin'&&snap2.data()?.rol!=='admin'){
         await signOut(auth);
         erisim.classList.add('v');
         btn.textContent='✦ Giriş Yap';btn.disabled=false;
@@ -1176,7 +1177,7 @@ window.basvuruDurum=async function(id,durum){
         const profil={partnerDurum:'onaylandi',partnerRoller:roller,partnerSirket:b.sirketAdi||''};
         if(roller.includes('magaza'))profil.magazaOnay=true;
         if(roller.includes('usta'))profil.ustaOnay=true;
-        await setDoc(doc(db,'kullanicilar',b.uid),profil,{merge:true}).catch(()=>{});
+        await setDoc(doc(db,'users',b.uid),profil,{merge:true}).catch(()=>{});
         // Kullanıcının ana rol alanını güncelle (kullanicilar koleksiyonu)
         // Başvurusu onaylanan kişiye uygun rol verilir; her iki rol de varsa 'satici' önceliklidir.
         const yeniRol = roller.includes('magaza') && roller.includes('usta')
@@ -1218,7 +1219,7 @@ window.basvuruDurum=async function(id,durum){
           : roller.includes('magaza')
           ? 'Mağaza başvurunuz onaylandı! Ürün eklemeye başlayabilirsiniz.'
           : 'Usta başvurunuz onaylandı! İlan vermeye başlayabilirsiniz.';
-        await addDoc(collection(db,'kullanicilar',b.uid,'bildirimler'),{
+        await addDoc(collection(db,'users',b.uid,'bildirimler'),{
           tip: 'onay',
           mesaj: bildirimMesaj,
           link: 'modpanel.html',
@@ -1236,6 +1237,7 @@ window.basvuruDurum=async function(id,durum){
 window.adminYap=async function(uid){
   if(!confirm('Bu kullanıcıyı admin yapmak istediğinize emin misiniz?'))return;
   try{
+    await setDoc(doc(db,'users',uid),{rol:'admin'},{merge:true});
     await setDoc(doc(db,'kullanicilar',uid),{rol:'admin'},{merge:true});
     const k=_veri.kullanicilar.find(x=>x.id===uid);
     if(k)k.rol='admin';
@@ -2295,14 +2297,5 @@ window.toggleSidebar=function(){document.getElementById('sidebar').classList.tog
   </div>
 </div>
 
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js")
-      .then(r => console.log("[GEN-Z] SW kayıtlı:", r.scope))
-      .catch(e => console.warn("[GEN-Z] SW hatası:", e));
-  });
-}
-</script>
 </body>
 </html>

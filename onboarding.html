@@ -295,7 +295,7 @@ onAuthStateChanged(auth, async (user) => {
   try {
     const snap = await getDoc(doc(db, 'kullanicilar', user.uid));
     if (snap.exists() && snap.data().onboardingTamamlandi === true) {
-      window.location.href = 'index.html';
+      window.location.href = 'gen-z.html';
       return;
     }
   } catch(e) {}
@@ -454,30 +454,20 @@ window.finishOnboarding = async function() {
 // ── Ana sayfaya git
 window.goHome = function() {
   document.getElementById('btnFinish').disabled = true;
-  window.location.href = 'index.html';
+  window.location.href = 'gen-z.html';
 };
 
 // ── Atla → onboarding'i tamamlandı say ama boş kaydet
 window.skipToHome = async function() {
-  if (!_user) { window.location.href = 'index.html'; return; }
+  if (!_user) { window.location.href = 'gen-z.html'; return; }
   try {
     await updateDoc(doc(db, 'kullanicilar', _user.uid), {
       onboardingTamamlandi: true,
       guncellendi: serverTimestamp()
     });
   } catch(e) {}
-  window.location.href = 'index.html';
+  window.location.href = 'gen-z.html';
 };
 </script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js")
-      .then(r => console.log("[GEN-Z] SW kayıtlı:", r.scope))
-      .catch(e => console.warn("[GEN-Z] SW hatası:", e));
-  });
-}
-</script>
-<script type="module" src="firebase-sync.js"></script>
 </body>
 </html>

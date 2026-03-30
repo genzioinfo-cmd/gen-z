@@ -83,10 +83,8 @@ import {
   getFirestore, collection, query, where, orderBy,
   getDocs, updateDoc, addDoc, doc, serverTimestamp, onSnapshot, limit
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { getApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 
-let db;
-try { db = getFirestore(getApp()); } catch(e) { db = getFirestore(); }
+const db = getFirestore();
 let _mstUid = null;
 let _chatUnsub = null;
 let _chatRdvId = null;
@@ -268,6 +266,4 @@ window.rdvIptal = async function(id) {
 };
 
 yukle();
-
-window.addEventListener('beforeunload', () => { if (_chatUnsub) { _chatUnsub(); _chatUnsub = null; } });
 </script>

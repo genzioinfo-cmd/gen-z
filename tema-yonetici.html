@@ -559,8 +559,8 @@ function ozelTemayiKaydet(){
   const ad=document.getElementById('ozel-tema-ad').value.trim();
   if(!ad){toast('Tema adı girin','error');return;}
   const t={ad,bg:gv('idx-bg'),a:gv('idx-g2'),a2:gv('idx-g3'),a3:gv('blob3'),g1:gv('idx-g1'),g2:gv('idx-g2'),g3:gv('idx-g3')};
-  let oz; try { oz=JSON.parse(localStorage.getItem('genz_oz_tema')||'[]'); if(!Array.isArray(oz)) oz=[]; } catch(e){ oz=[]; }
-  oz.push(t); try{ localStorage.setItem('genz_oz_tema',JSON.stringify(oz)); }catch(e){}
+  const oz=JSON.parse(localStorage.getItem('genz_oz_tema')||'[]');
+  oz.push(t); localStorage.setItem('genz_oz_tema',JSON.stringify(oz));
   document.getElementById('ozel-tema-ad').value=''; temaGrid();
   toast('✓ Özel tema kaydedildi','success');
 }

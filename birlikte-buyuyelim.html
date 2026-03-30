@@ -926,5 +926,14 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js")
+      .then(r => console.log("[GEN-Z] SW kayıtlı:", r.scope))
+      .catch(e => console.warn("[GEN-Z] SW hatası:", e));
+  });
+}
+</script>
 </body>
 </html>

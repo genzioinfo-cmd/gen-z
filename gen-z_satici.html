@@ -816,15 +816,26 @@ nav, .modal-overlay-auth, .modal-box, .toast {
 
 /* ── Firestore Ürün Yükleme ── */
 let _CACHED_PRODUCTS = [];
+let _CACHED_GENCZ    = [];   // gencz_icerikler önbelleği
+let _db = null;               // paylaşılan Firestore instance
 
+// ── Firebase init (tek seferlik) ────────────────────────────────────────
+async function getDB() {
+  if (_db) return _db;
+  const { initializeApp, getApps, getApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+  const { getFirestore } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+  const cfg = { apiKey:"AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ", authDomain:"gen-z-io.firebaseapp.com", projectId:"gen-z-io", storageBucket:"gen-z-io.firebasestorage.app", messagingSenderId:"97338868944", appId:"1:97338868944:web:d7b429e416d8c505b14ad5" };
+  const app = getApps().length ? getApp() : initializeApp(cfg);
+  _db = getFirestore(app);
+  return _db;
+}
+
+// ── magaza_urunler (Mağaza satıcıları) ──────────────────────────────────
 async function fetchAllProducts() {
   if (_CACHED_PRODUCTS.length > 0) return _CACHED_PRODUCTS;
   try {
-    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-    const { getFirestore, collection, getDocs, query, where, orderBy } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    const cfg = { apiKey:"AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ", authDomain:"gen-z-io.firebaseapp.com", projectId:"gen-z-io", storageBucket:"gen-z-io.firebasestorage.app", messagingSenderId:"97338868944", appId:"1:97338868944:web:d7b429e416d8c505b14ad5" };
-    const app = getApps().length ? getApps()[0] : initializeApp(cfg);
-    const db = getFirestore(app);
+    const db = await getDB();
+    const { collection, getDocs, query, where, orderBy } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
     const q = query(collection(db, 'magaza_urunler'), where('durum', '==', 'onaylandi'), orderBy('ts', 'desc'));
     const snap = await getDocs(q);
     _CACHED_PRODUCTS = snap.docs.map(d => {
@@ -845,11 +856,111 @@ async function fetchAllProducts() {
   } catch(e) { console.warn('Ürünler yüklenemedi:', e); return []; }
 }
 
-function getProductById(id) { return _CACHED_PRODUCTS.find(p => String(p.id) === String(id)); }
-function getProductsBySeller(sid) { return _CACHED_PRODUCTS.filter(p => p.seller.id === sid); }
-function getSellerById(sid) { const p = _CACHED_PRODUCTS.find(p => p.seller.id === sid); return p ? p.seller : null; }
-function getAllSellers() { const m = {}; _CACHED_PRODUCTS.forEach(p => { if(!m[p.seller.id]) m[p.seller.id]={...p.seller,products:[]}; m[p.seller.id].products.push(p); }); return Object.values(m); }
-function getProductsByCategory(cat) { if(cat==='all') return _CACHED_PRODUCTS; return _CACHED_PRODUCTS.filter(p=>p.category===cat); }
+// ── gencz_icerikler (Genç-Z satıcıları) — FIX: eksik koleksiyon desteği ─
+async function fetchGenzIcerikler(saticiUid) {
+  try {
+    const db = await getDB();
+    const { collection, getDocs, query, where, orderBy, doc, getDoc } =
+      await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+
+    // Kullanıcı profilini çek
+    let profilAd = '', profilFoto = null, profilAciklama = '';
+    try {
+      const kulSnap = await getDoc(doc(db, 'kullanicilar', saticiUid));
+      if (kulSnap.exists()) {
+        const kd = kulSnap.data();
+        profilAd = kd.displayName || kd.username || '';
+        profilFoto = kd.photoURL || null;
+        profilAciklama = kd.bio || kd.hakkinda || '';
+      }
+    } catch(e) { /* profil okunamazsa devam */ }
+
+    // İçeriklerini çek
+    const q = query(
+      collection(db, 'gencz_icerikler'),
+      where('uid', '==', saticiUid),
+      where('durum', '==', 'onaylandi'),
+      orderBy('ts', 'desc')
+    );
+    const snap = await getDocs(q);
+    const icerikler = snap.docs.map(d => {
+      const ic = d.data();
+      const initials = profilAd.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2) || '?';
+      return {
+        id: d.id,
+        name: ic.baslik || ic.ad || '',
+        price: ic.fiyat || 0,
+        oldPrice: null,
+        rating: ic.rating || 0,
+        reviews: ic.reviewCount || 0,
+        badge: null,
+        tags: ic.etiketler || [],
+        category: ic.kategori || 'gencz',
+        desc: ic.aciklama || '',
+        emoji: '⚡',
+        resim: ic.kapakFoto || ic.foto || null,
+        gradA: 'rgba(92,240,180,0.12)',
+        gradB: 'rgba(240,197,92,0.06)',
+        tip: ic.tip || 'urun',   // 'urun' | 'hizmet' | 'dijital'
+        seller: {
+          id: saticiUid,
+          uid: saticiUid,
+          name: profilAd || 'Genç-Z Satıcı',
+          initials: initials,
+          photoURL: profilFoto,
+          sales: ic.satisAdedi || 0,
+          joined: ic.ts ? new Date(ic.ts.seconds*1000).getFullYear() : '2025',
+          rating: 0,
+          ratingCount: 0,
+          desc: profilAciklama,
+          comments: []
+        }
+      };
+    });
+    _CACHED_GENCZ = icerikler;
+    return icerikler;
+  } catch(e) {
+    console.warn('Genç-Z içerikler yüklenemedi:', e);
+    return [];
+  }
+}
+
+// ── Genç-Z satıcı profili için doğrudan uid ile yükle ───────────────────
+// URL: gen-z_satici.html?seller=<uid>&tip=gencz
+async function fetchGenzSaticiProfil(uid) {
+  const icerikler = await fetchGenzIcerikler(uid);
+  if (!icerikler.length) return null;
+  // seller bilgisi ilk içerikten al
+  return icerikler[0].seller;
+}
+
+function getProductById(id) {
+  return _CACHED_PRODUCTS.find(p => String(p.id) === String(id))
+      || _CACHED_GENCZ.find(p => String(p.id) === String(id));
+}
+function getProductsBySeller(sid) {
+  const mag = _CACHED_PRODUCTS.filter(p => p.seller.id === sid);
+  const gnc = _CACHED_GENCZ.filter(p => p.seller.id === sid);
+  return [...mag, ...gnc];
+}
+function getSellerById(sid) {
+  const p = _CACHED_PRODUCTS.find(p => p.seller.id === sid)
+         || _CACHED_GENCZ.find(p => p.seller.id === sid);
+  return p ? p.seller : null;
+}
+function getAllSellers() {
+  const m = {};
+  [..._CACHED_PRODUCTS, ..._CACHED_GENCZ].forEach(p => {
+    if (!m[p.seller.id]) m[p.seller.id] = {...p.seller, products: []};
+    m[p.seller.id].products.push(p);
+  });
+  return Object.values(m);
+}
+function getProductsByCategory(cat) {
+  const all = [..._CACHED_PRODUCTS, ..._CACHED_GENCZ];
+  if (cat === 'all') return all;
+  return all.filter(p => p.category === cat);
+}
 /* ── MAGAZA-DATA (inline) ── */
 /* ══════════════════════════════════════════════════════════
    GEN-Z MAĞAZA — Paylaşılan Veri & Yardımcılar
@@ -1015,7 +1126,7 @@ function renderStars(rating) {
 
 /* ── PAGE SCRIPT ── */
 initThemeLang();
-document.addEventListener('DOMContentLoaded', async () => { await fetchAllProducts();
+document.addEventListener('DOMContentLoaded', async () => {
   document.querySelectorAll('.mobile-menu a').forEach(a => {
     a.addEventListener('click', () => {
       const mm = document.getElementById('mobileMenu');
@@ -1029,8 +1140,24 @@ document.addEventListener('DOMContentLoaded', async () => { await fetchAllProduc
   requestAnimationFrame(() => { document.body.style.opacity = '1'; });
 
   const sellerId = getParam('seller');
-  const seller = getSellerById(sellerId);
-  const products = getProductsBySeller(sellerId);
+  const tip      = getParam('tip'); // 'gencz' veya null → mağaza
+
+  // FIX: Genç-Z satıcıları için gencz_icerikler, mağaza satıcıları için magaza_urunler
+  let seller, products;
+  if (tip === 'gencz' && sellerId) {
+    await fetchGenzIcerikler(sellerId);
+    seller   = getSellerById(sellerId);
+    products = getProductsBySeller(sellerId);
+  } else {
+    await fetchAllProducts();
+    seller   = getSellerById(sellerId);
+    products = getProductsBySeller(sellerId);
+    if (!seller && sellerId) {
+      await fetchGenzIcerikler(sellerId);
+      seller   = getSellerById(sellerId);
+      products = getProductsBySeller(sellerId);
+    }
+  }
 
   if (!seller) {
     document.querySelector('.satici-inner').innerHTML = '<div style="text-align:center;padding:80px 20px;color:var(--text3);"><div style="font-size:48px;margin-bottom:16px;">😕</div><div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--text2);margin-bottom:8px;">Satıcı bulunamadı</div><div style="font-size:14px;"><a href="magaza.html" style="color:var(--accent)">← Mağazaya dön</a></div></div>';

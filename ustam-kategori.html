@@ -820,5 +820,14 @@ function renderUstalar(ustalar, grid) {
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="firebase-sync.js"></script>
 <script src="cookie-consent.js"></script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js")
+      .then(r => console.log("[GEN-Z] SW:", r.scope))
+      .catch(e => console.warn("[GEN-Z] SW hatasi:", e));
+  });
+}
+</script>
 </body>
 </html>

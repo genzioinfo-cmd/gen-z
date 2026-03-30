@@ -1,0 +1,57 @@
+# ══════════════════════════════════════════════════════════════════
+# GEN-Z — Cloudflare Pages _headers
+# Bu dosya projenin kök dizininde olmalı.
+# Firebase Hosting değil, Cloudflare Pages kullanıyorsanız bu dosya aktif olur.
+# ══════════════════════════════════════════════════════════════════
+
+# Global güvenlik başlıkları — tüm sayfalar
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(self)
+
+# HTML sayfalar — cache yok, güvenlik başlıkları tam
+/*.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Content-Security-Policy: default-src 'self' https://*.googleapis.com https://*.firebaseapp.com https://*.firebasestorage.app https://www.gstatic.com https://genz-upload.genzio-info.workers.dev; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com https://*.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.firebasestorage.app https://*.googleapis.com https://genz-upload.genzio-info.workers.dev; connect-src 'self' https://*.firebaseio.com https://*.googleapis.com https://*.firebasestorage.app https://genz-upload.genzio-info.workers.dev wss://*.firebaseio.com; worker-src 'self'; frame-src 'none';
+
+# JS dosyaları — 1 gün cache
+/*.js
+  Cache-Control: public, max-age=86400, stale-while-revalidate=3600
+  X-Content-Type-Options: nosniff
+
+# CSS dosyaları
+/*.css
+  Cache-Control: public, max-age=86400
+
+# Görseller — 7 gün immutable
+/*.png
+  Cache-Control: public, max-age=604800, immutable
+/*.jpg
+  Cache-Control: public, max-age=604800, immutable
+/*.jpeg
+  Cache-Control: public, max-age=604800, immutable
+/*.webp
+  Cache-Control: public, max-age=604800, immutable
+/*.svg
+  Cache-Control: public, max-age=604800, immutable
+/*.ico
+  Cache-Control: public, max-age=604800, immutable
+
+# Service Worker — asla cache'leme
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+  Service-Worker-Allowed: /
+
+# Manifest
+/manifest.json
+  Cache-Control: public, max-age=86400
+  Content-Type: application/manifest+json
+
+# Admin paneli — ekstra sıkı CSP
+/adminpanel.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  Content-Security-Policy: default-src 'self' https://*.googleapis.com https://*.firebaseapp.com https://*.firebasestorage.app https://www.gstatic.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.firebasestorage.app https://*.googleapis.com; connect-src 'self' https://*.firebaseio.com https://*.googleapis.com wss://*.firebaseio.com; frame-src 'none';

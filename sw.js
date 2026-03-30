@@ -1,15 +1,19 @@
-const CACHE_NAME = 'genz-v1';
+const CACHE_NAME = 'genz-v2';
 
 // Offline'da da çalışsın diye cache'lenecek dosyalar
 const STATIC_ASSETS = [
   '/gen-z.html',
   '/magaza.html',
   '/profile.html',
+  '/ustam.html',
+  '/404.html',
   '/manifest.json',
   '/favicon-192x192.png',
   '/favicon.svg',
-  '/tema-loader.js',
-  '/categories.js'
+  '/categories.js',
+  '/firebase-config.js',
+  '/firebase-store.js',
+  '/firebase-sync.js'
 ];
 
 // Kurulum

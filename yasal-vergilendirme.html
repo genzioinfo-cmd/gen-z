@@ -226,5 +226,14 @@ tr:hover td{background:rgba(255,255,255,.015);}
 
 </div>
 
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js")
+      .then(r => console.log("[GEN-Z] SW:", r.scope))
+      .catch(e => console.warn("[GEN-Z] SW hatasi:", e));
+  });
+}
+</script>
 </body>
 </html>

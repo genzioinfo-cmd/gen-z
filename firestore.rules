@@ -1,0 +1,275 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Yardımcı fonksiyonlar ──────────────────────────────────────────────
+    function girisYapti() {
+      return request.auth != null;
+    }
+
+    function kendiUid(uid) {
+      return request.auth.uid == uid;
+    }
+
+    function kullaniciBilgisi() {
+      return get(/databases/$(database)/documents/kullanicilar/$(request.auth.uid)).data;
+    }
+
+    function isAdmin() {
+      return girisYapti() &&
+        kullaniciBilgisi().rol == 'admin';
+    }
+
+    function isSatici() {
+      return girisYapti() && (
+        kullaniciBilgisi().rol == 'satici' ||
+        kullaniciBilgisi().magazaOnay == true
+      );
+    }
+
+    function isUsta() {
+      return girisYapti() &&
+        kullaniciBilgisi().ustaOnay == true;
+    }
+
+    // BUG FIX: isGencz — roller bazen array, bazen map olabiliyor.
+    // hasAny() + get() ile güvenli kontrol.
+    function isGencz() {
+      return girisYapti() && (
+        kullaniciBilgisi().rol == 'gencz' ||
+        kullaniciBilgisi().gencimDurum == 'onaylandi' ||
+        kullaniciBilgisi().get('roller', []).hasAny(['gencz'])
+      );
+    }
+
+    // ── kullanicilar ───────────────────────────────────────────────────────
+    match /kullanicilar/{uid} {
+      allow read: if girisYapti();
+      allow create: if girisYapti() && kendiUid(uid);
+      allow update: if girisYapti() && (kendiUid(uid) || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    // ── kullanici_verileri (sepet, adres, favoriler) ───────────────────────
+    match /kullanici_verileri/{uid} {
+      allow read, write: if girisYapti() && kendiUid(uid);
+    }
+
+    // ── magazalar ─────────────────────────────────────────────────────────
+    match /magazalar/{magazaId} {
+      allow read: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin() || (isSatici() && resource.data.uid == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+
+    // ── magaza_urunler ────────────────────────────────────────────────────
+    match /magaza_urunler/{urunId} {
+      allow read: if true;
+      allow create: if isSatici() || isGencz();
+      allow update: if isAdmin() ||
+        (isSatici() && resource.data.magazaId == request.auth.uid) ||
+        (isGencz()  && resource.data.uid      == request.auth.uid);
+      allow delete: if isAdmin() ||
+        (isSatici() && resource.data.magazaId == request.auth.uid) ||
+        (isGencz()  && resource.data.uid      == request.auth.uid);
+    }
+
+    // ── magaza_siparisler ─────────────────────────────────────────────────
+    // BUG FIX: siparis.html musteriUid yazar, eski kural uid'e bakıyordu.
+    // Hem musteriUid hem saticiId (siparis.html'in yazdığı field) kontrol edildi.
+    match /magaza_siparisler/{siparisId} {
+      allow read: if girisYapti() && (
+        isAdmin() ||
+        resource.data.musteriUid == request.auth.uid ||  // müşteri okuyabilir
+        resource.data.saticiId   == request.auth.uid ||  // satıcı okuyabilir
+        resource.data.magazaId   == request.auth.uid     // eski kayıtlar için geriye dönük uyumluluk
+      );
+      allow create: if girisYapti();
+      allow update: if isAdmin() ||
+        resource.data.saticiId  == request.auth.uid ||
+        resource.data.magazaId  == request.auth.uid;
+      allow delete: if isAdmin();
+    }
+
+    // ── partner_basvurular ────────────────────────────────────────────────
+    match /partner_basvurular/{basvuruId} {
+      allow read: if girisYapti() && (
+        isAdmin() || resource.data.uid == request.auth.uid
+      );
+      allow create: if girisYapti();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── gencim_basvurular ─────────────────────────────────────────────────
+    match /gencim_basvurular/{basvuruId} {
+      allow read: if girisYapti() && (
+        isAdmin() || resource.data.uid == request.auth.uid
+      );
+      allow create: if girisYapti();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── gencz_icerikler ───────────────────────────────────────────────────
+    // BUG FIX: gen-z.html herkese açık vitrin sayfası —
+    // giriş yapmamış ziyaretçiler onaylı içerikleri görebilmeli.
+    match /gencz_icerikler/{icerikId} {
+      allow read: if
+        resource.data.durum == 'onaylandi' ||   // onaylı içerik herkese açık
+        (girisYapti() && (
+          isAdmin() ||
+          resource.data.uid == request.auth.uid  // kendi içeriği
+        ));
+      allow create: if isGencz();
+      allow update: if isAdmin() ||
+        (isGencz() && resource.data.uid == request.auth.uid);
+      allow delete: if isAdmin() ||
+        (isGencz() && resource.data.uid == request.auth.uid);
+    }
+
+    // ── gencz_satislar ────────────────────────────────────────────────────
+    match /gencz_satislar/{satisId} {
+      allow read: if girisYapti() && (
+        isAdmin() || resource.data.uid == request.auth.uid
+      );
+      allow create: if girisYapti();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── ustam_ilanlar ─────────────────────────────────────────────────────
+    match /ustam_ilanlar/{ilanId} {
+      allow read: if true;
+      allow create: if isUsta();
+      allow update: if isAdmin() ||
+        (isUsta() && resource.data.ustaUid == request.auth.uid);
+      allow delete: if isAdmin() ||
+        (isUsta() && resource.data.ustaUid == request.auth.uid);
+    }
+
+    // ── ustam_randevular ──────────────────────────────────────────────────
+    match /ustam_randevular/{rdvId} {
+      allow read: if girisYapti() && (
+        isAdmin() ||
+        resource.data.ustaUid    == request.auth.uid ||
+        resource.data.musteriUid == request.auth.uid
+      );
+      allow create: if girisYapti();
+      allow update: if isAdmin() ||
+        resource.data.ustaUid    == request.auth.uid ||
+        resource.data.musteriUid == request.auth.uid;
+      allow delete: if isAdmin();
+
+      match /mesajlar/{mesajId} {
+        allow read:           if girisYapti();
+        allow create:         if girisYapti();
+        allow update, delete: if isAdmin();
+      }
+    }
+
+    // ── ustam_yorumlar ────────────────────────────────────────────────────
+    match /ustam_yorumlar/{yorumId} {
+      allow read: if true;
+      allow create: if girisYapti();
+      allow update: if isAdmin() ||
+        resource.data.musteriUid == request.auth.uid;
+      allow delete: if isAdmin();
+    }
+
+    // ── ustam_projeler ────────────────────────────────────────────────────
+    match /ustam_projeler/{projeId} {
+      allow read: if girisYapti() && (
+        isAdmin() ||
+        resource.data.ustaUid    == request.auth.uid ||
+        resource.data.musteriUid == request.auth.uid
+      );
+      allow create: if girisYapti();
+      allow update: if isAdmin() ||
+        resource.data.ustaUid    == request.auth.uid ||
+        resource.data.musteriUid == request.auth.uid;
+      allow delete: if isAdmin();
+    }
+
+    // ── ozelIstekler ──────────────────────────────────────────────────────
+    // BUG FIX: gen-z_satici.html buyerUid yazar, eski kural uid'e bakıyordu.
+    match /ozelIstekler/{istekId} {
+      allow read: if girisYapti() && (
+        isAdmin() ||
+        resource.data.buyerUid  == request.auth.uid ||  // alıcı okuyabilir
+        resource.data.saticiUid == request.auth.uid ||  // satıcı okuyabilir
+        resource.data.uid       == request.auth.uid     // geriye dönük uyumluluk
+      );
+      allow create: if girisYapti();
+      allow update: if isAdmin() ||
+        resource.data.buyerUid  == request.auth.uid ||
+        resource.data.saticiUid == request.auth.uid ||
+        resource.data.uid       == request.auth.uid;
+      allow delete: if isAdmin();
+
+      match /mesajlar/{mesajId} {
+        allow read:           if girisYapti();
+        allow create:         if girisYapti();
+        allow update, delete: if isAdmin();
+      }
+    }
+
+    // ── cekme_talepler ────────────────────────────────────────────────────
+    match /cekme_talepler/{talepId} {
+      allow read: if girisYapti() && (
+        isAdmin() || resource.data.uid == request.auth.uid
+      );
+      allow create: if girisYapti();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── iade_talepleri ────────────────────────────────────────────────────
+    match /iade_talepleri/{iadeId} {
+      allow read: if girisYapti() && (
+        isAdmin() ||
+        resource.data.magazaId == request.auth.uid ||
+        resource.data.uid      == request.auth.uid
+      );
+      allow create: if girisYapti();
+      allow update: if isAdmin() ||
+        resource.data.magazaId == request.auth.uid;
+      allow delete: if isAdmin();
+    }
+
+    // ── oneCikarTalepleri ─────────────────────────────────────────────────
+    match /oneCikarTalepleri/{talepId} {
+      allow read: if girisYapti() && (
+        isAdmin() || resource.data.magazaId == request.auth.uid
+      );
+      allow create: if isSatici() || isGencz();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── kampanyalar ───────────────────────────────────────────────────────
+    match /kampanyalar/{kampanyaId} {
+      allow read: if true;
+      allow create: if isSatici();
+      allow update: if isAdmin() ||
+        (isSatici() && resource.data.magazaId == request.auth.uid);
+      allow delete: if isAdmin() ||
+        (isSatici() && resource.data.magazaId == request.auth.uid);
+    }
+
+    // ── kullanicilar/{uid}/bildirimler ────────────────────────────────────
+    match /kullanicilar/{uid}/bildirimler/{bildirimId} {
+      allow read:   if girisYapti() && kendiUid(uid);
+      allow create: if girisYapti();
+      allow update: if girisYapti() && kendiUid(uid);
+      allow delete: if girisYapti() && (kendiUid(uid) || isAdmin());
+    }
+
+    // ── users (eski koleksiyon, geriye uyumluluk) ─────────────────────────
+    match /users/{uid} {
+      allow read:  if girisYapti();
+      allow write: if girisYapti() && (kendiUid(uid) || isAdmin());
+    }
+  }
+}

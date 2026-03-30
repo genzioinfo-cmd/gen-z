@@ -914,6 +914,7 @@ function renderRolKisayollar(user) {
     },
   ];
 
+  container.innerHTML = '';
   let added = 0;
   ROL_MAP.forEach(({ label, href, goster }) => {
     if (!isAdmin && !goster()) return;

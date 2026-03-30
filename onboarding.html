@@ -295,7 +295,7 @@ onAuthStateChanged(auth, async (user) => {
   try {
     const snap = await getDoc(doc(db, 'kullanicilar', user.uid));
     if (snap.exists() && snap.data().onboardingTamamlandi === true) {
-      window.location.href = 'gen-z.html';
+      window.location.href = 'index.html';
       return;
     }
   } catch(e) {}
@@ -454,19 +454,19 @@ window.finishOnboarding = async function() {
 // ── Ana sayfaya git
 window.goHome = function() {
   document.getElementById('btnFinish').disabled = true;
-  window.location.href = 'gen-z.html';
+  window.location.href = 'index.html';
 };
 
 // ── Atla → onboarding'i tamamlandı say ama boş kaydet
 window.skipToHome = async function() {
-  if (!_user) { window.location.href = 'gen-z.html'; return; }
+  if (!_user) { window.location.href = 'index.html'; return; }
   try {
     await updateDoc(doc(db, 'kullanicilar', _user.uid), {
       onboardingTamamlandi: true,
       guncellendi: serverTimestamp()
     });
   } catch(e) {}
-  window.location.href = 'gen-z.html';
+  window.location.href = 'index.html';
 };
 </script>
 <script>

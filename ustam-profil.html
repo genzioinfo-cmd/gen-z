@@ -325,6 +325,12 @@ const USTALAR=[
 ];
 
 function getU(id){return USTALAR.find(u=>u.id===id);}
+const _ls = {
+  get(k, fb = null) { try { const v = localStorage.getItem(k); return v !== null ? v : fb; } catch(e) { return fb; } },
+  set(k, v)         { try { localStorage.setItem(k, v); } catch(e) {} },
+  remove(k)         { try { localStorage.removeItem(k); } catch(e) {} },
+  getJSON(k, fb)    { try { return JSON.parse(localStorage.getItem(k)) ?? fb; } catch(e) { return fb; } },
+};
 let lang=_ls.get('genz-lang', 'tr');
 let theme=_ls.get('genz-theme', 'dark');
 let user=_ls.getJSON('genz-user', null);

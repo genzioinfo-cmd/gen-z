@@ -266,13 +266,6 @@ nav {
 .plan-name  { font-size: 11px; color: var(--text3); margin-top: 2px; font-weight: 600; }
 
 /* ── CTA BTN ── */
-/* ── YASAL ONAY CHECKBOXLARI ── */
-.onay-wrap { display: flex; flex-direction: column; gap: 10px; margin: 20px 0 18px; padding: 16px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07); border-radius: 10px; }
-.onay-satir { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
-.onay-satir input[type=checkbox] { width: 16px; height: 16px; min-width: 16px; margin-top: 2px; accent-color: var(--accent); cursor: pointer; }
-.onay-satir span { font-size: 12.5px; color: var(--text2); line-height: 1.5; }
-.onay-satir a { color: var(--accent); text-decoration: underline; }
-.onay-satir a:hover { opacity: .8; }
 .btn-apply {
   margin-top: 28px; width: 100%; padding: 15px;
   background: linear-gradient(135deg, var(--accent), var(--accent2));
@@ -523,26 +516,8 @@ nav, .modal-overlay-auth, .modal-box, .toast {
       <div class="f-field"><label>Telefon</label><input type="tel" placeholder="0555 000 00 00"/></div>
       <div class="f-field"><label>E-posta</label><input type="email" placeholder="ornek@mail.com"/></div>
       <div class="f-field"><label>Şehir</label><input type="text" placeholder="Ankara"/></div>
-      <div class="f-field"><label>TC Kimlik No / Vergi No</label><input type="text" placeholder="11 haneli TC veya 10 haneli Vergi No" maxlength="11"/></div>
-      <div class="f-field"><label>Vergi Dairesi</label><input type="text" placeholder="Örn: Çankaya Vergi Dairesi"/></div>
-      <div class="f-field"><label>Şirket / Mükellef Türü</label>
-        <select>
-          <option value="">Seçiniz</option>
-          <option>Şahıs Şirketi</option>
-          <option>Limited Şirket (Ltd. Şti.)</option>
-          <option>Anonim Şirket (A.Ş.)</option>
-          <option>Esnaf Muafiyeti</option>
-        </select>
-      </div>
-      <div class="f-field"><label>Ticaret Sicil No <span style="font-size:.7em;opacity:.5">(varsa)</span></label><input type="text" placeholder="Ticaret Sicil Numarası"/></div>
       <div class="f-field full"><label>Mağaza Açıklaması</label><textarea placeholder="Mağazanı kısaca tanıt..."></textarea></div>
       <div class="f-field full"><label>Satmayı planladığın ürünler</label><textarea placeholder="Hangi ürünleri satmayı düşünüyorsun?"></textarea></div>
-    </div>
-    <div class="onay-wrap">
-      <label class="onay-satir"><input type="checkbox" id="magaza-kvkk"/><span><a href="gizlilik.html" target="_blank">Gizlilik Politikası</a> ve KVKK kapsamında kişisel verilerimin işlenmesini okudum, kabul ediyorum.</span></label>
-      <label class="onay-satir"><input type="checkbox" id="magaza-sartlar"/><span><a href="kullanim-sartlari.html" target="_blank">Kullanım Koşulları</a>'nı okudum, kabul ediyorum.</span></label>
-      <label class="onay-satir"><input type="checkbox" id="magaza-vergi"/><span><a href="yasal-vergilendirme.html" target="_blank">Yasal vergilendirme hususlarını</a> okudum; GEN-Z ile iş ortaklığında Türkiye vergi mevzuatına uygun hareket edeceğimi kabul ediyorum.</span></label>
-      <label class="onay-satir"><input type="checkbox" id="magaza-komisyon"/><span>GEN-Z Ortaklık Sözleşmesi kapsamında platform komisyon oranlarını ve ödeme takvimini kabul ediyorum. Detaylar için <a href="iletisim.html" target="_blank">iletişime geçebilirsiniz</a>.</span></label>
     </div>
     <button class="btn-apply" onclick="submitForm('magaza')">🏪 Mağaza Başvurusu Gönder</button>
   </div>
@@ -574,26 +549,6 @@ nav, .modal-overlay-auth, .modal-box, .toast {
       <div class="f-field"><label>E-posta</label><input type="email" placeholder="ornek@mail.com"/></div>
       <div class="f-field"><label>Şehir</label><input type="text" placeholder="Ankara"/></div>
       <div class="f-field"><label>İlçe</label><input type="text" placeholder="Çankaya"/></div>
-      <div class="f-field"><label>TC Kimlik No</label><input type="text" placeholder="11 haneli TC Kimlik No" maxlength="11"/></div>
-      <div class="f-field"><label>Vergi No <span style="font-size:.7em;opacity:.5">(varsa)</span></label><input type="text" placeholder="10 haneli Vergi No" maxlength="10"/></div>
-      <div class="f-field"><label>Vergi Dairesi <span style="font-size:.7em;opacity:.5">(varsa)</span></label><input type="text" placeholder="Örn: Çankaya Vergi Dairesi"/></div>
-      <div class="f-field"><label>SGK Durumu</label>
-        <select>
-          <option value="">Seçiniz</option>
-          <option>SGK'lı (4/a - SSK)</option>
-          <option>Bağ-Kur (4/b)</option>
-          <option>Emekli</option>
-          <option>Kayıtlı Değil</option>
-        </select>
-      </div>
-      <div class="f-field"><label>Usta / Kalfa Belgesi</label>
-        <select id="usta-belge-var" onchange="toggleUstaBelge(this.value)">
-          <option value="">Seçiniz</option>
-          <option value="var">Var</option>
-          <option value="yok">Yok</option>
-        </select>
-      </div>
-      <div class="f-field" id="usta-belge-no-wrap" style="display:none"><label>Belge No</label><input type="text" placeholder="Usta/Kalfa Belgesi Numarası"/></div>
       <div class="f-field full"><label>Kendinizi Tanıtın</label><textarea placeholder="Deneyimleriniz, uzmanlık alanlarınız, referanslarınız..."></textarea></div>
       <div class="f-field full">
         <label>Abonelik Planı</label>
@@ -605,12 +560,6 @@ nav, .modal-overlay-auth, .modal-box, .toast {
           <div class="plan-opt" data-plan="1yil" onclick="selectPlan('1yil')"><div class="plan-price">₺999</div><div class="plan-name">1 Yıllık</div></div>
         </div>
       </div>
-    </div>
-    <div class="onay-wrap">
-      <label class="onay-satir"><input type="checkbox" id="usta-kvkk"/><span><a href="gizlilik.html" target="_blank">Gizlilik Politikası</a> ve KVKK kapsamında kişisel verilerimin işlenmesini okudum, kabul ediyorum.</span></label>
-      <label class="onay-satir"><input type="checkbox" id="usta-sartlar"/><span><a href="kullanim-sartlari.html" target="_blank">Kullanım Koşulları</a>'nı okudum, kabul ediyorum.</span></label>
-      <label class="onay-satir"><input type="checkbox" id="usta-vergi"/><span><a href="yasal-vergilendirme.html" target="_blank">Yasal vergilendirme hususlarını</a> okudum; GEN-Z ile iş ortaklığında Türkiye vergi mevzuatına uygun hareket edeceğimi kabul ediyorum.</span></label>
-      <label class="onay-satir"><input type="checkbox" id="usta-komisyon"/><span>USTA Ortaklık Sözleşmesi kapsamında platform komisyon oranlarını ve ödeme takvimini kabul ediyorum. Detaylar için <a href="iletisim.html" target="_blank">iletişime geçebilirsiniz</a>.</span></label>
     </div>
     <button class="btn-apply" onclick="submitForm('usta')">🔧 Usta Başvurusu Gönder</button>
   </div>
@@ -637,14 +586,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
       <div class="f-field"><label>Öğrenci E-postası</label><input type="email" placeholder="ad@uni.edu.tr"/></div>
       <div class="f-field"><label>Telefon</label><input type="tel" placeholder="0555 000 00 00"/></div>
       <div class="f-field"><label>Şehir</label><input type="text" placeholder="Ankara"/></div>
-      <div class="f-field"><label>Öğrenci Numarası</label><input type="text" placeholder="Öğrenci numaranız"/></div>
-      <div class="f-field full"><label>Öğrenci Belgesi <span style="font-size:.7em;opacity:.5">(PDF veya görsel)</span></label><input type="file" accept=".pdf,.jpg,.jpeg,.png" style="padding:.5rem;font-size:.78rem;color:var(--text2);"/></div>
       <div class="f-field full"><label>Kendinizi Tanıtın</label><textarea placeholder="Sanatsal ilgi alanların, ürettiğin eserler, hayallerin..."></textarea></div>
-    </div>
-    <div class="onay-wrap">
-      <label class="onay-satir"><input type="checkbox" id="gencz-kvkk"/><span><a href="gizlilik.html" target="_blank">Gizlilik Politikası</a> ve KVKK kapsamında kişisel verilerimin işlenmesini okudum, kabul ediyorum.</span></label>
-      <label class="onay-satir"><input type="checkbox" id="gencz-sartlar"/><span><a href="kullanim-sartlari.html" target="_blank">Kullanım Koşulları</a>'nı okudum, kabul ediyorum.</span></label>
-      <label class="onay-satir"><input type="checkbox" id="gencz-telif"/><span>Platforma yüklediğim içeriklerin telif hakkının bana ait olduğunu ve GEN-Z'nin bu içerikleri platform kapsamında kullanabileceğini kabul ediyorum.</span></label>
     </div>
     <button class="btn-apply" onclick="submitForm('gencz')">⚡ Genç-Z Başvurusu Gönder</button>
   </div>
@@ -697,7 +639,7 @@ nav, .modal-overlay-auth, .modal-box, .toast {
 
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ── SAFE STORAGE ── */
 const _ls = {
   get(k, fb = null) { try { const v = localStorage.getItem(k); return v !== null ? v : fb; } catch(e) { return fb; } },
@@ -760,10 +702,6 @@ window.toggleRole = function(role) {
     setTimeout(() => form.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
   }
 };
-window.toggleUstaBelge = function(val) {
-  const wrap = document.getElementById('usta-belge-no-wrap');
-  if (wrap) wrap.style.display = val === 'var' ? '' : 'none';
-};
 window.selectPlan = function(plan) {
   document.querySelectorAll('.plan-opt').forEach(o => o.classList.remove('active'));
   const el = document.querySelector('.plan-opt[data-plan="' + plan + '"]');
@@ -771,15 +709,6 @@ window.selectPlan = function(plan) {
 };
 window.submitForm = async function(role) {
   if (!currentUser) { openAuth('signin'); showToast('Başvuru için giriş yapman gerekiyor ⚠️'); return; }
-
-  // Yasal onay kontrolü
-  const onaylar = {
-    magaza: ['magaza-kvkk','magaza-sartlar','magaza-vergi','magaza-komisyon'],
-    usta:   ['usta-kvkk','usta-sartlar','usta-vergi','usta-komisyon'],
-    gencz:  ['gencz-kvkk','gencz-sartlar','gencz-telif'],
-  };
-  const hepsiOnaylandi = (onaylar[role] || []).every(id => document.getElementById(id)?.checked);
-  if (!hepsiOnaylandi) { showToast('Devam etmek için tüm onay kutularını işaretlemelisin ⚠️'); return; }
 
   // Form alanlarını topla
   const block = document.getElementById('form-' + role);
@@ -872,33 +801,7 @@ function safeObserve(elements, callback, options) {
   return observer;
 }
 
-/* ── ONAY CHECKBOX → BUTON DISABLE ── */
-function setupOnayValidation() {
-  const configs = [
-    { ids: ['magaza-kvkk','magaza-sartlar','magaza-vergi','magaza-komisyon'], btn: document.querySelector('#form-magaza .btn-apply') },
-    { ids: ['usta-kvkk','usta-sartlar','usta-vergi','usta-komisyon'],         btn: document.querySelector('#form-usta .btn-apply')   },
-    { ids: ['gencz-kvkk','gencz-sartlar','gencz-telif'],                      btn: document.querySelector('#form-gencz .btn-apply')  },
-  ];
-  configs.forEach(({ ids, btn }) => {
-    if (!btn) return;
-    btn.disabled = true;
-    btn.style.opacity = '0.45';
-    btn.style.cursor  = 'not-allowed';
-    const update = () => {
-      const allChecked = ids.every(id => document.getElementById(id)?.checked);
-      btn.disabled     = !allChecked;
-      btn.style.opacity = allChecked ? '1'   : '0.45';
-      btn.style.cursor  = allChecked ? 'pointer' : 'not-allowed';
-    };
-    ids.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.addEventListener('change', update);
-    });
-  });
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-  setupOnayValidation();
   document.querySelectorAll('.mobile-menu a').forEach(a => {
     a.addEventListener('click', () => {
       document.getElementById('mobileMenu').classList.remove('open');
@@ -920,11 +823,12 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         document.body.style.transition = 'opacity 0.25s';
         document.body.style.opacity = '0';
-        setTimeout(() => { window.location.href = href; }, 250);
+        setTimeout(() => { window.location.href = href; }, 270);
       });
     }
   });
 });
 </script>
+<script type="module" src="firebase-config.js"></script>
 </body>
 </html>

@@ -3,20 +3,23 @@
  * modpanel-ilan-gencz.js
  * getApp() kullanır — Firebase çakışması yok
  */
-import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, serverTimestamp, updateDoc, deleteDoc, doc }
+import { getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 
-// firebase-config.js window._genzAuth.db'yi set ediyor
-// modpanel.html de kendi db'sini init ediyor
-// Her ikisi de aynı Firebase app — getApps()[0] güvenli
-const _db = () => {
-  if(window._genzAuth?.db) return window._genzAuth.db;
-  const apps = getApps();
-  return apps.length ? getFirestore(apps[0]) : getFirestore(getApp());
-};
-
-// Fotoğraf fonksiyonları upload.js modülünden geliyor (window.ilanResimSec, window.gzResimSec vs.)
+let db;
+try {
+  db = getFirestore(getApp());
+} catch(e) {
+  // App henüz init edilmemişse bekle
+  const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+  const app = initializeApp({
+    apiKey:"AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ",
+    authDomain:"gen-z-io.firebaseapp.com",
+    projectId:"gen-z-io"
+  });
+  db = getFirestore(app);
+}
 
 // CSS: gz-kat-kart (modülden inject et)
 (function() {
@@ -73,10 +76,14 @@ const USTA_KAT_HIZMETLER = {
 };
 
 // Usta ilanı modal aç
-// Form içeriğini oluştur — sayfa yüklenince çağrılır
-function ilanFormIcerikOlustur() {
+window.ilanModalAc = function() {
+  // Ustanın kategorisini belirle
   const katRaw = (window._ustaVeri?.kategori || window._ustaVeri?.isKolu || '').toLowerCase();
   const hizmetler = USTA_KAT_HIZMETLER[katRaw] || null;
+
+  // Modal içeriği oluştur
+  const modalEl = document.getElementById('ilanModalIcerik');
+  if (!modalEl) return;
 
   const hizmetOptions = hizmetler
     ? hizmetler.map(h => `<div class="gz-kat-kart" onclick="ilanHizmetSec(this)" data-hizmet="${h}">${h}</div>`).join('')
@@ -84,108 +91,89 @@ function ilanFormIcerikOlustur() {
         `<optgroup label="${k.toUpperCase()}">${v.map(h=>`<option>${h}</option>`).join('')}</optgroup>`
       ).join('');
 
-  return `
+  modalEl.innerHTML = `
     <div style="display:flex;flex-direction:column;gap:.9rem;">
+
       ${hizmetler ? `
-      <div class="fa">
-        <label>🔧 Hizmet Seçin *</label>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.4rem;" id="ilanHizmetGrid">
+      <div class="sm-blok">
+        <div class="sm-blok-baslik">🔧 Hizmet Seçin</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.4rem;margin-top:.3rem;" id="ilanHizmetGrid">
           ${hizmetOptions}
         </div>
         <input class="fi" id="ilanHizmetOzel" placeholder="Listede yok? Buraya yaz…" style="margin-top:.5rem;font-size:.7rem;">
       </div>` : `
-      <div class="fa">
-        <label>🔧 Hizmet Türü *</label>
+      <div class="sm-blok">
+        <div class="sm-blok-baslik">🔧 Hizmet Türü</div>
         <select class="fi" id="ilanHizmetSec" style="font-size:.72rem;">${hizmetOptions}</select>
       </div>`}
 
-      <div class="f2">
-        <div class="fa">
-          <label>İlan Başlığı *</label>
-          <input class="fi" id="ilanBaslik" placeholder="Örn: Ankara'da Elektrik Tesisatı" style="font-size:.72rem;">
-        </div>
-        <div class="fa">
-          <label>Başlangıç Fiyatı (₺)</label>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
-            <input class="fi" id="ilanFiyat" type="number" placeholder="0" min="0" style="font-size:.72rem;">
-            <select class="fi" id="ilanFiyatTip" style="font-size:.72rem;">
-              <option value="saat">Saatlik</option>
-              <option value="is">İş Başı</option>
-              <option value="m2">m² başına</option>
-              <option value="gorusme">Görüşmeye göre</option>
-            </select>
+      <div class="sm-blok">
+        <div class="sm-blok-baslik">📝 İlan Detayları</div>
+        <div style="display:flex;flex-direction:column;gap:.6rem;">
+          <div>
+            <label class="dan-lbl">İlan Başlığı *</label>
+            <input class="fi" id="ilanBaslik" placeholder="Örn: Ankara'da Elektrik Tesisatı" style="font-size:.72rem;">
           </div>
-        </div>
-      </div>
-
-      <div class="f2">
-        <div class="fa">
-          <label>Şehir</label>
-          <input class="fi" id="ilanSehir" placeholder="Ankara" style="font-size:.72rem;" value="${window._ustaVeri?.sehir||''}">
-        </div>
-        <div class="fa">
-          <label>İlçe</label>
-          <input class="fi" id="ilanIlce" placeholder="Çankaya" style="font-size:.72rem;" value="${window._ustaVeri?.ilce||''}">
-        </div>
-      </div>
-
-      <div class="fa">
-        <label>Açıklama</label>
-        <textarea class="fi" id="ilanAciklama" placeholder="Deneyiminizi, kullandığınız malzemeleri, garantiyi anlatın…" style="font-size:.72rem;min-height:80px;resize:vertical;"></textarea>
-      </div>
-
-      <div class="fa">
-        <label>Müsait Günler / Saatler</label>
-        <input class="fi" id="ilanMusait" placeholder="Hafta içi 08:00-18:00, Cumartesi 09:00-14:00" style="font-size:.72rem;" value="${window._ustaVeri?.availability||''}">
-      </div>
-
-      <div class="fa">
-        <label>📷 Kapak Fotoğrafı (opsiyonel)</label>
-        <div style="border:1.5px dashed rgba(201,168,76,.2);border-radius:6px;padding:1.5rem;text-align:center;cursor:pointer;transition:all .25s;position:relative;"
-          onclick="document.getElementById('ilanResimInput').click()"
-          ondragover="event.preventDefault();this.style.borderColor='var(--gold)'"
-          ondragleave="this.style.borderColor='rgba(201,168,76,.2)'"
-          ondrop="ilanResimDrop(event)">
-          <input type="file" id="ilanResimInput" accept="image/*" style="display:none" onchange="ilanResimSec(this.files)">
-          <div id="ilanResimOnizleme" style="display:none;">
-            <img id="ilanResimImg" style="max-width:100%;max-height:160px;border-radius:6px;object-fit:cover;">
-            <button type="button" onclick="event.stopPropagation();ilanResimTemizle()" style="display:block;margin:.5rem auto 0;padding:.3rem .8rem;background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.3);color:#e05555;border-radius:4px;font-size:.58rem;cursor:pointer;">✕ Kaldır</button>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
+            <div>
+              <label class="dan-lbl">Başlangıç Fiyatı (₺)</label>
+              <input class="fi" id="ilanFiyat" type="number" placeholder="0" min="0" style="font-size:.72rem;">
+            </div>
+            <div>
+              <label class="dan-lbl">Fiyat Tipi</label>
+              <select class="fi" id="ilanFiyatTip" style="font-size:.72rem;">
+                <option value="saat">Saatlik</option>
+                <option value="is">İş Başı</option>
+                <option value="m2">m² başına</option>
+                <option value="gorusme">Görüşmeye göre</option>
+              </select>
+            </div>
           </div>
-          <div id="ilanResimPlaceholder">
-            <div style="font-size:1.8rem;margin-bottom:.4rem;opacity:.4;">📷</div>
-            <div style="font-size:.62rem;color:rgba(240,235,224,.42);">Fotoğraf seç veya sürükle bırak</div>
-            <div style="font-size:.55rem;color:rgba(240,235,224,.2);margin-top:.3rem;">JPG, PNG, WebP — max 1.5MB &nbsp;·&nbsp; <a href="https://squoosh.app" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:#c9a84c;opacity:.7;text-decoration:underline;">Boyutu buradan düşürebilirsin</a></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
+            <div>
+              <label class="dan-lbl">Şehir</label>
+              <input class="fi" id="ilanSehir" placeholder="Ankara" style="font-size:.72rem;" value="${window._ustaVeri?.sehir||''}">
+            </div>
+            <div>
+              <label class="dan-lbl">İlçe</label>
+              <input class="fi" id="ilanIlce" placeholder="Çankaya" style="font-size:.72rem;" value="${window._ustaVeri?.ilce||''}">
+            </div>
+          </div>
+          <div>
+            <label class="dan-lbl">Açıklama</label>
+            <textarea class="fi" id="ilanAciklama" placeholder="Deneyiminizi, kullandığınız malzemeleri, garantiyi anlatın…" style="font-size:.72rem;min-height:80px;resize:vertical;"></textarea>
+          </div>
+          <div>
+            <label class="dan-lbl">Müsait Günler / Saatler</label>
+            <input class="fi" id="ilanMusait" placeholder="Hafta içi 08:00-18:00, Cumartesi 09:00-14:00" style="font-size:.72rem;" value="${window._ustaVeri?.availability||''}">
           </div>
         </div>
       </div>
 
       <div class="ferr" id="ilanErr" style="display:none;"></div>
-      <div class="fok" id="ilanOk" style="display:none;"></div>
+      <button onclick="ilanGonder()" style="padding:1rem;background:linear-gradient(135deg,#5a3eb0,#7B5CF0);color:#fff;border:none;border-radius:6px;font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.1em;cursor:pointer;">✦ Admin Onayına Gönder</button>
+    </div>
+  `;
 
-      <div style="display:flex;gap:.6rem;">
-        <button onclick="ilanGonder()" class="submit-btn" style="flex:2;">✦ Admin Onayına Gönder</button>
-        <button onclick="ilanFormSifirla()" style="padding:.9rem 1.2rem;background:transparent;border:1px solid rgba(201,168,76,.22);color:var(--t2);font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;border-radius:3px;">✕ Sıfırla</button>
-      </div>
-    </div>`;
-}
+  // Kart seçimi için CSS
+  if (!document.getElementById('ilanKatCSS')) {
+    const s = document.createElement('style');
+    s.id = 'ilanKatCSS';
+    s.textContent = `.gz-kat-kart{padding:.45rem .7rem;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:6px;font-size:.65rem;cursor:pointer;transition:all .15s;text-align:center;} .gz-kat-kart:hover{border-color:var(--accent);} .gz-kat-kart.secili{background:rgba(123,92,240,.15);border-color:var(--accent);color:var(--accent2);font-weight:700;}`;
+    document.head.appendChild(s);
+  }
 
-window.ilanFormSifirla = function() {
-  const el = document.getElementById('ilanFormIcerik');
-  if(el) el.innerHTML = ilanFormIcerikOlustur();
-  window._ilanResimDosya = null;
-};
-
-// Sayfa açılınca formu doldur
-window.ilanSayfasiAc = function() {
-  const el = document.getElementById('ilanFormIcerik');
-  if(!el) return;
-  el.innerHTML = ilanFormIcerikOlustur();
-  if(typeof ustaYukle === 'function') ustaYukle();
+  document.getElementById('ilanModal').classList.add('open');
 };
 
 window.ilanHizmetSec = function(el) {
   document.querySelectorAll('#ilanHizmetGrid .gz-kat-kart').forEach(k=>k.classList.remove('secili'));
   el.classList.add('secili');
+};
+
+window.ilanModalKapat = function(e) {
+  if (e && e.target !== document.getElementById('ilanModal')) return;
+  document.getElementById('ilanModal').classList.remove('open');
 };
 
 window.ilanGonder = async function() {
@@ -209,22 +197,12 @@ window.ilanGonder = async function() {
   if (!baslik) { errEl.textContent='İlan başlığı zorunludur.'; errEl.style.display='block'; return; }
   if (!hizmet) { errEl.textContent='Hizmet türü seçin.'; errEl.style.display='block'; return; }
 
-  // Kapak fotoğrafı yükle (upload.js)
-  let kapakUrl = null;
-  if (window._ilanResimDosya) {
-    try {
-      kapakUrl = await window.ilanKapakYukle();
-    } catch(e) {
-      errEl.textContent = '⚠ Fotoğraf yüklenemedi: ' + e.message; errEl.style.display='block'; return;
-    }
-  }
-
   try {
-    await addDoc(collection(_db(),'ustam_ilanlar'),{
+    await addDoc(collection(db,'ustam_ilanlar'),{
       ustaUid    : window._aktifUid,
       ustaAdi    : window._ustaVeri?.displayName || window._ustaVeri?.ad || '',
       ustaEmail  : window._ustaVeri?.email || '',
-      kategori   : (window._ustaVeri?.kategori || window._ustaVeri?.isKolu || hizmet).toLowerCase(),
+      kategori   : (window._ustaVeri?.kategori||_ustaVeri?.isKolu||hizmet).toLowerCase(),
       hizmet,
       ad         : baslik,
       fiyat,
@@ -233,14 +211,12 @@ window.ilanGonder = async function() {
       ilce,
       aciklama,
       musaitlik  : musait,
-      kapakFoto  : kapakUrl,
       durum      : 'bekliyor',
       ts         : serverTimestamp()
     });
-    const okEl = document.getElementById('ilanOk');
-    if(okEl){ okEl.textContent='✦ İlanınız admin onayına gönderildi!'; okEl.style.display='block'; setTimeout(()=>okEl.style.display='none',4000); }
-    ilanFormSifirla();
-    if(typeof ustaYukle==='function') ustaYukle();
+    document.getElementById('ilanModal').classList.remove('open');
+    (typeof toast==='function'?toast:window.toast||console.log)('✦ İlanınız admin onayına gönderildi!');
+    ustaYukle();
   } catch(e) {
     errEl.textContent='Hata: '+e.message; errEl.style.display='block';
   }
@@ -295,8 +271,9 @@ let _gzIcerikler = [];
 window.genczKatGridOlustur = function() {
   const grid = document.getElementById('gzKatGrid');
   if (!grid) return;
-  // Her seferinde yeniden oluştur
-  grid.innerHTML = '';
+  // Sadece ilk kez oluştur
+  if (grid.dataset.hazir === '1') return;
+  grid.dataset.hazir = '1';
   Object.entries(GENCZ_KATEGORILER).forEach(([ad, meta]) => {
     const el = document.createElement('div');
     el.className = 'gz-kat-kart';
@@ -328,28 +305,6 @@ window.gzKatSec = function(ad, el) {
     return `<div><label class="dan-lbl">${cfg.label}</label>
       <input class="fi" id="gzAlan_${alan}" type="${cfg.type||'text'}" placeholder="${cfg.placeholder}" style="font-size:.72rem;"></div>`;
   }).join('');
-
-  // Kapak fotoğrafı alanı ekle
-  alanDiv.innerHTML += `
-    <div>
-      <label class="dan-lbl">📷 Kapak Fotoğrafı (opsiyonel)</label>
-      <div style="border:1.5px dashed rgba(123,92,240,.25);border-radius:6px;padding:1.5rem;text-align:center;cursor:pointer;transition:all .25s;"
-        onclick="document.getElementById('gzResimInput').click()"
-        ondragover="event.preventDefault();this.style.borderColor='#7B5CF0'"
-        ondragleave="this.style.borderColor='rgba(123,92,240,.25)'"
-        ondrop="gzResimDrop(event)">
-        <input type="file" id="gzResimInput" accept="image/*" style="display:none" onchange="gzResimSec(this.files)">
-        <div id="gzResimOnizleme" style="display:none;">
-          <img id="gzResimImg" style="max-width:100%;max-height:160px;border-radius:6px;object-fit:cover;">
-          <button type="button" onclick="event.stopPropagation();gzResimTemizle()" style="display:block;margin:.5rem auto 0;padding:.3rem .8rem;background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.3);color:#e05555;border-radius:4px;font-size:.58rem;cursor:pointer;">✕ Kaldır</button>
-        </div>
-        <div id="gzResimPlaceholder">
-          <div style="font-size:1.8rem;margin-bottom:.4rem;opacity:.4;">📷</div>
-          <div style="font-size:.62rem;color:rgba(240,235,224,.42);">Fotoğraf seç veya sürükle bırak</div>
-          <div style="font-size:.55rem;color:rgba(240,235,224,.2);margin-top:.3rem;">JPG, PNG, WebP — max 1.5MB &nbsp;·&nbsp; <a href="https://squoosh.app" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:#a78bfa;opacity:.7;text-decoration:underline;">Boyutu buradan düşürebilirsin</a></div>
-        </div>
-      </div>
-    </div>`;
 
   formDiv.style.display = 'flex';
   const errEl = document.getElementById('gzErr');
@@ -392,23 +347,12 @@ window.gzIcerikGonder = async function() {
 
   if (eksik) { errEl.textContent='Başlık ve açıklama zorunludur.'; errEl.style.display='block'; return; }
 
-  // Kapak fotoğrafı yükle (upload.js)
-  let kapakUrl = null;
-  if (window._gzResimDosya) {
-    try {
-      kapakUrl = await window.gzKapakYukle();
-    } catch(e) {
-      errEl.textContent = '⚠ Fotoğraf yüklenemedi: ' + e.message; errEl.style.display='block'; return;
-    }
-  }
-
   try {
-    await addDoc(collection(_db(),'gencz_icerikler'),{
+    await addDoc(collection(db,'gencz_icerikler'),{
       uid      : window._aktifUid,
       email    : window._ustaVeri?.email||'',
       kategori : _gzSeciliKat,
       ...veri,
-      kapakFoto: kapakUrl,
       durum    : 'bekliyor',
       ts       : serverTimestamp()
     });
@@ -417,7 +361,6 @@ window.gzIcerikGonder = async function() {
     // Formu sıfırla
     meta.alanlar.forEach(alan => { const el=document.getElementById('gzAlan_'+alan); if(el) el.value=''; });
     _gzSeciliKat = null;
-    window._gzResimDosya = null;
     document.querySelectorAll('#gzKatGrid .gz-kat-kart').forEach(k=>k.classList.remove('secili'));
     document.getElementById('gzDinamikForm').style.display='none';
     genczYukle();
@@ -430,12 +373,11 @@ window.genczYukle = async function genczYukle() {
   if (!window._aktifUid) return;
   try {
     const snap = await getDocs(query(
-      collection(_db(),'gencz_icerikler'),
-      where('uid','==',window._aktifUid)
+      collection(db,'gencz_icerikler'),
+      where('uid','==',window._aktifUid),
+      orderBy('ts','desc')
     )).catch(()=>null);
     _gzIcerikler = snap ? snap.docs.map(d=>({id:d.id,...d.data()})) : [];
-    // Client-side sırala (index gerektirmez)
-    _gzIcerikler.sort((a,b)=>(b.ts?.seconds||0)-(a.ts?.seconds||0));
 
     // Özet
     const s = (id,v) => { const el=document.getElementById(id); if(el)el.textContent=v; };
@@ -454,38 +396,20 @@ window.gzListeRender = function gzListeRender() {
   let liste = _gzIcerikler;
   if (_gzFiltreSec!=='hepsi') liste=liste.filter(i=>i.durum===_gzFiltreSec);
   if (!liste.length) { el.innerHTML='<div style="text-align:center;padding:2rem;color:var(--t2);font-style:italic;">İçerik bulunamadı</div>'; return; }
-  el.innerHTML=liste.map(i=>{
-    const durum=i.durum||'bekliyor';
-    const durumRenk=durum==='onaylandi'?'var(--green)':durum==='reddedildi'?'var(--red)':'var(--orange)';
-    const durumT=durum==='onaylandi'?'✅ Onaylı':durum==='reddedildi'?'❌ Reddedildi':'⏳ Bekliyor';
-    const tarih=i.ts?.toDate?i.ts.toDate().toLocaleDateString('tr-TR'):'—';
-    const redSebebiHTML = durum==='reddedildi' && i.redSebep
-      ? `<div style="margin-top:.5rem;padding:.5rem .7rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.2);border-radius:4px;">
-          <div style="font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:.2rem;">⚠️ Red Sebebi</div>
-          <div style="font-size:.65rem;color:rgba(240,238,255,.75);line-height:1.6;">${i.redSebep}</div>
-        </div>` : '';
-    const tekrarBtn = durum==='reddedildi'
-      ? `<button onclick="gzTekrarGonderModal('${i.id}')" style="margin-top:.5rem;padding:.4rem .9rem;background:rgba(92,240,180,.08);border:1px solid rgba(92,240,180,.3);color:#5CF0B4;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">🔄 Düzelt & Tekrar Gönder</button>` : '';
-    const duzenleBtn = durum==='bekliyor'
-      ? `<button onclick="gzDuzenle('${i.id}')" style="margin-top:.5rem;padding:.4rem .9rem;background:rgba(123,92,240,.1);border:1px solid rgba(123,92,240,.35);color:#a78bfa;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">✏️ Düzenle</button>` : '';
-    const silBtn = `<button onclick="gzSil('${i.id}')" style="margin-top:.5rem;margin-left:.4rem;padding:.4rem .9rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.25);color:var(--red);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">🗑 Sil</button>`;
-    return `<div style="background:rgba(255,255,255,.022);border:1px solid var(--border);border-radius:6px;padding:1rem 1.2rem;margin-bottom:.7rem;${durum==='reddedildi'?'border-color:rgba(224,85,85,.25);':''}">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
-        <div>
-          <span style="font-size:.5rem;background:rgba(123,92,240,.12);color:#a78bfa;border:1px solid rgba(123,92,240,.25);padding:.1rem .45rem;border-radius:10px;margin-right:.4rem;">${GENCZ_KATEGORILER[i.kategori]?.ikon||''} ${i.kategori||'—'}</span>
-          <strong style="font-size:.75rem;">${i.baslik||'—'}</strong>
-          <div style="font-size:.62rem;color:var(--t2);margin-top:.2rem;">${i.aciklama||'—'}</div>
-        </div>
-        <div style="text-align:right;flex-shrink:0;">
-          <span style="font-size:.6rem;font-weight:700;color:${durumRenk};">${durumT}</span>
-          <div style="font-size:.55rem;color:var(--t2);margin-top:.15rem;">${tarih}</div>
-        </div>
-      </div>
-      ${redSebebiHTML}
-      <div>${duzenleBtn}${tekrarBtn}${silBtn}</div>
-    </div>`;
-  }).join('');
-};
+  el.innerHTML=`<table><thead><tr><th>Kategori</th><th>Başlık</th><th>Açıklama</th><th>Tarih</th><th>Durum</th></tr></thead><tbody>
+    ${liste.map(i=>{
+      const durum=i.durum||'bekliyor';
+      const durumT=durum==='onaylandi'?'✅ Onaylı':durum==='reddedildi'?'❌ Reddedildi':'⏳ Bekliyor';
+      const tarih=i.ts?.toDate?i.ts.toDate().toLocaleDateString('tr-TR'):'—';
+      return `<tr>
+        <td style="font-size:.65rem;">${GENCZ_KATEGORILER[i.kategori]?.ikon||''} ${i.kategori||'—'}</td>
+        <td style="font-weight:600;font-size:.72rem;">${i.baslik||'—'}</td>
+        <td style="font-size:.65rem;color:var(--t2);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${i.aciklama||'—'}</td>
+        <td style="font-size:.65rem;color:var(--t2);">${tarih}</td>
+        <td><span style="font-size:.6rem;font-weight:700;">${durumT}</span></td>
+      </tr>`;
+    }).join('')}</tbody></table>`;
+}
 
 window.gzFiltre=function(tip,btn){
   _gzFiltreSec=tip;
@@ -494,137 +418,14 @@ window.gzFiltre=function(tip,btn){
   gzListeRender();
 };
 
-window.gzTekrarGonderModal = function(id) {
-  const i = _gzIcerikler.find(x=>x.id===id);
-  if(!i) return;
-  // Modal yoksa oluştur
-  let modal = document.getElementById('gzTekrarModal');
-  if(!modal){
-    modal = document.createElement('div');
-    modal.id = 'gzTekrarModal';
-    modal.style.cssText = 'position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1rem;';
-    modal.innerHTML = `
-      <div style="background:#0d0d14;border:1px solid rgba(123,92,240,.25);border-radius:8px;padding:1.6rem;width:min(460px,94vw);">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
-          <h3 style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:300;">🔄 Tekrar Gönder</h3>
-          <button onclick="document.getElementById('gzTekrarModal').remove()" style="background:none;border:none;color:var(--t2);font-size:1.2rem;cursor:pointer;">✕</button>
-        </div>
-        <p style="font-size:.68rem;color:var(--t2);margin-bottom:1rem;line-height:1.7;">Admin'e bir not bırakabilirsin. Örn: "Görsel güncellendi", "Açıklama düzeltildi"</p>
-        <label style="display:block;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--t2);margin-bottom:.4rem;">Notun (isteğe bağlı)</label>
-        <textarea id="gzTekrarNot" placeholder="Örn: Görseli değiştirdim, fiyatı güncelledim…"
-          style="width:100%;min-height:90px;background:rgba(255,255,255,.03);border:1px solid rgba(123,92,240,.2);border-radius:4px;padding:.7rem 1rem;font-family:'DM Sans',sans-serif;font-size:.72rem;color:var(--cream);outline:none;resize:vertical;line-height:1.6;"></textarea>
-        <div style="display:flex;gap:.6rem;margin-top:1rem;justify-content:flex-end;">
-          <button onclick="document.getElementById('gzTekrarModal').remove()" style="padding:.6rem 1.2rem;background:none;border:1px solid var(--border);color:var(--t2);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.62rem;cursor:pointer;">İptal</button>
-          <button id="gzTekrarOnayla" style="padding:.6rem 1.4rem;background:rgba(92,240,180,.1);border:1px solid rgba(92,240,180,.3);color:#5CF0B4;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:700;cursor:pointer;">🔄 Onaya Gönder</button>
-        </div>
-      </div>`;
-    document.body.appendChild(modal);
-  }
-  document.getElementById('gzTekrarNot').value = '';
-  document.getElementById('gzTekrarOnayla').onclick = () => gzTekrarGonderOnayla(id);
-};
-
-window.gzTekrarGonderOnayla = async function(id) {
-  const not = document.getElementById('gzTekrarNot')?.value.trim();
-  try {
-    const guncelleme = { durum:'bekliyor', redSebep:null, guncellendi:serverTimestamp() };
-    if(not) guncelleme.duzeltmeNotu = not;
-    await updateDoc(doc(_db(),'gencz_icerikler',id), guncelleme);
-    const i = _gzIcerikler.find(x=>x.id===id);
-    if(i){ i.durum='bekliyor'; i.redSebep=null; }
-    document.getElementById('gzTekrarModal')?.remove();
-    if(typeof toast==='function') toast('✅ İçerik tekrar onaya gönderildi!');
-    gzListeRender();
-  } catch(e) {
-    if(typeof toast==='function') toast('Hata: '+e.message,'err');
-  }
-};
-
-window.gzSil = async function(id) {
-  if(!confirm('Bu içeriği silmek istediğine emin misin?')) return;
-  try {
-    await deleteDoc(doc(_db(),'gencz_icerikler',id));
-    _gzIcerikler = _gzIcerikler.filter(x=>x.id!==id);
-    if(typeof toast==='function') toast('🗑 İçerik silindi.');
-    gzListeRender();
-    const s=(elId,v)=>{const el=document.getElementById(elId);if(el)el.textContent=v;};
-    s('gzIcerikSay', _gzIcerikler.length);
-    s('gzOnayliSay', _gzIcerikler.filter(i=>i.durum==='onaylandi').length);
-    s('gzBekliyor',  _gzIcerikler.filter(i=>i.durum==='bekliyor').length);
-  } catch(e) {
-    if(typeof toast==='function') toast('Hata: '+e.message,'err');
-  }
-};
-
-// ── GENÇ-Z DÜZENLE (bekliyor) ────────────────────────────────────────────
-window.gzDuzenle = function(id) {
-  const i = _gzIcerikler.find(x=>x.id===id);
-  if(!i){ if(typeof toast==='function') toast('İçerik bulunamadı.','err'); return; }
-  const meta = GENCZ_KATEGORILER[i.kategori];
-  if(!meta){ if(typeof toast==='function') toast('Kategori tanımlı değil.','err'); return; }
-
-  let modal = document.getElementById('gzDuzenleModal');
-  if(!modal){
-    modal = document.createElement('div');
-    modal.id = 'gzDuzenleModal';
-    modal.style.cssText = 'position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1rem;overflow-y:auto;';
-    modal.onclick = e => { if(e.target===modal) modal.remove(); };
-    document.body.appendChild(modal);
-  }
-
-  const alanHTML = meta.alanlar.map(alan => {
-    const cfg = GENCZ_ALAN_LABELS[alan];
-    if(!cfg) return '';
-    const val = (i[alan]||'').toString().replace(/"/g,'&quot;').replace(/</g,'&lt;');
-    if(cfg.type==='textarea'){
-      return `<div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.35rem;">${cfg.label}</label>
-        <textarea class="fi" id="gzd_${alan}" placeholder="${cfg.placeholder}" style="width:100%;min-height:70px;resize:vertical;font-size:.72rem;box-sizing:border-box;">${i[alan]||''}</textarea></div>`;
-    }
-    return `<div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.35rem;">${cfg.label}</label>
-      <input class="fi" id="gzd_${alan}" type="${cfg.type||'text'}" placeholder="${cfg.placeholder}" value="${val}" style="width:100%;font-size:.72rem;box-sizing:border-box;"></div>`;
-  }).join('');
-
-  modal.innerHTML = `
-    <div style="background:#0d0d14;border:1px solid rgba(123,92,240,.25);border-radius:10px;padding:1.8rem;width:min(500px,95vw);max-height:90vh;overflow-y:auto;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;">
-        <h3 style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:300;color:var(--cream);">✏️ İçeriği Düzenle <span style="font-size:.6rem;color:#a78bfa;margin-left:.4rem;">${meta.ikon} ${i.kategori}</span></h3>
-        <button onclick="document.getElementById('gzDuzenleModal').remove()" style="background:none;border:none;color:var(--t2);font-size:1.2rem;cursor:pointer;">✕</button>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:.85rem;">
-        ${alanHTML}
-        <div id="gzdErr" style="display:none;padding:.6rem .8rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.25);border-radius:4px;font-size:.68rem;color:#e05555;"></div>
-        <div style="display:flex;gap:.6rem;justify-content:flex-end;margin-top:.4rem;">
-          <button onclick="document.getElementById('gzDuzenleModal').remove()" style="padding:.65rem 1.2rem;background:none;border:1px solid rgba(255,255,255,.08);color:rgba(240,238,255,.5);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.62rem;cursor:pointer;">İptal</button>
-          <button onclick="gzDuzenleKaydet('${id}')" style="padding:.65rem 1.4rem;background:rgba(123,92,240,.15);border:1px solid rgba(123,92,240,.4);color:#a78bfa;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:700;cursor:pointer;">✦ Kaydet — Onay Bekliyor</button>
-        </div>
-      </div>
-    </div>`;
-};
-
-window.gzDuzenleKaydet = async function(id) {
-  const i = _gzIcerikler.find(x=>x.id===id);
-  if(!i) return;
-  const meta = GENCZ_KATEGORILER[i.kategori];
-  if(!meta) return;
-  const err = document.getElementById('gzdErr');
-  const veri = {};
-  let eksik = false;
-  meta.alanlar.forEach(alan => {
-    const el = document.getElementById('gzd_'+alan);
-    if(el){ veri[alan] = el.value.trim(); if((alan==='baslik'||alan==='aciklama')&&!veri[alan]) eksik=true; }
-  });
-  if(eksik){ err.textContent='Başlık ve açıklama zorunludur.'; err.style.display='block'; return; }
-  try {
-    await updateDoc(doc(_db(),'gencz_icerikler',id),{
-      ...veri, durum:'bekliyor', guncellendi:serverTimestamp()
-    });
-    Object.assign(i, veri, {durum:'bekliyor'});
-    document.getElementById('gzDuzenleModal')?.remove();
-    if(typeof toast==='function') toast('✦ İçerik güncellendi, onay bekliyor.');
-    gzListeRender();
-  } catch(e){
-    err.textContent='Hata: '+e.message; err.style.display='block';
-  }
-};
-
-// patchGit kaldırıldı — window.git artık modpanel.html'de direkt tanımlı
+// Genç-z sayfasına geçince grid oluştur — window.git hazır olana kadar bekle
+function patchGit() {
+  if (!window.git) { setTimeout(patchGit, 200); return; }
+  const _orig = window.git;
+  window.git = function(id, btn) {
+    _orig(id, btn);
+    if (id==='gencz-yeni') genczKatGridOlustur();
+    if (id==='gencz-icerik'||id==='gencz-ozet') genczYukle();
+  };
+}
+patchGit();

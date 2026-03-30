@@ -71,7 +71,7 @@ function _rolBadgeGuncelle(ud) {
   if(isPro)                rozetler.push({txt:'⚡ Büyük Mağaza',  bg:'rgba(201,168,76,.12)',renk:'#d4a83e', border:'rgba(201,168,76,.35)'});
   if(roller.includes('usta')||ud.ustaOnay)
                            rozetler.push({txt:'🔨 Usta',          bg:'rgba(123,92,240,.15)',renk:'#a78bfa', border:'rgba(123,92,240,.3)'});
-  if(roller.includes('gencz')||ud.gencimDurum==='onaylandi'||ud.rol==='gencz')
+  if(roller.includes('gencz')||ud.gencimDurum==='onaylandi')
                            rozetler.push({txt:'⚡ Genç-Z',        bg:'rgba(92,240,180,.1)', renk:'#5CF0B4', border:'rgba(92,240,180,.25)'});
   if(ud.magazaOnay||roller.includes('satici'))
                            rozetler.push({txt:'🏪 Satıcı',        bg:'rgba(255,153,102,.1)',renk:'#ff9966', border:'rgba(255,153,102,.25)'});
@@ -161,85 +161,3 @@ window._genzSync = {
   yukle:  () => _uid && firestoredenYukle(_uid),
   temizle: hassasVerileriTemizle,
 };
-
-/* ══════════════════════════════════════════════════
-   KVKK & GDPR — Zorunlu Rıza & Veri Yönetimi
-   ══════════════════════════════════════════════════ */
-
-/**
- * Kullanıcının KVKK/Gizlilik rızasını Firestore'a kaydet
- * Çağrı zamanı: ilk kayıt veya rıza güncellemesi
- */
-export async function kvkkRizaKaydet(uid, secimler = {}) {
-  try {
-    const riza = {
-      kvkkOkundu:          secimler.kvkk        ?? true,
-      kullanımSartlari:    secimler.kullanim     ?? true,
-      pazarlamaIzni:       secimler.pazarlama    ?? false,
-      cerezIzni:           secimler.cerez        ?? false,
-      ucuncuTarafPaylaşım: secimler.ucuncuTaraf  ?? false,
-      rizaTarihi:          new Date().toISOString(),
-      rizaIp:              'client-side',        // sunucu tarafında doldurulabilir
-      rizaVersiyon:        '1.0',
-    };
-    await setDoc(doc(db, 'kullanici_verileri', uid), { kvkk: riza }, { merge: true });
-    await setDoc(doc(db, 'kullanicilar', uid),      { kvkk: riza }, { merge: true });
-    console.info('KVKK rızası kaydedildi');
-    return true;
-  } catch(e) {
-    console.warn('KVKK kayıt hatası:', e);
-    return false;
-  }
-}
-
-/**
- * Kullanıcının kişisel verilerini dışa aktar (KVKK Madde 11 — Erişim Hakkı)
- */
-export async function kisiselVeriDısaAktar(uid) {
-  try {
-    const [kulRef, verRef] = await Promise.all([
-      getDoc(doc(db, 'kullanicilar', uid)),
-      getDoc(doc(db, 'kullanici_verileri', uid)),
-    ]);
-    const veri = {
-      profil:   kulRef.exists()  ? kulRef.data()  : {},
-      veriler:  verRef.exists()  ? verRef.data()  : {},
-      ihracTarihi: new Date().toISOString(),
-    };
-    // Hassas alanları çıkar
-    delete veri.profil.passwordHash;
-    const blob = new Blob([JSON.stringify(veri, null, 2)], { type: 'application/json' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href = url; a.download = 'kisisel-verilerim.json'; a.click();
-    URL.revokeObjectURL(url);
-    return true;
-  } catch(e) {
-    console.warn('Veri dışa aktarım hatası:', e);
-    return false;
-  }
-}
-
-/**
- * Kullanıcı hesabını ve tüm kişisel verilerini sil (KVKK Madde 7 — Silme Hakkı)
- * NOT: Firebase Auth silme işlemi için kullanıcının yeniden giriş yapması gerekebilir
- */
-export async function hesabiSil(uid) {
-  try {
-    // 1. Firestore verilerini sil
-    await Promise.all([
-      setDoc(doc(db, 'kullanicilar', uid),      { silindi: true, silinmeTarihi: new Date().toISOString(), email: '[silindi]', displayName: '[silindi]' }, { merge: true }),
-      setDoc(doc(db, 'kullanici_verileri', uid), { silindi: true, silinmeTarihi: new Date().toISOString(), sepet: [], favoriler: [], siparisler: [], adresler: [] }, { merge: true }),
-    ]);
-    // 2. localStorage temizle
-    hassasVerileriTemizle();
-    return true;
-  } catch(e) {
-    console.warn('Hesap silme hatası:', e);
-    return false;
-  }
-}
-
-// Global erişim
-window._genzKVKK = { kvkkRizaKaydet, kisiselVeriDısaAktar, hesabiSil };
-

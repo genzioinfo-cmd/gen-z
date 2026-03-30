@@ -419,37 +419,6 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
 .stok-row-kritik{background:rgba(255,80,80,.04)!important;}
 .stok-row-bitti{background:rgba(80,80,80,.06)!important;opacity:.7;}
 
-/* ── PROJE KARTI ── */
-.prj-kart{background:rgba(255,255,255,.022);border:1px solid var(--border);border-radius:8px;padding:1.4rem 1.6rem;margin-bottom:.9rem;transition:border-color .25s;}
-.prj-kart:hover{border-color:rgba(123,92,240,.35);}
-.prj-kart.onay-bekliyor{border-color:rgba(230,126,34,.5);animation:prjPulse 2s infinite;}
-@keyframes prjPulse{0%,100%{box-shadow:0 0 0 0 rgba(230,126,34,0);}50%{box-shadow:0 0 0 4px rgba(230,126,34,.15);}}
-.prj-ust{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;}
-.prj-baslik{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:300;margin-bottom:.2rem;}
-.prj-meta{font-size:.6rem;color:var(--t2);letter-spacing:.05em;}
-.prj-bar-wrap{margin:.9rem 0;}
-.prj-bar-label{display:flex;justify-content:space-between;font-size:.55rem;color:var(--t2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.35rem;}
-.prj-bar-track{height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;}
-.prj-bar-fill{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1);background:linear-gradient(90deg,#7B5CF0,#5CF0B4);}
-.prj-bar-fill.iptal{background:var(--red);}
-.prj-bar-fill.tamam{background:var(--green);}
-.prj-adimlar{display:flex;gap:.5rem;flex-wrap:wrap;margin:.8rem 0;}
-.prj-adim{font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .6rem;border-radius:20px;border:1px solid rgba(255,255,255,.08);color:var(--t2);}
-.prj-adim.onaylandi{background:rgba(76,175,130,.1);border-color:rgba(76,175,130,.3);color:var(--green);}
-.prj-adim.reddedildi{background:rgba(224,85,85,.1);border-color:rgba(224,85,85,.3);color:var(--red);}
-.prj-adim.bekliyor{background:rgba(230,126,34,.1);border-color:rgba(230,126,34,.3);color:var(--orange);}
-.prj-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;}
-.prj-ilerleme-btn{padding:.45rem 1rem;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border:1px solid rgba(123,92,240,.35);background:rgba(123,92,240,.08);color:#a48af0;transition:all .2s;}
-.prj-ilerleme-btn:hover{border-color:var(--gold);background:rgba(123,92,240,.18);color:var(--cream);}
-.prj-ilerleme-btn:disabled{opacity:.35;cursor:not-allowed;}
-.prj-ilerleme-btn.tamam-btn{border-color:rgba(76,175,130,.4);background:rgba(76,175,130,.08);color:var(--green);}
-.prj-ilerleme-btn.tamam-btn:hover{background:rgba(76,175,130,.2);}
-.prj-durum{font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .65rem;border-radius:20px;white-space:nowrap;}
-.prj-durum.devam{color:var(--orange);background:rgba(230,126,34,.1);border:1px solid rgba(230,126,34,.25);}
-.prj-durum.tamamlandi{color:var(--green);background:rgba(76,175,130,.1);border:1px solid rgba(76,175,130,.25);}
-.prj-durum.iptal{color:var(--red);background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.25);}
-.prj-durum.onay-bk{color:var(--orange);background:rgba(230,126,34,.15);border:1px solid rgba(230,126,34,.4);}
-
 </style>
 </head>
 <body>
@@ -505,17 +474,18 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
           <button class="sb-btn" onclick="git('finans',this)"><span class="ikon">💰</span> Finans</button>
           <button class="sb-btn" onclick="git('finans-danisman',this)"><span class="ikon">🧠</span> Finansal Danışman</button>
           <button class="sb-btn" onclick="git('vergi-takvim',this)"><span class="ikon">🗓️</span> Vergi Takvimi <span class="sb-badge" id="vergiAlertBadge" style="display:none;background:#ff6b6b;">!</span></button>
-          <button class="sb-btn" onclick="git('gelir-gider',this)"><span class="ikon">📒</span> Gelir & Gider</button>
           <button class="sb-btn" onclick="git('one-cikar',this)"><span class="ikon">⭐</span> Öne Çıkar</button>
         </div>
         <!-- GENÇ-Z BÖLÜMÜ -->
         <div id="genczMenuBlok" style="display:none;border-top:1px solid rgba(123,92,240,.15);margin:.5rem 0;padding-top:.5rem;">
           <div style="font-size:.45rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(123,92,240,.5);padding:.3rem .8rem .2rem;">⚡ Genç-Z</div>
-          <button class="sb-btn" onclick="git('gencz-ozet',this)"><span class="ikon">📊</span> Özet</button>
-          <button class="sb-btn" onclick="git('gencz-yeni',this)"><span class="ikon">🛍</span> Ürün / İçerik Ekle</button>
+          <button class="sb-btn" onclick="git('gencz-ozet',this)"><span class="ikon">📊</span> Genel Bakış</button>
           <button class="sb-btn" onclick="git('gencz-icerik',this)"><span class="ikon">🎨</span> İçeriklerim</button>
-          <button class="sb-btn" onclick="git('gencz-ozel-istekler',this)"><span class="ikon">✨</span> Özel İstekler <span class="sb-badge" id="ozelIstekBadge" style="display:none;background:linear-gradient(135deg,#7B5CF0,#9b6ef0);"></span></button>
-          <button class="sb-btn" onclick="git('gelir-gider',this)"><span class="ikon">📒</span> Gelir & Gider</button>
+          <button class="sb-btn" onclick="git('gencz-yeni',this)"><span class="ikon">✏️</span> Yeni İçerik</button>
+          <button class="sb-btn" onclick="git('gencz-magaza',this)"><span class="ikon">🛍</span> Dijital Mağazam</button>
+          <button class="sb-btn" onclick="git('gencz-kazanc',this)"><span class="ikon">💰</span> Kazancım</button>
+          <button class="sb-btn" onclick="git('gencz-portfolyo',this)"><span class="ikon">🖼</span> Portföyüm</button>
+          <button class="sb-btn" onclick="git('gencz-analitik',this)"><span class="ikon">📈</span> İçerik Analitik</button>
         </div>
 
         <!-- USTA BÖLÜMÜ -->
@@ -524,9 +494,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
           <button class="sb-btn" onclick="git('usta-ozet',this)"><span class="ikon">📊</span> Usta Özeti</button>
           <button class="sb-btn" onclick="git('usta-ilanlar',this)"><span class="ikon">📋</span> İlanlarım <span class="sb-badge" id="ustaIlanBadge" style="display:none">!</span></button>
           <button class="sb-btn" onclick="git('usta-randevular',this)"><span class="ikon">📅</span> Randevular <span class="sb-badge" id="rdvBadge" style="display:none;background:var(--red);">!</span></button>
-          <button class="sb-btn" onclick="git('usta-projeler',this)"><span class="ikon">📋</span> Projeler <span class="sb-badge" id="proje-badge" style="display:none;background:var(--orange);"></span></button>
           <button class="sb-btn" onclick="git('usta-abonelik',this)"><span class="ikon">⏱</span> Aboneliğim</button>
-          <button class="sb-btn" onclick="git('gelir-gider',this)"><span class="ikon">📒</span> Gelir & Gider</button>
           <button class="sb-btn" onclick="git('usta-one-cikar',this)"><span class="ikon">⭐</span> Öne Çıkar</button>
         </div>
       </div>
@@ -666,7 +634,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
                 <input type="file" id="resimInput" accept="image/*" multiple onchange="resimSec(this.files)">
                 <div class="r-ikon">📷</div>
                 <div class="r-yaz">Fotoğraf seç veya sürükle bırak</div>
-                <div class="r-alt">JPG, PNG, WebP — max 1.5MB/adet &nbsp;·&nbsp; <a href="https://squoosh.app" target="_blank" rel="noopener" style="color:var(--gold);opacity:.7;text-decoration:underline;font-size:inherit;" onclick="event.stopPropagation()">Fotoğrafının boyutunu buradan düşürebilirsin</a></div>
+                <div class="r-alt">JPG, PNG, WebP — max 2.5MB/adet &nbsp;·&nbsp; <a href="https://squoosh.app" target="_blank" rel="noopener" style="color:var(--gold);opacity:.7;text-decoration:underline;font-size:inherit;" onclick="event.stopPropagation()">Fotoğrafının boyutunu buradan düşürebilirsin</a></div>
               </div>
               <div class="resim-preview" id="resimPreview"></div>
             </div>
@@ -1119,7 +1087,7 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
           <div class="oz-k"><div class="oz-n" style="color:var(--orange)" id="ustaAbonelikBitisTarih">—</div><div class="oz-l">Bitiş Tarihi</div></div>
         </div>
         <div style="display:flex;gap:1rem;flex-wrap:wrap;padding:1rem 0;">
-          <button onclick="git('usta-ilanlar',document.querySelector('[onclick*=usta-ilanlar]'))" style="padding:.75rem 2rem;background:linear-gradient(135deg,#5a3eb0,#7B5CF0);color:#fff;font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.26em;text-transform:uppercase;border-radius:3px;font-weight:700;border:none;cursor:pointer;">+ Yeni İlan Ver</button>
+          <button onclick="ilanModalAc()" style="padding:.75rem 2rem;background:linear-gradient(135deg,#5a3eb0,#7B5CF0);color:#fff;font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.26em;text-transform:uppercase;border-radius:3px;font-weight:700;border:none;cursor:pointer;">+ Yeni İlan Ver</button>
           <a href="ustam-profil.html" style="padding:.72rem 2rem;background:transparent;border:1px solid rgba(123,92,240,.3);color:#a78bfa;font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.26em;text-transform:uppercase;border-radius:3px;text-decoration:none;">Profilimi Gör</a>
         </div>
       </div>
@@ -1141,50 +1109,16 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
         </div>
       </div>
 
-      <!-- USTA PROJELERİM -->
-      <div class="sayfa" id="sayfa-usta-projeler">
-        <div class="sh"><span class="eyebrow">İş Takip Sistemi</span><h1>Projeler <em>&amp; İşler</em></h1></div>
-
-        <div class="oz-grid" id="projeOzetGrid">
-          <div class="oz-k"><div class="oz-n" id="prj-toplam">—</div><div class="oz-l">Toplam Proje</div></div>
-          <div class="oz-k"><div class="oz-n" style="color:var(--orange)" id="prj-devam">—</div><div class="oz-l">Devam Eden</div></div>
-          <div class="oz-k"><div class="oz-n" style="color:var(--green)" id="prj-tamam">—</div><div class="oz-l">Tamamlanan</div></div>
-          <div class="oz-k"><div class="oz-n" style="color:var(--red)" id="prj-iptal">—</div><div class="oz-l">İptal</div></div>
-        </div>
-
-        <div class="filtre-row" style="margin-bottom:1.2rem;">
-          <button class="f-btn on" onclick="prjFiltre('hepsi',this)">Tümü</button>
-          <button class="f-btn" onclick="prjFiltre('devam',this)">⚙️ Devam Eden</button>
-          <button class="f-btn" onclick="prjFiltre('tamamlandi',this)">✅ Tamamlanan</button>
-          <button class="f-btn" onclick="prjFiltre('iptal',this)">🚫 İptal</button>
-        </div>
-
-        <div id="projeListesi">
-          <div style="color:var(--t2);font-size:.75rem;font-style:italic;padding:2rem 0;">Randevu onaylandığında projeler burada görünür.</div>
-        </div>
-      </div>
-
       <!-- USTA İLANLARIM -->
       <div class="sayfa" id="sayfa-usta-ilanlar">
-        <div class="sh"><span class="eyebrow">İlan Yönetimi</span><h1>İlan <em>Ver & Yönet</em></h1></div>
-
-        <!-- YENİ İLAN FORMU — direkt açık -->
-        <div class="fkart">
-          <div class="fkart-top" onclick="toggle('ilanFormBody','ilanFormArr')">
-            <h2>➕ Yeni İlan Ver</h2>
-            <span class="arr ac" id="ilanFormArr">▲</span>
+        <div class="sh"><span class="eyebrow">İlan Yönetimi</span><h1>İlanlarım</h1></div>
+        <div class="twrap">
+          <div class="tbaslik" style="display:flex;justify-content:space-between;align-items:center;">
+            <h3>Tüm İlanlar</h3>
+            <button onclick="ilanModalAc()" style="padding:.5rem 1.2rem;background:linear-gradient(135deg,#5a3eb0,#7B5CF0);color:#fff;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;border-radius:3px;font-weight:700;border:none;cursor:pointer;">+ Yeni İlan</button>
           </div>
-          <div class="fkart-body ac" id="ilanFormBody">
-            <div id="ilanFormIcerik">
-              <!-- modpanel-ilan-gencz.js doldurur -->
-              <div style="color:var(--t2);font-size:.7rem;font-style:italic;">Yükleniyor…</div>
-            </div>
-          </div>
+          <div id="ustaIlanListesi" style="margin-top:1rem;"></div>
         </div>
-
-        <!-- İLAN LİSTESİ -->
-        <div style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:300;margin:1.5rem 0 1rem;">İlanlarım</div>
-        <div id="ustaIlanListesi"></div>
       </div>
 
 
@@ -1403,443 +1337,6 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
         <div id="gencz-analitik-icerik"></div>
       </div>
 
-      <!-- ████ GENÇ-Z ÖZEL İSTEKLER ████ -->
-      <div class="sayfa" id="sayfa-gencz-ozel-istekler">
-        <div class="sh">
-          <span class="eyebrow">Ücretli Danışmanlık</span>
-          <h1>Özel <em>İstekler</em></h1>
-        </div>
-
-        <!-- ÖZET KARTLAR -->
-        <div class="oz-grid" id="ozelIstekOzetGrid">
-          <div class="oz-k">
-            <div class="oz-n" id="oi-toplam">—</div>
-            <div class="oz-l">Toplam İstek</div>
-          </div>
-          <div class="oz-k">
-            <div class="oz-n" style="color:var(--orange)" id="oi-bekleyen">—</div>
-            <div class="oz-l">Bekleyen</div>
-          </div>
-          <div class="oz-k">
-            <div class="oz-n" style="color:var(--green)" id="oi-cevaplanan">—</div>
-            <div class="oz-l">Yanıtlanan</div>
-          </div>
-          <div class="oz-k">
-            <div class="oz-n" style="color:var(--gold)" id="oi-kazanc">—</div>
-            <div class="oz-l">Toplam Kazanç</div>
-          </div>
-        </div>
-
-        <!-- BİLGİ KUTUSU -->
-        <div id="oiGelirBilgi" style="background:linear-gradient(135deg,rgba(123,92,240,.08),rgba(240,197,92,.05));border:1px solid rgba(123,92,240,.2);border-radius:8px;padding:1rem 1.4rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
-          <span style="font-size:1.4rem;">💰</span>
-          <div>
-            <div style="font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:.2rem;">Gelir Modeli</div>
-            <div style="font-size:.72rem;color:var(--t2);line-height:1.7;">Her özel istekten <strong style="color:var(--cream);">₺50</strong> tahsil edilir. Bunun <strong style="color:var(--green);">₺25'i sana</strong> anında, <strong style="color:var(--gold);">₺25'i platforma</strong> aktarılır.</div>
-          </div>
-        </div>
-
-        <!-- FİLTRE -->
-        <div class="filtre-row" style="margin-bottom:1.2rem;">
-          <button class="f-btn on" onclick="oiFiltre('hepsi',this)">Tümü</button>
-          <button class="f-btn" onclick="oiFiltre('yeni',this)">🔔 Yeni</button>
-          <button class="f-btn" onclick="oiFiltre('aktif',this)">💬 Aktif</button>
-          <button class="f-btn" onclick="oiFiltre('tamamlandi',this)">✅ Tamamlanan</button>
-        </div>
-
-        <!-- İSTEK LİSTESİ -->
-        <div id="ozelIstekListesi">
-          <div style="color:var(--t2);font-size:.75rem;font-style:italic;padding:3rem 0;text-align:center;">
-            <div style="font-size:2.5rem;margin-bottom:.8rem;opacity:.3;">✨</div>
-            Henüz özel istek yok.<br>
-            <span style="font-size:.65rem;opacity:.6;">Birisi sana özel istek gönderdiğinde burada görünecek.</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ÖZEL İSTEK SOHBET MODALI (Mod Panel içi) -->
-      <div id="oiSohbetModal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px;">
-        <div style="background:var(--panel);border:1px solid rgba(123,92,240,.25);border-radius:16px;width:100%;max-width:520px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 32px 80px rgba(0,0,0,.6);">
-          <!-- Modal Başlık -->
-          <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
-            <div style="flex:1;">
-              <div style="font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;color:var(--cream);" id="oiSohbetAd">Müşteri</div>
-              <div style="font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);opacity:.65;" id="oiSohbetTarih">—</div>
-            </div>
-            <div id="oiSohbetKazanc" style="text-align:right;">
-              <div style="font-size:.65rem;color:var(--green);font-weight:700;">₺25 Kazanıldı</div>
-              <div style="font-size:.5rem;color:var(--t2);">Ödeme onaylı</div>
-            </div>
-            <button onclick="oiSohbetKapat()" style="width:30px;height:30px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;color:var(--t2);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">&#x2715;</button>
-          </div>
-          <!-- Kabul / Reddet Butonları -->
-          <div id="oiAksiyonRow" style="display:none;padding:10px 16px;background:rgba(255,255,255,.015);border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap;">
-            <button onclick="oiKabul()" style="flex:1;min-width:120px;padding:.55rem 1rem;background:rgba(76,175,130,.12);border:1px solid rgba(76,175,130,.35);border-radius:6px;color:var(--green);font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='rgba(76,175,130,.22)'" onmouseout="this.style.background='rgba(76,175,130,.12)'">✅ İsteği Tamamla</button>
-            <button onclick="oiReddet()" style="flex:1;min-width:120px;padding:.55rem 1rem;background:rgba(224,85,85,.08);border:1px solid rgba(224,85,85,.3);border-radius:6px;color:var(--red);font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='rgba(224,85,85,.18)'" onmouseout="this.style.background='rgba(224,85,85,.08)'">❌ Reddet</button>
-          </div>
-          <!-- Özel İstek (varsa) -->
-          <div id="oiSohbetIstek" style="display:none;margin:12px 16px 0;background:rgba(240,197,92,.06);border:1px solid rgba(240,197,92,.2);border-radius:8px;padding:10px 14px;">
-            <div style="font-size:.5rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;">📋 Özel İstek</div>
-            <div style="font-size:.72rem;color:var(--t2);line-height:1.7;" id="oiSohbetIstekMetin"></div>
-          </div>
-          <!-- Mesajlar -->
-          <div id="oiSohbetMesajlar" style="flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-height:200px;max-height:300px;"></div>
-          <!-- Input -->
-          <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end;">
-            <textarea id="oiSohbetInput" placeholder="Müşteriye yanıt yaz…" rows="1" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'" onkeydown="oiEnterGonder(event)" style="flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:.8rem;color:var(--cream);outline:none;resize:none;min-height:40px;max-height:100px;transition:border-color .2s;"></textarea>
-            <button onclick="oiMesajGonder()" style="width:40px;height:40px;background:var(--gold);border:none;border-radius:8px;color:#0a0a0f;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700;transition:all .2s;">&#x2191;</button>
-          </div>
-        </div>
-      </div>
-
-      <style>
-      /* ── ÖZEL İSTEK KARTLARI ── */
-      .oi-kart {
-        background: rgba(255,255,255,.022);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 1.2rem 1.5rem;
-        margin-bottom: .8rem;
-        display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
-        transition: border-color .25s;
-        cursor: pointer;
-      }
-      .oi-kart:hover { border-color: rgba(123,92,240,.4); }
-      .oi-kart.yeni { border-color: rgba(230,126,34,.4); animation: oiPulse 2s infinite; }
-      @keyframes oiPulse {
-        0%,100% { box-shadow: 0 0 0 0 rgba(230,126,34,0); }
-        50%      { box-shadow: 0 0 0 4px rgba(230,126,34,.12); }
-      }
-      .oi-avatar {
-        width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
-        background: linear-gradient(135deg, rgba(123,92,240,.3), rgba(240,197,92,.2));
-        border: 1px solid rgba(123,92,240,.25);
-        display: flex; align-items: center; justify-content: center;
-        font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
-        color: var(--gold);
-      }
-      .oi-bilgi { flex: 1; min-width: 0; }
-      .oi-musteri { font-size: .75rem; font-weight: 600; color: var(--cream); margin-bottom: .15rem; }
-      .oi-on-izlenim { font-size: .65rem; color: var(--t2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      .oi-meta { display: flex; flex-direction: column; align-items: flex-end; gap: .3rem; flex-shrink: 0; }
-      .oi-tarih { font-size: .52rem; color: var(--t2); letter-spacing: .05em; }
-      .oi-durum {
-        font-size: .48rem; letter-spacing: .12em; text-transform: uppercase;
-        padding: .18rem .6rem; border-radius: 20px;
-      }
-      .oi-durum.yeni    { background: rgba(230,126,34,.15); border: 1px solid rgba(230,126,34,.3); color: var(--orange); }
-      .oi-durum.aktif   { background: rgba(123,92,240,.12); border: 1px solid rgba(123,92,240,.3); color: #a48af0; }
-      .oi-durum.tamamlandi { background: rgba(76,175,130,.1); border: 1px solid rgba(76,175,130,.3); color: var(--green); }
-      .oi-kazanc { font-size: .65rem; font-weight: 700; color: var(--green); }
-
-      /* sohbet modal mesaj baloncukları */
-      .oi-mesaj { max-width: 80%; padding: 9px 13px; border-radius: 10px; font-size: .72rem; line-height: 1.6; word-break: break-word; }
-      .oi-mesaj.gelen { background: rgba(255,255,255,.06); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 3px; }
-      .oi-mesaj.giden { background: var(--gold); color: #0a0a0f; align-self: flex-end; border-bottom-right-radius: 3px; font-weight: 500; }
-      .oi-mesaj.sistem { background: rgba(240,197,92,.07); border: 1px solid rgba(240,197,92,.15); color: var(--gold); align-self: center; text-align: center; font-size: .6rem; max-width: 90%; border-radius: 6px; }
-      .oi-mesaj-zaman { font-size: .48rem; color: rgba(240,235,224,.28); margin-top: .25rem; }
-      .oi-mesaj.giden .oi-mesaj-zaman { color: rgba(10,10,15,.35); }
-      </style>
-
-      <script type="module">
-      /* ═══════════════════════════════════════════════════════════════
-         ÖZEL İSTEKLER — MOD PANEL (Genç-Z)
-         Firestore tabanlı — Koleksiyonlar:
-           ozelIstekler/{istekId}           → istek belgesi
-           ozelIstekler/{istekId}/mesajlar  → alt-koleksiyon (mesajlar)
-      ═══════════════════════════════════════════════════════════════ */
-      import {
-        getFirestore,
-        collection, query, where, orderBy,
-        onSnapshot, doc, addDoc, updateDoc,
-        serverTimestamp, getDocs
-      } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-      const db = getFirestore();
-
-      let _oiFiltre   = 'hepsi';
-      let _oiAktif    = null;   // açık sohbetin Firestore belge ID'si
-      let _oiAktifUid = null;   // açık sohbetin buyerUid'si
-      let _oiListe    = [];
-      let _oiMsgUnsub = null;   // mesaj real-time dinleyici
-      let _oiListeUnsub = null;
-
-      /* ── Giriş yapmış üreticinin UID'si ── */
-      function _uid() {
-        return window._aktifUid
-          || window._genzAuth?.auth?.currentUser?.uid
-          || JSON.parse(localStorage.getItem('genz-user')||'null')?.uid
-          || 'demo';
-      }
-
-      /* ─── ÖZET KARTLARI GÜNCELLE ─── */
-      function _ozet() {
-        const bek = _oiListe.filter(x => x.durum === 'yeni').length;
-        const el  = id => document.getElementById(id);
-        if (!el('oi-toplam')) return;
-        el('oi-toplam').textContent     = _oiListe.length;
-        el('oi-bekleyen').textContent   = bek;
-        el('oi-cevaplanan').textContent = _oiListe.filter(x => x.durum !== 'yeni').length;
-        el('oi-kazanc').textContent     = '₺' + _oiListe.reduce((s,x) => s+(x.kazanc||0), 0).toLocaleString('tr-TR');
-        const badge = document.getElementById('ozelIstekBadge');
-        if (badge) { badge.textContent = bek||''; badge.style.display = bek ? 'inline' : 'none'; }
-      }
-
-      /* ─── FİLTRE ─── */
-      window.oiFiltre = function(f, btn) {
-        _oiFiltre = f;
-        document.querySelectorAll('#sayfa-gencz-ozel-istekler .f-btn').forEach(b => b.classList.remove('on'));
-        if (btn) btn.classList.add('on');
-        _render();
-      };
-
-      /* ─── LİSTE RENDER ─── */
-      function _render() {
-        const el = document.getElementById('ozelIstekListesi');
-        if (!el) return;
-        const l = _oiListe.filter(x => _oiFiltre === 'hepsi' || x.durum === _oiFiltre);
-        if (!l.length) {
-          el.innerHTML = `<div style="text-align:center;padding:3rem 0;color:var(--t2);font-style:italic;font-size:.72rem;">
-            ${_oiFiltre==='hepsi' ? '<div style="font-size:2.5rem;margin-bottom:.8rem;opacity:.3;">✨</div>Henüz özel istek yok.<br><span style="font-size:.65rem;opacity:.6;">Birisi sana istek gönderdiğinde burada görünecek.</span>' : 'Bu filtrede istek yok.'}
-          </div>`;
-          return;
-        }
-        el.innerHTML = l.map(x => {
-          const durumLabel = x.durum==='yeni' ? '🔔 Yeni' : x.durum==='aktif' ? '💬 Aktif' : x.durum==='reddedildi' ? '❌ Reddedildi' : '✅ Bitti';
-          const durumCls   = x.durum==='reddedildi' ? 'reddedildi' : x.durum;
-          return `
-            <div class="oi-kart ${x.durum==='yeni'?'yeni':''}" onclick="oiSohbetAc('${x._id}','${x.buyerUid}')">
-              <div class="oi-avatar">${(x.musteri||'?').charAt(0).toUpperCase()}</div>
-              <div class="oi-bilgi">
-                <div class="oi-musteri">${x.musteri||'Müşteri'}</div>
-                <div class="oi-on-izlenim">${x.onIzlenim||'—'}</div>
-              </div>
-              <div class="oi-meta">
-                <span class="oi-tarih">${x.tarih||'—'}</span>
-                <span class="oi-durum ${durumCls}">${durumLabel}</span>
-                ${x.durum!=='reddedildi' ? `<span class="oi-kazanc">+₺${x.kazanc||25}</span>` : ''}
-              </div>
-            </div>`;
-        }).join('');
-      }
-
-      /* ─── LİSTEYİ FIRESTORE'DAN DİNLE ─── */
-      function _listeBaslat() {
-        const uid = _uid();
-        if (!uid || uid === 'demo') { _demoBaşlat(); return; }
-        if (_oiListeUnsub) return;
-
-        const q = query(
-          collection(db, 'ozelIstekler'),
-          where('saticiUid', '==', uid),
-          orderBy('ts', 'desc')
-        );
-        _oiListeUnsub = onSnapshot(q, snap => {
-          _oiListe = snap.docs.map(d => ({ _id: d.id, ...d.data(),
-            tarih: d.data().ts?.toDate
-              ? d.data().ts.toDate().toLocaleString('tr-TR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})
-              : (d.data().tarih || '—')
-          }));
-          _ozet();
-          _render();
-        });
-      }
-
-      /* Demo verisi (Firestore bağlı değilken) */
-      function _demoBaşlat() {
-        _oiListe = [
-          { _id:'demo_001', buyerUid:'demo_001', musteri:'Elif K.',  tarih:'28.03.2026 14:22', durum:'yeni',       kazanc:25, onIzlenim:'Anneme özel tablo yaptırmak istiyorum...', istekMetni:'50x70 cm yağlı boya, bahar bahçesi teması.' },
-          { _id:'demo_002', buyerUid:'demo_002', musteri:'Mert A.',  tarih:'27.03.2026 09:45', durum:'aktif',      kazanc:25, onIzlenim:'Dijital illüstrasyon hakkında...', istekMetni:'' },
-          { _id:'demo_003', buyerUid:'demo_003', musteri:'Selin T.', tarih:'25.03.2026 18:30', durum:'tamamlandi', kazanc:25, onIzlenim:'Logo tasarımı için teşekkürler!', istekMetni:'Küçük cafem için logo.' },
-        ];
-        _ozet(); _render();
-      }
-
-      /* ─── SOHBET AÇ ─── */
-      window.oiSohbetAc = async function(istekId, buyerUid) {
-        const x = _oiListe.find(i => i._id === istekId);
-        if (!x) return;
-        _oiAktif    = istekId;
-        _oiAktifUid = buyerUid;
-
-        document.getElementById('oiSohbetAd').textContent   = x.musteri || 'Müşteri';
-        document.getElementById('oiSohbetTarih').textContent = x.tarih || '—';
-
-        /* Kabul/Reddet butonlarını duruma göre göster */
-        const aksiyonDiv = document.getElementById('oiAksiyonRow');
-        if (aksiyonDiv) {
-          if (x.durum === 'yeni' || x.durum === 'aktif') {
-            aksiyonDiv.style.display = 'flex';
-          } else {
-            aksiyonDiv.style.display = 'none';
-          }
-        }
-
-        /* Kazanç bilgisi */
-        const kazancDiv = document.getElementById('oiSohbetKazanc');
-        if (kazancDiv) {
-          if (x.durum === 'reddedildi') {
-            kazancDiv.innerHTML = '<div style="font-size:.65rem;color:var(--red);font-weight:700;">❌ Reddedildi</div><div style="font-size:.5rem;color:var(--t2);">İstek iptal edildi</div>';
-          } else {
-            kazancDiv.innerHTML = '<div style="font-size:.65rem;color:var(--green);font-weight:700;">₺25 Kazanıldı</div><div style="font-size:.5rem;color:var(--t2);">Ödeme onaylı</div>';
-          }
-        }
-
-        /* Özel istek metni */
-        const istekDiv = document.getElementById('oiSohbetIstek');
-        if (x.istekMetni) {
-          document.getElementById('oiSohbetIstekMetin').textContent = x.istekMetni;
-          istekDiv.style.display = 'block';
-        } else { istekDiv.style.display = 'none'; }
-
-        /* Yeni → aktif yap (Firestore) */
-        if (x.durum === 'yeni') {
-          if (!istekId.startsWith('demo')) {
-            await updateDoc(doc(db, 'ozelIstekler', istekId), { durum: 'aktif' });
-          } else {
-            const d = _oiListe.find(i => i._id === istekId);
-            if (d) { d.durum = 'aktif'; _ozet(); _render(); }
-          }
-        }
-
-        /* Mesajları real-time dinle */
-        _oiMesajBaslat(istekId, x);
-        document.getElementById('oiSohbetModal').style.display = 'flex';
-      };
-
-      /* ─── MESAJLARI DİNLE (real-time) ─── */
-      function _oiMesajBaslat(istekId, x) {
-        if (_oiMsgUnsub) { _oiMsgUnsub(); _oiMsgUnsub = null; }
-        const el = document.getElementById('oiSohbetMesajlar');
-        el.innerHTML = '<div style="text-align:center;padding:1rem;color:var(--t2);font-size:.65rem;">Yükleniyor…</div>';
-
-        if (istekId.startsWith('demo')) {
-          /* Demo mesajlar */
-          el.innerHTML = '';
-          const demo = [
-            { tip:'sistem', metin:'💰 Ödeme onaylandı — ₺25 kazancın eklendi.' },
-            { tip:'gelen',  metin: x.onIzlenim||'Merhaba!', zaman: (x.tarih||'').split(' ')[1]||'' },
-          ];
-          if (x.istekMetni) demo.push({ tip:'gelen', metin:'📋 Özel İstek: ' + x.istekMetni, zaman: '' });
-          demo.forEach(m => _balonEkle(m, el));
-          el.scrollTop = el.scrollHeight;
-          return;
-        }
-
-        const msgRef = collection(db, 'ozelIstekler', istekId, 'mesajlar');
-        const q = query(msgRef, orderBy('ts', 'asc'));
-        _oiMsgUnsub = onSnapshot(q, snap => {
-          el.innerHTML = '';
-          if (!snap.docs.length) {
-            /* İlk kez açılıyor — başlangıç mesajlarını yaz */
-            const baslangic = [
-              { tip:'sistem', metin:'💰 Ödeme onaylandı — ₺25 kazancın eklendi.', ts: serverTimestamp() },
-              { tip:'gelen',  metin: x.onIzlenim||'Merhaba!', zaman: (x.tarih||'').split(' ')[1]||'', ts: serverTimestamp() },
-            ];
-            if (x.istekMetni) baslangic.push({ tip:'gelen', metin:'📋 Özel İstek: ' + x.istekMetni, ts: serverTimestamp() });
-            baslangic.forEach(m => addDoc(msgRef, m));
-          } else {
-            snap.docs.forEach(d => {
-              const m = d.data();
-              const zaman = m.ts?.toDate ? m.ts.toDate().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}) : (m.zaman||'');
-              _balonEkle({ ...m, zaman }, el);
-            });
-            el.scrollTop = el.scrollHeight;
-          }
-        });
-      }
-
-      function _balonEkle(m, el) {
-        const d = document.createElement('div');
-        d.style.cssText = 'display:flex;flex-direction:column;';
-        d.innerHTML = `<div class="oi-mesaj ${m.tip}">${m.metin}${m.zaman?`<div class="oi-mesaj-zaman">${m.zaman}</div>`:''}</div>`;
-        el.appendChild(d);
-      }
-
-      /* ─── KAPAT ─── */
-      window.oiSohbetKapat = function() {
-        if (_oiMsgUnsub) { _oiMsgUnsub(); _oiMsgUnsub = null; }
-        document.getElementById('oiSohbetModal').style.display = 'none';
-        _oiAktif = null; _oiAktifUid = null;
-      };
-
-      /* ─── MESAJ GÖNDER (üretici → müşteri) ─── */
-      window.oiMesajGonder = async function() {
-        if (!_oiAktif) return;
-        const inp   = document.getElementById('oiSohbetInput');
-        const metin = inp.value.trim();
-        if (!metin) return;
-        inp.value = ''; inp.style.height = 'auto';
-
-        const zaman = new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
-
-        if (_oiAktif.startsWith('demo')) {
-          /* Demo mod — sadece ekrana ekle */
-          _balonEkle({ tip:'giden', metin, zaman }, document.getElementById('oiSohbetMesajlar'));
-          document.getElementById('oiSohbetMesajlar').scrollTop = 999999;
-          return;
-        }
-
-        /* Firestore'a yaz — tip:'gelen' çünkü müşteri ekranında üreticinin mesajı "gelen" olarak görünür */
-        await addDoc(collection(db, 'ozelIstekler', _oiAktif, 'mesajlar'), {
-          tip   : 'gelen',
-          gonderen: 'satici',
-          metin,
-          ts    : serverTimestamp(),
-        });
-
-        /* onIzlenim güncelle */
-        await updateDoc(doc(db, 'ozelIstekler', _oiAktif), {
-          onIzlenim: metin.substring(0, 60) + (metin.length > 60 ? '…' : ''),
-        });
-      };
-
-      window.oiEnterGonder = function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); oiMesajGonder(); }
-      };
-
-      /* ─── KABUL / REDDET ─── */
-      window.oiKabul = async function() {
-        if (!_oiAktif) return;
-        if (!confirm('Bu isteği kabul edip tamamlandı olarak işaretleyeyim mi?')) return;
-        if (_oiAktif.startsWith('demo')) {
-          const d = _oiListe.find(i => i._id === _oiAktif);
-          if (d) d.durum = 'tamamlandi';
-          _ozet(); _render(); oiSohbetKapat(); toast('İstek tamamlandı olarak işaretlendi ✦'); return;
-        }
-        await updateDoc(doc(db, 'ozelIstekler', _oiAktif), { durum: 'tamamlandi' });
-        oiSohbetKapat();
-        toast('İstek tamamlandı olarak işaretlendi ✦');
-      };
-
-      window.oiReddet = async function() {
-        if (!_oiAktif) return;
-        if (!confirm('Bu isteği reddetmek istediğinden emin misin?')) return;
-        if (_oiAktif.startsWith('demo')) {
-          const d = _oiListe.find(i => i._id === _oiAktif);
-          if (d) { d.durum = 'reddedildi'; d.kazanc = 0; }
-          _ozet(); _render(); oiSohbetKapat(); toast('İstek reddedildi', 'err'); return;
-        }
-        await updateDoc(doc(db, 'ozelIstekler', _oiAktif), { durum: 'reddedildi', kazanc: 0 });
-        oiSohbetKapat();
-        toast('İstek reddedildi', 'err');
-      };
-
-      /* ─── SAYFA AÇILIŞI ─── */
-      const _origGit = window.git;
-      window.git = function(id, btn) {
-        if (typeof _origGit === 'function') _origGit(id, btn);
-        if (id === 'gencz-ozel-istekler') { _listeBaslat(); }
-      };
-
-      /* İlk yüklemede badge için */
-      document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => {
-          _listeBaslat();
-        }, 900);
-      });
-      </script>
-
       <!-- USTA ABONELİK -->
       <div class="sayfa" id="sayfa-usta-abonelik">
         <div class="sh"><span class="eyebrow">Abonelik</span><h1>Abonelik <em>Detayları</em></h1></div>
@@ -1939,377 +1436,11 @@ body{text-rendering:optimizeSpeed;font-display:swap;}
         </div>
       </div>
 
-      <!-- ████ GELİR & GİDER ████ -->
-      <div class="sayfa" id="sayfa-gelir-gider">
-        <div class="sh"><span class="eyebrow">Finansal Takip</span><h1>Gelir & <em>Gider</em></h1></div>
-
-        <!-- ÖZET KARTLAR -->
-        <div class="stk-ozet-grid" style="margin-bottom:1.5rem;">
-          <div class="stk-k" style="border-color:rgba(76,175,130,.25);">
-            <div class="stk-n" style="color:var(--green)" id="mpGGelir">0₺</div>
-            <div class="stk-l">Toplam Gelir</div>
-            <div style="font-size:.55rem;color:var(--t2);margin-top:.2rem;" id="mpGGelirAdet">0 kayıt</div>
-          </div>
-          <div class="stk-k" style="border-color:rgba(224,85,85,.25);">
-            <div class="stk-n" style="color:var(--red)" id="mpGGider">0₺</div>
-            <div class="stk-l">Toplam Gider</div>
-            <div style="font-size:.55rem;color:var(--t2);margin-top:.2rem;" id="mpGGiderAdet">0 kayıt</div>
-          </div>
-          <div class="stk-k" id="mpGNetKart">
-            <div class="stk-n" id="mpGNet">0₺</div>
-            <div class="stk-l">Net Kar / Zarar</div>
-            <div style="font-size:.55rem;color:var(--t2);margin-top:.2rem;" id="mpGNetAlt">—</div>
-          </div>
-          <div class="stk-k">
-            <div class="stk-n" style="color:var(--gold)" id="mpGBuAy">0₺</div>
-            <div class="stk-l">Bu Ay Net</div>
-            <div style="font-size:.55rem;color:var(--t2);margin-top:.2rem;" id="mpGBuAyAlt">—</div>
-          </div>
-        </div>
-
-        <!-- FİLTRE + EKLE -->
-        <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin-bottom:1rem;">
-          <div class="filtre-row" style="margin:0;flex:1;flex-wrap:wrap;">
-            <button class="f-btn on" id="mpGTipHepsi" onclick="mpGTipSec('hepsi',this)">Hepsi</button>
-            <button class="f-btn" onclick="mpGTipSec('gelir',this)">💚 Gelir</button>
-            <button class="f-btn" onclick="mpGTipSec('gider',this)">🔴 Gider</button>
-          </div>
-          <select id="mpGAyFiltre" onchange="ggRenderMod()" style="padding:.4rem .7rem;background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.15);color:var(--cream);border-radius:3px;font-family:'DM Sans',sans-serif;font-size:.65rem;">
-            <option value="">Tüm Aylar</option>
-          </select>
-          <input placeholder="Kategori / not ara…" id="mpGArama" oninput="ggRenderMod()" style="padding:.4rem .8rem;background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.13);border-radius:3px;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:.68rem;outline:none;width:170px;">
-          <button onclick="mpGModalAc()" style="padding:.46rem 1.1rem;background:linear-gradient(135deg,#4caf82,#3a9a6e);color:#fff;border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-weight:700;white-space:nowrap;">+ Kayıt Ekle</button>
-          <button id="mpGExcelBtn" onclick="mpGExcelIndir()" disabled style="padding:.46rem 1.1rem;background:rgba(76,175,130,.08);border:1px solid rgba(76,175,130,.25);color:var(--green);border-radius:3px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-weight:700;white-space:nowrap;transition:all .2s;">📊 Excel'e Aktar</button>
-        </div>
-
-        <!-- TABLO -->
-        <div class="twrap">
-          <div class="tbaslik"><h3 id="mpGTabloBaslik">📒 Tüm Kayıtlar</h3></div>
-          <div id="mpGTablo"><div style="text-align:center;padding:3rem;font-style:italic;color:var(--t2)">✦ Henüz kayıt yok. "+ Kayıt Ekle" ile başlayın.</div></div>
-        </div>
-      </div>
-
     </div>
   </div>
 </div>
 
-<!-- GELİR & GİDER MODAL -->
-<div class="chat-overlay" id="mpGModalOverlay" onclick="if(event.target===this)mpGModalKapat()">
-  <div class="chat-box" style="max-width:500px;max-height:92vh;overflow-y:auto;">
-    <div class="chat-head">
-      <div class="chat-head-info">
-        <div class="chat-head-name" id="mpGModalBaslik">📒 Yeni Kayıt</div>
-        <div class="chat-head-sub">Gelir veya gider kaydı ekle</div>
-      </div>
-      <button class="chat-close" onclick="mpGModalKapat()">✕</button>
-    </div>
-    <div style="padding:1.4rem;display:flex;flex-direction:column;gap:1rem;">
-
-      <!-- TİP -->
-      <div>
-        <div style="font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--t2);margin-bottom:.5rem;">Kayıt Tipi</div>
-        <div style="display:flex;gap:.5rem;">
-          <button id="mpGBtnGelir" onclick="mpGTipToggle('gelir')" style="flex:1;padding:.65rem;border-radius:5px;font-family:'DM Sans',sans-serif;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-weight:700;border:2px solid var(--green);background:rgba(76,175,130,.15);color:var(--green);">💚 Gelir</button>
-          <button id="mpGBtnGider" onclick="mpGTipToggle('gider')" style="flex:1;padding:.65rem;border-radius:5px;font-family:'DM Sans',sans-serif;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-weight:700;border:2px solid rgba(224,85,85,.2);background:none;color:var(--t2);">🔴 Gider</button>
-        </div>
-      </div>
-
-      <!-- KATEGORİ -->
-      <div>
-        <label class="dan-lbl">Kategori</label>
-        <select id="mpGKatInput" class="fi" style="font-size:.75rem;"></select>
-      </div>
-
-      <!-- TUTAR + TARİH -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;">
-        <div>
-          <label class="dan-lbl">Tutar (₺)</label>
-          <input type="number" id="mpGTutarInput" min="0" step="0.01" placeholder="0.00" class="fi" style="font-size:.8rem;">
-        </div>
-        <div>
-          <label class="dan-lbl">Tarih</label>
-          <input type="date" id="mpGTarihInput" class="fi" style="font-size:.75rem;">
-        </div>
-      </div>
-
-      <!-- NOT -->
-      <div>
-        <label class="dan-lbl">Not (opsiyonel)</label>
-        <input type="text" id="mpGNotInput" placeholder="Kısa açıklama…" class="fi" style="font-size:.75rem;">
-      </div>
-
-    </div>
-    <div style="padding:1rem 1.4rem;border-top:1px solid var(--border);display:flex;gap:.6rem;justify-content:flex-end;">
-      <button onclick="mpGModalKapat()" style="padding:.42rem .9rem;background:none;border:1px solid rgba(201,168,76,.2);color:var(--t2);border-radius:3px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;">İptal</button>
-      <button onclick="mpGKaydet()" style="padding:.42rem 1.2rem;background:linear-gradient(135deg,#4caf82,#3a9a6e);color:#fff;border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-weight:700;">💾 Kaydet</button>
-    </div>
-  </div>
-</div>
-
-<script>
-// ════════════ GELİR & GİDER — MOD PANELİ (in-memory + Excel export) ════════════
-(function(){
-
-const GG_KAT2 = {
-  magaza:{
-    gelir:['Ürün Satışı','Online Satış','Toptan Satış','İndirimli Satış','Kargo Geliri','Diğer Gelir'],
-    gider:['Stok / Mal Alımı','Dükkan Kirası','Elektrik Faturası','Su Faturası','Doğalgaz Faturası','İnternet / Telefon','Personel Maaşı','Kargo / Lojistik','Reklam & Tanıtım','Paketleme Malzemesi','POS / Komisyon','Muhasebe / Mali Müşavir','Tamir & Bakım','Temizlik','Vergi / SGK','Diğer Gider']
-  },
-  usta:{
-    gelir:['Hizmet Bedeli','Proje Ödemesi','Malzeme Dahil İş','Saat Ücreti','Tamir Geliri','Diğer Gelir'],
-    gider:['Alet & Ekipman','Malzeme / Sarf','Araç Yakıtı','Araç Bakımı','Dükkan / Depo Kirası','Elektrik Faturası','Telefon','Sigorta','Reklam','Personel','Vergi / SGK','Diğer Gider']
-  },
-  genc:{
-    gelir:['Eser Satışı','Komisyon / Royalti','Sergi Geliri','Atölye / Workshop','Sponsorluk','Burs / Destek','Freelance İş','Diğer Gelir'],
-    gider:['Malzeme (Boya/Tuval/vb.)','Atölye Kirası','Sergi Gideri','Ulaşım','Dijital Araçlar / Abonelik','Kurs / Eğitim','Kargo','Diğer Gider']
-  },
-  genel:{
-    gelir:['Platform Komisyonu','Abonelik Geliri','Diğer Gelir'],
-    gider:['Genel Gider','Diğer Gider']
-  }
-};
-
-// ── IN-MEMORY VERİ ──
-let _ggVeri = [];
-let _mpGTip = 'hepsi';
-let _mpGSecilenTip = 'gelir';
-let _mpGDuzenleId = null;
-
-function ggPara2(n){ return (Number(n)||0).toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2})+'₺'; }
-function ggAyStr2(iso){ if(!iso)return'—'; const [y,m]=iso.split('-'); const ay=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara']; return (ay[parseInt(m)-1]||m)+' '+y; }
-
-function aktifRol(){
-  if(document.getElementById('magazaMenuBlok')?.style.display!=='none') return 'magaza';
-  if(document.getElementById('ustaMenuBlok')?.style.display!=='none') return 'usta';
-  if(document.getElementById('genczMenuBlok')?.style.display!=='none') return 'genc';
-  return 'genel';
-}
-
-function aylarDoldur(){
-  const sel = document.getElementById('mpGAyFiltre');
-  if(!sel) return;
-  const mevcut = sel.value;
-  const rol = aktifRol();
-  const aylar = [...new Set(_ggVeri.filter(v=>v.rol===rol).map(v=>v.tarih?v.tarih.substring(0,7):'').filter(Boolean))].sort().reverse();
-  sel.innerHTML = '<option value="">Tüm Aylar</option>' + aylar.map(a=>`<option value="${a}" ${mevcut===a?'selected':''}>${ggAyStr2(a+'-01')}</option>`).join('');
-}
-
-function ozetGuncelle(){
-  const rol = aktifRol();
-  const rolListe = _ggVeri.filter(v=>v.rol===rol);
-  const gelirler = rolListe.filter(v=>v.tip==='gelir');
-  const giderler = rolListe.filter(v=>v.tip==='gider');
-  const topG  = gelirler.reduce((s,v)=>s+(Number(v.tutar)||0),0);
-  const topGd = giderler.reduce((s,v)=>s+(Number(v.tutar)||0),0);
-  const net = topG - topGd;
-  const f = id=>document.getElementById(id);
-  if(f('mpGGelir'))    { f('mpGGelir').textContent = ggPara2(topG); }
-  if(f('mpGGelirAdet')){ f('mpGGelirAdet').textContent = gelirler.length+' kayıt'; }
-  if(f('mpGGider'))    { f('mpGGider').textContent = ggPara2(topGd); }
-  if(f('mpGGiderAdet')){ f('mpGGiderAdet').textContent = giderler.length+' kayıt'; }
-  if(f('mpGNet'))      { f('mpGNet').textContent = ggPara2(net); f('mpGNet').style.color = net>=0?'var(--green)':'var(--red)'; }
-  if(f('mpGNetAlt'))   { f('mpGNetAlt').textContent = net>=0?'Kârlı ✦':'Zararda ⚠'; }
-  if(f('mpGNetKart'))  { f('mpGNetKart').style.borderColor = net>=0?'rgba(76,175,130,.3)':'rgba(224,85,85,.25)'; }
-  const simdi = new Date();
-  const buAy = simdi.getFullYear()+'-'+String(simdi.getMonth()+1).padStart(2,'0');
-  const buAyListe = rolListe.filter(v=>v.tarih&&v.tarih.startsWith(buAy));
-  const buAyNet = buAyListe.filter(v=>v.tip==='gelir').reduce((s,v)=>s+(Number(v.tutar)||0),0)
-                - buAyListe.filter(v=>v.tip==='gider').reduce((s,v)=>s+(Number(v.tutar)||0),0);
-  if(f('mpGBuAy'))    { f('mpGBuAy').textContent = ggPara2(buAyNet); f('mpGBuAy').style.color = buAyNet>=0?'var(--gold)':'var(--red)'; }
-  if(f('mpGBuAyAlt')) { f('mpGBuAyAlt').textContent = ggAyStr2(buAy+'-01'); }
-}
-
-window.ggRenderMod = function(){
-  aylarDoldur();
-  ozetGuncelle();
-  const rol = aktifRol();
-  const ara = (document.getElementById('mpGArama')?.value||'').toLowerCase();
-  const ay  = document.getElementById('mpGAyFiltre')?.value||'';
-  let liste = _ggVeri.filter(v=>v.rol===rol).sort((a,b)=>(b.tarih||'').localeCompare(a.tarih||''));
-  if(_mpGTip!=='hepsi') liste = liste.filter(v=>v.tip===_mpGTip);
-  if(ay)  liste = liste.filter(v=>v.tarih&&v.tarih.startsWith(ay));
-  if(ara) liste = liste.filter(v=>(v.kategori||'').toLowerCase().includes(ara)||(v.not||'').toLowerCase().includes(ara));
-
-  // Excel butonu aktifliği
-  const exBtn = document.getElementById('mpGExcelBtn');
-  if(exBtn) exBtn.disabled = _ggVeri.filter(v=>v.rol===rol).length === 0;
-
-  const el = document.getElementById('mpGTablo');
-  if(!el) return;
-  if(!liste.length){
-    el.innerHTML='<div style="text-align:center;padding:3rem;font-style:italic;color:var(--t2)">✦ Kayıt yok. "+ Kayıt Ekle" ile başlayın.</div>';
-    return;
-  }
-  el.innerHTML=`<div style="overflow-x:auto"><table style="min-width:650px;width:100%;border-collapse:collapse;">
-    <thead><tr>
-      <th style="padding:.6rem 1rem;text-align:left;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,168,76,.6);border-bottom:1px solid var(--border);">Tarih</th>
-      <th style="padding:.6rem 1rem;text-align:left;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,168,76,.6);border-bottom:1px solid var(--border);">Tip</th>
-      <th style="padding:.6rem 1rem;text-align:left;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,168,76,.6);border-bottom:1px solid var(--border);">Kategori</th>
-      <th style="padding:.6rem 1rem;text-align:left;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,168,76,.6);border-bottom:1px solid var(--border);">Tutar (₺)</th>
-      <th style="padding:.6rem 1rem;text-align:left;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,168,76,.6);border-bottom:1px solid var(--border);">Not</th>
-      <th style="padding:.6rem 1rem;text-align:left;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,168,76,.6);border-bottom:1px solid var(--border);">İşlem</th>
-    </tr></thead>
-    <tbody>${liste.map(v=>{
-      const renk = v.tip==='gelir'?'var(--green)':'var(--red)';
-      return`<tr style="border-bottom:1px solid rgba(255,255,255,.03);">
-        <td style="padding:.6rem 1rem;font-size:.65rem;color:var(--t2)">${v.tarih||'—'}</td>
-        <td style="padding:.6rem 1rem"><span style="font-size:.55rem;font-weight:700;color:${renk}">${v.tip==='gelir'?'💚 Gelir':'🔴 Gider'}</span></td>
-        <td style="padding:.6rem 1rem;font-size:.73rem;font-weight:600">${v.kategori||'—'}</td>
-        <td style="padding:.6rem 1rem;font-size:1rem;font-family:'Syne',sans-serif;font-weight:300;color:${renk}">${v.tip==='gelir'?'+':'−'}${ggPara2(v.tutar)}</td>
-        <td style="padding:.6rem 1rem;font-size:.63rem;color:var(--t2);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${v.not||'—'}</td>
-        <td style="padding:.6rem 1rem"><div style="display:flex;gap:.3rem;">
-          <button onclick="mpGDuzenle('${v.id}')" style="padding:.25rem .6rem;background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);color:var(--gold);border-radius:2px;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">✎</button>
-          <button onclick="mpGSil('${v.id}')" style="padding:.25rem .6rem;background:rgba(224,85,85,.08);border:1px solid rgba(224,85,85,.2);color:var(--red);border-radius:2px;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">✕</button>
-        </div></td>
-      </tr>`;
-    }).join('')}</tbody>
-  </table></div>`;
-};
-
-// ── EXCEL EXPORT ──
-window.mpGExcelIndir = function(){
-  const rol = aktifRol();
-  const liste = _ggVeri.filter(v=>v.rol===rol).sort((a,b)=>(a.tarih||'').localeCompare(b.tarih||''));
-  if(!liste.length){ toast('Dışa aktarılacak kayıt yok','err'); return; }
-
-  const ROL_ADI = {magaza:'Mağaza',usta:'Usta',genc:'Genç-Sanatçı',genel:'Genel'};
-  const gelirler = liste.filter(v=>v.tip==='gelir');
-  const giderler = liste.filter(v=>v.tip==='gider');
-  const topG  = gelirler.reduce((s,v)=>s+(Number(v.tutar)||0),0);
-  const topGd = giderler.reduce((s,v)=>s+(Number(v.tutar)||0),0);
-  const net   = topG - topGd;
-
-  // CSV oluştur (Excel UTF-8 BOM ile açar)
-  const BOM = '\uFEFF';
-  const satirlar = [
-    ['GEN-Z — Gelir & Gider Raporu'],
-    ['Hesap:', ROL_ADI[rol]||rol],
-    ['Oluşturulma:', new Date().toLocaleDateString('tr-TR')],
-    [],
-    ['Tarih','Tip','Kategori','Tutar (₺)','Not'],
-    ...liste.map(v=>[
-      v.tarih||'',
-      v.tip==='gelir'?'Gelir':'Gider',
-      v.kategori||'',
-      Number(v.tutar)||0,
-      v.not||''
-    ]),
-    [],
-    ['ÖZET','','','',''],
-    ['Toplam Gelir','','', topG,''],
-    ['Toplam Gider','','', topGd,''],
-    ['Net Kar / Zarar','','', net, net>=0?'Kârlı':'Zararda'],
-  ];
-
-  const csv = BOM + satirlar.map(r=>r.map(h=>{
-    const s = String(h);
-    return s.includes(',')||s.includes('"')||s.includes('\n') ? '"'+s.replace(/"/g,'""')+'"' : s;
-  }).join(',')).join('\r\n');
-
-  const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  const tarih = new Date().toLocaleDateString('tr-TR').replace(/\./g,'-');
-  a.href = url;
-  a.download = `GEN-Z_GelirGider_${ROL_ADI[rol]||rol}_${tarih}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
-  toast('Excel dosyası indiriliyor… 📊');
-};
-
-// ── NAVİGASYON ──
-window.mpGTipSec = function(tip, el){
-  _mpGTip = tip;
-  document.querySelectorAll('#sayfa-gelir-gider .f-btn').forEach(b=>b.classList.remove('on'));
-  el.classList.add('on');
-  ggRenderMod();
-};
-
-window.mpGTipToggle = function(tip){
-  _mpGSecilenTip = tip;
-  const bG  = document.getElementById('mpGBtnGelir');
-  const bGd = document.getElementById('mpGBtnGider');
-  const S_ON_G  = 'flex:1;padding:.65rem;border-radius:5px;font-family:\'DM Sans\',sans-serif;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-weight:700;border:2px solid var(--green);background:rgba(76,175,130,.15);color:var(--green);';
-  const S_OFF   = 'flex:1;padding:.65rem;border-radius:5px;font-family:\'DM Sans\',sans-serif;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-weight:700;border:2px solid rgba(224,85,85,.2);background:none;color:var(--t2);';
-  const S_ON_GD = 'flex:1;padding:.65rem;border-radius:5px;font-family:\'DM Sans\',sans-serif;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-weight:700;border:2px solid var(--red);background:rgba(224,85,85,.15);color:var(--red);';
-  const S_OFF_G = 'flex:1;padding:.65rem;border-radius:5px;font-family:\'DM Sans\',sans-serif;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-weight:700;border:2px solid rgba(76,175,130,.2);background:none;color:var(--t2);';
-  if(bG&&bGd){ bG.style.cssText=tip==='gelir'?S_ON_G:S_OFF_G; bGd.style.cssText=tip==='gelir'?S_OFF:S_ON_GD; }
-  mpGKatDoldur();
-};
-
-window.mpGKatDoldur = function(){
-  const rol = aktifRol();
-  const katlar = (GG_KAT2[rol]||GG_KAT2.genel)[_mpGSecilenTip]||['Diğer'];
-  const sel = document.getElementById('mpGKatInput');
-  if(!sel) return;
-  const mevcut = sel.value;
-  sel.innerHTML = katlar.map(k=>`<option value="${k}" ${mevcut===k?'selected':''}>${k}</option>`).join('');
-};
-
-window.mpGModalAc = function(){
-  _mpGDuzenleId = null;
-  _mpGSecilenTip = 'gelir';
-  document.getElementById('mpGModalBaslik').textContent = '📒 Yeni Kayıt';
-  document.getElementById('mpGTutarInput').value = '';
-  document.getElementById('mpGNotInput').value   = '';
-  document.getElementById('mpGTarihInput').value = new Date().toISOString().substring(0,10);
-  mpGTipToggle('gelir');
-  mpGKatDoldur();
-  document.getElementById('mpGModalOverlay').classList.add('open');
-};
-
-window.mpGModalKapat = function(){
-  document.getElementById('mpGModalOverlay').classList.remove('open');
-};
-
-window.mpGKaydet = function(){
-  const tutar = parseFloat(document.getElementById('mpGTutarInput').value);
-  if(!tutar||tutar<=0){ toast('Geçerli bir tutar girin','err'); return; }
-  const kayit = {
-    id       : _mpGDuzenleId || Date.now().toString(36)+Math.random().toString(36).substr(2,5),
-    tip      : _mpGSecilenTip,
-    rol      : aktifRol(),
-    kategori : document.getElementById('mpGKatInput').value,
-    tutar    : tutar,
-    tarih    : document.getElementById('mpGTarihInput').value,
-    not      : document.getElementById('mpGNotInput').value.trim()
-  };
-  if(_mpGDuzenleId){
-    const idx = _ggVeri.findIndex(v=>v.id===_mpGDuzenleId);
-    if(idx>-1) _ggVeri[idx]=kayit; else _ggVeri.push(kayit);
-    toast('Kayıt güncellendi ✦');
-  } else {
-    _ggVeri.push(kayit);
-    toast('Kayıt eklendi 💰');
-  }
-  mpGModalKapat();
-  ggRenderMod();
-};
-
-window.mpGDuzenle = function(id){
-  const v = _ggVeri.find(x=>x.id===id);
-  if(!v) return;
-  _mpGDuzenleId   = id;
-  _mpGSecilenTip  = v.tip||'gelir';
-  document.getElementById('mpGModalBaslik').textContent = '✎ Kaydı Düzenle';
-  document.getElementById('mpGTutarInput').value = v.tutar||'';
-  document.getElementById('mpGTarihInput').value = v.tarih||'';
-  document.getElementById('mpGNotInput').value   = v.not||'';
-  mpGTipToggle(v.tip||'gelir');
-  mpGKatDoldur();
-  setTimeout(()=>{ document.getElementById('mpGKatInput').value = v.kategori||''; }, 50);
-  document.getElementById('mpGModalOverlay').classList.add('open');
-};
-
-window.mpGSil = function(id){
-  if(!confirm('Bu kaydı silmek istiyor musunuz?')) return;
-  _ggVeri = _ggVeri.filter(v=>v.id!==id);
-  toast('Kayıt silindi');
-  ggRenderMod();
-};
-
-})();
-</script>
+<!-- DÜZENLE MODALİ -->
 <div id="mOv" onclick="mKapat()">
   <div class="m-ic" onclick="event.stopPropagation()">
     <div class="m-top">
@@ -2349,13 +1480,12 @@ window.mpGSil = function(id){
 
 <script src="categories.js"></script>
 <script type="module">
-import{initializeApp,getApps,getApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import{getFirestore,doc,getDoc,collection,addDoc,getDocs,updateDoc,deleteDoc,query,where,orderBy,serverTimestamp,onSnapshot,limit}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import{getStorage,ref,uploadBytes,getDownloadURL}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged,sendPasswordResetEmail}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-const _fc={apiKey:"AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ",authDomain:"gen-z-io.firebaseapp.com",projectId:"gen-z-io",storageBucket:"gen-z-io.firebasestorage.app",messagingSenderId:"97338868944",appId:"1:97338868944:web:d7b429e416d8c505b14ad5"};
-const app=getApps().length?getApp():initializeApp(_fc);
+const app=initializeApp({apiKey:"AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ",authDomain:"gen-z-io.firebaseapp.com",projectId:"gen-z-io",storageBucket:"gen-z-io.firebasestorage.app",messagingSenderId:"97338868944",appId:"1:97338868944:web:d7b429e416d8c505b14ad5"});
 const db=getFirestore(app);
 const storage=getStorage(app);
 const auth=getAuth(app);
@@ -2368,9 +1498,7 @@ let _uFiltre='hepsi';
 let _sFiltre='hepsi';
 let _secKat='Kumaş / Tekstil';
 let _secOlcu={birim:'adet',ad:'Adet'};
-// _resimler upload.js'den window._resimler olarak geliyor
-let _resimler = window._resimler || [];
-window._resimler = _resimler;
+let _resimler=[];
 let _bedenler=[];
 let _renkler=[];
 
@@ -2417,7 +1545,6 @@ let _ustaVeri = null;
 onAuthStateChanged(auth, async user=>{
   if(user){
     _aktifUid = user.uid;
-    window._aktifUid = user.uid;
     await magazaYukle(user.uid);
   } else {
     document.getElementById('loginScreen').style.display='flex';
@@ -2427,7 +1554,7 @@ onAuthStateChanged(auth, async user=>{
 
 async function magazaYukle(uid){
   try{
-    // Hem mağaza hem usta hem genç kontrol et
+    // Hem mağaza hem usta kontrol et
     const [magSnap, userSnap] = await Promise.all([
       getDocs(query(collection(db,'magazalar'),where('uid','==',uid))),
       getDoc(doc(db,'kullanicilar',uid)).catch(()=>null)
@@ -2436,24 +1563,17 @@ async function magazaYukle(uid){
     const ustaOnay = ud.ustaOnay === true;
     const magazaVar = !magSnap.empty;
 
-    // Genç-Z kontrolü (mağaza/usta yoksa bile girebilir)
-    const isGencz = (ud.roller||[]).includes('gencz')
-                 || ud.gencimDurum === 'onaylandi'
-                 || ud.rol === 'gencz';
-
-    // Hiçbir yetkisi yoksa çıkış yaptır
-    if(!magazaVar && !ustaOnay && !isGencz){
+    if(!magazaVar && !ustaOnay){
       await signOut(auth);
       const err=document.getElementById('lErr');
-      err.textContent='Bu hesabın mağaza, usta veya Genç-Z yetkisi yok.';
+      err.textContent='Bu hesabın mağaza veya usta yetkisi yok.';
       err.classList.add('v');
       return;
     }
 
     if(magazaVar){
       const mag=magSnap.docs[0];
-      _magaza={id:mag.id, ...mag.data(), tip:'magaza'};
-      window._magaza = _magaza;
+      _magaza={id:mag.id,...mag.data()};
       document.getElementById('magazaMenuBlok').style.display='block';
     }
 
@@ -2462,25 +1582,15 @@ async function magazaYukle(uid){
       const bitis = ud.ustaAbonelikBitis;
       const aktif = !bitis || new Date(bitis) > new Date();
       _ustaVeri._abonelikAktif = aktif;
-      window._ustaVeri = _ustaVeri;
       document.getElementById('ustaMenuBlok').style.display='block';
     }
 
+    // Genç-Z kontrolü
+    const isGencz = (ud.roller||[]).includes('gencz') || ud.gencimDurum === 'onaylandi';
     if(isGencz){
-      // Genç için _magaza set et — urunEkle() bu olmadan çöküyor
-      if(!_magaza){
-        _magaza = {
-          id  : uid,
-          ad  : ud.displayName || ud.username || ud.ad || 'Genç Mağaza',
-          uid : uid,
-          tip : 'gencz'
-        };
-        window._magaza = _magaza;
-      }
       document.getElementById('genczMenuBlok').style.display='block';
     }
 
-    // Varsayılan başlangıç sayfası
     if(!magazaVar && ustaOnay && !isGencz){
       document.querySelector('.sayfa.on')?.classList.remove('on');
       document.getElementById('sayfa-usta-ozet')?.classList.add('on');
@@ -2536,39 +1646,15 @@ window.sifremiUnuttum=async function(){
 function panelAc(){
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('panel').style.display='block';
-
-  // Görünen isim
-  let panelAd = '—';
-  if(_magaza && _magaza.tip === 'magaza') {
-    panelAd = _magaza.ad + (_ustaVeri?.ustaOnay ? ' / Usta' : '');
-  } else if(_ustaVeri?.ustaOnay && !_magaza) {
-    panelAd = _ustaVeri.ad || _ustaVeri.displayName || 'Usta';
-  } else if(_magaza && _magaza.tip === 'gencz') {
-    panelAd = _magaza.ad || 'Genç-Z';
-  }
+  const panelAd = (_magaza&&_magaza.ad) ? _magaza.ad+(_ustaVeri?' / Usta':'') : (_ustaVeri?(_ustaVeri.ad||'Usta'):'—');
   document.getElementById('sbAd').textContent = panelAd;
-
-  // Mağaza için ürün/sipariş yükle
-  if(_magaza && _magaza.tip === 'magaza'){ renderKatGrid(); doldurModalKat(); yukle(); }
-
-  // Genç için ürünleri yükle (mağaza kategorileri DEĞİL, kendi kategorileri var)
-  if(_magaza && _magaza.tip === 'gencz'){ yukle(); }
-
-  // Usta modülünü yükle
-  if(_ustaVeri?.ustaOnay){ ustaYukle(); }
-
-  // Genç modülünü yükle
-  if(_magaza?.tip === 'gencz'){
-    if(typeof window.genczYukle === 'function') window.genczYukle();
-  }
+  if(_magaza){ renderKatGrid(); doldurModalKat(); yukle(); }
+  if(_ustaVeri){ ustaYukle(); }
 }
 
 window.cikisYap=async function(){
   await signOut(auth);
-  _magaza=null;_urunler=[];_siparisler=[];_ustaVeri=null;
-  document.getElementById('magazaMenuBlok').style.display='none';
-  document.getElementById('ustaMenuBlok').style.display='none';
-  document.getElementById('genczMenuBlok').style.display='none';
+  _magaza=null;_urunler=[];_siparisler=[];
   document.getElementById('lEmail').value='';
   document.getElementById('lPass').value='';
 };
@@ -2587,7 +1673,8 @@ async function ustaYukle(){
     // İlanları çek
     const ilanSnap = await getDocs(query(
       collection(db,'ustam_ilanlar'),
-      where('ustaUid','==',_aktifUid)
+      where('ustaUid','==',_aktifUid),
+      orderBy('ts','desc')
     )).catch(()=>null);
     // saticiUid ile de dene (eski kayıtlar için)
     let ilanlar = ilanSnap ? ilanSnap.docs.map(d=>({id:d.id,...d.data()})) : [];
@@ -2598,9 +1685,6 @@ async function ustaYukle(){
       )).catch(()=>null);
       ilanlar = ilanSnap2 ? ilanSnap2.docs.map(d=>({id:d.id,...d.data()})) : [];
     }
-    // Client-side sırala (Firestore index gerektirmez)
-    ilanlar.sort((a,b)=>(b.ts?.seconds||0)-(a.ts?.seconds||0));
-    window._aktifIlanlar = ilanlar; // ilanDuzenle için global erişim
 
     // Özet güncelle
     document.getElementById('ustaIlanSay').textContent = ilanlar.length;
@@ -2647,162 +1731,22 @@ async function ustaYukle(){
       } else {
         const durumRenk = (d) => d==='onaylandi'?'var(--green)':d==='reddedildi'?'var(--red)':'var(--gold)';
         const durumTxt  = (d) => d==='onaylandi'?'✅ Onaylı':d==='reddedildi'?'❌ Reddedildi':'⏳ Onay Bekliyor';
-        liste.innerHTML = ilanlar.map(il=>{
-          const durum = il.durum||'bekliyor';
-          const redSebebiHTML = durum==='reddedildi' && il.redSebep
-            ? `<div style="margin-top:.5rem;padding:.5rem .7rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.2);border-radius:4px;">
-                <div style="font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:.2rem;">⚠️ Red Sebebi</div>
-                <div style="font-size:.65rem;color:rgba(240,238,255,.75);line-height:1.6;">${il.redSebep}</div>
-              </div>` : '';
-          const tekrarBtn = durum==='reddedildi'
-            ? `<button onclick="ilanTekrarGonder('${il.id}')" style="margin-top:.5rem;padding:.4rem .9rem;background:rgba(92,240,180,.08);border:1px solid rgba(92,240,180,.3);color:#5CF0B4;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">🔄 Düzelt & Tekrar Gönder</button>` : '';
-          const duzenleBtn = durum==='bekliyor'
-            ? `<button onclick="ilanDuzenle('${il.id}')" style="margin-top:.5rem;padding:.4rem .9rem;background:rgba(123,92,240,.1);border:1px solid rgba(123,92,240,.35);color:#a78bfa;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">✏️ Düzenle</button>` : '';
-          const silBtn = `<button onclick="ilanSil('${il.id}')" style="margin-top:.5rem;margin-left:.4rem;padding:.4rem .9rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.25);color:var(--red);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;cursor:pointer;">🗑 Sil</button>`;
-          return `<div style="padding:1rem;background:rgba(255,255,255,.022);border:1px solid ${durum==='reddedildi'?'rgba(224,85,85,.25)':'rgba(201,168,76,.12)'};border-radius:6px;margin-bottom:.7rem;">
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
-              <div style="flex:1;min-width:0;">
-                <div style="font-family:'Syne',sans-serif;font-size:.95rem;color:#f0ebe0;margin-bottom:.2rem;">${il.ad||il.hizmet||'—'}</div>
-                <div style="font-size:.58rem;color:rgba(201,168,76,.6);letter-spacing:.1em;">${il.hizmet||il.kategori||'—'} · ${il.fiyat?'₺'+(il.fiyat).toLocaleString('tr-TR')+' / '+(il.fiyatTip||'iş'):''} · ${il.sehir||''}</div>
-              </div>
-              <span style="font-size:.58rem;font-weight:700;color:${durumRenk(durum)};flex-shrink:0;">${durumTxt(durum)}</span>
+        liste.innerHTML = ilanlar.map(il=>`
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem;background:rgba(255,255,255,.022);border:1px solid rgba(201,168,76,.12);border-radius:6px;margin-bottom:.7rem;gap:1rem;flex-wrap:wrap;">
+            <div style="flex:1;min-width:0;">
+              <div style="font-family:'Syne',sans-serif;font-size:.95rem;color:#f0ebe0;margin-bottom:.2rem;">${il.ad||il.hizmet||'—'}</div>
+              <div style="font-size:.58rem;color:rgba(201,168,76,.6);letter-spacing:.1em;">${il.hizmet||il.kategori||'—'} · ${il.fiyat?'₺'+(il.fiyat).toLocaleString('tr-TR')+' / '+(il.fiyatTip||'iş'):''} · ${il.sehir||''}</div>
             </div>
-            ${redSebebiHTML}
-            <div>${duzenleBtn}${tekrarBtn}${silBtn}</div>
-          </div>`;
-        }).join('');
+            <span style="font-size:.58rem;font-weight:700;color:${durumRenk(il.durum||'bekliyor')};">${durumTxt(il.durum||'bekliyor')}</span>
+          </div>
+        `).join('');
       }
     }
   }catch(e){ console.error('ustaYukle hata:',e); }
   rdvBadgeGuncelle();
 }
 
-// ── İLAN TEKRAR GÖNDER ──────────────────────────────────────────────────
-window.ilanTekrarGonder = function(id) {
-  let modal = document.getElementById('ilanTekrarModal');
-  if(!modal){
-    modal = document.createElement('div');
-    modal.id = 'ilanTekrarModal';
-    modal.style.cssText = 'position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1rem;';
-    modal.innerHTML = `
-      <div style="background:#0d0d14;border:1px solid rgba(201,168,76,.25);border-radius:8px;padding:1.6rem;width:min(460px,94vw);">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
-          <h3 style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:300;">🔄 İlanı Tekrar Gönder</h3>
-          <button onclick="document.getElementById('ilanTekrarModal').remove()" style="background:none;border:none;color:var(--t2);font-size:1.2rem;cursor:pointer;">✕</button>
-        </div>
-        <p style="font-size:.68rem;color:var(--t2);margin-bottom:1rem;line-height:1.7;">Admin'e bir not bırakabilirsin. Örn: "Fiyat güncellendi", "Açıklama düzeltildi"</p>
-        <label style="display:block;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--t2);margin-bottom:.4rem;">Notun (isteğe bağlı)</label>
-        <textarea id="ilanTekrarNot" placeholder="Örn: Belirtilen eksiklikleri tamamladım…"
-          style="width:100%;min-height:90px;background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:.7rem 1rem;font-family:'DM Sans',sans-serif;font-size:.72rem;color:var(--cream);outline:none;resize:vertical;line-height:1.6;"></textarea>
-        <div style="display:flex;gap:.6rem;margin-top:1rem;justify-content:flex-end;">
-          <button onclick="document.getElementById('ilanTekrarModal').remove()" style="padding:.6rem 1.2rem;background:none;border:1px solid var(--border);color:var(--t2);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.62rem;cursor:pointer;">İptal</button>
-          <button id="ilanTekrarOnayla" style="padding:.6rem 1.4rem;background:rgba(92,240,180,.1);border:1px solid rgba(92,240,180,.3);color:#5CF0B4;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:700;cursor:pointer;">🔄 Onaya Gönder</button>
-        </div>
-      </div>`;
-    document.body.appendChild(modal);
-  }
-  document.getElementById('ilanTekrarNot').value = '';
-  document.getElementById('ilanTekrarOnayla').onclick = async () => {
-    const not = document.getElementById('ilanTekrarNot')?.value.trim();
-    try {
-      const guncelleme = { durum:'bekliyor', redSebep:null, guncellendi:serverTimestamp() };
-      if(not) guncelleme.duzeltmeNotu = not;
-      await updateDoc(doc(db,'ustam_ilanlar',id), guncelleme);
-      document.getElementById('ilanTekrarModal')?.remove();
-      toast('✅ İlan tekrar onaya gönderildi!');
-      ustaYukle();
-    } catch(e) { toast('Hata: '+e.message,'err'); }
-  };
-};
-
-// ── İLAN SİL ────────────────────────────────────────────────────────────
-window.ilanSil = async function(id) {
-  if(!confirm('Bu ilanı silmek istediğine emin misin?')) return;
-  try {
-    await deleteDoc(doc(db,'ustam_ilanlar',id));
-    toast('🗑 İlan silindi.');
-    ustaYukle();
-  } catch(e) { toast('Hata: '+e.message,'err'); }
-};
-
-// ── İLAN DÜZENLE (bekliyor) ──────────────────────────────────────────────
-window.ilanDuzenle = function(id) {
-  // ilanlar ustaYukle'den local scope'ta — window'a açık tut
-  const ilanlar = window._aktifIlanlar || [];
-  const il = ilanlar.find(x=>x.id===id);
-  if(!il){ toast('İlan bulunamadı.','err'); return; }
-
-  let modal = document.getElementById('ilanDuzenleModal');
-  if(!modal){
-    modal = document.createElement('div');
-    modal.id = 'ilanDuzenleModal';
-    modal.style.cssText = 'position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1rem;overflow-y:auto;';
-    modal.onclick = e => { if(e.target===modal) modal.remove(); };
-    document.body.appendChild(modal);
-  }
-
-  const FIYAT_TIPLER = [
-    ['saat','Saatlik'],['is','İş Başı'],['m2','m² Başına'],['gorusme','Görüşmeye Göre']
-  ];
-  modal.innerHTML = `
-    <div style="background:#0d0d14;border:1px solid rgba(201,168,76,.25);border-radius:10px;padding:1.8rem;width:min(520px,95vw);max-height:90vh;overflow-y:auto;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;">
-        <h3 style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:300;color:var(--cream);">✏️ İlanı Düzenle</h3>
-        <button onclick="document.getElementById('ilanDuzenleModal').remove()" style="background:none;border:none;color:var(--t2);font-size:1.2rem;cursor:pointer;">✕</button>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:.85rem;">
-        <div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.4rem;">Hizmet Türü</label>
-          <input class="fi" id="idHizmet" value="${il.hizmet||''}" style="width:100%;font-size:.72rem;box-sizing:border-box;"></div>
-        <div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.4rem;">İlan Başlığı *</label>
-          <input class="fi" id="idBaslik" value="${(il.ad||'').replace(/"/g,'&quot;')}" style="width:100%;font-size:.72rem;box-sizing:border-box;"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;">
-          <div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.4rem;">Fiyat (₺)</label>
-            <input class="fi" id="idFiyat" type="number" min="0" value="${il.fiyat||''}" style="width:100%;font-size:.72rem;box-sizing:border-box;"></div>
-          <div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.4rem;">Fiyat Tipi</label>
-            <select class="fi" id="idFiyatTip" style="width:100%;font-size:.72rem;box-sizing:border-box;">
-              ${FIYAT_TIPLER.map(([v,t])=>`<option value="${v}"${il.fiyatTip===v?' selected':''}>${t}</option>`).join('')}
-            </select></div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;">
-          <div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.4rem;">Şehir</label>
-            <input class="fi" id="idSehir" value="${il.sehir||''}" style="width:100%;font-size:.72rem;box-sizing:border-box;"></div>
-          <div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.4rem;">İlçe</label>
-            <input class="fi" id="idIlce" value="${il.ilce||''}" style="width:100%;font-size:.72rem;box-sizing:border-box;"></div>
-        </div>
-        <div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.4rem;">Açıklama</label>
-          <textarea class="fi" id="idAciklama" style="width:100%;min-height:80px;resize:vertical;font-size:.72rem;box-sizing:border-box;">${il.aciklama||''}</textarea></div>
-        <div><label style="display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.15em;color:var(--t2);margin-bottom:.4rem;">Müsait Günler / Saatler</label>
-          <input class="fi" id="idMusait" value="${il.musaitlik||''}" style="width:100%;font-size:.72rem;box-sizing:border-box;"></div>
-        <div id="idErr" style="display:none;padding:.6rem .8rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.25);border-radius:4px;font-size:.68rem;color:var(--red);"></div>
-        <div style="display:flex;gap:.6rem;justify-content:flex-end;margin-top:.4rem;">
-          <button onclick="document.getElementById('ilanDuzenleModal').remove()" style="padding:.65rem 1.2rem;background:none;border:1px solid var(--border);color:var(--t2);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.62rem;cursor:pointer;">İptal</button>
-          <button onclick="ilanDuzenleKaydet('${id}')" style="padding:.65rem 1.4rem;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.35);color:var(--gold);border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:700;cursor:pointer;">✦ Kaydet — Onay Bekliyor</button>
-        </div>
-      </div>
-    </div>`;
-};
-
-window.ilanDuzenleKaydet = async function(id) {
-  const baslik  = document.getElementById('idBaslik')?.value.trim();
-  const hizmet  = document.getElementById('idHizmet')?.value.trim();
-  const fiyat   = parseFloat(document.getElementById('idFiyat')?.value)||0;
-  const fiyatTip= document.getElementById('idFiyatTip')?.value||'is';
-  const sehir   = document.getElementById('idSehir')?.value.trim();
-  const ilce    = document.getElementById('idIlce')?.value.trim();
-  const aciklama= document.getElementById('idAciklama')?.value.trim();
-  const musait  = document.getElementById('idMusait')?.value.trim();
-  const err     = document.getElementById('idErr');
-  if(!baslik){ err.textContent='Başlık zorunludur.'; err.style.display='block'; return; }
-  try {
-    await updateDoc(doc(db,'ustam_ilanlar',id),{
-      ad:baslik, hizmet, fiyat, fiyatTip, sehir, ilce, aciklama,
-      musaitlik:musait, durum:'bekliyor', guncellendi:serverTimestamp()
-    });
-    document.getElementById('ilanDuzenleModal')?.remove();
-    toast('✦ İlan güncellendi, onay bekliyor.');
-    ustaYukle();
-  } catch(e){ err.textContent='Hata: '+e.message; err.style.display='block'; }
-};
+// ── RANDEVU FONKSİYONLARI ──
 let _rdvListesi = [];
 let _rdvFiltreSec = 'hepsi';
 
@@ -2983,19 +1927,6 @@ function renderUrunler(){
     const durum=u.durum||'bekliyor';
     const durumT=durum==='onaylandi'?'✅ Onaylı':durum==='reddedildi'?'❌ Reddedildi':durum==='stok'?'📦 Stokta':durum==='bekliyor'?'⏳ Bekliyor':'⏳ Bekliyor';
     const olcuStr=u.miktar&&u.olcuBirim?`${u.miktar} ${u.olcuBirim}`:'';
-
-    // Red sebebi bloğu
-    const redSebebiHTML = durum==='reddedildi' && u.redSebep
-      ? `<div style="margin:.6rem 0 0;padding:.6rem .8rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.22);border-radius:4px;">
-          <div style="font-size:.5rem;letter-spacing:.15em;text-transform:uppercase;color:var(--red);opacity:.8;margin-bottom:.3rem;">⚠️ Red Sebebi</div>
-          <div style="font-size:.68rem;color:rgba(240,238,255,.75);line-height:1.6;">${u.redSebep}</div>
-        </div>`
-      : durum==='reddedildi'
-      ? `<div style="margin:.6rem 0 0;padding:.5rem .8rem;background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.18);border-radius:4px;font-size:.65rem;color:var(--red);opacity:.7;">
-          ❌ Reddedildi — sebep belirtilmedi
-        </div>`
-      : '';
-
     return`<div class="u-kart">
       <div class="u-img">
         ${resim?`<img src="${resim}" alt="${u.ad}" loading="lazy">`:`<span style="font-size:3rem;opacity:.3">📷</span>`}
@@ -3005,7 +1936,6 @@ function renderUrunler(){
         <span class="u-kat">${u.kategori||'—'}</span>
         <div class="u-ad">${u.ad||'—'}</div>
         <div class="u-desc">${u.aciklama||''}</div>
-        ${redSebebiHTML}
         <div class="u-alt">
           <div>
             <span class="u-fiyat">${para(u.kdvDahilFiyat||u.fiyat||0)} ₺</span>
@@ -3017,7 +1947,6 @@ function renderUrunler(){
       </div>
       <div class="u-eylem">
         <button class="aksiyon duz" onclick="mAc('${u.id}')">✏️ Düzenle</button>
-        ${durum==='reddedildi'?`<button class="aksiyon duz" onclick="tekrarGonder('${u.id}')" style="color:rgba(92,240,180,.9);border-color:rgba(92,240,180,.3);">🔄 Düzelt & Tekrar Gönder</button>`:''}
         ${durum==='stok'?`<button class="aksiyon duz" onclick="urunYayinla('${u.id}')" style="color:rgba(92,240,180,.9);border-color:rgba(92,240,180,.3);">🚀 Yayınla</button>`:''}
         ${durum==='onaylandi'||durum==='bekliyor'?`<button class="aksiyon duz" onclick="oneCikarAc('${u.id}','${(u.ad||u.name||'').replace(/'/g,"\\'")}')" style="color:rgba(201,168,76,.8);border-color:rgba(201,168,76,.3);">⭐ Öne Çıkar</button>`:''}
         <button class="aksiyon sil" onclick="urunSil('${u.id}')">🗑 Sil</button>
@@ -3075,10 +2004,10 @@ window.urunFiltre=function(tip,btn){
 };
 
 // ── FORM KONTROL ──
-window.formKontrol = function formKontrol(){
+function formKontrol(){
   const ad=(document.getElementById('uAd')?.value||'').trim();
   const fiyat=parseFloat(document.getElementById('uFiyat')?.value||0);
-  const foto=(window._resimler||_resimler).length>0;
+  const foto=_resimler.length>0;
   const kat=!!_secKat;
   const tamam= kat && ad && fiyat>0 && foto;
   // Yayınla butonu — foto + kat + ad + fiyat zorunlu
@@ -3140,35 +2069,22 @@ window.urunEkle=async function(){
   const err=document.getElementById('ekleErr');
   const ok=document.getElementById('ekleOk');
   err.classList.remove('v');ok.classList.remove('v');
-
-  // _magaza yoksa (Genç yeniden yüklenmişse) yeniden oluştur
-  if(!_magaza && _aktifUid){
-    _magaza = { id:_aktifUid, ad:'Genç Mağaza', uid:_aktifUid, tip:'gencz' };
-    window._magaza = _magaza;
-  }
-  if(!_magaza){
-    err.textContent='Mağaza bilgisi bulunamadı. Lütfen tekrar giriş yapın.';
-    err.classList.add('v');
-    return;
-  }
-
   if(!ad){err.textContent='Ürün adı zorunludur.';err.classList.add('v');return;}
   if(!fiyat||fiyat<=0){err.textContent='Geçerli bir fiyat girin.';err.classList.add('v');return;}
   if(!desc){err.textContent='Açıklama zorunludur.';err.classList.add('v');return;}
   const btn=document.getElementById('ekleBtn');
   btn.textContent='Yükleniyor…';btn.disabled=true;
-  urunOverlayAc();
 
   let resimUrls=[];
   try{
-    resimUrls = await window.magazaResimleriYukle();
+    for(const r of _resimler){
+      const storageRef=ref(storage,`magaza_urunler/${_magaza.id}/${Date.now()}_${r.file.name}`);
+      await uploadBytes(storageRef,r.file);
+      const url=await getDownloadURL(storageRef);
+      resimUrls.push(url);
+    }
   }catch(e){
-    urunOverlayKapat();
-    err.textContent='⚠ Fotoğraf yüklenemedi: ' + e.message + ' — Lütfen tekrar deneyin.';
-    err.classList.add('v');
-    btn.textContent='✦ Yayınla — Admin Onayına Gider';
-    btn.disabled=false;
-    return;
+    resimUrls=_resimler.map(r=>r.url);
   }
 
   try{
@@ -3178,8 +2094,6 @@ window.urunEkle=async function(){
     await addDoc(collection(db,'magaza_urunler'),{
       magazaId:_magaza.id,
       magazaAd:_magaza.ad,
-      uid:_aktifUid||null,
-      platform: _magaza.tip || 'magaza',
       ad,fiyat,stok,
       aciklama:desc,
       kategori:_secKat,
@@ -3207,9 +2121,8 @@ window.urunEkle=async function(){
     });
     ok.textContent='✦ Ürün gönderildi! Admin onayından sonra mağazada görünecek.';
     ok.classList.add('v');
-    urunOverlayBasarili();
     ['uAd','uFiyat','uStok','uDesc','uSku'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-    window.magazaResimleriTemizle?.();_resimler=window._resimler||[];_bedenler=[];_renkler=[];
+    _resimler=[];_bedenler=[];_renkler=[];
     Object.keys(_ekAlanlar).forEach(k=>delete _ekAlanlar[k]);
     document.getElementById('resimPreview').innerHTML='';
     _secKat='';
@@ -3223,37 +2136,8 @@ window.urunEkle=async function(){
     setTimeout(()=>ok.classList.remove('v'),5000);
     await urunleriYukle();
     ozetGuncelle();
-  }catch(e){
-    urunOverlayKapat();
-    err.textContent='Hata: '+e.message;
-    err.classList.add('v');
-  } finally {
-    btn.textContent='✦ Yayınla — Admin Onayına Gider';
-    btn.disabled=false;
-  }
-};
-
-// ── REDDEDİLEN ÜRÜNÜ TEKRAR GÖNDER ─────────────────────────────────────
-window.tekrarGonder = async function(id) {
-  const u = _urunler.find(x => x.id === id);
-  if (!u) return;
-  if (!confirm(`"${u.ad}" ürününü düzenleyip tekrar admin onayına göndermek istiyor musun?`)) return;
-  if (!u.resimler || !u.resimler.length) {
-    toast('Ürünün fotoğrafı yok. Önce düzenle ve fotoğraf ekle.', 'err');
-    return;
-  }
-  try {
-    await updateDoc(doc(db, 'magaza_urunler', id), {
-      durum       : 'bekliyor',
-      redSebep    : null,
-      guncellendi : serverTimestamp()
-    });
-    toast('✅ Ürün tekrar onaya gönderildi!');
-    await urunleriYukle();
-    ozetGuncelle();
-  } catch(e) {
-    toast('Hata: ' + e.message, 'err');
-  }
+  }catch(e){err.textContent='Hata: '+e.message;err.classList.add('v');}
+  btn.textContent='✦ Ürünü Gönder — Admin Onayına Gider';btn.disabled=false;
 };
 
 // ── STOKTAN YAYINLA ─────────────────────────────────────────────────────
@@ -3424,7 +2308,56 @@ function renderFinans(){
 
 // ── RESİM YÜKLEYİCİ ──
 /* Fotoğrafı canvas üzerinden sıkıştırır; max 1200px, JPEG %82 kalite */
-// Fotoğraf kodu upload.js modülünde — window.resimSec, window.dragOver vs. oradan geliyor
+function gorselSikistir(file){
+  return new Promise(resolve=>{
+    const MAX_W=1200,MAX_H=1200,QUALITY=0.72;
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const img=new Image();
+      img.onload=()=>{
+        let w=img.width,h=img.height;
+        if(w>MAX_W||h>MAX_H){
+          const ratio=Math.min(MAX_W/w,MAX_H/h);
+          w=Math.round(w*ratio);h=Math.round(h*ratio);
+        }
+        const canvas=document.createElement('canvas');
+        canvas.width=w;canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        canvas.toBlob(blob=>{
+          const sFile=new File([blob],file.name.replace(/\.[^.]+$/,'.jpg'),{type:'image/jpeg'});
+          const url=canvas.toDataURL('image/jpeg',QUALITY);
+          resolve({file:sFile,url});
+        },'image/jpeg',QUALITY);
+      };
+      img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+window.resimSec=async function(files){
+  const MAX_BOYUT=2.5*1024*1024; /* Max 2.5MB kabul et, sıkıştırılacak */
+  for(const f of Array.from(files)){
+    if(_resimler.length>=5) break;
+    if(!f.type.startsWith('image/')) continue;
+    if(f.size>MAX_BOYUT){ showToast('⚠ Fotoğraf çok büyük (max 2.5MB): '+f.name+' — Boyutu küçültmek için squoosh.app kullanabilirsin'); continue; }
+    const sikistirilmis=await gorselSikistir(f);
+    _resimler.push(sikistirilmis);
+    resimPreviewGuncelle();
+    formKontrol();
+  }
+};
+window.dragOver=function(e){e.preventDefault();document.getElementById('resimAlan').classList.add('dragover');};
+window.dragLeave=function(){document.getElementById('resimAlan').classList.remove('dragover');};
+window.dropResim=function(e){e.preventDefault();document.getElementById('resimAlan').classList.remove('dragover');resimSec(e.dataTransfer.files);};
+function resimPreviewGuncelle(){
+  document.getElementById('resimPreview').innerHTML=_resimler.map((r,i)=>`
+    <div class="resim-thumb${i===0?' ana':''}">
+      <img src="${r.url}" alt="resim">
+      <button class="r-sil" onclick="resimSil(${i})">✕</button>
+    </div>`).join('');
+}
+window.resimSil=function(i){_resimler.splice(i,1);resimPreviewGuncelle();formKontrol();};
 
 window.etiketEkle=function(inputId,listId){
   const inp=document.getElementById(inputId);
@@ -4697,16 +3630,13 @@ window.git=function(id,btn){
   document.getElementById('sayfa-'+id).classList.add('on');
   btn.classList.add('on');
   if(id==='usta-randevular') randevulariYukle();
-  if(id==='usta-projeler') window.projeModulYukle && window.projeModulYukle();
-  if(id==='usta-ilanlar') { ustaYukle(); window.ilanSayfasiAc && window.ilanSayfasiAc(); }
-  if(id==='usta-ozet') ustaYukle();
+  if(id==='usta-ilanlar'||id==='usta-ozet') ustaYukle();
   if(id==='stok') window.stokModulYukle && window.stokModulYukle();
   if(id==='iadeler') window._iadeTalepleriYukle && window._iadeTalepleriYukle();
   if(id==='gencz-icerik' || id==='gencz-ozet') window.genczYukle && window.genczYukle();
   if(id==='gencz-yeni') window.genczKatGridOlustur && window.genczKatGridOlustur();
   if(id==='finans-danisman') window.danismanYukle && window.danismanYukle();
   if(id==='vergi-takvim') window.vergiYukle && window.vergiYukle();
-  if(id==='gelir-gider') window.ggRenderMod && window.ggRenderMod();
 };
 window.toggle=function(bodyId,arrId){
   const b=document.getElementById(bodyId);
@@ -4883,7 +3813,6 @@ window.iadeAc = function(s) { _iadeModalAcFn(typeof s==='string'?JSON.parse(s):s
 <script type="module" src="modpanel-ilan-gencz.js"></script>
 <script type="module" src="modpanel-pro.js"></script>
 <script src="cookie-consent.js"></script>
-<script type="module" src="upload.js"></script>
 
 <!-- CHAT MODAL -->
 <div class="chat-overlay" id="chatOverlay" onclick="chatKapat(event)">
@@ -4991,163 +3920,5 @@ window.chatGonder = async function() {
   </div>
 </div>
 
-<script type="module">
-/* ── PROJE TAKİP MODÜLü ── */
-import {
-  getFirestore, collection, query, where, orderBy,
-  onSnapshot, doc, updateDoc, serverTimestamp, getDoc
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-const db = getFirestore();
-let _projeler = [];
-let _prjFiltre = 'hepsi';
-let _prjUnsub  = null;
-
-async function ilerlemeyiGuncelle(projeId, yuzde) {
-  const projeRef = doc(db, 'ustam_projeler', projeId);
-  const snap = await getDoc(projeRef);
-  const eskiAdimlar = snap.data()?.adimlar || [];
-  const yeniAdim = { yuzde, ustaTs: new Date().toISOString(), musteriOnay: null, musteriTs: null };
-  await updateDoc(projeRef, {
-    ilerleme     : yuzde,
-    onayBekliyor : true,
-    adimlar      : [...eskiAdimlar, yeniAdim],
-    sonGuncelleme: serverTimestamp(),
-  });
-}
-
-function ozetGuncelle() {
-  const el = (id) => document.getElementById(id);
-  if (!el('prj-toplam')) return;
-  el('prj-toplam').textContent = _projeler.length;
-  el('prj-devam').textContent  = _projeler.filter(p => p.durum === 'devam').length;
-  el('prj-tamam').textContent  = _projeler.filter(p => p.durum === 'tamamlandi').length;
-  el('prj-iptal').textContent  = _projeler.filter(p => p.durum === 'iptal').length;
-  const bekleyen = _projeler.filter(p => p.onayBekliyor).length;
-  const badge = document.getElementById('proje-badge');
-  if (badge) { badge.textContent = bekleyen || ''; badge.style.display = bekleyen ? 'inline' : 'none'; }
-}
-
-window.prjFiltre = function(filtre, btn) {
-  _prjFiltre = filtre;
-  document.querySelectorAll('#sayfa-usta-projeler .f-btn').forEach(b => b.classList.remove('on'));
-  if (btn) btn.classList.add('on');
-  prjRender();
-};
-
-function projeKartHTML(p) {
-  const durumMap = {
-    devam      : { label:'⚙️ Devam Ediyor', cls:'devam' },
-    tamamlandi : { label:'✅ Tamamlandı',   cls:'tamamlandi' },
-    iptal      : { label:'🚫 İptal',        cls:'iptal' },
-  };
-  const d = durumMap[p.durum] || durumMap.devam;
-  const tarih = p.ts?.toDate ? p.ts.toDate().toLocaleDateString('tr-TR') : '—';
-  let barCls = p.durum === 'iptal' ? 'iptal' : p.durum === 'tamamlandi' ? 'tamam' : '';
-
-  const adimlarHTML = (p.adimlar || []).map(a => {
-    const cls    = a.musteriOnay === true ? 'onaylandi' : a.musteriOnay === false ? 'reddedildi' : 'bekliyor';
-    const etiket = a.musteriOnay === true ? `%${a.yuzde} ✓` : a.musteriOnay === false ? `%${a.yuzde} ✗` : `%${a.yuzde} ⏳`;
-    return `<span class="prj-adim ${cls}">${etiket}</span>`;
-  }).join('');
-
-  let aksiyonHTML = '';
-  if (p.durum === 'devam' && !p.onayBekliyor) {
-    const adimlar = [25, 50, 100].filter(y => y > (p.ilerleme || 0));
-    aksiyonHTML = `<div class="prj-actions">
-      ${adimlar.map(y => `<button class="prj-ilerleme-btn ${y===100?'tamam-btn':''}" onclick="prjIlerle('${p.id}',${y})">
-        ${y===100 ? '✅ İşi Tamamlandı Olarak İşaretle' : `%${y} Tamamlandı`}
-      </button>`).join('')}
-    </div>`;
-  } else if (p.onayBekliyor) {
-    aksiyonHTML = `<div style="margin-top:.8rem;font-size:.65rem;color:var(--orange);background:rgba(230,126,34,.07);border:1px solid rgba(230,126,34,.2);border-radius:4px;padding:.5rem .8rem;">
-      ⏳ Müşteri onayı bekleniyor…
-    </div>`;
-  }
-
-  return `<div class="prj-kart ${p.onayBekliyor?'onay-bekliyor':''}">
-    <div class="prj-ust">
-      <div>
-        <div class="prj-baslik">${p.isAdi}</div>
-        <div class="prj-meta">📍 ${p.sehir||'—'} &nbsp;·&nbsp; 👤 ${p.musteriAd} &nbsp;·&nbsp; 📅 ${tarih}</div>
-      </div>
-      <span class="prj-durum ${p.onayBekliyor&&p.durum==='devam'?'onay-bk':d.cls}">
-        ${p.onayBekliyor&&p.durum==='devam'?'⏳ Onay Bekliyor':d.label}
-      </span>
-    </div>
-    <div class="prj-bar-wrap">
-      <div class="prj-bar-label"><span>İlerleme</span><span>%${p.ilerleme||0}</span></div>
-      <div class="prj-bar-track"><div class="prj-bar-fill ${barCls}" style="width:${p.ilerleme||0}%"></div></div>
-    </div>
-    ${adimlarHTML ? `<div class="prj-adimlar">${adimlarHTML}</div>` : ''}
-    ${aksiyonHTML}
-  </div>`;
-}
-
-function prjRender() {
-  const el = document.getElementById('projeListesi');
-  if (!el) return;
-  const liste = _projeler.filter(p => _prjFiltre === 'hepsi' || p.durum === _prjFiltre);
-  if (!liste.length) {
-    el.innerHTML = `<div style="text-align:center;padding:3rem 1rem;color:var(--t2);font-family:'Syne',sans-serif;font-style:italic;">
-      ${_prjFiltre==='hepsi' ? 'Henüz proje yok. Randevu onaylandığında otomatik oluşur.' : 'Bu filtrede proje yok.'}
-    </div>`;
-    return;
-  }
-  el.innerHTML = liste.map(projeKartHTML).join('');
-}
-
-window.prjIlerle = async function(projeId, yuzde) {
-  if (!confirm(`%${yuzde} tamamlandı olarak işaretlensin mi? Müşteriye onay isteği gönderilecek.`)) return;
-  try {
-    await ilerlemeyiGuncelle(projeId, yuzde);
-    toast(`%${yuzde} bildirimi gönderildi ✦`);
-  } catch(e) { toast('Hata oluştu ⚠️', 'err'); }
-};
-
-window.projeModulYukle = function() {
-  if (_prjUnsub) return; // zaten dinleniyor
-  const uid = _aktifUid;
-  if (!uid) return;
-  const q = query(collection(db, 'ustam_projeler'), where('ustaUid','==',uid), orderBy('ts','desc'));
-  _prjUnsub = onSnapshot(q, snap => {
-    _projeler = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    ozetGuncelle();
-    prjRender();
-  });
-};
-</script>
-
-<!-- ── ÜRÜN YÜKLEME OVERLAY ── -->
-<div id="urunYukleOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.82);backdrop-filter:blur(6px);flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;">
-  <div id="urunYukleIkon" style="font-size:2.2rem;">⏳</div>
-  <div id="urunYukleBaslik" style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:#f0ebe0;letter-spacing:.08em;">Ürün yükleniyor…</div>
-  <div id="urunYukleAlt" style="font-size:.7rem;color:rgba(240,235,224,.45);letter-spacing:.12em;text-transform:uppercase;">Bu işlem biraz uzun sürebilir, lütfen bekleyin</div>
-  <div id="urunYukleBar" style="width:220px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;">
-    <div id="urunYukleBarIc" style="height:100%;width:0%;background:linear-gradient(90deg,#7B5CF0,#a78bfa);border-radius:2px;transition:width .4s ease;"></div>
-  </div>
-</div>
-<script>
-function urunOverlayAc(){
-  const o=document.getElementById('urunYukleOverlay');
-  o.style.display='flex';
-  document.getElementById('urunYukleIkon').textContent='⏳';
-  document.getElementById('urunYukleBaslik').textContent='Ürün yükleniyor…';
-  document.getElementById('urunYukleAlt').textContent='Bu işlem biraz uzun sürebilir, lütfen bekleyin';
-  document.getElementById('urunYukleBarIc').style.width='0%';
-  setTimeout(()=>document.getElementById('urunYukleBarIc').style.width='40%',100);
-  setTimeout(()=>document.getElementById('urunYukleBarIc').style.width='70%',1200);
-}
-function urunOverlayBasarili(){
-  document.getElementById('urunYukleIkon').textContent='✅';
-  document.getElementById('urunYukleBaslik').textContent='Ürün başarıyla yüklendi!';
-  document.getElementById('urunYukleAlt').textContent='Admin onayından sonra mağazanda görünecek';
-  document.getElementById('urunYukleBarIc').style.width='100%';
-  setTimeout(()=>{ document.getElementById('urunYukleOverlay').style.display='none'; },2200);
-}
-function urunOverlayKapat(){
-  document.getElementById('urunYukleOverlay').style.display='none';
-}
-</script>
 </body>
 </html>

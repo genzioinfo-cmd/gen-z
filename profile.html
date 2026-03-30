@@ -672,9 +672,6 @@ nav, .toast, .edit-modal-overlay, .edit-modal,
           <span class="nav-icon">📅</span> Randevularım
           <span class="nav-badge" id="rdv-badge"></span>
         </button>
-        <button class="profile-nav-item" onclick="loadTab('projeler')" id="pnav-projeler">
-          <span class="nav-icon">🔧</span> Projelerim
-        </button>
         <button class="profile-nav-item" onclick="loadTab('reviews')" id="pnav-reviews">
           <span class="nav-icon">⭐</span> Değerlendirmelerim
           <span class="nav-badge" id="reviews-badge">2</span>
@@ -688,11 +685,6 @@ nav, .toast, .edit-modal-overlay, .edit-modal,
         <button class="profile-nav-item" onclick="loadTab('info')" id="pnav-info">
           <span class="nav-icon">👤</span> Kişisel Bilgiler
         </button>
-
-        <!-- Rol Kısayolları -->
-        <div id="rol-kisayollar" style="display:none; margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.08);">
-          <div style="font-size:10px; color:var(--text3); text-transform:uppercase; letter-spacing:0.6px; padding:4px 8px 6px; font-weight:600;">Profillerim</div>
-        </div>
       </nav>
 
       <!-- Content: dinamik yüklenir -->
@@ -795,37 +787,12 @@ document.getElementById('themeBtn').textContent = currentTheme === 'dark' ? '�
 if (currentUser) {
   document.getElementById('profilePageHandle').textContent  = currentUser.username;
   document.getElementById('profilePageEmail').textContent   = currentUser.email;
+  /* info-username ve info-email tab yüklenince (loadTab → info) doldurulur */
   const infoUser = document.getElementById('info-username');
   const infoEmail = document.getElementById('info-email');
   if (infoUser) infoUser.textContent = currentUser.username;
   if (infoEmail) infoEmail.textContent = currentUser.email;
   document.getElementById('avatarInitial').textContent      = currentUser.username.replace('@','').charAt(0).toUpperCase();
-
-  // localStorage'daki rol bilgisiyle hemen göster
-  renderRolKisayollar(currentUser);
-
-  // Firestore'dan güncel rol bilgisini çek ve güncelle
-  (async () => {
-    try {
-      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-      const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-      const cfg = { apiKey:"AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ", authDomain:"gen-z-io.firebaseapp.com", projectId:"gen-z-io", storageBucket:"gen-z-io.firebasestorage.app", messagingSenderId:"97338868944", appId:"1:97338868944:web:d7b429e416d8c505b14ad5" };
-      const app = getApps().length ? getApps()[0] : initializeApp(cfg);
-      const db = getFirestore(app);
-      const snap = await getDoc(doc(db, 'kullanicilar', currentUser.uid));
-      if (snap.exists()) {
-        const d = snap.data();
-        // localStorage'ı güncelle
-        const updated = { ...currentUser, rol: d.rol || 'uye', roller: d.roller || [], admin: d.admin || false, ustaOnay: d.ustaOnay || false, magazaOnay: d.magazaOnay || false, gencimDurum: d.gencimDurum || '' };
-        _ls.set('genz-user', JSON.stringify(updated));
-        currentUser = updated;
-        // Kısayolları yeniden render et (güncel rol ile)
-        const rzCont = document.getElementById('rol-kisayollar');
-        if (rzCont) { rzCont.innerHTML = '<div style="font-size:10px; color:var(--text3); text-transform:uppercase; letter-spacing:0.6px; padding:4px 8px 6px; font-weight:600;">Profillerim</div>'; rzCont.style.display = 'none'; }
-        renderRolKisayollar(updated);
-      }
-    } catch(e) { console.warn('Profil güncel veri hatası:', e); }
-  })();
 } else {
   /* Giriş yapılmamışsa ana sayfaya yönlendir */
   window.location.href = 'index.html?auth=signin';
@@ -850,77 +817,12 @@ function toggleTheme() {
   setTimeout(() => document.body.classList.remove('theme-transitioning'), 350);
 }
 
-/* ── ROL KISAYOLLARI ── */
-function renderRolKisayollar(user) {
-  const container = document.getElementById('rol-kisayollar');
-  if (!container) return;
-  const rol = (user.rol || '').toLowerCase();
-  const roller_arr = Array.isArray(user.roller) ? user.roller.map(r => r.toLowerCase()) : [];
-  const tumRoller = new Set([...roller_arr, ...(rol ? [rol] : [])]);
-  const isAdmin = tumRoller.has('admin') || user.admin === true;
-
-  // Rol kontrolü — Firestore'daki gerçek alanlarla eşleşiyor
-  const hasMagaza = user.magazaOnay === true || tumRoller.has('magaza') || tumRoller.has('satici');
-  const hasUsta   = user.ustaOnay   === true || tumRoller.has('usta')   || tumRoller.has('ustam');
-  const hasGencz  = user.gencimDurum === 'onaylandi' || tumRoller.has('gencz');
-
-  const uid = user.uid || user.id || '';
-  let added = 0;
-
-  // Modpanel linki — tüm roller için en önemli link
-  if (hasMagaza || hasUsta || hasGencz || isAdmin) {
-    const panel = document.createElement('a');
-    panel.className = 'profile-nav-item';
-    panel.href = 'modpanel.html';
-    panel.style.cssText = 'text-decoration:none;display:flex;align-items:center;gap:8px;background:rgba(123,92,240,0.08);border-radius:6px;';
-    panel.innerHTML = '<span>🎛️ Kontrol Paneli</span>';
-    container.appendChild(panel);
-    added++;
-  }
-
-  // Mağaza profil linki
-  if (isAdmin || hasMagaza) {
-    const btn = document.createElement('a');
-    btn.className = 'profile-nav-item';
-    btn.href = uid ? `magaza-satici.html?uid=${encodeURIComponent(uid)}` : 'magaza-satici.html';
-    btn.style.cssText = 'text-decoration:none;display:flex;align-items:center;gap:8px;';
-    btn.innerHTML = '<span>🏪 Mağazam</span>';
-    container.appendChild(btn);
-    added++;
-  }
-
-  // Usta profil linki
-  if (isAdmin || hasUsta) {
-    const btn = document.createElement('a');
-    btn.className = 'profile-nav-item';
-    btn.href = uid ? `ustam-profil.html?uid=${encodeURIComponent(uid)}` : 'ustam-profil.html';
-    btn.style.cssText = 'text-decoration:none;display:flex;align-items:center;gap:8px;';
-    btn.innerHTML = '<span>🔨 Usta Profilim</span>';
-    container.appendChild(btn);
-    added++;
-  }
-
-  // Genç-Z profil linki
-  if (isAdmin || hasGencz) {
-    const btn = document.createElement('a');
-    btn.className = 'profile-nav-item';
-    btn.href = uid ? `gen-z_satici.html?uid=${encodeURIComponent(uid)}` : 'gen-z_satici.html';
-    btn.style.cssText = 'text-decoration:none;display:flex;align-items:center;gap:8px;';
-    btn.innerHTML = '<span>⚡ Genç-Z Profilim</span>';
-    container.appendChild(btn);
-    added++;
-  }
-
-  if (added > 0) container.style.display = 'block';
-}
-
 /* ── TAB SWITCHING — dinamik yükleme ── */
 const TAB_FILES = {
   orders:        'profile-orders.html',
   favorites:     'profile-favorites.html',
   cart:          'profile-cart.html',
   randevular:    'profile-randevular.html',
-  projeler:      'profile-projeler.html',
   reviews:       'profile-reviews.html',
   addresses:     'profile-addresses.html',
   notifications: 'profile-notifications.html',

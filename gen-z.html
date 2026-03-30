@@ -784,26 +784,24 @@ const GZ_CATEGORIES = [
   { id: 'oyun',     name: 'Oyun & Anime',        icon: '🎮', count: null },
 ];
 
-/* ── DEMO / FALLBACK VERİSİ ── */
 let GZ_PRODUCTS = [];
 
 /* ── Firestore'dan ürünleri çek ── */
 async function fetchProducts() {
-  // _genzAuth ve _genzFirestore hazır olana kadar bekle (firebase-config.js yüklenince gelir)
-  let beklemeSayac = 0;
-  while ((!window._genzAuth?.db || !window._genzFirestore) && beklemeSayac < 30) {
-    await new Promise(r => setTimeout(r, 200));
-    beklemeSayac++;
-  }
-  if (!window._genzAuth?.db || !window._genzFirestore) {
-    console.warn('Firebase hazır olmadı, ürünler yüklenemedi');
-    return;
-  }
   try {
-    const db = window._genzAuth.db;
-    const { collection, getDocs, query, where } = window._genzFirestore;
-    // ── gencz_icerikler koleksiyonundan çek (doğru koleksiyon) ──
-    const q = query(collection(db, 'gencz_icerikler'), where('durum', '==', 'onaylandi'));
+    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getFirestore, collection, getDocs, query, where, orderBy } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const firebaseConfig = {
+      apiKey: 'AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ',
+      authDomain: 'gen-z-io.firebaseapp.com',
+      projectId: 'gen-z-io',
+      storageBucket: 'gen-z-io.firebasestorage.app',
+      messagingSenderId: '97338868944',
+      appId: '1:97338868944:web:d7b429e416d8c505b14ad5'
+    };
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const q = query(collection(db, 'magaza_urunler'), where('durum', '==', 'aktif'));
     const snap = await getDocs(q);
     const GRAD_PAIRS = [
       ['rgba(240,197,92,0.18)', 'rgba(123,92,240,0.1)'],
@@ -812,49 +810,43 @@ async function fetchProducts() {
       ['rgba(92,180,240,0.15)', 'rgba(240,140,92,0.1)'],
       ['rgba(180,92,240,0.15)', 'rgba(92,240,197,0.1)'],
     ];
-    const CAT_EMOJI = {
-      'Şiir & Edebiyat':'📝', 'Kitap & Hikaye':'📚', 'Grafik Tasarım':'🎨',
-      'Fotoğrafçılık':'📷', 'Müzik':'🎵', 'Video & İçerik':'🎬',
-      'İllüstrasyon':'🖌️', 'El Sanatları':'✂️', 'Dijital Sanat':'💻', 'Diğer':'⚡'
-    };
-    if (snap.empty) { GZ_PRODUCTS = []; return; }
+    const CAT_EMOJI = { muzik:'🎵', tasarim:'🎨', yazilim:'💻', video:'📹',
+      fotograf:'📷', yazi:'📝', moda:'👗', oyun:'🎮' };
     GZ_PRODUCTS = snap.docs.map((doc, i) => {
       const d = doc.data();
       const grad = GRAD_PAIRS[i % GRAD_PAIRS.length];
-      const sanatciAd = d.sanatciAd || d.displayName || d.email?.split('@')[0] || 'Sanatçı';
-      const initials = sanatciAd.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
-      const resim = d.kapakFoto || null;
+      const initials = (d.magazaAd || 'M').split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+      const resim = (d.resimler && d.resimler.length > 0) ? d.resimler[0] : null;
       return {
         id: doc.id,
-        name: d.baslik || d.ad || '',
-        price: d.fiyat || 0,
+        name: d.ad || '',
+        price: d.kdvDahilFiyat || d.fiyat || 0,
         oldPrice: null,
         rating: d.rating || 0,
         reviews: d.reviewCount || 0,
-        badge: null,
-        tags: d.kategori ? [d.kategori] : [],
+        badge: d.badge || null,
+        tags: d.etiketler || [],
         category: d.kategori || 'diger',
         desc: d.aciklama || '',
-        emoji: CAT_EMOJI[d.kategori] || '⚡',
+        emoji: CAT_EMOJI[d.kategori] || '📦',
         resim: resim,
         gradA: grad[0],
         gradB: grad[1],
-        linkUrl: d.linkUrl || d.portfolyoLink || d.publuu || null,
         seller: {
-          id: d.uid || doc.id,
-          name: sanatciAd,
+          id: d.magazaId || doc.id,
+          name: d.magazaAd || 'Mağaza',
           initials: initials,
-          sales: 0,
+          sales: d.satisAdedi || 0,
           joined: d.ts ? new Date(d.ts.seconds * 1000).getFullYear().toString() : '2025',
-          rating: 0,
-          ratingCount: 0,
-          desc: d.aciklama || '',
+          rating: d.magazaRating || 0,
+          ratingCount: d.magazaRatingCount || 0,
+          desc: '',
         }
       };
     });
   } catch(e) {
-    console.warn('Ürünler yüklenemedi, demo data kullanılıyor:', e);
-    GZ_PRODUCTS = []; console.warn('Ürünler yüklenemedi');
+    console.warn('Ürünler yüklenemedi:', e);
+    GZ_PRODUCTS = [];
   }
 }
 
@@ -1020,15 +1012,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const grid = document.getElementById('productsGrid');
   if (grid) grid.innerHTML = '<div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-text">Ürünler yükleniyor...</div></div>';
 
-  /* firebase-config.js module olarak yüklendiği için _genzAuth hazır olana kadar bekle */
-  await new Promise(resolve => {
-    if (window._genzAuth) { resolve(); return; }
-    let attempts = 0;
-    const t = setInterval(() => {
-      attempts++;
-      if (window._genzAuth || attempts > 20) { clearInterval(t); resolve(); }
-    }, 100);
-  });
   await fetchProducts();
 
   let filteredProducts = [...GZ_PRODUCTS];

@@ -1,5 +1,5 @@
 // GEN-Z Firebase Config + Auth Modülü
-import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
   getAuth, GoogleAuthProvider,
   signInWithPopup, signOut,
@@ -24,8 +24,7 @@ const firebaseConfig = {
   measurementId: "G-1CHTYFV70Y"
 };
 
-// Çift initialize önlemi — modpanel.html de aynı config ile başlatıyor
-const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
@@ -47,67 +46,31 @@ async function kullaniciyiKaydet(user, extraData = {}) {
     };
     if (!snap.exists()) {
       data.olusturuldu = serverTimestamp();
-      data.rol = 'uye';
-      // KVKK — zorunlu kayıt alanları (ilk kayıtta)
-      data.kvkk = {
-        kvkkOkundu:          true,
-        kullanımSartlari:    true,
-        pazarlamaIzni:       false,
-        cerezIzni:           false,
-        ucuncuTarafPaylaşım: false,
-        rizaTarihi:          new Date().toISOString(),
-        rizaVersiyon:        '1.0',
-      };
-      data.hesapDurumu = 'aktif';
-      data.kayitKanali = extraData.kayitKanali || 'email';
+      data.rol = 'gencz';
     }
     await setDoc(ref, data, { merge: true });
   } catch(e) { console.warn('Firestore yazma hatası:', e); }
 }
 
 /* ── UI Güncelle ── */
-async function uiGuncelle(user) {
+function uiGuncelle(user) {
   const authBtn = document.getElementById('authBtn');
+  if (!authBtn) return;
   if (user) {
     const displayName = user.displayName || user.email.split('@')[0];
-    if (authBtn) authBtn.textContent = '@' + displayName.replace('@','');
-
-    // Firestore'dan güncel kullanıcı verisini çek (rol, roller, vs.)
-    let firestoreData = {};
-    try {
-      const kulRef = doc(db, 'kullanicilar', user.uid);
-      const kulSnap = await getDoc(kulRef);
-      if (kulSnap.exists()) firestoreData = kulSnap.data();
-    } catch(e) { console.warn('Kullanıcı verisi çekilemedi:', e); }
-
-    // localStorage'a rol dahil tam veriyi yaz
-    const userData = {
-      uid:      user.uid,
-      email:    user.email,
+    authBtn.textContent = '@' + displayName.replace('@','');
+    localStorage.setItem('genz-user', JSON.stringify({
+      uid: user.uid,
+      email: user.email,
       username: '@' + displayName.replace('@',''),
-      photoURL: user.photoURL,
-      rol:      firestoreData.rol      || 'uye',
-      roller:   firestoreData.roller   || [],
-      admin:    firestoreData.admin    || false,
-      proModul: firestoreData.proModul || false,
-      ustaOnay:         firestoreData.ustaOnay         || false,
-      magazaOnay:       firestoreData.magazaOnay       || false,
-      gencimDurum:      firestoreData.gencimDurum      || '',
-    };
-    localStorage.setItem('genz-user', JSON.stringify(userData));
-    window._genzKullanici = { ...user, ...firestoreData };
-
+      photoURL: user.photoURL
+    }));
     const pu = document.getElementById('profile-username');
     const pe = document.getElementById('profile-email');
-    if (pu) pu.textContent = userData.username;
+    if (pu) pu.textContent = '@' + displayName.replace('@','');
     if (pe) pe.textContent = user.email;
-
-    // Profil sayfasındaki rol kısayollarını güncelle
-    if (typeof window.renderRolKisayollar === 'function') {
-      window.renderRolKisayollar(userData);
-    }
   } else {
-    if (authBtn) authBtn.textContent = 'Giriş Yap';
+    authBtn.textContent = 'Giriş Yap';
     localStorage.removeItem('genz-user');
   }
 }
@@ -170,9 +133,9 @@ window.doSignUp = async function() {
   try {
     const result = await createUserWithEmailAndPassword(auth, email, pass);
     await updateProfile(result.user, { displayName: username });
-    // Kayıt olan herkes 'uye' olarak başlar.
-    // Genç-Z, Satıcı, Usta rolleri ancak başvuru doldurup admin onayından sonra verilir.
-    await kullaniciyiKaydet(result.user, { username, rol: 'uye' });
+    // Kayıt olan herkes normal kullanıcı (gencz) olarak başlar.
+    // Satıcı / Usta rolü ancak başvuru doldurup admin onayından sonra verilir.
+    await kullaniciyiKaydet(result.user, { username, rol: 'gencz' });
     girisYaptiktan(result.user, 'Hesabın oluşturuldu, hoş geldin 🎉');
   } catch(e) {
     const msg = e.code === 'auth/email-already-in-use' ? 'Bu e-posta zaten kayıtlı ⚠️'
@@ -218,21 +181,3 @@ window.doSignOut = async function() {
 };
 
 window._genzAuth = { auth, db, googleProvider };
-
-// Firestore fonksiyonlarını global olarak erişilebilir yap
-// (module olmayan script'ler için)
-import {
-  collection as _col, getDocs as _getDocs, query as _query,
-  where as _where, orderBy as _orderBy, limit as _limit,
-  doc as _doc, getDoc as _getDoc, addDoc as _addDoc,
-  updateDoc as _updateDoc, serverTimestamp as _serverTimestamp,
-  onSnapshot as _onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-window._genzFirestore = {
-  collection: _col, getDocs: _getDocs, query: _query,
-  where: _where, orderBy: _orderBy, limit: _limit,
-  doc: _doc, getDoc: _getDoc, addDoc: _addDoc,
-  updateDoc: _updateDoc, serverTimestamp: _serverTimestamp,
-  onSnapshot: _onSnapshot
-};

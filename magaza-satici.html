@@ -573,43 +573,6 @@ nav, .modal-overlay-auth, .modal-box, .toast {
 
 <script src="data.js"></script>
 <script>
-
-/* ── Firestore Ürün Yükleme ── */
-let _CACHED_PRODUCTS = [];
-
-async function fetchAllProducts() {
-  if (_CACHED_PRODUCTS.length > 0) return _CACHED_PRODUCTS;
-  try {
-    const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-    const { getFirestore, collection, getDocs, query, where, orderBy } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    const cfg = { apiKey:"AIzaSyASkzJZdiW-Yj5HhxRub0UVtKPkERjCAVQ", authDomain:"gen-z-io.firebaseapp.com", projectId:"gen-z-io", storageBucket:"gen-z-io.firebasestorage.app", messagingSenderId:"97338868994", appId:"1:97338868944:web:d7b429e416d8c505b14ad5" };
-    const app = getApps().length ? getApps()[0] : initializeApp(cfg);
-    const db = getFirestore(app);
-    const q = query(collection(db, 'magaza_urunler'), where('durum', '==', 'onaylandi'), orderBy('ts', 'desc'));
-    const snap = await getDocs(q);
-    _CACHED_PRODUCTS = snap.docs.map(d => {
-      const u = d.data();
-      const initials = (u.magazaAd || 'M').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-      return {
-        id: d.id, name: u.ad || '', price: u.kdvDahilFiyat || u.fiyat || 0,
-        oldPrice: u.eskiFiyat || null, rating: u.rating || 0, reviews: u.reviewCount || 0,
-        badge: u.badge || null, tags: u.etiketler || [], category: u.kategori || 'diger',
-        desc: u.aciklama || '', emoji: '📦', resim: (u.resimler && u.resimler[0]) ? u.resimler[0] : null,
-        gradA: 'rgba(123,92,240,0.15)', gradB: 'rgba(240,197,92,0.08)',
-        seller: { id: u.magazaId || d.id, name: u.magazaAd || 'Mağaza', initials,
-          sales: u.satisAdedi || 0, joined: u.ts ? new Date(u.ts.seconds*1000).getFullYear() : '2025',
-          rating: u.magazaRating || 0, ratingCount: u.magazaRatingCount || 0, desc: '', comments: u.yorumlar || [] }
-      };
-    });
-    return _CACHED_PRODUCTS;
-  } catch(e) { console.warn('Ürünler yüklenemedi:', e); return []; }
-}
-
-function getProductById(id) { return _CACHED_PRODUCTS.find(p => String(p.id) === String(id)); }
-function getProductsBySeller(sid) { return _CACHED_PRODUCTS.filter(p => p.seller.id === sid); }
-function getSellerById(sid) { const p = _CACHED_PRODUCTS.find(p => p.seller.id === sid); return p ? p.seller : null; }
-function getAllSellers() { const m = {}; _CACHED_PRODUCTS.forEach(p => { if(!m[p.seller.id]) m[p.seller.id]={...p.seller,products:[]}; m[p.seller.id].products.push(p); }); return Object.values(m); }
-function getProductsByCategory(cat) { if(cat==='all') return _CACHED_PRODUCTS; return _CACHED_PRODUCTS.filter(p=>p.category===cat); }
 /* ── MAGAZA-DATA (inline) ── */
 /* ══════════════════════════════════════════════════════════
    GEN-Z MAĞAZA — Paylaşılan Veri & Yardımcılar

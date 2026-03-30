@@ -636,7 +636,7 @@ nav, .toast, .edit-modal-overlay, .edit-modal,
       </div>
       <div class="profile-meta">
         <div class="profile-handle" id="profilePageHandle">@gencz_kullanici</div>
-        <div class="profile-email-display" id="profilePageEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="aec1dcc0cbc5eec3cfc7c280cdc1c3">[email&#160;protected]</a></div>
+        <div class="profile-email-display" id="profilePageEmail">ornek@mail.com</div>
         <div class="profile-stats-row">
           <div class="profile-stat">
             <div class="profile-stat-num" id="profileOrderCount">2</div>
@@ -647,7 +647,7 @@ nav, .toast, .edit-modal-overlay, .edit-modal,
             <div class="profile-stat-label">Favori</div>
           </div>
         </div>
-        <div class="profile-badge" id="profileRoleBadge">⚡ —</div>
+        <div class="profile-badge" id="profileRoleBadge">⚡ Genç-Z</div>
       </div>
     </div>
 
@@ -767,7 +767,7 @@ nav, .toast, .edit-modal-overlay, .edit-modal,
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 /* ── SAFE STORAGE ── */
 const _ls = {
   get(k, fb = null) { try { const v = localStorage.getItem(k); return v !== null ? v : fb; } catch(e) { return fb; } },
@@ -793,9 +793,6 @@ if (currentUser) {
   if (infoUser) infoUser.textContent = currentUser.username;
   if (infoEmail) infoEmail.textContent = currentUser.email;
   document.getElementById('avatarInitial').textContent      = currentUser.username.replace('@','').charAt(0).toUpperCase();
-  /* Rol rozetini güncelle — sadece admin tarafından atanmış bir rol varsa göster */
-  const rolBadge = document.getElementById('profileRoleBadge');
-  if (rolBadge) rolBadge.textContent = currentUser.rol ? '⚡ ' + currentUser.rol : '⚡ —';
 } else {
   /* Giriş yapılmamışsa ana sayfaya yönlendir */
   window.location.href = 'index.html?auth=signin';
@@ -878,7 +875,7 @@ async function loadTab(tab) {
       if (el2) el2.textContent = currentUser.email || '';
       if (el3 && currentUser.phone) el3.textContent = currentUser.phone;
       if (el4 && currentUser.city) el4.textContent = currentUser.city;
-      if (el5) el5.textContent = currentUser.rol || '—';
+      if (el5 && currentUser.rol) el5.textContent = currentUser.rol;
     }
 
     /* notifications sekmesinde kayıtlı tercihleri uygula */
@@ -1137,4 +1134,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const items = JSON.parse(localStorage.getItem('genz-sepet')) || [];
       const qty = items.reduce((t, i) => t + (i.qty || 1), 0);
       const badge = document.getElementById('cart-badge');
-      if (badge) badge.textConte
+      if (badge) badge.textContent = qty || '';
+    } catch {}
+  })();
+
+});
+</script>
+
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="firebase-sync.js"></script>
+<script src="cookie-consent.js"></script>
+</body>
+</html>
